@@ -12,11 +12,11 @@ test:
   override:
     - APPENV=testenv make docker
     - docker tag quay.io/opsee/compost quay.io/opsee/compost:$CIRCLE_SHA1
-    - docker push quay.io/opsee/spanx:$CIRCLE_SHA1
+    - docker push quay.io/opsee/compost:$CIRCLE_SHA1
 deployment:
   production:
     branch: master
     owner: opsee
     commands:
-      - docker tag -f quay.io/opsee/spanx:$CIRCLE_SHA1 quay.io/opsee/spanx:latest
-      - docker push quay.io/opsee/spanx:latest
+      - docker tag -f quay.io/opsee/compost:$CIRCLE_SHA1 quay.io/opsee/compost:latest
+      - docker push quay.io/opsee/compost:latest
