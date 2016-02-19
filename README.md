@@ -1,26 +1,6 @@
-GET /ql?query={check(id:\"badead\"){target results}}
-GET /ql?query={group(name:\"potato+elb\"){name instances{name }}}
+compost
+=======
 
-POST /checks ...
+The Opsee compositor and GraphQL server.
 
-
-GET /graphql
-query groupQuery {
-        group(name: "potato+elb") {
-                name
-                instance_count
-                instances {
-                        name
-                        results {
-                                responses {
-                                        response
-                                }
-                        }
-                }
-        }
-}
-
-POST /graphql
-mutation checkMutation {
-        createCheck(...)
-}
+![pepe compost](./pepecompost.png)
