@@ -1,0 +1,62 @@
+syntax = "proto2";
+import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+
+package opsee.aws.autoscaling;
+
+option go_package = "autoscaling";
+option (opseeproto.graphql) = true;
+
+
+message EnabledMetric {
+  optional string Granularity = 2;
+  optional string Metric = 3;
+}
+
+message Group {
+  optional string AutoScalingGroupARN = 2;
+  optional string AutoScalingGroupName = 3;
+  repeated string AvailabilityZones = 4;
+  optional sfixed64 CreatedTime = 5;
+  optional sint64 DefaultCooldown = 6;
+  optional sint64 DesiredCapacity = 7;
+  repeated EnabledMetric EnabledMetrics = 8;
+  optional sint64 HealthCheckGracePeriod = 9;
+  optional string HealthCheckType = 10;
+  repeated Instance Instances = 11;
+  optional string LaunchConfigurationName = 12;
+  repeated string LoadBalancerNames = 13;
+  optional sint64 MaxSize = 14;
+  optional sint64 MinSize = 15;
+  optional bool NewInstancesProtectedFromScaleIn = 16;
+  optional string PlacementGroup = 17;
+  optional string Status = 18;
+  repeated SuspendedProcess SuspendedProcesses = 19;
+  repeated TagDescription Tags = 20;
+  repeated string TerminationPolicies = 21;
+  optional string VPCZoneIdentifier = 22;
+}
+
+message Instance {
+  optional string AvailabilityZone = 2;
+  optional string HealthStatus = 3;
+  optional string InstanceId = 4;
+  optional string LaunchConfigurationName = 5;
+  optional string LifecycleState = 6;
+  optional bool ProtectedFromScaleIn = 7;
+}
+
+message SuspendedProcess {
+  optional string ProcessName = 2;
+  optional string SuspensionReason = 3;
+}
+
+message TagDescription {
+  optional string Key = 2;
+  optional bool PropagateAtLaunch = 3;
+  optional string ResourceId = 4;
+  optional string ResourceType = 5;
+  optional string Value = 6;
+}
+

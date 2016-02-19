@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
+import "github.com/opsee/protobuf/proto/google/protobuf/any.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+
+
+package opsee;
+
+option java_package = "co.opsee.proto";
+option java_multiple_files = true;
+option java_outer_classname = "BastionProto";
+
+option go_package = "schema";
+option (opseeproto.graphql) = true;
+
+message Target {
+	string name = 1;
+	string type = 2 [(opseeproto.required) = true];
+	string id = 3 [(opseeproto.required) = true];
+	string address = 4;
+}
+
+message Check {
+	string id = 1;
+	int32 interval = 2 [(opseeproto.required) = true];
+	Target target = 3 [(opseeproto.required) = true];
+	google.protobuf.Timestamp last_run = 4;
+	google.protobuf.Any check_spec = 5 [(opseeproto.required) = true];
+	string name = 6 [(opseeproto.required) = true];
+	repeated Assertion assertions = 7;
+	repeated CheckResult results = 8;
+	oneof spec {
+		HttpCheck http_check = 101;
+		CloudWatchCheck cloudwatch_check = 102;
+	}
+}
+
+message Assertion {
+	// key is one of "code", "header", "body".
+	string key = 1 [(opseeproto.required) = true];
+	// In the case of key=header, value would be the header field.
+	string value = 2;
+	// relationship is one of: "equal" "notEqual" "empty" "notEmpty" "contain" "notContain" "regExp"
+	string relationship = 3 [(opseeproto.required) = true];
+	string operand = 4;
+}
+
+message Header {
+	string name = 1 [(opseeproto.required) = true];
+	repeated string values = 2;
+}
+
+message HttpCheck {
+	string name = 1; //deprecated
+	string path = 2 [(opseeproto.required) = true];
+	string protocol = 3 [(opseeproto.required) = true];
+	int32 port = 4 [(opseeproto.required) = true];
+	string verb = 5 [(opseeproto.required) = true];
+	repeated Header headers = 6;
+	string body = 7;
+}
+
+message CloudWatchCheck {
+	Target target = 1;
+	string metric_name = 2;
+	string function = 3;
+	repeated string function_params = 4;
+}
+
+message Metric {
+	string name = 1;
+	double value = 2;
+	repeated string tags = 3;
+	google.protobuf.Timestamp timestamp = 4;
+}
+
+message HttpResponse {
+	int32 code = 1;
+	string body = 2;
+	repeated Header headers = 3;
+	repeated Metric metrics = 4;
+	string host = 5;
+}
+
+message CheckResourceResponse {
+	string id = 1;
+	Check check = 2;
+	string error = 3;
+}
+
+message ResourceResponse {
+	repeated CheckResourceResponse responses = 1;
+}
+
+message CheckResourceRequest {
+	repeated Check checks = 1;
+}
+
+message ResultsResource {
+  repeated CheckResult results = 1;
+}
+
+message TestCheckRequest {
+	int32 max_hosts = 1 [(opseeproto.required) = true];
+	google.protobuf.Timestamp deadline = 2 [(opseeproto.required) = true];
+	Check check = 3 [(opseeproto.required) = true];
+}
+
+message TestCheckResponse {
+	repeated CheckResponse responses = 1;
+	string error = 2;
+}
+
+message CheckResponse {
+	Target target = 1;
+	google.protobuf.Any response = 2;
+	string error = 3;
+	bool passing = 4;
+	oneof reply {
+		HttpResponse http_response = 101;
+	}
+}
+
+message CheckResult {
+	string check_id = 1;
+	string customer_id = 2;
+	google.protobuf.Timestamp timestamp = 3;
+	bool passing = 4;
+	repeated CheckResponse responses = 5;
+	Target target = 6;
+	string check_name = 7;
+	int32 version = 8;
+}

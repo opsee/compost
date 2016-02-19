@@ -1,0 +1,81 @@
+syntax = "proto2";
+import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+
+package opsee.aws.elb;
+
+option go_package = "elb";
+option (opseeproto.graphql) = true;
+
+
+message AppCookieStickinessPolicy {
+  optional string CookieName = 2;
+  optional string PolicyName = 3;
+}
+
+message BackendServerDescription {
+  optional sint64 InstancePort = 2;
+  repeated string PolicyNames = 3;
+}
+
+message HealthCheck {
+  optional sint64 HealthyThreshold = 2;
+  optional sint64 Interval = 3;
+  optional string Target = 4;
+  optional sint64 Timeout = 5;
+  optional sint64 UnhealthyThreshold = 6;
+}
+
+message Instance {
+  optional string InstanceId = 2;
+}
+
+message LBCookieStickinessPolicy {
+  optional sint64 CookieExpirationPeriod = 2;
+  optional string PolicyName = 3;
+}
+
+message Listener {
+  optional sint64 InstancePort = 2;
+  optional string InstanceProtocol = 3;
+  optional sint64 LoadBalancerPort = 4;
+  optional string Protocol = 5;
+  optional string SSLCertificateId = 6;
+}
+
+message ListenerDescription {
+  optional Listener Listener = 2;
+  repeated string PolicyNames = 3;
+}
+
+message LoadBalancerDescription {
+  repeated string AvailabilityZones = 2;
+  repeated BackendServerDescription BackendServerDescriptions = 3;
+  optional string CanonicalHostedZoneName = 4;
+  optional string CanonicalHostedZoneNameID = 5;
+  optional sfixed64 CreatedTime = 6;
+  optional string DNSName = 7;
+  optional HealthCheck HealthCheck = 8;
+  repeated Instance Instances = 9;
+  repeated ListenerDescription ListenerDescriptions = 10;
+  optional string LoadBalancerName = 11;
+  optional Policies Policies = 12;
+  optional string Scheme = 13;
+  repeated string SecurityGroups = 14;
+  optional SourceSecurityGroup SourceSecurityGroup = 15;
+  repeated string Subnets = 16;
+  optional string VPCId = 17;
+}
+
+message Policies {
+  repeated AppCookieStickinessPolicy AppCookieStickinessPolicies = 2;
+  repeated LBCookieStickinessPolicy LBCookieStickinessPolicies = 3;
+  repeated string OtherPolicies = 4;
+}
+
+message SourceSecurityGroup {
+  optional string GroupName = 2;
+  optional string OwnerAlias = 3;
+}
+

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+
+
+package opsee;
+
+option java_package = "co.opsee.proto";
+option java_multiple_files = true;
+option java_outer_classname = "BastionProto";
+
+option go_package = "schema";
+option (opseeproto.graphql) = true;
+
+message User {
+	int32 id = 1 [(opseeproto.required) = true];
+	string customer_id = 2 [(opseeproto.required) = true];
+	string email = 3 [(opseeproto.required) = true];
+	string name = 4 [(opseeproto.required) = true];
+	bool verified = 5 [(opseeproto.required) = true];
+	bool admin = 6 [(opseeproto.required) = true];
+	bool active = 7 [(opseeproto.required) = true];
+}

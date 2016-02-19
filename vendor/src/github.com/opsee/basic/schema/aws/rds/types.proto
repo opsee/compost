@@ -1,0 +1,122 @@
+syntax = "proto2";
+import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+
+package opsee.aws.rds;
+
+option go_package = "rds";
+option (opseeproto.graphql) = true;
+
+
+message AvailabilityZone {
+  optional string Name = 2;
+}
+
+message DBInstance {
+  optional sint64 AllocatedStorage = 2;
+  optional bool AutoMinorVersionUpgrade = 3;
+  optional string AvailabilityZone = 4;
+  optional sint64 BackupRetentionPeriod = 5;
+  optional string CACertificateIdentifier = 6;
+  optional string CharacterSetName = 7;
+  optional bool CopyTagsToSnapshot = 8;
+  optional string DBClusterIdentifier = 9;
+  optional string DBInstanceClass = 10;
+  optional string DBInstanceIdentifier = 11;
+  optional string DBInstanceStatus = 12;
+  optional string DBName = 13;
+  repeated DBParameterGroupStatus DBParameterGroups = 14;
+  repeated DBSecurityGroupMembership DBSecurityGroups = 15;
+  optional DBSubnetGroup DBSubnetGroup = 16;
+  optional sint64 DbInstancePort = 17;
+  optional string DbiResourceId = 18;
+  optional Endpoint Endpoint = 19;
+  optional string Engine = 20;
+  optional string EngineVersion = 21;
+  optional string EnhancedMonitoringResourceArn = 22;
+  optional sfixed64 InstanceCreateTime = 23;
+  optional sint64 Iops = 24;
+  optional string KmsKeyId = 25;
+  optional sfixed64 LatestRestorableTime = 26;
+  optional string LicenseModel = 27;
+  optional string MasterUsername = 28;
+  optional sint64 MonitoringInterval = 29;
+  optional string MonitoringRoleArn = 30;
+  optional bool MultiAZ = 31;
+  repeated OptionGroupMembership OptionGroupMemberships = 32;
+  optional PendingModifiedValues PendingModifiedValues = 33;
+  optional string PreferredBackupWindow = 34;
+  optional string PreferredMaintenanceWindow = 35;
+  optional bool PubliclyAccessible = 36;
+  repeated string ReadReplicaDBInstanceIdentifiers = 37;
+  optional string ReadReplicaSourceDBInstanceIdentifier = 38;
+  optional string SecondaryAvailabilityZone = 39;
+  repeated DBInstanceStatusInfo StatusInfos = 40;
+  optional bool StorageEncrypted = 41;
+  optional string StorageType = 42;
+  optional string TdeCredentialArn = 43;
+  repeated VpcSecurityGroupMembership VpcSecurityGroups = 44;
+}
+
+message DBInstanceStatusInfo {
+  optional string Message = 2;
+  optional bool Normal = 3;
+  optional string Status = 4;
+  optional string StatusType = 5;
+}
+
+message DBParameterGroupStatus {
+  optional string DBParameterGroupName = 2;
+  optional string ParameterApplyStatus = 3;
+}
+
+message DBSecurityGroupMembership {
+  optional string DBSecurityGroupName = 2;
+  optional string Status = 3;
+}
+
+message DBSubnetGroup {
+  optional string DBSubnetGroupDescription = 2;
+  optional string DBSubnetGroupName = 3;
+  optional string SubnetGroupStatus = 4;
+  repeated Subnet Subnets = 5;
+  optional string VpcId = 6;
+}
+
+message Endpoint {
+  optional string Address = 2;
+  optional string HostedZoneId = 3;
+  optional sint64 Port = 4;
+}
+
+message OptionGroupMembership {
+  optional string OptionGroupName = 2;
+  optional string Status = 3;
+}
+
+message PendingModifiedValues {
+  optional sint64 AllocatedStorage = 2;
+  optional sint64 BackupRetentionPeriod = 3;
+  optional string CACertificateIdentifier = 4;
+  optional string DBInstanceClass = 5;
+  optional string DBInstanceIdentifier = 6;
+  optional string EngineVersion = 7;
+  optional sint64 Iops = 8;
+  optional string MasterUserPassword = 9;
+  optional bool MultiAZ = 10;
+  optional sint64 Port = 11;
+  optional string StorageType = 12;
+}
+
+message Subnet {
+  optional AvailabilityZone SubnetAvailabilityZone = 2;
+  optional string SubnetIdentifier = 3;
+  optional string SubnetStatus = 4;
+}
+
+message VpcSecurityGroupMembership {
+  optional string Status = 2;
+  optional string VpcSecurityGroupId = 3;
+}
+

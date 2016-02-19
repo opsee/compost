@@ -1,0 +1,22 @@
+machine:
+  services:
+    - docker
+  environment:
+    ci: "true"
+dependencies:
+  cache_directories: []
+  override:
+    - docker info
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
+test:
+  override:
+    - APPENV=testenv make docker
+    - docker tag quay.io/opsee/compost quay.io/opsee/compost:$CIRCLE_SHA1
+    - docker push quay.io/opsee/spanx:$CIRCLE_SHA1
+deployment:
+  production:
+    branch: master
+    owner: opsee
+    commands:
+      - docker tag -f quay.io/opsee/spanx:$CIRCLE_SHA1 quay.io/opsee/spanx:latest
+      - docker push quay.io/opsee/spanx:latest
