@@ -3,12 +3,13 @@ package resolver
 import (
 	"github.com/opsee/basic/schema"
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
 )
 
-// ResolveChecks fetches Checks from Bartnet and CheckResults from Beavis
+// ListChecks fetches Checks from Bartnet and CheckResults from Beavis
 // concurrently, then zips them together. If the request to Beavis fails,
 // then checks are returned without results.
-func (c *client) ResolveChecks(user *schema.User) ([]*schema.Check, error) {
+func (c *client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.Check, error) {
 	var (
 		resultChan = make(chan []*schema.CheckResult)
 		errChan    = make(chan error)

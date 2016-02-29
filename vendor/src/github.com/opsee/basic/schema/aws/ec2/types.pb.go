@@ -27,15 +27,16 @@ It has these top-level messages:
 	ProductCode
 	SecurityGroup
 	StateReason
+	Subnet
 	Tag
 	UserIdGroupPair
+	Vpc
 */
 package ec2
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import _ "github.com/opsee/protobuf/proto/google/protobuf"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/protobuf/opseeproto"
 
@@ -1000,6 +1001,86 @@ func (m *StateReason) GetMessage() string {
 	return ""
 }
 
+type Subnet struct {
+	AvailabilityZone        *string `protobuf:"bytes,2,opt,name=AvailabilityZone" json:"AvailabilityZone,omitempty"`
+	AvailableIpAddressCount *int64  `protobuf:"zigzag64,3,opt,name=AvailableIpAddressCount" json:"AvailableIpAddressCount,omitempty"`
+	CidrBlock               *string `protobuf:"bytes,4,opt,name=CidrBlock" json:"CidrBlock,omitempty"`
+	DefaultForAz            *bool   `protobuf:"varint,5,opt,name=DefaultForAz" json:"DefaultForAz,omitempty"`
+	MapPublicIpOnLaunch     *bool   `protobuf:"varint,6,opt,name=MapPublicIpOnLaunch" json:"MapPublicIpOnLaunch,omitempty"`
+	State                   *string `protobuf:"bytes,7,opt,name=State" json:"State,omitempty"`
+	SubnetId                *string `protobuf:"bytes,8,opt,name=SubnetId" json:"SubnetId,omitempty"`
+	Tags                    []*Tag  `protobuf:"bytes,9,rep,name=Tags" json:"Tags,omitempty"`
+	VpcId                   *string `protobuf:"bytes,10,opt,name=VpcId" json:"VpcId,omitempty"`
+	XXX_unrecognized        []byte  `json:"-"`
+}
+
+func (m *Subnet) Reset()         { *m = Subnet{} }
+func (m *Subnet) String() string { return proto.CompactTextString(m) }
+func (*Subnet) ProtoMessage()    {}
+
+func (m *Subnet) GetAvailabilityZone() string {
+	if m != nil && m.AvailabilityZone != nil {
+		return *m.AvailabilityZone
+	}
+	return ""
+}
+
+func (m *Subnet) GetAvailableIpAddressCount() int64 {
+	if m != nil && m.AvailableIpAddressCount != nil {
+		return *m.AvailableIpAddressCount
+	}
+	return 0
+}
+
+func (m *Subnet) GetCidrBlock() string {
+	if m != nil && m.CidrBlock != nil {
+		return *m.CidrBlock
+	}
+	return ""
+}
+
+func (m *Subnet) GetDefaultForAz() bool {
+	if m != nil && m.DefaultForAz != nil {
+		return *m.DefaultForAz
+	}
+	return false
+}
+
+func (m *Subnet) GetMapPublicIpOnLaunch() bool {
+	if m != nil && m.MapPublicIpOnLaunch != nil {
+		return *m.MapPublicIpOnLaunch
+	}
+	return false
+}
+
+func (m *Subnet) GetState() string {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return ""
+}
+
+func (m *Subnet) GetSubnetId() string {
+	if m != nil && m.SubnetId != nil {
+		return *m.SubnetId
+	}
+	return ""
+}
+
+func (m *Subnet) GetTags() []*Tag {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *Subnet) GetVpcId() string {
+	if m != nil && m.VpcId != nil {
+		return *m.VpcId
+	}
+	return ""
+}
+
 type Tag struct {
 	Key              *string `protobuf:"bytes,2,opt,name=Key" json:"Key,omitempty"`
 	Value            *string `protobuf:"bytes,3,opt,name=Value" json:"Value,omitempty"`
@@ -1056,6 +1137,70 @@ func (m *UserIdGroupPair) GetUserId() string {
 	return ""
 }
 
+type Vpc struct {
+	CidrBlock        *string `protobuf:"bytes,2,opt,name=CidrBlock" json:"CidrBlock,omitempty"`
+	DhcpOptionsId    *string `protobuf:"bytes,3,opt,name=DhcpOptionsId" json:"DhcpOptionsId,omitempty"`
+	InstanceTenancy  *string `protobuf:"bytes,4,opt,name=InstanceTenancy" json:"InstanceTenancy,omitempty"`
+	IsDefault        *bool   `protobuf:"varint,5,opt,name=IsDefault" json:"IsDefault,omitempty"`
+	State            *string `protobuf:"bytes,6,opt,name=State" json:"State,omitempty"`
+	Tags             []*Tag  `protobuf:"bytes,7,rep,name=Tags" json:"Tags,omitempty"`
+	VpcId            *string `protobuf:"bytes,8,opt,name=VpcId" json:"VpcId,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *Vpc) Reset()         { *m = Vpc{} }
+func (m *Vpc) String() string { return proto.CompactTextString(m) }
+func (*Vpc) ProtoMessage()    {}
+
+func (m *Vpc) GetCidrBlock() string {
+	if m != nil && m.CidrBlock != nil {
+		return *m.CidrBlock
+	}
+	return ""
+}
+
+func (m *Vpc) GetDhcpOptionsId() string {
+	if m != nil && m.DhcpOptionsId != nil {
+		return *m.DhcpOptionsId
+	}
+	return ""
+}
+
+func (m *Vpc) GetInstanceTenancy() string {
+	if m != nil && m.InstanceTenancy != nil {
+		return *m.InstanceTenancy
+	}
+	return ""
+}
+
+func (m *Vpc) GetIsDefault() bool {
+	if m != nil && m.IsDefault != nil {
+		return *m.IsDefault
+	}
+	return false
+}
+
+func (m *Vpc) GetState() string {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return ""
+}
+
+func (m *Vpc) GetTags() []*Tag {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *Vpc) GetVpcId() string {
+	if m != nil && m.VpcId != nil {
+		return *m.VpcId
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*EbsInstanceBlockDevice)(nil), "opsee.aws.ec2.EbsInstanceBlockDevice")
 	proto.RegisterType((*GroupIdentifier)(nil), "opsee.aws.ec2.GroupIdentifier")
@@ -1075,8 +1220,10 @@ func init() {
 	proto.RegisterType((*ProductCode)(nil), "opsee.aws.ec2.ProductCode")
 	proto.RegisterType((*SecurityGroup)(nil), "opsee.aws.ec2.SecurityGroup")
 	proto.RegisterType((*StateReason)(nil), "opsee.aws.ec2.StateReason")
+	proto.RegisterType((*Subnet)(nil), "opsee.aws.ec2.Subnet")
 	proto.RegisterType((*Tag)(nil), "opsee.aws.ec2.Tag")
 	proto.RegisterType((*UserIdGroupPair)(nil), "opsee.aws.ec2.UserIdGroupPair")
+	proto.RegisterType((*Vpc)(nil), "opsee.aws.ec2.Vpc")
 }
 func (this *EbsInstanceBlockDevice) Equal(that interface{}) bool {
 	if that == nil {
@@ -2460,6 +2607,116 @@ func (this *StateReason) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *Subnet) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Subnet)
+	if !ok {
+		that2, ok := that.(Subnet)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.AvailabilityZone != nil && that1.AvailabilityZone != nil {
+		if *this.AvailabilityZone != *that1.AvailabilityZone {
+			return false
+		}
+	} else if this.AvailabilityZone != nil {
+		return false
+	} else if that1.AvailabilityZone != nil {
+		return false
+	}
+	if this.AvailableIpAddressCount != nil && that1.AvailableIpAddressCount != nil {
+		if *this.AvailableIpAddressCount != *that1.AvailableIpAddressCount {
+			return false
+		}
+	} else if this.AvailableIpAddressCount != nil {
+		return false
+	} else if that1.AvailableIpAddressCount != nil {
+		return false
+	}
+	if this.CidrBlock != nil && that1.CidrBlock != nil {
+		if *this.CidrBlock != *that1.CidrBlock {
+			return false
+		}
+	} else if this.CidrBlock != nil {
+		return false
+	} else if that1.CidrBlock != nil {
+		return false
+	}
+	if this.DefaultForAz != nil && that1.DefaultForAz != nil {
+		if *this.DefaultForAz != *that1.DefaultForAz {
+			return false
+		}
+	} else if this.DefaultForAz != nil {
+		return false
+	} else if that1.DefaultForAz != nil {
+		return false
+	}
+	if this.MapPublicIpOnLaunch != nil && that1.MapPublicIpOnLaunch != nil {
+		if *this.MapPublicIpOnLaunch != *that1.MapPublicIpOnLaunch {
+			return false
+		}
+	} else if this.MapPublicIpOnLaunch != nil {
+		return false
+	} else if that1.MapPublicIpOnLaunch != nil {
+		return false
+	}
+	if this.State != nil && that1.State != nil {
+		if *this.State != *that1.State {
+			return false
+		}
+	} else if this.State != nil {
+		return false
+	} else if that1.State != nil {
+		return false
+	}
+	if this.SubnetId != nil && that1.SubnetId != nil {
+		if *this.SubnetId != *that1.SubnetId {
+			return false
+		}
+	} else if this.SubnetId != nil {
+		return false
+	} else if that1.SubnetId != nil {
+		return false
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if !this.Tags[i].Equal(that1.Tags[i]) {
+			return false
+		}
+	}
+	if this.VpcId != nil && that1.VpcId != nil {
+		if *this.VpcId != *that1.VpcId {
+			return false
+		}
+	} else if this.VpcId != nil {
+		return false
+	} else if that1.VpcId != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
 func (this *Tag) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
@@ -2558,6 +2815,98 @@ func (this *UserIdGroupPair) Equal(that interface{}) bool {
 	} else if this.UserId != nil {
 		return false
 	} else if that1.UserId != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *Vpc) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Vpc)
+	if !ok {
+		that2, ok := that.(Vpc)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.CidrBlock != nil && that1.CidrBlock != nil {
+		if *this.CidrBlock != *that1.CidrBlock {
+			return false
+		}
+	} else if this.CidrBlock != nil {
+		return false
+	} else if that1.CidrBlock != nil {
+		return false
+	}
+	if this.DhcpOptionsId != nil && that1.DhcpOptionsId != nil {
+		if *this.DhcpOptionsId != *that1.DhcpOptionsId {
+			return false
+		}
+	} else if this.DhcpOptionsId != nil {
+		return false
+	} else if that1.DhcpOptionsId != nil {
+		return false
+	}
+	if this.InstanceTenancy != nil && that1.InstanceTenancy != nil {
+		if *this.InstanceTenancy != *that1.InstanceTenancy {
+			return false
+		}
+	} else if this.InstanceTenancy != nil {
+		return false
+	} else if that1.InstanceTenancy != nil {
+		return false
+	}
+	if this.IsDefault != nil && that1.IsDefault != nil {
+		if *this.IsDefault != *that1.IsDefault {
+			return false
+		}
+	} else if this.IsDefault != nil {
+		return false
+	} else if that1.IsDefault != nil {
+		return false
+	}
+	if this.State != nil && that1.State != nil {
+		if *this.State != *that1.State {
+			return false
+		}
+	} else if this.State != nil {
+		return false
+	} else if that1.State != nil {
+		return false
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if !this.Tags[i].Equal(that1.Tags[i]) {
+			return false
+		}
+	}
+	if this.VpcId != nil && that1.VpcId != nil {
+		if *this.VpcId != *that1.VpcId {
+			return false
+		}
+	} else if this.VpcId != nil {
+		return false
+	} else if that1.VpcId != nil {
 		return false
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -2674,6 +3023,12 @@ type StateReasonGetter interface {
 
 var GraphQLStateReasonType *github_com_graphql_go_graphql.Object
 
+type SubnetGetter interface {
+	GetSubnet() *Subnet
+}
+
+var GraphQLSubnetType *github_com_graphql_go_graphql.Object
+
 type TagGetter interface {
 	GetTag() *Tag
 }
@@ -2685,6 +3040,12 @@ type UserIdGroupPairGetter interface {
 }
 
 var GraphQLUserIdGroupPairType *github_com_graphql_go_graphql.Object
+
+type VpcGetter interface {
+	GetVpc() *Vpc
+}
+
+var GraphQLVpcType *github_com_graphql_go_graphql.Object
 
 func init() {
 	GraphQLEbsInstanceBlockDeviceType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
@@ -5278,6 +5639,233 @@ func init() {
 			}
 		}),
 	})
+	GraphQLSubnetType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2Subnet",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"AvailabilityZone": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.AvailabilityZone == nil {
+								return nil, nil
+							}
+							return obj.GetAvailabilityZone(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AvailabilityZone == nil {
+								return nil, nil
+							}
+							return face.GetAvailabilityZone(), nil
+						}
+						return nil, fmt.Errorf("field AvailabilityZone not resolved")
+					},
+				},
+				"AvailableIpAddressCount": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.AvailableIpAddressCount == nil {
+								return nil, nil
+							}
+							return obj.GetAvailableIpAddressCount(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AvailableIpAddressCount == nil {
+								return nil, nil
+							}
+							return face.GetAvailableIpAddressCount(), nil
+						}
+						return nil, fmt.Errorf("field AvailableIpAddressCount not resolved")
+					},
+				},
+				"CidrBlock": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.CidrBlock == nil {
+								return nil, nil
+							}
+							return obj.GetCidrBlock(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.CidrBlock == nil {
+								return nil, nil
+							}
+							return face.GetCidrBlock(), nil
+						}
+						return nil, fmt.Errorf("field CidrBlock not resolved")
+					},
+				},
+				"DefaultForAz": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.DefaultForAz == nil {
+								return nil, nil
+							}
+							return obj.GetDefaultForAz(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DefaultForAz == nil {
+								return nil, nil
+							}
+							return face.GetDefaultForAz(), nil
+						}
+						return nil, fmt.Errorf("field DefaultForAz not resolved")
+					},
+				},
+				"MapPublicIpOnLaunch": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.MapPublicIpOnLaunch == nil {
+								return nil, nil
+							}
+							return obj.GetMapPublicIpOnLaunch(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MapPublicIpOnLaunch == nil {
+								return nil, nil
+							}
+							return face.GetMapPublicIpOnLaunch(), nil
+						}
+						return nil, fmt.Errorf("field MapPublicIpOnLaunch not resolved")
+					},
+				},
+				"State": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.State == nil {
+								return nil, nil
+							}
+							return obj.GetState(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.State == nil {
+								return nil, nil
+							}
+							return face.GetState(), nil
+						}
+						return nil, fmt.Errorf("field State not resolved")
+					},
+				},
+				"SubnetId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.SubnetId == nil {
+								return nil, nil
+							}
+							return obj.GetSubnetId(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.SubnetId == nil {
+								return nil, nil
+							}
+							return face.GetSubnetId(), nil
+						}
+						return nil, fmt.Errorf("field SubnetId not resolved")
+					},
+				},
+				"Tags": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLTagType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							return obj.Tags, nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Tags, nil
+						}
+						return nil, fmt.Errorf("field Tags not resolved")
+					},
+				},
+				"VpcId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.VpcId == nil {
+								return nil, nil
+							}
+							return obj.GetVpcId(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.VpcId == nil {
+								return nil, nil
+							}
+							return face.GetVpcId(), nil
+						}
+						return nil, fmt.Errorf("field VpcId not resolved")
+					},
+				},
+			}
+		}),
+	})
 	GraphQLTagType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "ec2Tag",
 		Description: "",
@@ -5414,6 +6002,183 @@ func init() {
 							return face.GetUserId(), nil
 						}
 						return nil, fmt.Errorf("field UserId not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLVpcType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2Vpc",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"CidrBlock": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.CidrBlock == nil {
+								return nil, nil
+							}
+							return obj.GetCidrBlock(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.CidrBlock == nil {
+								return nil, nil
+							}
+							return face.GetCidrBlock(), nil
+						}
+						return nil, fmt.Errorf("field CidrBlock not resolved")
+					},
+				},
+				"DhcpOptionsId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.DhcpOptionsId == nil {
+								return nil, nil
+							}
+							return obj.GetDhcpOptionsId(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DhcpOptionsId == nil {
+								return nil, nil
+							}
+							return face.GetDhcpOptionsId(), nil
+						}
+						return nil, fmt.Errorf("field DhcpOptionsId not resolved")
+					},
+				},
+				"InstanceTenancy": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.InstanceTenancy == nil {
+								return nil, nil
+							}
+							return obj.GetInstanceTenancy(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.InstanceTenancy == nil {
+								return nil, nil
+							}
+							return face.GetInstanceTenancy(), nil
+						}
+						return nil, fmt.Errorf("field InstanceTenancy not resolved")
+					},
+				},
+				"IsDefault": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.IsDefault == nil {
+								return nil, nil
+							}
+							return obj.GetIsDefault(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.IsDefault == nil {
+								return nil, nil
+							}
+							return face.GetIsDefault(), nil
+						}
+						return nil, fmt.Errorf("field IsDefault not resolved")
+					},
+				},
+				"State": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.State == nil {
+								return nil, nil
+							}
+							return obj.GetState(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.State == nil {
+								return nil, nil
+							}
+							return face.GetState(), nil
+						}
+						return nil, fmt.Errorf("field State not resolved")
+					},
+				},
+				"Tags": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLTagType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							return obj.Tags, nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Tags, nil
+						}
+						return nil, fmt.Errorf("field Tags not resolved")
+					},
+				},
+				"VpcId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.VpcId == nil {
+								return nil, nil
+							}
+							return obj.GetVpcId(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.VpcId == nil {
+								return nil, nil
+							}
+							return face.GetVpcId(), nil
+						}
+						return nil, fmt.Errorf("field VpcId not resolved")
 					},
 				},
 			}
@@ -6022,15 +6787,65 @@ func NewPopulatedStateReason(r randyTypes, easy bool) *StateReason {
 	return this
 }
 
+func NewPopulatedSubnet(r randyTypes, easy bool) *Subnet {
+	this := &Subnet{}
+	if r.Intn(10) != 0 {
+		v93 := randStringTypes(r)
+		this.AvailabilityZone = &v93
+	}
+	if r.Intn(10) != 0 {
+		v94 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v94 *= -1
+		}
+		this.AvailableIpAddressCount = &v94
+	}
+	if r.Intn(10) != 0 {
+		v95 := randStringTypes(r)
+		this.CidrBlock = &v95
+	}
+	if r.Intn(10) != 0 {
+		v96 := bool(bool(r.Intn(2) == 0))
+		this.DefaultForAz = &v96
+	}
+	if r.Intn(10) != 0 {
+		v97 := bool(bool(r.Intn(2) == 0))
+		this.MapPublicIpOnLaunch = &v97
+	}
+	if r.Intn(10) != 0 {
+		v98 := randStringTypes(r)
+		this.State = &v98
+	}
+	if r.Intn(10) != 0 {
+		v99 := randStringTypes(r)
+		this.SubnetId = &v99
+	}
+	if r.Intn(10) != 0 {
+		v100 := r.Intn(5)
+		this.Tags = make([]*Tag, v100)
+		for i := 0; i < v100; i++ {
+			this.Tags[i] = NewPopulatedTag(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v101 := randStringTypes(r)
+		this.VpcId = &v101
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 11)
+	}
+	return this
+}
+
 func NewPopulatedTag(r randyTypes, easy bool) *Tag {
 	this := &Tag{}
 	if r.Intn(10) != 0 {
-		v93 := randStringTypes(r)
-		this.Key = &v93
+		v102 := randStringTypes(r)
+		this.Key = &v102
 	}
 	if r.Intn(10) != 0 {
-		v94 := randStringTypes(r)
-		this.Value = &v94
+		v103 := randStringTypes(r)
+		this.Value = &v103
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6041,19 +6856,58 @@ func NewPopulatedTag(r randyTypes, easy bool) *Tag {
 func NewPopulatedUserIdGroupPair(r randyTypes, easy bool) *UserIdGroupPair {
 	this := &UserIdGroupPair{}
 	if r.Intn(10) != 0 {
-		v95 := randStringTypes(r)
-		this.GroupId = &v95
+		v104 := randStringTypes(r)
+		this.GroupId = &v104
 	}
 	if r.Intn(10) != 0 {
-		v96 := randStringTypes(r)
-		this.GroupName = &v96
+		v105 := randStringTypes(r)
+		this.GroupName = &v105
 	}
 	if r.Intn(10) != 0 {
-		v97 := randStringTypes(r)
-		this.UserId = &v97
+		v106 := randStringTypes(r)
+		this.UserId = &v106
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
+	}
+	return this
+}
+
+func NewPopulatedVpc(r randyTypes, easy bool) *Vpc {
+	this := &Vpc{}
+	if r.Intn(10) != 0 {
+		v107 := randStringTypes(r)
+		this.CidrBlock = &v107
+	}
+	if r.Intn(10) != 0 {
+		v108 := randStringTypes(r)
+		this.DhcpOptionsId = &v108
+	}
+	if r.Intn(10) != 0 {
+		v109 := randStringTypes(r)
+		this.InstanceTenancy = &v109
+	}
+	if r.Intn(10) != 0 {
+		v110 := bool(bool(r.Intn(2) == 0))
+		this.IsDefault = &v110
+	}
+	if r.Intn(10) != 0 {
+		v111 := randStringTypes(r)
+		this.State = &v111
+	}
+	if r.Intn(10) != 0 {
+		v112 := r.Intn(5)
+		this.Tags = make([]*Tag, v112)
+		for i := 0; i < v112; i++ {
+			this.Tags[i] = NewPopulatedTag(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v113 := randStringTypes(r)
+		this.VpcId = &v113
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 9)
 	}
 	return this
 }
@@ -6077,9 +6931,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v98 := r.Intn(100)
-	tmps := make([]rune, v98)
-	for i := 0; i < v98; i++ {
+	v114 := r.Intn(100)
+	tmps := make([]rune, v114)
+	for i := 0; i < v114; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -6101,11 +6955,11 @@ func randFieldTypes(data []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateTypes(data, uint64(key))
-		v99 := r.Int63()
+		v115 := r.Int63()
 		if r.Intn(2) == 0 {
-			v99 *= -1
+			v115 *= -1
 		}
-		data = encodeVarintPopulateTypes(data, uint64(v99))
+		data = encodeVarintPopulateTypes(data, uint64(v115))
 	case 1:
 		data = encodeVarintPopulateTypes(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))

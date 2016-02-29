@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/basic/schema/user.proto";
+
+package opsee;
+
+option go_package = "service";
+option (opseeproto.graphql) = true;
+
+message GetUserRequest {
+	string customer_id = 1;
+	int32 id = 2;
+	string email = 3;
+}
+
+message GetUserResponse {
+	User user = 1;
+	string basic_token = 2;
+}
+
+message ListUsersRequest {
+	int32 page = 1;
+	int32 per_page = 2;
+}
+
+message ListUsersResponse {
+	repeated User users = 1;
+	int32 page = 2;
+	int32 per_page = 3;
+	int32 total = 4;
+}
+
+message ListCustomersResponse {
+	repeated Customer customers = 1;
+	int32 page = 2;
+	int32 per_page = 3;
+	int32 total = 4;
+}
+
+service Vape {
+	rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+	rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
+}

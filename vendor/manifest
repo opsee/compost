@@ -128,21 +128,21 @@
 		{
 			"importpath": "github.com/gogo/protobuf/gogoproto",
 			"repository": "https://github.com/gogo/protobuf",
-			"revision": "82d16f734d6d871204a3feb1a73cb220cc92574c",
+			"revision": "ff05bbbb0ff143cc11fc3f8b700fc3a2864b884d",
 			"branch": "master",
 			"path": "/gogoproto"
 		},
 		{
 			"importpath": "github.com/gogo/protobuf/proto",
 			"repository": "https://github.com/gogo/protobuf",
-			"revision": "82d16f734d6d871204a3feb1a73cb220cc92574c",
+			"revision": "ff05bbbb0ff143cc11fc3f8b700fc3a2864b884d",
 			"branch": "master",
 			"path": "/proto"
 		},
 		{
 			"importpath": "github.com/gogo/protobuf/protoc-gen-gogo/descriptor",
 			"repository": "https://github.com/gogo/protobuf",
-			"revision": "82d16f734d6d871204a3feb1a73cb220cc92574c",
+			"revision": "ff05bbbb0ff143cc11fc3f8b700fc3a2864b884d",
 			"branch": "master",
 			"path": "/protoc-gen-gogo/descriptor"
 		},
@@ -186,22 +186,22 @@
 		{
 			"importpath": "github.com/opsee/basic",
 			"repository": "https://github.com/opsee/basic",
-			"revision": "f665eadca4b1107464bd7fe8276e3593521f6857",
-			"branch": "mark/beav"
+			"revision": "7d188aeceac516fbda67d575042d0b6257b2f8e1",
+			"branch": "master"
 		},
 		{
 			"importpath": "github.com/opsee/protobuf/opseeproto",
 			"repository": "https://github.com/opsee/protobuf",
-			"revision": "c54e5215f1a45512fba78eeaddd1fcc19095afd5",
+			"revision": "1776823a8fe8856c8e3a75c9d4f846c9008c6935",
 			"branch": "master",
 			"path": "/opseeproto"
 		},
 		{
-			"importpath": "github.com/opsee/protobuf/proto/google/protobuf",
+			"importpath": "github.com/opsee/protobuf/plugin/graphql/scalars",
 			"repository": "https://github.com/opsee/protobuf",
-			"revision": "c54e5215f1a45512fba78eeaddd1fcc19095afd5",
+			"revision": "1776823a8fe8856c8e3a75c9d4f846c9008c6935",
 			"branch": "master",
-			"path": "/proto/google/protobuf"
+			"path": "/plugin/graphql/scalars"
 		},
 		{
 			"importpath": "github.com/pmezard/go-difflib/difflib",

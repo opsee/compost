@@ -12,3 +12,10 @@ func ParamsDecoder(key interface{}) DecodeFunc {
 		return newContext, 0, nil
 	}
 }
+
+func QueryDecoder(key interface{}) DecodeFunc {
+	return func(ctx context.Context, rw http.ResponseWriter, r *http.Request, _ httprouter.Params) (context.Context, int, error) {
+		newContext := context.WithValue(ctx, key, r.URL.Query())
+		return newContext, 0, nil
+	}
+}

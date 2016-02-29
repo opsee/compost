@@ -21,8 +21,9 @@ var (
 )
 
 type Composter struct {
-	Schema   graphql.Schema
-	resolver resolver.Client
+	Schema      graphql.Schema
+	AdminSchema graphql.Schema
+	resolver    resolver.Client
 }
 
 func New(resolver resolver.Client) *Composter {
@@ -34,14 +35,14 @@ func New(resolver resolver.Client) *Composter {
 	return composter
 }
 
-func (c *Composter) Compost(ctx context.Context) (*graphql.Result, error) {
+func (c *Composter) Compost(ctx context.Context, schema graphql.Schema) (*graphql.Result, error) {
 	request, ok := ctx.Value(requestKey).(*GraphQLRequest)
 	if !ok {
 		return nil, errDecodeRequest
 	}
 
 	response := graphql.Do(graphql.Params{
-		Schema:         c.Schema,
+		Schema:         schema,
 		RequestString:  request.Query,
 		VariableValues: request.Variables,
 		Context:        ctx,

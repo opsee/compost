@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gogo/protobuf/proto"
 	"github.com/opsee/basic/schema"
+	"github.com/opsee/basic/service"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -36,7 +37,7 @@ func (c *client) ListChecks(user *schema.User) ([]*schema.Check, error) {
 		return nil, err
 	}
 
-	checks := &schema.CheckResourceRequest{}
+	checks := &service.CheckResourceRequest{}
 	err = proto.Unmarshal(body, checks)
 	if err != nil {
 		return nil, err

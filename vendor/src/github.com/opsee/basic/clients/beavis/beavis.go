@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gogo/protobuf/proto"
 	"github.com/opsee/basic/schema"
+	"github.com/opsee/basic/service"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -37,7 +38,7 @@ func (c *client) ListResults(user *schema.User) ([]*schema.CheckResult, error) {
 		return nil, err
 	}
 
-	results := &schema.ResultsResource{}
+	results := &service.ResultsResource{}
 	err = proto.Unmarshal(body, results)
 	if err != nil {
 		return nil, err

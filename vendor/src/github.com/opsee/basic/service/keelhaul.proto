@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "stack.proto";
+import "github.com/opsee/basic/schema/user.proto";
+import "github.com/opsee/basic/schema/aws_data.proto";
+import "github.com/opsee/basic/schema/aws/ec2/types.proto";
+
+package opsee;
+
+option go_package = "service";
+option (opseeproto.graphql) = true;
+
+message ListBastionStatesRequest {
+	repeated string customer_ids = 1;
+}
+
+message ListBastionStatesResponse {
+	repeated BastionState bastion_states = 1;
+}
+
+message ScanVpcsRequest {
+  User user = 1;
+	string access_key = 2;
+	string secret_key = 3;
+	string region = 4;
+}
+
+message ScanVpcsResponse {
+	Region region = 1;
+}
+
+message LaunchStackRequest {
+  User user = 1;
+	string access_key = 2;
+	string secret_key = 3;
+	string region = 4;
+	string vpc_id = 5;
+	string subnet_id = 6;
+	string instance_size = 7;
+}
+
+message LaunchStackResponse {
+	string stack_id = 1;
+}
+
+message AuthenticateBastionRequest {
+	string id = 1;
+	string password = 2;
+}
+
+message AuthenticateBastionResponse {
+	bool success = 1;
+}
+
+service Keelhaul {
+	rpc ListBastionStates(ListBastionStatesRequest) returns (ListBastionStatesResponse) {}
+	rpc ScanVpcs(ScanVpcsRequest) returns (ScanVpcsResponse) {}
+	rpc LaunchStack(LaunchStackRequest) returns (LaunchStackResponse) {}
+	rpc AuthenticateBastion(AuthenticateBastionRequest) returns (AuthenticateBastionResponse) {}
+}

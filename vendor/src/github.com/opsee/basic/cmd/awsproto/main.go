@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/autoscaling"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/elb"
@@ -37,6 +38,8 @@ var (
 		"ec2": []interface{}{
 			ec2.Instance{},
 			ec2.SecurityGroup{},
+			ec2.Vpc{},
+			ec2.Subnet{},
 		},
 		"elb": []interface{}{
 			elb.LoadBalancerDescription{},
@@ -47,11 +50,13 @@ var (
 		"rds": []interface{}{
 			rds.DBInstance{},
 		},
+		"credentials": []interface{}{
+			credentials.Value{},
+		},
 	}
 
 	basePath = flag.String("basepath", "", "the base path for aws proto")
 	header   = `syntax = "proto2";
-import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 
@@ -87,6 +92,7 @@ func main() {
 		protobuf.GenerateProtobufDefinition(buf, allTypes, nil, &protonamer{})
 
 		sanitized := bytes.Replace(buf.Bytes(), []byte("  required  _ = 1;\n"), []byte{}, -1)
+		sanitized = bytes.Replace(sanitized, []byte("  required"), []byte("  optional"), -1)
 
 		p := path.Join(*basePath, pkg)
 		if err := os.MkdirAll(p, 0777); err != nil {

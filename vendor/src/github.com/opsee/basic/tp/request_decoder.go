@@ -36,16 +36,14 @@ func RequestDecodeFunc(requestKey int, requestType interface{}) DecodeFunc {
 		}
 
 		request, ok := requestInterface.(RequestValidator)
-		if !ok {
-			return ctx, http.StatusInternalServerError, fmt.Errorf("Failed type assertion for type: %#v", requestType)
+		if ok {
+			err = request.Validate()
+			if err != nil {
+				return ctx, http.StatusBadRequest, err
+			}
 		}
 
-		err = request.Validate()
-		if err != nil {
-			return ctx, http.StatusBadRequest, err
-		}
-
-		return context.WithValue(ctx, requestKey, request), 0, nil
+		return context.WithValue(ctx, requestKey, requestInterface), 0, nil
 	}
 }
 

@@ -8,10 +8,17 @@ import (
 )
 
 func main() {
-	resolver := resolver.NewClient(resolver.ClientConfig{
-		Bartnet: "https://bartnet.in.opsee.com",
-		Beavis:  "https://beavis.in.opsee.com",
+	resolver, err := resolver.NewClient(resolver.ClientConfig{
+		Bartnet:  "https://bartnet.in.opsee.com",
+		Beavis:   "https://beavis.in.opsee.com",
+		Spanx:    "spanx.in.opsee.com:8443",
+		Vape:     "vape.in.opsee.com:443",
+		Keelhaul: "keelhaul.in.opsee.com:443",
 	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	composter := composter.New(resolver)
 	composter.StartHTTP(

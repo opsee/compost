@@ -7,11 +7,12 @@ package schema
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import _ "github.com/opsee/protobuf/proto/google/protobuf"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/protobuf/opseeproto"
+import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
+import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -19,21 +20,81 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 type User struct {
-	Id         int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CustomerId string `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty"`
-	Email      string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Name       string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Verified   bool   `protobuf:"varint,5,opt,name=verified,proto3" json:"verified,omitempty"`
-	Admin      bool   `protobuf:"varint,6,opt,name=admin,proto3" json:"admin,omitempty"`
-	Active     bool   `protobuf:"varint,7,opt,name=active,proto3" json:"active,omitempty"`
+	Id           int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" token:"id"`
+	CustomerId   string                 `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty" token:"customer_id" db:"customer_id"`
+	Email        string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" token:"email"`
+	Name         string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" token:"name"`
+	Verified     bool                   `protobuf:"varint,5,opt,name=verified,proto3" json:"verified,omitempty" token:"verified"`
+	Admin        bool                   `protobuf:"varint,6,opt,name=admin,proto3" json:"admin,omitempty" token:"admin"`
+	Active       bool                   `protobuf:"varint,7,opt,name=active,proto3" json:"active,omitempty" token:"active"`
+	AdminId      int32                  `protobuf:"varint,8,opt,name=admin_id,proto3" json:"admin_id,omitempty" token:"admin_id"`
+	PasswordHash string                 `protobuf:"bytes,9,opt,name=password_hash,proto3" json:"-" db:"password_hash"`
+	CreatedAt    *opsee_types.Timestamp `protobuf:"bytes,10,opt,name=created_at" json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt    *opsee_types.Timestamp `protobuf:"bytes,11,opt,name=updated_at" json:"updated_at,omitempty" db:"updated_at"`
 }
 
 func (m *User) Reset()         { *m = User{} }
 func (m *User) String() string { return proto.CompactTextString(m) }
 func (*User) ProtoMessage()    {}
 
+func (m *User) GetCreatedAt() *opsee_types.Timestamp {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return nil
+}
+
+func (m *User) GetUpdatedAt() *opsee_types.Timestamp {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return nil
+}
+
+type Customer struct {
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	CreatedAt     *opsee_types.Timestamp `protobuf:"bytes,3,opt,name=created_at" json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt     *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=updated_at" json:"updated_at,omitempty" db:"updated_at"`
+	Users         []*User                `protobuf:"bytes,5,rep,name=users" json:"users,omitempty"`
+	BastionStates []*BastionState        `protobuf:"bytes,6,rep,name=bastion_states" json:"bastion_states,omitempty"`
+}
+
+func (m *Customer) Reset()         { *m = Customer{} }
+func (m *Customer) String() string { return proto.CompactTextString(m) }
+func (*Customer) ProtoMessage()    {}
+
+func (m *Customer) GetCreatedAt() *opsee_types.Timestamp {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return nil
+}
+
+func (m *Customer) GetUpdatedAt() *opsee_types.Timestamp {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return nil
+}
+
+func (m *Customer) GetUsers() []*User {
+	if m != nil {
+		return m.Users
+	}
+	return nil
+}
+
+func (m *Customer) GetBastionStates() []*BastionState {
+	if m != nil {
+		return m.BastionStates
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*User)(nil), "opsee.User")
+	proto.RegisterType((*Customer)(nil), "opsee.Customer")
 }
 func (this *User) Equal(that interface{}) bool {
 	if that == nil {
@@ -81,6 +142,73 @@ func (this *User) Equal(that interface{}) bool {
 	if this.Active != that1.Active {
 		return false
 	}
+	if this.AdminId != that1.AdminId {
+		return false
+	}
+	if this.PasswordHash != that1.PasswordHash {
+		return false
+	}
+	if !this.CreatedAt.Equal(that1.CreatedAt) {
+		return false
+	}
+	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
+		return false
+	}
+	return true
+}
+func (this *Customer) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Customer)
+	if !ok {
+		that2, ok := that.(Customer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Id != that1.Id {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if !this.CreatedAt.Equal(that1.CreatedAt) {
+		return false
+	}
+	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
+		return false
+	}
+	if len(this.Users) != len(that1.Users) {
+		return false
+	}
+	for i := range this.Users {
+		if !this.Users[i].Equal(that1.Users[i]) {
+			return false
+		}
+	}
+	if len(this.BastionStates) != len(that1.BastionStates) {
+		return false
+	}
+	for i := range this.BastionStates {
+		if !this.BastionStates[i].Equal(that1.BastionStates[i]) {
+			return false
+		}
+	}
 	return true
 }
 
@@ -89,6 +217,12 @@ type UserGetter interface {
 }
 
 var GraphQLUserType *github_com_graphql_go_graphql.Object
+
+type CustomerGetter interface {
+	GetCustomer() *Customer
+}
+
+var GraphQLCustomerType *github_com_graphql_go_graphql.Object
 
 func init() {
 	GraphQLUserType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
@@ -229,6 +363,228 @@ func init() {
 						return nil, fmt.Errorf("field active not resolved")
 					},
 				},
+				"admin_id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*User)
+						if ok {
+							return obj.AdminId, nil
+						}
+						inter, ok := p.Source.(UserGetter)
+						if ok {
+							face := inter.GetUser()
+							if face == nil {
+								return nil, nil
+							}
+							return face.AdminId, nil
+						}
+						return nil, fmt.Errorf("field admin_id not resolved")
+					},
+				},
+				"password_hash": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*User)
+						if ok {
+							return obj.PasswordHash, nil
+						}
+						inter, ok := p.Source.(UserGetter)
+						if ok {
+							face := inter.GetUser()
+							if face == nil {
+								return nil, nil
+							}
+							return face.PasswordHash, nil
+						}
+						return nil, fmt.Errorf("field password_hash not resolved")
+					},
+				},
+				"created_at": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*User)
+						if ok {
+							if obj.CreatedAt == nil {
+								return nil, nil
+							}
+							return obj.GetCreatedAt(), nil
+						}
+						inter, ok := p.Source.(UserGetter)
+						if ok {
+							face := inter.GetUser()
+							if face == nil {
+								return nil, nil
+							}
+							if face.CreatedAt == nil {
+								return nil, nil
+							}
+							return face.GetCreatedAt(), nil
+						}
+						return nil, fmt.Errorf("field created_at not resolved")
+					},
+				},
+				"updated_at": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*User)
+						if ok {
+							if obj.UpdatedAt == nil {
+								return nil, nil
+							}
+							return obj.GetUpdatedAt(), nil
+						}
+						inter, ok := p.Source.(UserGetter)
+						if ok {
+							face := inter.GetUser()
+							if face == nil {
+								return nil, nil
+							}
+							if face.UpdatedAt == nil {
+								return nil, nil
+							}
+							return face.GetUpdatedAt(), nil
+						}
+						return nil, fmt.Errorf("field updated_at not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLCustomerType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "schemaCustomer",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Customer)
+						if ok {
+							return obj.Id, nil
+						}
+						inter, ok := p.Source.(CustomerGetter)
+						if ok {
+							face := inter.GetCustomer()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Id, nil
+						}
+						return nil, fmt.Errorf("field id not resolved")
+					},
+				},
+				"name": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Customer)
+						if ok {
+							return obj.Name, nil
+						}
+						inter, ok := p.Source.(CustomerGetter)
+						if ok {
+							face := inter.GetCustomer()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Name, nil
+						}
+						return nil, fmt.Errorf("field name not resolved")
+					},
+				},
+				"created_at": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Customer)
+						if ok {
+							if obj.CreatedAt == nil {
+								return nil, nil
+							}
+							return obj.GetCreatedAt(), nil
+						}
+						inter, ok := p.Source.(CustomerGetter)
+						if ok {
+							face := inter.GetCustomer()
+							if face == nil {
+								return nil, nil
+							}
+							if face.CreatedAt == nil {
+								return nil, nil
+							}
+							return face.GetCreatedAt(), nil
+						}
+						return nil, fmt.Errorf("field created_at not resolved")
+					},
+				},
+				"updated_at": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Customer)
+						if ok {
+							if obj.UpdatedAt == nil {
+								return nil, nil
+							}
+							return obj.GetUpdatedAt(), nil
+						}
+						inter, ok := p.Source.(CustomerGetter)
+						if ok {
+							face := inter.GetCustomer()
+							if face == nil {
+								return nil, nil
+							}
+							if face.UpdatedAt == nil {
+								return nil, nil
+							}
+							return face.GetUpdatedAt(), nil
+						}
+						return nil, fmt.Errorf("field updated_at not resolved")
+					},
+				},
+				"users": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLUserType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Customer)
+						if ok {
+							return obj.Users, nil
+						}
+						inter, ok := p.Source.(CustomerGetter)
+						if ok {
+							face := inter.GetCustomer()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Users, nil
+						}
+						return nil, fmt.Errorf("field users not resolved")
+					},
+				},
+				"bastion_states": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLBastionStateType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Customer)
+						if ok {
+							return obj.BastionStates, nil
+						}
+						inter, ok := p.Source.(CustomerGetter)
+						if ok {
+							face := inter.GetCustomer()
+							if face == nil {
+								return nil, nil
+							}
+							return face.BastionStates, nil
+						}
+						return nil, fmt.Errorf("field bastion_states not resolved")
+					},
+				},
 			}
 		}),
 	})
@@ -245,6 +601,46 @@ func NewPopulatedUser(r randyUser, easy bool) *User {
 	this.Verified = bool(bool(r.Intn(2) == 0))
 	this.Admin = bool(bool(r.Intn(2) == 0))
 	this.Active = bool(bool(r.Intn(2) == 0))
+	this.AdminId = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.AdminId *= -1
+	}
+	this.PasswordHash = randStringUser(r)
+	if r.Intn(10) != 0 {
+		this.CreatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.UpdatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedCustomer(r randyUser, easy bool) *Customer {
+	this := &Customer{}
+	this.Id = randStringUser(r)
+	this.Name = randStringUser(r)
+	if r.Intn(10) != 0 {
+		this.CreatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.UpdatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Users = make([]*User, v1)
+		for i := 0; i < v1; i++ {
+			this.Users[i] = NewPopulatedUser(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v2 := r.Intn(5)
+		this.BastionStates = make([]*BastionState, v2)
+		for i := 0; i < v2; i++ {
+			this.BastionStates[i] = NewPopulatedBastionState(r, easy)
+		}
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -269,9 +665,9 @@ func randUTF8RuneUser(r randyUser) rune {
 	return rune(ru + 61)
 }
 func randStringUser(r randyUser) string {
-	v1 := r.Intn(100)
-	tmps := make([]rune, v1)
-	for i := 0; i < v1; i++ {
+	v3 := r.Intn(100)
+	tmps := make([]rune, v3)
+	for i := 0; i < v3; i++ {
 		tmps[i] = randUTF8RuneUser(r)
 	}
 	return string(tmps)
@@ -293,11 +689,11 @@ func randFieldUser(data []byte, r randyUser, fieldNumber int, wire int) []byte {
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateUser(data, uint64(key))
-		v2 := r.Int63()
+		v4 := r.Int63()
 		if r.Intn(2) == 0 {
-			v2 *= -1
+			v4 *= -1
 		}
-		data = encodeVarintPopulateUser(data, uint64(v2))
+		data = encodeVarintPopulateUser(data, uint64(v4))
 	case 1:
 		data = encodeVarintPopulateUser(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))

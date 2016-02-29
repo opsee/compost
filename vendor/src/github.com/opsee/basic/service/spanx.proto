@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/basic/schema/aws/credentials/types.proto";
+import "github.com/opsee/basic/schema/user.proto";
+
+package opsee;
+
+option go_package = "service";
+option (opseeproto.graphql) = true;
+
+message PutRoleRequest {
+	User user = 1;
+	aws.credentials.Value credentials = 2;
+}
+
+message PutRoleResponse {
+	aws.credentials.Value credentials = 1;
+}
+
+message GetCredentialsRequest {
+	User user = 1;
+}
+
+message GetCredentialsResponse {
+	aws.credentials.Value credentials = 1;
+}
+
+service Spanx {
+	rpc PutRole(PutRoleRequest) returns (PutRoleResponse) {}
+	rpc GetCredentials(GetCredentialsRequest) returns (GetCredentialsResponse) {}
+}

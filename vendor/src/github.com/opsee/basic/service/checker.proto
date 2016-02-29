@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/opseeproto/types/any.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/basic/schema/checks.proto";
+
+package opsee;
+
+option go_package = "service";
+option (opseeproto.graphql) = true;
+
+service Checker {
+	rpc TestCheck(TestCheckRequest) returns (TestCheckResponse) {}
+	rpc CreateCheck(CheckResourceRequest) returns (ResourceResponse) {}
+	rpc RetrieveCheck(CheckResourceRequest) returns (ResourceResponse) {}
+	rpc UpdateCheck(CheckResourceRequest) returns (ResourceResponse) {}
+	rpc DeleteCheck(CheckResourceRequest) returns (ResourceResponse) {}
+}
+
+message CheckResourceResponse {
+	string id = 1;
+	Check check = 2;
+	string error = 3;
+}
+
+message ResourceResponse {
+	repeated CheckResourceResponse responses = 1;
+}
+
+message CheckResourceRequest {
+	repeated Check checks = 1;
+}
+
+message ResultsResource {
+  repeated CheckResult results = 1;
+}
+
+message TestCheckRequest {
+	int32 max_hosts = 1 [(opseeproto.required) = true];
+	opsee.types.Timestamp deadline = 2 [(opseeproto.required) = true];
+	Check check = 3 [(opseeproto.required) = true];
+}
+
+message TestCheckResponse {
+	repeated CheckResponse responses = 1;
+	string error = 2;
+}

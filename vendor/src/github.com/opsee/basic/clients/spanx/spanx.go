@@ -7,14 +7,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/opsee/basic/com"
+	"github.com/opsee/basic/schema"
 	"io"
 	"net/http"
 )
 
 type Client interface {
-	PutRole(user *com.User, accessKey, secretKey string) (credentials.Value, error)
-	GetCredentials(user *com.User) (credentials.Value, error)
+	PutRole(user *schema.User, accessKey, secretKey string) (credentials.Value, error)
+	GetCredentials(user *schema.User) (credentials.Value, error)
 }
 
 type client struct {
@@ -42,7 +42,7 @@ func New(endpoint string) Client {
 // PutRole provisions the Opsee IAM role in a customer's account, using the provided AWS credentials.
 // Calls to PutRole are idempotent; if a role has already been provisioned, it will simply return
 // AWS STS credentials.
-func (c *client) PutRole(user *com.User, accessKey, secretKey string) (credentials.Value, error) {
+func (c *client) PutRole(user *schema.User, accessKey, secretKey string) (credentials.Value, error) {
 	var creds credentials.Value
 
 	body, err := json.Marshal(roleRequest{
@@ -59,11 +59,11 @@ func (c *client) PutRole(user *com.User, accessKey, secretKey string) (credentia
 
 // GetCredentials returns an AWS STS credentials value that expires at the configured expiration of
 // the spanx service.
-func (c *client) GetCredentials(user *com.User) (credentials.Value, error) {
+func (c *client) GetCredentials(user *schema.User) (credentials.Value, error) {
 	return c.do(user, "GET", "/credentials", nil)
 }
 
-func (c *client) do(user *com.User, method, path string, body io.Reader) (credentials.Value, error) {
+func (c *client) do(user *schema.User, method, path string, body io.Reader) (credentials.Value, error) {
 	var creds credentials.Value
 
 	req, err := http.NewRequest(method, c.endpoint+path, body)

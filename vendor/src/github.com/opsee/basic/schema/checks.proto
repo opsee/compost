@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
-import "github.com/opsee/protobuf/proto/google/protobuf/any.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/protobuf/opseeproto/types/any.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 
@@ -26,8 +26,8 @@ message Check {
 	string id = 1;
 	int32 interval = 2 [(opseeproto.required) = true];
 	Target target = 3 [(opseeproto.required) = true];
-	google.protobuf.Timestamp last_run = 4;
-	google.protobuf.Any check_spec = 5 [(opseeproto.required) = true];
+	opsee.types.Timestamp last_run = 4;
+	opsee.types.Any check_spec = 5 [(opseeproto.required) = true];
 	string name = 6 [(opseeproto.required) = true];
 	repeated Assertion assertions = 7;
 	repeated CheckResult results = 8;
@@ -73,7 +73,7 @@ message Metric {
 	string name = 1;
 	double value = 2;
 	repeated string tags = 3;
-	google.protobuf.Timestamp timestamp = 4;
+	opsee.types.Timestamp timestamp = 4;
 }
 
 message HttpResponse {
@@ -84,38 +84,10 @@ message HttpResponse {
 	string host = 5;
 }
 
-message CheckResourceResponse {
-	string id = 1;
-	Check check = 2;
-	string error = 3;
-}
-
-message ResourceResponse {
-	repeated CheckResourceResponse responses = 1;
-}
-
-message CheckResourceRequest {
-	repeated Check checks = 1;
-}
-
-message ResultsResource {
-  repeated CheckResult results = 1;
-}
-
-message TestCheckRequest {
-	int32 max_hosts = 1 [(opseeproto.required) = true];
-	google.protobuf.Timestamp deadline = 2 [(opseeproto.required) = true];
-	Check check = 3 [(opseeproto.required) = true];
-}
-
-message TestCheckResponse {
-	repeated CheckResponse responses = 1;
-	string error = 2;
-}
 
 message CheckResponse {
 	Target target = 1;
-	google.protobuf.Any response = 2;
+	opsee.types.Any response = 2;
 	string error = 3;
 	bool passing = 4;
 	oneof reply {
@@ -126,7 +98,7 @@ message CheckResponse {
 message CheckResult {
 	string check_id = 1;
 	string customer_id = 2;
-	google.protobuf.Timestamp timestamp = 3;
+	opsee.types.Timestamp timestamp = 3;
 	bool passing = 4;
 	repeated CheckResponse responses = 5;
 	Target target = 6;

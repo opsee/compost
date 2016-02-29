@@ -7,11 +7,14 @@ Package schema is a generated protocol buffer package.
 
 It is generated from these files:
 	aws_data.proto
-	checker.proto
 	checks.proto
+	stack.proto
 	user.proto
 
 It has these top-level messages:
+	Region
+	Vpc
+	Subnet
 	Group
 	Instance
 	Target
@@ -22,36 +25,110 @@ It has these top-level messages:
 	CloudWatchCheck
 	Metric
 	HttpResponse
-	CheckResourceResponse
-	ResourceResponse
-	CheckResourceRequest
-	ResultsResource
-	TestCheckRequest
-	TestCheckResponse
 	CheckResponse
 	CheckResult
+	BastionState
+	Stack
 	User
+	Customer
 */
 package schema
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import google_protobuf "github.com/opsee/protobuf/proto/google/protobuf"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/protobuf/opseeproto"
+import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 import opsee_aws_autoscaling "github.com/opsee/basic/schema/aws/autoscaling"
 import opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
 import opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 import opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
-import github_com_opsee_protobuf_opseeproto "github.com/opsee/protobuf/opseeproto"
+import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// An Opsee region object representing an AWS region.
+type Region struct {
+	// The region identifier, e.g. us-west-1.
+	Region     string `protobuf:"bytes,1,opt,name=region,proto3" json:"region,omitempty"`
+	CustomerId string `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty"`
+	// The region's supported platforms [EC2-VPC, Classic].
+	SupportedPlatforms []string `protobuf:"bytes,3,rep,name=supported_platforms" json:"supported_platforms,omitempty"`
+	// The region's VPCs.
+	Vpcs []*Vpc `protobuf:"bytes,4,rep,name=vpcs" json:"vpcs,omitempty"`
+	// The region's subnets.
+	Subnets []*Subnet `protobuf:"bytes,5,rep,name=subnets" json:"subnets,omitempty"`
+}
+
+func (m *Region) Reset()         { *m = Region{} }
+func (m *Region) String() string { return proto.CompactTextString(m) }
+func (*Region) ProtoMessage()    {}
+
+func (m *Region) GetVpcs() []*Vpc {
+	if m != nil {
+		return m.Vpcs
+	}
+	return nil
+}
+
+func (m *Region) GetSubnets() []*Subnet {
+	if m != nil {
+		return m.Subnets
+	}
+	return nil
+}
+
+// An Opsee VPC object representing an AWS VPC resource.
+type Vpc struct {
+	// The VPC identifier.
+	Id         string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CustomerId string `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty"`
+	// The raw AWS VPC data.
+	Resource *opsee_aws_ec2.Vpc `protobuf:"bytes,3,opt,name=resource" json:"resource,omitempty"`
+	// The last seen number of instances in the VPC. This value is cached, so it may not be consistent.
+	InstanceCount int32 `protobuf:"varint,4,opt,name=instance_count,proto3" json:"instance_count,omitempty"`
+}
+
+func (m *Vpc) Reset()         { *m = Vpc{} }
+func (m *Vpc) String() string { return proto.CompactTextString(m) }
+func (*Vpc) ProtoMessage()    {}
+
+func (m *Vpc) GetResource() *opsee_aws_ec2.Vpc {
+	if m != nil {
+		return m.Resource
+	}
+	return nil
+}
+
+// An Opsee subnet object representing an AWS Subnet resource.
+type Subnet struct {
+	// The subnet identifier.
+	Id         string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CustomerId string `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty"`
+	// The raw AWS subnet data.
+	Resource *opsee_aws_ec2.Subnet `protobuf:"bytes,3,opt,name=resource" json:"resource,omitempty"`
+	// The last seen number of instances in the Subnet. This value is cached, so it may not be consistent.
+	InstanceCount int32 `protobuf:"varint,4,opt,name=instance_count,proto3" json:"instance_count,omitempty"`
+	// The type of route to the internet, may be one of [public, nat, gateway, private, occluded].
+	Routing string `protobuf:"bytes,5,opt,name=routing,proto3" json:"routing,omitempty"`
+}
+
+func (m *Subnet) Reset()         { *m = Subnet{} }
+func (m *Subnet) String() string { return proto.CompactTextString(m) }
+func (*Subnet) ProtoMessage()    {}
+
+func (m *Subnet) GetResource() *opsee_aws_ec2.Subnet {
+	if m != nil {
+		return m.Resource
+	}
+	return nil
+}
 
 // An Opsee group target representing an AWS group resource.
 type Group struct {
@@ -70,9 +147,9 @@ type Group struct {
 	// The last seen number of instances in the group target. This value is cached, so it may not be consistent.
 	InstanceCount int32 `protobuf:"varint,4,opt,name=instance_count,proto3" json:"instance_count,omitempty"`
 	// The last seen instances in the group target. This value is cached, so it may not be consistent.
-	Instances []*Instance                `protobuf:"bytes,5,rep,name=instances" json:"instances,omitempty"`
-	CreatedAt *google_protobuf.Timestamp `protobuf:"bytes,6,opt,name=created_at" json:"created_at,omitempty"`
-	UpdatedAt *google_protobuf.Timestamp `protobuf:"bytes,7,opt,name=updated_at" json:"updated_at,omitempty"`
+	Instances []*Instance            `protobuf:"bytes,5,rep,name=instances" json:"instances,omitempty"`
+	CreatedAt *opsee_types.Timestamp `protobuf:"bytes,6,opt,name=created_at" json:"created_at,omitempty"`
+	UpdatedAt *opsee_types.Timestamp `protobuf:"bytes,7,opt,name=updated_at" json:"updated_at,omitempty"`
 }
 
 func (m *Group) Reset()         { *m = Group{} }
@@ -133,14 +210,14 @@ func (m *Group) GetInstances() []*Instance {
 	return nil
 }
 
-func (m *Group) GetCreatedAt() *google_protobuf.Timestamp {
+func (m *Group) GetCreatedAt() *opsee_types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
 	return nil
 }
 
-func (m *Group) GetUpdatedAt() *google_protobuf.Timestamp {
+func (m *Group) GetUpdatedAt() *opsee_types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
@@ -228,9 +305,9 @@ type Instance struct {
 	//	*Instance_DbInstance
 	Resource isInstance_Resource `protobuf_oneof:"resource"`
 	// The last seen group targets that the instance belongs to. This value is cached, so it may not be consistent.
-	Groups    []*Group                   `protobuf:"bytes,4,rep,name=groups" json:"groups,omitempty"`
-	CreatedAt *google_protobuf.Timestamp `protobuf:"bytes,5,opt,name=created_at" json:"created_at,omitempty"`
-	UpdatedAt *google_protobuf.Timestamp `protobuf:"bytes,6,opt,name=updated_at" json:"updated_at,omitempty"`
+	Groups    []*Group               `protobuf:"bytes,4,rep,name=groups" json:"groups,omitempty"`
+	CreatedAt *opsee_types.Timestamp `protobuf:"bytes,5,opt,name=created_at" json:"created_at,omitempty"`
+	UpdatedAt *opsee_types.Timestamp `protobuf:"bytes,6,opt,name=updated_at" json:"updated_at,omitempty"`
 }
 
 func (m *Instance) Reset()         { *m = Instance{} }
@@ -280,14 +357,14 @@ func (m *Instance) GetGroups() []*Group {
 	return nil
 }
 
-func (m *Instance) GetCreatedAt() *google_protobuf.Timestamp {
+func (m *Instance) GetCreatedAt() *opsee_types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
 	return nil
 }
 
-func (m *Instance) GetUpdatedAt() *google_protobuf.Timestamp {
+func (m *Instance) GetUpdatedAt() *opsee_types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
@@ -348,8 +425,149 @@ func _Instance_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffe
 }
 
 func init() {
+	proto.RegisterType((*Region)(nil), "opsee.Region")
+	proto.RegisterType((*Vpc)(nil), "opsee.Vpc")
+	proto.RegisterType((*Subnet)(nil), "opsee.Subnet")
 	proto.RegisterType((*Group)(nil), "opsee.Group")
 	proto.RegisterType((*Instance)(nil), "opsee.Instance")
+}
+func (this *Region) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Region)
+	if !ok {
+		that2, ok := that.(Region)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Region != that1.Region {
+		return false
+	}
+	if this.CustomerId != that1.CustomerId {
+		return false
+	}
+	if len(this.SupportedPlatforms) != len(that1.SupportedPlatforms) {
+		return false
+	}
+	for i := range this.SupportedPlatforms {
+		if this.SupportedPlatforms[i] != that1.SupportedPlatforms[i] {
+			return false
+		}
+	}
+	if len(this.Vpcs) != len(that1.Vpcs) {
+		return false
+	}
+	for i := range this.Vpcs {
+		if !this.Vpcs[i].Equal(that1.Vpcs[i]) {
+			return false
+		}
+	}
+	if len(this.Subnets) != len(that1.Subnets) {
+		return false
+	}
+	for i := range this.Subnets {
+		if !this.Subnets[i].Equal(that1.Subnets[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *Vpc) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Vpc)
+	if !ok {
+		that2, ok := that.(Vpc)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Id != that1.Id {
+		return false
+	}
+	if this.CustomerId != that1.CustomerId {
+		return false
+	}
+	if !this.Resource.Equal(that1.Resource) {
+		return false
+	}
+	if this.InstanceCount != that1.InstanceCount {
+		return false
+	}
+	return true
+}
+func (this *Subnet) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Subnet)
+	if !ok {
+		that2, ok := that.(Subnet)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Id != that1.Id {
+		return false
+	}
+	if this.CustomerId != that1.CustomerId {
+		return false
+	}
+	if !this.Resource.Equal(that1.Resource) {
+		return false
+	}
+	if this.InstanceCount != that1.InstanceCount {
+		return false
+	}
+	if this.Routing != that1.Routing {
+		return false
+	}
+	return true
 }
 func (this *Group) Equal(that interface{}) bool {
 	if that == nil {
@@ -623,6 +841,24 @@ func (this *Instance_DbInstance) Equal(that interface{}) bool {
 	return true
 }
 
+type RegionGetter interface {
+	GetRegion() *Region
+}
+
+var GraphQLRegionType *github_com_graphql_go_graphql.Object
+
+type VpcGetter interface {
+	GetVpc() *Vpc
+}
+
+var GraphQLVpcType *github_com_graphql_go_graphql.Object
+
+type SubnetGetter interface {
+	GetSubnet() *Subnet
+}
+
+var GraphQLSubnetType *github_com_graphql_go_graphql.Object
+
 type GroupGetter interface {
 	GetGroup() *Group
 }
@@ -654,6 +890,308 @@ func (g *Instance_DbInstance) GetDBInstance() *opsee_aws_rds.DBInstance {
 }
 
 func init() {
+	GraphQLRegionType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "schemaRegion",
+		Description: "An Opsee region object representing an AWS region.",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"region": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "The region identifier, e.g. us-west-1.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Region)
+						if ok {
+							return obj.Region, nil
+						}
+						inter, ok := p.Source.(RegionGetter)
+						if ok {
+							face := inter.GetRegion()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Region, nil
+						}
+						return nil, fmt.Errorf("field region not resolved")
+					},
+				},
+				"customer_id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Region)
+						if ok {
+							return obj.CustomerId, nil
+						}
+						inter, ok := p.Source.(RegionGetter)
+						if ok {
+							face := inter.GetRegion()
+							if face == nil {
+								return nil, nil
+							}
+							return face.CustomerId, nil
+						}
+						return nil, fmt.Errorf("field customer_id not resolved")
+					},
+				},
+				"supported_platforms": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "The region's supported platforms [EC2-VPC, Classic].",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Region)
+						if ok {
+							return obj.SupportedPlatforms, nil
+						}
+						inter, ok := p.Source.(RegionGetter)
+						if ok {
+							face := inter.GetRegion()
+							if face == nil {
+								return nil, nil
+							}
+							return face.SupportedPlatforms, nil
+						}
+						return nil, fmt.Errorf("field supported_platforms not resolved")
+					},
+				},
+				"vpcs": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLVpcType),
+					Description: "The region's VPCs.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Region)
+						if ok {
+							return obj.Vpcs, nil
+						}
+						inter, ok := p.Source.(RegionGetter)
+						if ok {
+							face := inter.GetRegion()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Vpcs, nil
+						}
+						return nil, fmt.Errorf("field vpcs not resolved")
+					},
+				},
+				"subnets": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLSubnetType),
+					Description: "The region's subnets.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Region)
+						if ok {
+							return obj.Subnets, nil
+						}
+						inter, ok := p.Source.(RegionGetter)
+						if ok {
+							face := inter.GetRegion()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Subnets, nil
+						}
+						return nil, fmt.Errorf("field subnets not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLVpcType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "schemaVpc",
+		Description: "An Opsee VPC object representing an AWS VPC resource.",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "The VPC identifier.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							return obj.Id, nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Id, nil
+						}
+						return nil, fmt.Errorf("field id not resolved")
+					},
+				},
+				"customer_id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							return obj.CustomerId, nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							return face.CustomerId, nil
+						}
+						return nil, fmt.Errorf("field customer_id not resolved")
+					},
+				},
+				"resource": &github_com_graphql_go_graphql.Field{
+					Type:        opsee_aws_ec2.GraphQLVpcType,
+					Description: "The raw AWS VPC data.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							if obj.Resource == nil {
+								return nil, nil
+							}
+							return obj.GetResource(), nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Resource == nil {
+								return nil, nil
+							}
+							return face.GetResource(), nil
+						}
+						return nil, fmt.Errorf("field resource not resolved")
+					},
+				},
+				"instance_count": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "The last seen number of instances in the VPC. This value is cached, so it may not be consistent.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Vpc)
+						if ok {
+							return obj.InstanceCount, nil
+						}
+						inter, ok := p.Source.(VpcGetter)
+						if ok {
+							face := inter.GetVpc()
+							if face == nil {
+								return nil, nil
+							}
+							return face.InstanceCount, nil
+						}
+						return nil, fmt.Errorf("field instance_count not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLSubnetType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "schemaSubnet",
+		Description: "An Opsee subnet object representing an AWS Subnet resource.",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "The subnet identifier.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							return obj.Id, nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Id, nil
+						}
+						return nil, fmt.Errorf("field id not resolved")
+					},
+				},
+				"customer_id": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							return obj.CustomerId, nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							return face.CustomerId, nil
+						}
+						return nil, fmt.Errorf("field customer_id not resolved")
+					},
+				},
+				"resource": &github_com_graphql_go_graphql.Field{
+					Type:        opsee_aws_ec2.GraphQLSubnetType,
+					Description: "The raw AWS subnet data.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							if obj.Resource == nil {
+								return nil, nil
+							}
+							return obj.GetResource(), nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Resource == nil {
+								return nil, nil
+							}
+							return face.GetResource(), nil
+						}
+						return nil, fmt.Errorf("field resource not resolved")
+					},
+				},
+				"instance_count": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "The last seen number of instances in the Subnet. This value is cached, so it may not be consistent.",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							return obj.InstanceCount, nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							return face.InstanceCount, nil
+						}
+						return nil, fmt.Errorf("field instance_count not resolved")
+					},
+				},
+				"routing": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "The type of route to the internet, may be one of [public, nat, gateway, private, occluded].",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Subnet)
+						if ok {
+							return obj.Routing, nil
+						}
+						inter, ok := p.Source.(SubnetGetter)
+						if ok {
+							face := inter.GetSubnet()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Routing, nil
+						}
+						return nil, fmt.Errorf("field routing not resolved")
+					},
+				},
+			}
+		}),
+	})
 	GraphQLGroupType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "schemaGroup",
 		Description: "An Opsee group target representing an AWS group resource.",
@@ -755,7 +1293,7 @@ func init() {
 					},
 				},
 				"created_at": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_opseeproto.ByteString,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*Group)
@@ -780,7 +1318,7 @@ func init() {
 					},
 				},
 				"updated_at": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_opseeproto.ByteString,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*Group)
@@ -900,7 +1438,7 @@ func init() {
 					},
 				},
 				"created_at": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_opseeproto.ByteString,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*Instance)
@@ -925,7 +1463,7 @@ func init() {
 					},
 				},
 				"updated_at": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_opseeproto.ByteString,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*Instance)
@@ -1001,6 +1539,67 @@ func init() {
 		},
 	})
 }
+func NewPopulatedRegion(r randyAwsData, easy bool) *Region {
+	this := &Region{}
+	this.Region = randStringAwsData(r)
+	this.CustomerId = randStringAwsData(r)
+	v1 := r.Intn(10)
+	this.SupportedPlatforms = make([]string, v1)
+	for i := 0; i < v1; i++ {
+		this.SupportedPlatforms[i] = randStringAwsData(r)
+	}
+	if r.Intn(10) == 0 {
+		v2 := r.Intn(5)
+		this.Vpcs = make([]*Vpc, v2)
+		for i := 0; i < v2; i++ {
+			this.Vpcs[i] = NewPopulatedVpc(r, easy)
+		}
+	}
+	if r.Intn(10) == 0 {
+		v3 := r.Intn(5)
+		this.Subnets = make([]*Subnet, v3)
+		for i := 0; i < v3; i++ {
+			this.Subnets[i] = NewPopulatedSubnet(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedVpc(r randyAwsData, easy bool) *Vpc {
+	this := &Vpc{}
+	this.Id = randStringAwsData(r)
+	this.CustomerId = randStringAwsData(r)
+	if r.Intn(10) != 0 {
+		this.Resource = opsee_aws_ec2.NewPopulatedVpc(r, easy)
+	}
+	this.InstanceCount = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.InstanceCount *= -1
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedSubnet(r randyAwsData, easy bool) *Subnet {
+	this := &Subnet{}
+	this.Id = randStringAwsData(r)
+	this.CustomerId = randStringAwsData(r)
+	if r.Intn(10) != 0 {
+		this.Resource = opsee_aws_ec2.NewPopulatedSubnet(r, easy)
+	}
+	this.InstanceCount = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.InstanceCount *= -1
+	}
+	this.Routing = randStringAwsData(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedGroup(r randyAwsData, easy bool) *Group {
 	this := &Group{}
 	this.Id = randStringAwsData(r)
@@ -1020,17 +1619,17 @@ func NewPopulatedGroup(r randyAwsData, easy bool) *Group {
 		this.InstanceCount *= -1
 	}
 	if r.Intn(10) == 0 {
-		v1 := r.Intn(5)
-		this.Instances = make([]*Instance, v1)
-		for i := 0; i < v1; i++ {
+		v4 := r.Intn(5)
+		this.Instances = make([]*Instance, v4)
+		for i := 0; i < v4; i++ {
 			this.Instances[i] = NewPopulatedInstance(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		this.CreatedAt = google_protobuf.NewPopulatedTimestamp(r, easy)
+		this.CreatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.UpdatedAt = google_protobuf.NewPopulatedTimestamp(r, easy)
+		this.UpdatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1065,17 +1664,17 @@ func NewPopulatedInstance(r randyAwsData, easy bool) *Instance {
 		this.Resource = NewPopulatedInstance_DbInstance(r, easy)
 	}
 	if r.Intn(10) == 0 {
-		v2 := r.Intn(5)
-		this.Groups = make([]*Group, v2)
-		for i := 0; i < v2; i++ {
+		v5 := r.Intn(5)
+		this.Groups = make([]*Group, v5)
+		for i := 0; i < v5; i++ {
 			this.Groups[i] = NewPopulatedGroup(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		this.CreatedAt = google_protobuf.NewPopulatedTimestamp(r, easy)
+		this.CreatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.UpdatedAt = google_protobuf.NewPopulatedTimestamp(r, easy)
+		this.UpdatedAt = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1112,9 +1711,9 @@ func randUTF8RuneAwsData(r randyAwsData) rune {
 	return rune(ru + 61)
 }
 func randStringAwsData(r randyAwsData) string {
-	v3 := r.Intn(100)
-	tmps := make([]rune, v3)
-	for i := 0; i < v3; i++ {
+	v6 := r.Intn(100)
+	tmps := make([]rune, v6)
+	for i := 0; i < v6; i++ {
 		tmps[i] = randUTF8RuneAwsData(r)
 	}
 	return string(tmps)
@@ -1136,11 +1735,11 @@ func randFieldAwsData(data []byte, r randyAwsData, fieldNumber int, wire int) []
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateAwsData(data, uint64(key))
-		v4 := r.Int63()
+		v7 := r.Int63()
 		if r.Intn(2) == 0 {
-			v4 *= -1
+			v7 *= -1
 		}
-		data = encodeVarintPopulateAwsData(data, uint64(v4))
+		data = encodeVarintPopulateAwsData(data, uint64(v7))
 	case 1:
 		data = encodeVarintPopulateAwsData(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))

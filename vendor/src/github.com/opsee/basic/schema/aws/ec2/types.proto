@@ -1,5 +1,4 @@
 syntax = "proto2";
-import "github.com/opsee/protobuf/proto/google/protobuf/timestamp.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 
@@ -164,6 +163,18 @@ message StateReason {
   optional string Message = 3;
 }
 
+message Subnet {
+  optional string AvailabilityZone = 2;
+  optional sint64 AvailableIpAddressCount = 3;
+  optional string CidrBlock = 4;
+  optional bool DefaultForAz = 5;
+  optional bool MapPublicIpOnLaunch = 6;
+  optional string State = 7;
+  optional string SubnetId = 8;
+  repeated Tag Tags = 9;
+  optional string VpcId = 10;
+}
+
 message Tag {
   optional string Key = 2;
   optional string Value = 3;
@@ -173,5 +184,15 @@ message UserIdGroupPair {
   optional string GroupId = 2;
   optional string GroupName = 3;
   optional string UserId = 4;
+}
+
+message Vpc {
+  optional string CidrBlock = 2;
+  optional string DhcpOptionsId = 3;
+  optional string InstanceTenancy = 4;
+  optional bool IsDefault = 5;
+  optional string State = 6;
+  repeated Tag Tags = 7;
+  optional string VpcId = 8;
 }
 

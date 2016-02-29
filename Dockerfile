@@ -7,6 +7,7 @@ RUN apk add --update bash ca-certificates curl
 
 COPY run.sh /
 COPY target/linux/amd64/bin/* /
+COPY static /static
 
 EXPOSE 9096
 CMD ["/compost"]

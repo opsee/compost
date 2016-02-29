@@ -3,7 +3,7 @@ package spanx
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/opsee/basic/com"
+	"github.com/opsee/basic/schema"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -28,8 +28,8 @@ func TestCredentials(t *testing.T) {
 
 	defer ts.Close()
 
-	user := &com.User{
-		CustomerID: "heyyyy",
+	user := &schema.User{
+		CustomerId: "heyyyy",
 	}
 
 	client := New(ts.URL)
