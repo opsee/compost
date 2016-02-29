@@ -54,7 +54,7 @@ func (c *client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest)
 			Name:          userlist[0].Name,
 			CreatedAt:     userlist[0].CreatedAt,
 			UpdatedAt:     userlist[0].UpdatedAt,
-			Users:         userlist,
+			Users:         userlist[:1],
 			BastionStates: bastionStates[cid],
 		})
 	}
