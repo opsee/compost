@@ -21,7 +21,7 @@ func (c *client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest)
 	for _, user := range resp.Users {
 		_, ok := customerIdMap[user.CustomerId]
 		if !ok {
-			customerIdMap[user.CustomerId] = make([]*schema.User, 0, 1)
+			customerIdMap[user.CustomerId] = make([]*schema.User, 0)
 		}
 		customerIdMap[user.CustomerId] = append(customerIdMap[user.CustomerId], user)
 	}
@@ -41,7 +41,7 @@ func (c *client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest)
 	for _, bastionState := range stateResp.BastionStates {
 		_, ok := bastionStates[bastionState.CustomerId]
 		if !ok {
-			bastionStates[bastionState.CustomerId] = make([]*schema.BastionState, 0, 1)
+			bastionStates[bastionState.CustomerId] = make([]*schema.BastionState, 0)
 		}
 		bastionStates[bastionState.CustomerId] = append(bastionStates[bastionState.CustomerId], bastionState)
 	}
