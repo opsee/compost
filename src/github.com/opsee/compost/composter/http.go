@@ -16,6 +16,11 @@ var (
 func (s *Composter) StartHTTP(addr string) {
 	router := tp.NewHTTPRouter(context.Background())
 
+	router.CORS(
+		[]string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
+		[]string{`https?://localhost:8080`, `https?://localhost:8008`, `https://(\w+\.)?(opsy\.co|opsee\.co|opsee\.com)`, `https?://coreys-mbp-8:\d+`},
+	)
+
 	// graph q l
 	router.Handle("POST", "/graphql", decoders(schema.User{}, GraphQLRequest{}), s.graphQL())
 	router.Handle("POST", "/admin/graphql", decoders(schema.User{}, GraphQLRequest{}), s.adminGraphQL())
