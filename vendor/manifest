@@ -120,6 +120,12 @@
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/dvsekhvalnov/jose2go",
+			"repository": "https://github.com/dvsekhvalnov/jose2go",
+			"revision": "6387d3c1f5abd8443b223577d5a7e0f4e0e5731f",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/go-ini/ini",
 			"repository": "https://github.com/go-ini/ini",
 			"revision": "afbd495e5aaea13597b5e14fe514ddeaa4d76fc3",
@@ -202,6 +208,12 @@
 			"revision": "1776823a8fe8856c8e3a75c9d4f846c9008c6935",
 			"branch": "master",
 			"path": "/plugin/graphql/scalars"
+		},
+		{
+			"importpath": "github.com/opsee/vaper",
+			"repository": "https://github.com/opsee/vaper",
+			"revision": "7a6308e9d536835f8697064d57f6502d172369d1",
+			"branch": "master"
 		},
 		{
 			"importpath": "github.com/pmezard/go-difflib/difflib",

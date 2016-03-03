@@ -2,10 +2,14 @@ package composter
 
 import (
 	"errors"
+	"fmt"
+	"github.com/julienschmidt/httprouter"
 	"github.com/opsee/basic/schema"
 	"github.com/opsee/basic/tp"
+	"github.com/opsee/vaper"
 	"golang.org/x/net/context"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -22,8 +26,8 @@ func (s *Composter) StartHTTP(addr string) {
 	)
 
 	// graph q l
-	router.Handle("POST", "/graphql", decoders(schema.User{}, GraphQLRequest{}), s.graphQL())
-	router.Handle("POST", "/admin/graphql", decoders(schema.User{}, GraphQLRequest{}), s.adminGraphQL())
+	router.Handle("POST", "/graphql", s.decoders(schema.User{}, GraphQLRequest{}), s.graphQL())
+	router.Handle("POST", "/admin/graphql", s.decoders(schema.User{}, GraphQLRequest{}), s.adminGraphQL())
 
 	// fileserver for static things
 	router.Handler("GET", "/static/*stuff", http.StripPrefix("/static/", http.FileServer(http.Dir("/static"))))
@@ -34,10 +38,51 @@ func (s *Composter) StartHTTP(addr string) {
 	http.ListenAndServe(addr, router)
 }
 
-func decoders(userType interface{}, requestType interface{}) []tp.DecodeFunc {
+func (s *Composter) decoders(userType interface{}, requestType interface{}) []tp.DecodeFunc {
 	return []tp.DecodeFunc{
-		tp.AuthorizationDecodeFunc(userKey, userType),
+		s.authorizationDecodeFunc(),
 		tp.RequestDecodeFunc(requestKey, requestType),
+	}
+}
+
+func (s *Composter) authorizationDecodeFunc() tp.DecodeFunc {
+	return func(ctx context.Context, rw http.ResponseWriter, r *http.Request, p httprouter.Params) (context.Context, int, error) {
+		header := r.Header.Get("authorization")
+		if header == "" {
+			return ctx, http.StatusUnauthorized, nil
+		}
+
+		var (
+			authType string
+			token    string
+		)
+
+		_, err := fmt.Sscanf(header, "%s %s", &authType, &token)
+		if err != nil || token == "" {
+			return ctx, http.StatusUnauthorized, fmt.Errorf("Authorization header is malformed.")
+		}
+
+		if strings.ToLower(authType) != "bearer" {
+			return ctx, http.StatusUnauthorized, fmt.Errorf("Authorization type not supported.")
+		}
+
+		decoded, err := vaper.Unmarshal(token)
+		if err != nil {
+			return ctx, http.StatusUnauthorized, fmt.Errorf("Authorization token decode error.")
+		}
+
+		user := &schema.User{}
+		err = decoded.Reify(user)
+		if err != nil {
+			return ctx, http.StatusUnauthorized, fmt.Errorf("authorization token unmarshal error.")
+		}
+
+		err = user.Validate()
+		if err != nil {
+			return ctx, http.StatusUnauthorized, err
+		}
+
+		return context.WithValue(ctx, userKey, user), 0, nil
 	}
 }
 
