@@ -3,11 +3,19 @@ package main
 import (
 	"github.com/opsee/compost/composter"
 	"github.com/opsee/compost/resolver"
+	"github.com/opsee/vaper"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"os"
 )
 
 func main() {
+	key, err := ioutil.ReadFile(mustEnvString("VAPE_KEYFILE"))
+	if err != nil {
+		log.Fatal("Unable to read vape key: ", err)
+	}
+	vaper.Init(key)
+
 	resolver, err := resolver.NewClient(resolver.ClientConfig{
 		Bartnet:  "https://bartnet.in.opsee.com",
 		Beavis:   "https://beavis.in.opsee.com",
