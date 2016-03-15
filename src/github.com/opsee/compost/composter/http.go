@@ -22,7 +22,7 @@ func (s *Composter) StartHTTP(addr string) {
 
 	router.CORS(
 		[]string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
-		[]string{`https?://localhost:8080`, `https?://localhost:8008`, `https://(\w+\.)?(opsy\.co|opsee\.co|opsee\.com)`, `https?://coreys-mbp-8:\d+`},
+		[]string{`https?://localhost:8080`, `https?://localhost:8008`, `https://(.+)?(opsy\.co|opsee\.co|opsee\.com)`, `https?://coreys-mbp-8:\d+`},
 	)
 
 	// graph q l
