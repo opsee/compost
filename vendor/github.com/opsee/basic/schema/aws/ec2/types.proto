@@ -1,0 +1,201 @@
+syntax = "proto2";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+
+package opsee.aws.ec2;
+
+option go_package = "ec2";
+option (opseeproto.graphql) = true;
+
+
+message EbsInstanceBlockDevice {
+  optional sfixed64 AttachTime = 2;
+  optional bool DeleteOnTermination = 3;
+  optional string Status = 4;
+  optional string VolumeId = 5;
+}
+
+message GroupIdentifier {
+  optional string GroupId = 2;
+  optional string GroupName = 3;
+}
+
+message IamInstanceProfile {
+  optional string Arn = 2;
+  optional string Id = 3;
+}
+
+message Instance {
+  optional sint64 AmiLaunchIndex = 2;
+  optional string Architecture = 3;
+  repeated InstanceBlockDeviceMapping BlockDeviceMappings = 4;
+  optional string ClientToken = 5;
+  optional bool EbsOptimized = 6;
+  optional string Hypervisor = 7;
+  optional IamInstanceProfile IamInstanceProfile = 8;
+  optional string ImageId = 9;
+  optional string InstanceId = 10;
+  optional string InstanceLifecycle = 11;
+  optional string InstanceType = 12;
+  optional string KernelId = 13;
+  optional string KeyName = 14;
+  optional sfixed64 LaunchTime = 15;
+  optional Monitoring Monitoring = 16;
+  repeated InstanceNetworkInterface NetworkInterfaces = 17;
+  optional Placement Placement = 18;
+  optional string Platform = 19;
+  optional string PrivateDnsName = 20;
+  optional string PrivateIpAddress = 21;
+  repeated ProductCode ProductCodes = 22;
+  optional string PublicDnsName = 23;
+  optional string PublicIpAddress = 24;
+  optional string RamdiskId = 25;
+  optional string RootDeviceName = 26;
+  optional string RootDeviceType = 27;
+  repeated GroupIdentifier SecurityGroups = 28;
+  optional bool SourceDestCheck = 29;
+  optional string SpotInstanceRequestId = 30;
+  optional string SriovNetSupport = 31;
+  optional InstanceState State = 32;
+  optional StateReason StateReason = 33;
+  optional string StateTransitionReason = 34;
+  optional string SubnetId = 35;
+  repeated Tag Tags = 36;
+  optional string VirtualizationType = 37;
+  optional string VpcId = 38;
+}
+
+message InstanceBlockDeviceMapping {
+  optional string DeviceName = 2;
+  optional EbsInstanceBlockDevice Ebs = 3;
+}
+
+message InstanceNetworkInterface {
+  optional InstanceNetworkInterfaceAssociation Association = 2;
+  optional InstanceNetworkInterfaceAttachment Attachment = 3;
+  optional string Description = 4;
+  repeated GroupIdentifier Groups = 5;
+  optional string MacAddress = 6;
+  optional string NetworkInterfaceId = 7;
+  optional string OwnerId = 8;
+  optional string PrivateDnsName = 9;
+  optional string PrivateIpAddress = 10;
+  repeated InstancePrivateIpAddress PrivateIpAddresses = 11;
+  optional bool SourceDestCheck = 12;
+  optional string Status = 13;
+  optional string SubnetId = 14;
+  optional string VpcId = 15;
+}
+
+message InstanceNetworkInterfaceAssociation {
+  optional string IpOwnerId = 2;
+  optional string PublicDnsName = 3;
+  optional string PublicIp = 4;
+}
+
+message InstanceNetworkInterfaceAttachment {
+  optional sfixed64 AttachTime = 2;
+  optional string AttachmentId = 3;
+  optional bool DeleteOnTermination = 4;
+  optional sint64 DeviceIndex = 5;
+  optional string Status = 6;
+}
+
+message InstancePrivateIpAddress {
+  optional InstanceNetworkInterfaceAssociation Association = 2;
+  optional bool Primary = 3;
+  optional string PrivateDnsName = 4;
+  optional string PrivateIpAddress = 5;
+}
+
+message InstanceState {
+  optional sint64 Code = 2;
+  optional string Name = 3;
+}
+
+message IpPermission {
+  optional sint64 FromPort = 2;
+  optional string IpProtocol = 3;
+  repeated IpRange IpRanges = 4;
+  repeated PrefixListId PrefixListIds = 5;
+  optional sint64 ToPort = 6;
+  repeated UserIdGroupPair UserIdGroupPairs = 7;
+}
+
+message IpRange {
+  optional string CidrIp = 2;
+}
+
+message Monitoring {
+  optional string State = 2;
+}
+
+message Placement {
+  optional string Affinity = 2;
+  optional string AvailabilityZone = 3;
+  optional string GroupName = 4;
+  optional string HostId = 5;
+  optional string Tenancy = 6;
+}
+
+message PrefixListId {
+  optional string PrefixListId = 2;
+}
+
+message ProductCode {
+  optional string ProductCodeId = 2;
+  optional string ProductCodeType = 3;
+}
+
+message SecurityGroup {
+  optional string Description = 2;
+  optional string GroupId = 3;
+  optional string GroupName = 4;
+  repeated IpPermission IpPermissions = 5;
+  repeated IpPermission IpPermissionsEgress = 6;
+  optional string OwnerId = 7;
+  repeated Tag Tags = 8;
+  optional string VpcId = 9;
+}
+
+message StateReason {
+  optional string Code = 2;
+  optional string Message = 3;
+}
+
+message Subnet {
+  optional string AvailabilityZone = 2;
+  optional sint64 AvailableIpAddressCount = 3;
+  optional string CidrBlock = 4;
+  optional bool DefaultForAz = 5;
+  optional bool MapPublicIpOnLaunch = 6;
+  optional string State = 7;
+  optional string SubnetId = 8;
+  repeated Tag Tags = 9;
+  optional string VpcId = 10;
+}
+
+message Tag {
+  optional string Key = 2;
+  optional string Value = 3;
+}
+
+message UserIdGroupPair {
+  optional string GroupId = 2;
+  optional string GroupName = 3;
+  optional string PeeringStatus = 4;
+  optional string UserId = 5;
+  optional string VpcId = 6;
+  optional string VpcPeeringConnectionId = 7;
+}
+
+message Vpc {
+  optional string CidrBlock = 2;
+  optional string DhcpOptionsId = 3;
+  optional string InstanceTenancy = 4;
+  optional bool IsDefault = 5;
+  optional string State = 6;
+  repeated Tag Tags = 7;
+  optional string VpcId = 8;
+}
+
