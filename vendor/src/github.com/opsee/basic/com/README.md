@@ -1,4 +1,0 @@
-com
-========
-
-common objects package
