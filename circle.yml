@@ -10,8 +10,7 @@ dependencies:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD quay.io
 test:
   override:
-    - APPENV=testenv make docker
-    - docker tag quay.io/opsee/compost quay.io/opsee/compost:$CIRCLE_SHA1
+    - REV=${CIRCLE_SHA1} make build
     - docker push quay.io/opsee/compost:$CIRCLE_SHA1
 deployment:
   production:
