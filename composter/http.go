@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -18,6 +19,10 @@ var (
 )
 
 func (s *Composter) StartHTTP(addr string) {
+	http.ListenAndServe(addr, s.router)
+}
+
+func (s *Composter) initHTTP() {
 	router := tp.NewHTTPRouter(context.Background())
 
 	router.CORS(
@@ -35,7 +40,7 @@ func (s *Composter) StartHTTP(addr string) {
 	// set a big timeout bc aws be slow
 	router.Timeout(5 * time.Minute)
 
-	http.ListenAndServe(addr, router)
+	s.router = router
 }
 
 func (s *Composter) decoders(userType interface{}, requestType interface{}) []tp.DecodeFunc {
@@ -68,6 +73,7 @@ func (s *Composter) authorizationDecodeFunc() tp.DecodeFunc {
 
 		decoded, err := vaper.Unmarshal(token)
 		if err != nil {
+			log.WithError(err).Error("error decoding bearer token")
 			return ctx, http.StatusUnauthorized, fmt.Errorf("Authorization token decode error.")
 		}
 

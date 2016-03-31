@@ -5,6 +5,7 @@ package composter
 import (
 	"errors"
 	"github.com/graphql-go/graphql"
+	"github.com/opsee/basic/tp"
 	"github.com/opsee/compost/resolver"
 	"golang.org/x/net/context"
 )
@@ -24,6 +25,7 @@ type Composter struct {
 	Schema      graphql.Schema
 	AdminSchema graphql.Schema
 	resolver    resolver.Client
+	router      *tp.Router
 }
 
 func New(resolver resolver.Client) *Composter {
@@ -32,6 +34,7 @@ func New(resolver resolver.Client) *Composter {
 	}
 
 	composter.mustSchema()
+	composter.initHTTP()
 	return composter
 }
 
