@@ -44,6 +44,20 @@ func (c *client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 
 		for _, check := range checks {
 			check.Results = checkMap[check.Id]
+			if check.Spec == nil {
+				any, err := schema.UnmarshalAny(check.CheckSpec)
+				if err != nil {
+					log.WithError(err).Error("couldn't list checks from bartnet")
+					return nil, err
+				}
+
+				switch spec := any.(type) {
+				case *schema.HttpCheck:
+					check.Spec = &schema.Check_HttpCheck{spec}
+				case *schema.CloudWatchCheck:
+					check.Spec = &schema.Check_CloudwatchCheck{spec}
+				}
+			}
 		}
 
 	case err = <-errChan:
