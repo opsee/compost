@@ -14,6 +14,8 @@ import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
 import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 
+import io "io"
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
@@ -21,14 +23,15 @@ var _ = math.Inf
 
 type BastionState struct {
 	Id         string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	CustomerId string                 `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty" db:"customer_id"`
+	CustomerId string                 `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" db:"customer_id"`
 	Status     string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
-	LastSeen   *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=last_seen" json:"last_seen,omitempty" db:"last_seen"`
+	LastSeen   *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=last_seen,json=lastSeen" json:"last_seen,omitempty" db:"last_seen"`
 }
 
-func (m *BastionState) Reset()         { *m = BastionState{} }
-func (m *BastionState) String() string { return proto.CompactTextString(m) }
-func (*BastionState) ProtoMessage()    {}
+func (m *BastionState) Reset()                    { *m = BastionState{} }
+func (m *BastionState) String() string            { return proto.CompactTextString(m) }
+func (*BastionState) ProtoMessage()               {}
+func (*BastionState) Descriptor() ([]byte, []int) { return fileDescriptorStack, []int{0} }
 
 func (m *BastionState) GetLastSeen() *opsee_types.Timestamp {
 	if m != nil {
@@ -39,19 +42,20 @@ func (m *BastionState) GetLastSeen() *opsee_types.Timestamp {
 
 type Stack struct {
 	Id           string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	CustomerId   string                 `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty" db:"customer_id"`
-	UserId       int32                  `protobuf:"varint,3,opt,name=user_id,proto3" json:"user_id,omitempty" db:"user_id"`
-	VpcId        string                 `protobuf:"bytes,4,opt,name=vpc_id,proto3" json:"vpc_id,omitempty" db:"vpc_id"`
+	CustomerId   string                 `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" db:"customer_id"`
+	UserId       int32                  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" db:"user_id"`
+	VpcId        string                 `protobuf:"bytes,4,opt,name=vpc_id,json=vpcId,proto3" json:"vpc_id,omitempty" db:"vpc_id"`
 	State        string                 `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
 	Password     string                 `protobuf:"bytes,6,opt,name=password,proto3" json:"-"`
-	PasswordHash string                 `protobuf:"bytes,7,opt,name=password_hash,proto3" json:"-" db:"password_hash"`
-	CreatedAt    *opsee_types.Timestamp `protobuf:"bytes,8,opt,name=created_at" json:"created_at,omitempty" db:"created_at"`
-	UpdatedAt    *opsee_types.Timestamp `protobuf:"bytes,9,opt,name=updated_at" json:"updated_at,omitempty" db:"updated_at"`
+	PasswordHash string                 `protobuf:"bytes,7,opt,name=password_hash,json=passwordHash,proto3" json:"-" db:"password_hash"`
+	CreatedAt    *opsee_types.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt" json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt    *opsee_types.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty" db:"updated_at"`
 }
 
-func (m *Stack) Reset()         { *m = Stack{} }
-func (m *Stack) String() string { return proto.CompactTextString(m) }
-func (*Stack) ProtoMessage()    {}
+func (m *Stack) Reset()                    { *m = Stack{} }
+func (m *Stack) String() string            { return proto.CompactTextString(m) }
+func (*Stack) ProtoMessage()               {}
+func (*Stack) Descriptor() ([]byte, []int) { return fileDescriptorStack, []int{1} }
 
 func (m *Stack) GetCreatedAt() *opsee_types.Timestamp {
 	if m != nil {
@@ -460,6 +464,158 @@ func init() {
 		}),
 	})
 }
+func (m *BastionState) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *BastionState) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.Id)))
+		i += copy(data[i:], m.Id)
+	}
+	if len(m.CustomerId) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.CustomerId)))
+		i += copy(data[i:], m.CustomerId)
+	}
+	if len(m.Status) > 0 {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.Status)))
+		i += copy(data[i:], m.Status)
+	}
+	if m.LastSeen != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintStack(data, i, uint64(m.LastSeen.Size()))
+		n1, err := m.LastSeen.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	return i, nil
+}
+
+func (m *Stack) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Stack) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.Id)))
+		i += copy(data[i:], m.Id)
+	}
+	if len(m.CustomerId) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.CustomerId)))
+		i += copy(data[i:], m.CustomerId)
+	}
+	if m.UserId != 0 {
+		data[i] = 0x18
+		i++
+		i = encodeVarintStack(data, i, uint64(m.UserId))
+	}
+	if len(m.VpcId) > 0 {
+		data[i] = 0x22
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.VpcId)))
+		i += copy(data[i:], m.VpcId)
+	}
+	if len(m.State) > 0 {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.State)))
+		i += copy(data[i:], m.State)
+	}
+	if len(m.Password) > 0 {
+		data[i] = 0x32
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.Password)))
+		i += copy(data[i:], m.Password)
+	}
+	if len(m.PasswordHash) > 0 {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintStack(data, i, uint64(len(m.PasswordHash)))
+		i += copy(data[i:], m.PasswordHash)
+	}
+	if m.CreatedAt != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintStack(data, i, uint64(m.CreatedAt.Size()))
+		n2, err := m.CreatedAt.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if m.UpdatedAt != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintStack(data, i, uint64(m.UpdatedAt.Size()))
+		n3, err := m.UpdatedAt.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	return i, nil
+}
+
+func encodeFixed64Stack(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Stack(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintStack(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
 func NewPopulatedBastionState(r randyStack, easy bool) *BastionState {
 	this := &BastionState{}
 	this.Id = randStringStack(r)
@@ -567,4 +723,695 @@ func encodeVarintPopulateStack(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *BastionState) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	l = len(m.CustomerId)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	l = len(m.Status)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	if m.LastSeen != nil {
+		l = m.LastSeen.Size()
+		n += 1 + l + sovStack(uint64(l))
+	}
+	return n
+}
+
+func (m *Stack) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	l = len(m.CustomerId)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	if m.UserId != 0 {
+		n += 1 + sovStack(uint64(m.UserId))
+	}
+	l = len(m.VpcId)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	l = len(m.State)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	l = len(m.Password)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	l = len(m.PasswordHash)
+	if l > 0 {
+		n += 1 + l + sovStack(uint64(l))
+	}
+	if m.CreatedAt != nil {
+		l = m.CreatedAt.Size()
+		n += 1 + l + sovStack(uint64(l))
+	}
+	if m.UpdatedAt != nil {
+		l = m.UpdatedAt.Size()
+		n += 1 + l + sovStack(uint64(l))
+	}
+	return n
+}
+
+func sovStack(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozStack(x uint64) (n int) {
+	return sovStack(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *BastionState) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowStack
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BastionState: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BastionState: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CustomerId = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Status = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastSeen", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastSeen == nil {
+				m.LastSeen = &opsee_types.Timestamp{}
+			}
+			if err := m.LastSeen.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipStack(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthStack
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Stack) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowStack
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Stack: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Stack: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CustomerId = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
+			}
+			m.UserId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.UserId |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VpcId = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.State = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Password = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PasswordHash", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PasswordHash = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreatedAt == nil {
+				m.CreatedAt = &opsee_types.Timestamp{}
+			}
+			if err := m.CreatedAt.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthStack
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UpdatedAt == nil {
+				m.UpdatedAt = &opsee_types.Timestamp{}
+			}
+			if err := m.UpdatedAt.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipStack(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthStack
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipStack(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowStack
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowStack
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthStack
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowStack
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipStack(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthStack = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowStack   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorStack = []byte{
+	// 446 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x52, 0x3d, 0x8f, 0xd3, 0x40,
+	0x14, 0x94, 0xef, 0xce, 0xbe, 0x78, 0x1d, 0xee, 0x4e, 0xcb, 0xe9, 0x64, 0x1d, 0x52, 0x02, 0x2b,
+	0x84, 0xa0, 0x88, 0x83, 0x40, 0x34, 0xa9, 0x88, 0x1b, 0x3e, 0xca, 0x0d, 0x15, 0x8d, 0xe5, 0x8f,
+	0x25, 0xb6, 0xc0, 0x59, 0xcb, 0xbb, 0x06, 0xf1, 0x77, 0xa8, 0xf8, 0x01, 0x08, 0x51, 0x52, 0x52,
+	0xf2, 0x0b, 0x22, 0xa0, 0xa4, 0xa4, 0xa2, 0xe4, 0xed, 0xb3, 0x9d, 0x84, 0x06, 0xa5, 0xa0, 0x58,
+	0x69, 0x66, 0xdf, 0xcc, 0xbc, 0xf1, 0xca, 0xc4, 0x53, 0x3a, 0x4e, 0x5f, 0x06, 0x55, 0x2d, 0xb5,
+	0xa4, 0xb6, 0xac, 0x94, 0x10, 0x97, 0x93, 0x65, 0xa1, 0xf3, 0x26, 0x09, 0x52, 0x59, 0x4e, 0x97,
+	0x72, 0x29, 0xa7, 0x38, 0x4d, 0x9a, 0x17, 0xc8, 0x90, 0x20, 0x6a, 0x5d, 0x97, 0x77, 0x77, 0xe4,
+	0x18, 0xb0, 0xd5, 0x23, 0x6d, 0x0d, 0x08, 0x3b, 0xc7, 0x6c, 0x2f, 0x87, 0x7e, 0x5b, 0x09, 0x35,
+	0xd5, 0x45, 0x29, 0xa0, 0x63, 0x59, 0xb5, 0x5e, 0xf6, 0xd1, 0x22, 0xc3, 0x30, 0x56, 0xba, 0x90,
+	0xab, 0x85, 0x8e, 0xb5, 0xa0, 0x27, 0xe4, 0xa0, 0xc8, 0x7c, 0xeb, 0xba, 0x75, 0xdb, 0xe5, 0x80,
+	0xe8, 0x03, 0xe2, 0xa5, 0x8d, 0xd2, 0xb2, 0x14, 0x75, 0x04, 0x83, 0x03, 0x33, 0x08, 0xcf, 0x7f,
+	0xad, 0xc7, 0x67, 0x59, 0x32, 0x63, 0x3b, 0x23, 0xc6, 0x49, 0xcf, 0x9e, 0x64, 0xf4, 0x82, 0x38,
+	0xb0, 0x46, 0x37, 0xca, 0x3f, 0xc4, 0xa8, 0x8e, 0xd1, 0x47, 0xc4, 0x7d, 0x05, 0xeb, 0x22, 0xa8,
+	0xb5, 0xf2, 0x8f, 0x60, 0xe4, 0xdd, 0xbb, 0x08, 0xda, 0x8f, 0xc1, 0x82, 0xc1, 0xb3, 0xbe, 0x60,
+	0x48, 0x61, 0xc9, 0x89, 0x59, 0xb2, 0x31, 0x30, 0x3e, 0x30, 0x78, 0x61, 0xe0, 0x87, 0x43, 0x62,
+	0x2f, 0xcc, 0x63, 0xff, 0xaf, 0xc6, 0x77, 0xc8, 0x71, 0xa3, 0x5a, 0x8b, 0xa9, 0x6c, 0x87, 0x67,
+	0x60, 0x19, 0x1a, 0x4b, 0x77, 0xcd, 0xb8, 0x63, 0x10, 0x48, 0x6f, 0x11, 0xe7, 0x75, 0x95, 0x1a,
+	0xe5, 0x11, 0x86, 0x9f, 0x82, 0xd2, 0x33, 0xca, 0xf6, 0x96, 0x71, 0x1b, 0x00, 0xe8, 0xce, 0x89,
+	0x6d, 0x3e, 0x5b, 0xf8, 0x36, 0x96, 0x6b, 0x09, 0xbd, 0x41, 0x06, 0x55, 0xac, 0xd4, 0x1b, 0x59,
+	0x67, 0xbe, 0x83, 0x7e, 0xfb, 0xe7, 0x7a, 0x6c, 0x4d, 0xf8, 0xe6, 0x9a, 0x3e, 0x24, 0x57, 0x7a,
+	0x1c, 0xe5, 0xb1, 0xca, 0xfd, 0x63, 0xd4, 0x5d, 0x43, 0x1d, 0x2c, 0xa3, 0x66, 0xd9, 0x5f, 0x0a,
+	0xc6, 0x87, 0x3d, 0x7f, 0x0c, 0x94, 0x3e, 0x25, 0x24, 0xad, 0x05, 0xac, 0xcb, 0xa2, 0x58, 0xfb,
+	0x83, 0x7f, 0x3e, 0xf4, 0x55, 0x48, 0x3c, 0xc5, 0xb7, 0xd9, 0x38, 0x18, 0x77, 0x3b, 0x32, 0xd7,
+	0x26, 0xab, 0xa9, 0xb2, 0x3e, 0xcb, 0xdd, 0x2f, 0x6b, 0xeb, 0x80, 0xac, 0x8e, 0xcc, 0x75, 0x78,
+	0xf3, 0xf7, 0xf7, 0x91, 0xf5, 0xfe, 0xc7, 0xc8, 0xfa, 0x04, 0xe7, 0x0b, 0x9c, 0xaf, 0x70, 0xbe,
+	0xc1, 0xf9, 0xfc, 0x6e, 0x6c, 0x3d, 0x77, 0x54, 0x9a, 0x8b, 0x32, 0x4e, 0x1c, 0xfc, 0x39, 0xef,
+	0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x1b, 0xc6, 0xb4, 0x4e, 0x4f, 0x03, 0x00, 0x00,
 }

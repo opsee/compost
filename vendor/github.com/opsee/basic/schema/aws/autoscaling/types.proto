@@ -1,12 +1,24 @@
 syntax = "proto2";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 
 package opsee.aws.autoscaling;
 
 option go_package = "autoscaling";
 option (opseeproto.graphql) = true;
 
+
+message DescribeAutoScalingGroupsInput {
+  repeated string AutoScalingGroupNames = 2;
+  optional sint64 MaxRecords = 3;
+  optional string NextToken = 4;
+}
+
+message DescribeAutoScalingGroupsOutput {
+  repeated Group AutoScalingGroups = 2;
+  optional string NextToken = 3;
+}
 
 message EnabledMetric {
   optional string Granularity = 2;
@@ -17,7 +29,7 @@ message Group {
   optional string AutoScalingGroupARN = 2;
   optional string AutoScalingGroupName = 3;
   repeated string AvailabilityZones = 4;
-  optional sfixed64 CreatedTime = 5;
+  optional opsee.types.Timestamp CreatedTime = 5;
   optional sint64 DefaultCooldown = 6;
   optional sint64 DesiredCapacity = 7;
   repeated EnabledMetric EnabledMetrics = 8;

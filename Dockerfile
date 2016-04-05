@@ -7,6 +7,7 @@ RUN mkdir -p /opt/bin && \
 
 ENV COMPOST_VAPE_KEYFILE "/vape.test.key"
 ENV COMPOST_ADDRESS ""
+ENV COMPOST_SKIP_VERIFY "false"
 ENV APPENV ""
 
 COPY run.sh /

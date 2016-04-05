@@ -13,7 +13,7 @@ import (
 const (
 	userKey = iota
 	requestKey
-	resolverKey
+	queryContextKey
 )
 
 var (
@@ -24,11 +24,11 @@ var (
 type Composter struct {
 	Schema      graphql.Schema
 	AdminSchema graphql.Schema
-	resolver    resolver.Client
+	resolver    *resolver.Client
 	router      *tp.Router
 }
 
-func New(resolver resolver.Client) *Composter {
+func New(resolver *resolver.Client) *Composter {
 	composter := &Composter{
 		resolver: resolver,
 	}
@@ -44,6 +44,8 @@ func (c *Composter) Compost(ctx context.Context, schema graphql.Schema) (*graphq
 		return nil, errDecodeRequest
 	}
 
+	ctx = context.WithValue(ctx, queryContextKey, &QueryContext{})
+
 	response := graphql.Do(graphql.Params{
 		Schema:         schema,
 		RequestString:  request.Query,
@@ -57,6 +59,11 @@ func (c *Composter) Compost(ctx context.Context, schema graphql.Schema) (*graphq
 type GraphQLRequest struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables,omitempty"`
+}
+
+type QueryContext struct {
+	Region string
+	VpcId  string
 }
 
 func (req *GraphQLRequest) Validate() error {

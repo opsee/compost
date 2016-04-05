@@ -6,7 +6,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func (c *client) GetCredentials(ctx context.Context, customerId string) (*opsee.GetCredentialsResponse, error) {
+func (c *Client) GetCredentials(ctx context.Context, customerId string) (*opsee.GetCredentialsResponse, error) {
 	log.WithFields(log.Fields{
 		"customer_id": customerId,
 	}).Info("get credentials request")

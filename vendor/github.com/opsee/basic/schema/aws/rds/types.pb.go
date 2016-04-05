@@ -3,23 +3,27 @@
 // DO NOT EDIT!
 
 /*
-Package rds is a generated protocol buffer package.
+	Package rds is a generated protocol buffer package.
 
-It is generated from these files:
-	types.proto
+	It is generated from these files:
+		types.proto
 
-It has these top-level messages:
-	AvailabilityZone
-	DBInstance
-	DBInstanceStatusInfo
-	DBParameterGroupStatus
-	DBSecurityGroupMembership
-	DBSubnetGroup
-	Endpoint
-	OptionGroupMembership
-	PendingModifiedValues
-	Subnet
-	VpcSecurityGroupMembership
+	It has these top-level messages:
+		AvailabilityZone
+		DBInstance
+		DBInstanceStatusInfo
+		DBParameterGroupStatus
+		DBSecurityGroupMembership
+		DBSubnetGroup
+		DescribeDBInstancesInput
+		DescribeDBInstancesOutput
+		DomainMembership
+		Endpoint
+		Filter
+		OptionGroupMembership
+		PendingModifiedValues
+		Subnet
+		VpcSecurityGroupMembership
 */
 package rds
 
@@ -28,24 +32,33 @@ import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/protobuf/opseeproto"
+import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 
 import bytes "bytes"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
+import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
+
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
+
 type AvailabilityZone struct {
-	Name             *string `protobuf:"bytes,2,opt,name=Name" json:"Name,omitempty"`
+	Name             *string `protobuf:"bytes,2,opt,name=Name,json=name" json:"Name,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *AvailabilityZone) Reset()         { *m = AvailabilityZone{} }
-func (m *AvailabilityZone) String() string { return proto.CompactTextString(m) }
-func (*AvailabilityZone) ProtoMessage()    {}
+func (m *AvailabilityZone) Reset()                    { *m = AvailabilityZone{} }
+func (m *AvailabilityZone) String() string            { return proto.CompactTextString(m) }
+func (*AvailabilityZone) ProtoMessage()               {}
+func (*AvailabilityZone) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
 
 func (m *AvailabilityZone) GetName() string {
 	if m != nil && m.Name != nil {
@@ -55,55 +68,58 @@ func (m *AvailabilityZone) GetName() string {
 }
 
 type DBInstance struct {
-	AllocatedStorage                      *int64                        `protobuf:"zigzag64,2,opt,name=AllocatedStorage" json:"AllocatedStorage,omitempty"`
-	AutoMinorVersionUpgrade               *bool                         `protobuf:"varint,3,opt,name=AutoMinorVersionUpgrade" json:"AutoMinorVersionUpgrade,omitempty"`
-	AvailabilityZone                      *string                       `protobuf:"bytes,4,opt,name=AvailabilityZone" json:"AvailabilityZone,omitempty"`
-	BackupRetentionPeriod                 *int64                        `protobuf:"zigzag64,5,opt,name=BackupRetentionPeriod" json:"BackupRetentionPeriod,omitempty"`
-	CACertificateIdentifier               *string                       `protobuf:"bytes,6,opt,name=CACertificateIdentifier" json:"CACertificateIdentifier,omitempty"`
-	CharacterSetName                      *string                       `protobuf:"bytes,7,opt,name=CharacterSetName" json:"CharacterSetName,omitempty"`
-	CopyTagsToSnapshot                    *bool                         `protobuf:"varint,8,opt,name=CopyTagsToSnapshot" json:"CopyTagsToSnapshot,omitempty"`
-	DBClusterIdentifier                   *string                       `protobuf:"bytes,9,opt,name=DBClusterIdentifier" json:"DBClusterIdentifier,omitempty"`
-	DBInstanceClass                       *string                       `protobuf:"bytes,10,opt,name=DBInstanceClass" json:"DBInstanceClass,omitempty"`
-	DBInstanceIdentifier                  *string                       `protobuf:"bytes,11,opt,name=DBInstanceIdentifier" json:"DBInstanceIdentifier,omitempty"`
-	DBInstanceStatus                      *string                       `protobuf:"bytes,12,opt,name=DBInstanceStatus" json:"DBInstanceStatus,omitempty"`
-	DBName                                *string                       `protobuf:"bytes,13,opt,name=DBName" json:"DBName,omitempty"`
-	DBParameterGroups                     []*DBParameterGroupStatus     `protobuf:"bytes,14,rep,name=DBParameterGroups" json:"DBParameterGroups,omitempty"`
-	DBSecurityGroups                      []*DBSecurityGroupMembership  `protobuf:"bytes,15,rep,name=DBSecurityGroups" json:"DBSecurityGroups,omitempty"`
-	DBSubnetGroup                         *DBSubnetGroup                `protobuf:"bytes,16,opt,name=DBSubnetGroup" json:"DBSubnetGroup,omitempty"`
-	DbInstancePort                        *int64                        `protobuf:"zigzag64,17,opt,name=DbInstancePort" json:"DbInstancePort,omitempty"`
-	DbiResourceId                         *string                       `protobuf:"bytes,18,opt,name=DbiResourceId" json:"DbiResourceId,omitempty"`
-	Endpoint                              *Endpoint                     `protobuf:"bytes,19,opt,name=Endpoint" json:"Endpoint,omitempty"`
-	Engine                                *string                       `protobuf:"bytes,20,opt,name=Engine" json:"Engine,omitempty"`
-	EngineVersion                         *string                       `protobuf:"bytes,21,opt,name=EngineVersion" json:"EngineVersion,omitempty"`
-	EnhancedMonitoringResourceArn         *string                       `protobuf:"bytes,22,opt,name=EnhancedMonitoringResourceArn" json:"EnhancedMonitoringResourceArn,omitempty"`
-	InstanceCreateTime                    *int64                        `protobuf:"fixed64,23,opt,name=InstanceCreateTime" json:"InstanceCreateTime,omitempty"`
-	Iops                                  *int64                        `protobuf:"zigzag64,24,opt,name=Iops" json:"Iops,omitempty"`
-	KmsKeyId                              *string                       `protobuf:"bytes,25,opt,name=KmsKeyId" json:"KmsKeyId,omitempty"`
-	LatestRestorableTime                  *int64                        `protobuf:"fixed64,26,opt,name=LatestRestorableTime" json:"LatestRestorableTime,omitempty"`
-	LicenseModel                          *string                       `protobuf:"bytes,27,opt,name=LicenseModel" json:"LicenseModel,omitempty"`
-	MasterUsername                        *string                       `protobuf:"bytes,28,opt,name=MasterUsername" json:"MasterUsername,omitempty"`
-	MonitoringInterval                    *int64                        `protobuf:"zigzag64,29,opt,name=MonitoringInterval" json:"MonitoringInterval,omitempty"`
-	MonitoringRoleArn                     *string                       `protobuf:"bytes,30,opt,name=MonitoringRoleArn" json:"MonitoringRoleArn,omitempty"`
-	MultiAZ                               *bool                         `protobuf:"varint,31,opt,name=MultiAZ" json:"MultiAZ,omitempty"`
-	OptionGroupMemberships                []*OptionGroupMembership      `protobuf:"bytes,32,rep,name=OptionGroupMemberships" json:"OptionGroupMemberships,omitempty"`
-	PendingModifiedValues                 *PendingModifiedValues        `protobuf:"bytes,33,opt,name=PendingModifiedValues" json:"PendingModifiedValues,omitempty"`
-	PreferredBackupWindow                 *string                       `protobuf:"bytes,34,opt,name=PreferredBackupWindow" json:"PreferredBackupWindow,omitempty"`
-	PreferredMaintenanceWindow            *string                       `protobuf:"bytes,35,opt,name=PreferredMaintenanceWindow" json:"PreferredMaintenanceWindow,omitempty"`
-	PubliclyAccessible                    *bool                         `protobuf:"varint,36,opt,name=PubliclyAccessible" json:"PubliclyAccessible,omitempty"`
-	ReadReplicaDBInstanceIdentifiers      []string                      `protobuf:"bytes,37,rep,name=ReadReplicaDBInstanceIdentifiers" json:"ReadReplicaDBInstanceIdentifiers,omitempty"`
-	ReadReplicaSourceDBInstanceIdentifier *string                       `protobuf:"bytes,38,opt,name=ReadReplicaSourceDBInstanceIdentifier" json:"ReadReplicaSourceDBInstanceIdentifier,omitempty"`
-	SecondaryAvailabilityZone             *string                       `protobuf:"bytes,39,opt,name=SecondaryAvailabilityZone" json:"SecondaryAvailabilityZone,omitempty"`
-	StatusInfos                           []*DBInstanceStatusInfo       `protobuf:"bytes,40,rep,name=StatusInfos" json:"StatusInfos,omitempty"`
-	StorageEncrypted                      *bool                         `protobuf:"varint,41,opt,name=StorageEncrypted" json:"StorageEncrypted,omitempty"`
-	StorageType                           *string                       `protobuf:"bytes,42,opt,name=StorageType" json:"StorageType,omitempty"`
-	TdeCredentialArn                      *string                       `protobuf:"bytes,43,opt,name=TdeCredentialArn" json:"TdeCredentialArn,omitempty"`
-	VpcSecurityGroups                     []*VpcSecurityGroupMembership `protobuf:"bytes,44,rep,name=VpcSecurityGroups" json:"VpcSecurityGroups,omitempty"`
+	AllocatedStorage                      *int64                        `protobuf:"zigzag64,2,opt,name=AllocatedStorage,json=allocatedStorage" json:"AllocatedStorage,omitempty"`
+	AutoMinorVersionUpgrade               *bool                         `protobuf:"varint,3,opt,name=AutoMinorVersionUpgrade,json=autoMinorVersionUpgrade" json:"AutoMinorVersionUpgrade,omitempty"`
+	AvailabilityZone                      *string                       `protobuf:"bytes,4,opt,name=AvailabilityZone,json=availabilityZone" json:"AvailabilityZone,omitempty"`
+	BackupRetentionPeriod                 *int64                        `protobuf:"zigzag64,5,opt,name=BackupRetentionPeriod,json=backupRetentionPeriod" json:"BackupRetentionPeriod,omitempty"`
+	CACertificateIdentifier               *string                       `protobuf:"bytes,6,opt,name=CACertificateIdentifier,json=cACertificateIdentifier" json:"CACertificateIdentifier,omitempty"`
+	CharacterSetName                      *string                       `protobuf:"bytes,7,opt,name=CharacterSetName,json=characterSetName" json:"CharacterSetName,omitempty"`
+	CopyTagsToSnapshot                    *bool                         `protobuf:"varint,8,opt,name=CopyTagsToSnapshot,json=copyTagsToSnapshot" json:"CopyTagsToSnapshot,omitempty"`
+	DBClusterIdentifier                   *string                       `protobuf:"bytes,9,opt,name=DBClusterIdentifier,json=dBClusterIdentifier" json:"DBClusterIdentifier,omitempty"`
+	DBInstanceClass                       *string                       `protobuf:"bytes,10,opt,name=DBInstanceClass,json=dBInstanceClass" json:"DBInstanceClass,omitempty"`
+	DBInstanceIdentifier                  *string                       `protobuf:"bytes,11,opt,name=DBInstanceIdentifier,json=dBInstanceIdentifier" json:"DBInstanceIdentifier,omitempty"`
+	DBInstanceStatus                      *string                       `protobuf:"bytes,12,opt,name=DBInstanceStatus,json=dBInstanceStatus" json:"DBInstanceStatus,omitempty"`
+	DBName                                *string                       `protobuf:"bytes,13,opt,name=DBName,json=dBName" json:"DBName,omitempty"`
+	DBParameterGroups                     []*DBParameterGroupStatus     `protobuf:"bytes,14,rep,name=DBParameterGroups,json=dBParameterGroups" json:"DBParameterGroups,omitempty"`
+	DBSecurityGroups                      []*DBSecurityGroupMembership  `protobuf:"bytes,15,rep,name=DBSecurityGroups,json=dBSecurityGroups" json:"DBSecurityGroups,omitempty"`
+	DBSubnetGroup                         *DBSubnetGroup                `protobuf:"bytes,16,opt,name=DBSubnetGroup,json=dBSubnetGroup" json:"DBSubnetGroup,omitempty"`
+	DbInstancePort                        *int64                        `protobuf:"zigzag64,17,opt,name=DbInstancePort,json=dbInstancePort" json:"DbInstancePort,omitempty"`
+	DbiResourceId                         *string                       `protobuf:"bytes,18,opt,name=DbiResourceId,json=dbiResourceId" json:"DbiResourceId,omitempty"`
+	DomainMemberships                     []*DomainMembership           `protobuf:"bytes,19,rep,name=DomainMemberships,json=domainMemberships" json:"DomainMemberships,omitempty"`
+	Endpoint                              *Endpoint                     `protobuf:"bytes,20,opt,name=Endpoint,json=endpoint" json:"Endpoint,omitempty"`
+	Engine                                *string                       `protobuf:"bytes,21,opt,name=Engine,json=engine" json:"Engine,omitempty"`
+	EngineVersion                         *string                       `protobuf:"bytes,22,opt,name=EngineVersion,json=engineVersion" json:"EngineVersion,omitempty"`
+	EnhancedMonitoringResourceArn         *string                       `protobuf:"bytes,23,opt,name=EnhancedMonitoringResourceArn,json=enhancedMonitoringResourceArn" json:"EnhancedMonitoringResourceArn,omitempty"`
+	InstanceCreateTime                    *opsee_types.Timestamp        `protobuf:"bytes,24,opt,name=InstanceCreateTime,json=instanceCreateTime" json:"InstanceCreateTime,omitempty"`
+	Iops                                  *int64                        `protobuf:"zigzag64,25,opt,name=Iops,json=iops" json:"Iops,omitempty"`
+	KmsKeyId                              *string                       `protobuf:"bytes,26,opt,name=KmsKeyId,json=kmsKeyId" json:"KmsKeyId,omitempty"`
+	LatestRestorableTime                  *opsee_types.Timestamp        `protobuf:"bytes,27,opt,name=LatestRestorableTime,json=latestRestorableTime" json:"LatestRestorableTime,omitempty"`
+	LicenseModel                          *string                       `protobuf:"bytes,28,opt,name=LicenseModel,json=licenseModel" json:"LicenseModel,omitempty"`
+	MasterUsername                        *string                       `protobuf:"bytes,29,opt,name=MasterUsername,json=masterUsername" json:"MasterUsername,omitempty"`
+	MonitoringInterval                    *int64                        `protobuf:"zigzag64,30,opt,name=MonitoringInterval,json=monitoringInterval" json:"MonitoringInterval,omitempty"`
+	MonitoringRoleArn                     *string                       `protobuf:"bytes,31,opt,name=MonitoringRoleArn,json=monitoringRoleArn" json:"MonitoringRoleArn,omitempty"`
+	MultiAZ                               *bool                         `protobuf:"varint,32,opt,name=MultiAZ,json=multiAZ" json:"MultiAZ,omitempty"`
+	OptionGroupMemberships                []*OptionGroupMembership      `protobuf:"bytes,33,rep,name=OptionGroupMemberships,json=optionGroupMemberships" json:"OptionGroupMemberships,omitempty"`
+	PendingModifiedValues                 *PendingModifiedValues        `protobuf:"bytes,34,opt,name=PendingModifiedValues,json=pendingModifiedValues" json:"PendingModifiedValues,omitempty"`
+	PreferredBackupWindow                 *string                       `protobuf:"bytes,35,opt,name=PreferredBackupWindow,json=preferredBackupWindow" json:"PreferredBackupWindow,omitempty"`
+	PreferredMaintenanceWindow            *string                       `protobuf:"bytes,36,opt,name=PreferredMaintenanceWindow,json=preferredMaintenanceWindow" json:"PreferredMaintenanceWindow,omitempty"`
+	PromotionTier                         *int64                        `protobuf:"zigzag64,37,opt,name=PromotionTier,json=promotionTier" json:"PromotionTier,omitempty"`
+	PubliclyAccessible                    *bool                         `protobuf:"varint,38,opt,name=PubliclyAccessible,json=publiclyAccessible" json:"PubliclyAccessible,omitempty"`
+	ReadReplicaDBInstanceIdentifiers      []string                      `protobuf:"bytes,39,rep,name=ReadReplicaDBInstanceIdentifiers,json=readReplicaDBInstanceIdentifiers" json:"ReadReplicaDBInstanceIdentifiers,omitempty"`
+	ReadReplicaSourceDBInstanceIdentifier *string                       `protobuf:"bytes,40,opt,name=ReadReplicaSourceDBInstanceIdentifier,json=readReplicaSourceDBInstanceIdentifier" json:"ReadReplicaSourceDBInstanceIdentifier,omitempty"`
+	SecondaryAvailabilityZone             *string                       `protobuf:"bytes,41,opt,name=SecondaryAvailabilityZone,json=secondaryAvailabilityZone" json:"SecondaryAvailabilityZone,omitempty"`
+	StatusInfos                           []*DBInstanceStatusInfo       `protobuf:"bytes,42,rep,name=StatusInfos,json=statusInfos" json:"StatusInfos,omitempty"`
+	StorageEncrypted                      *bool                         `protobuf:"varint,43,opt,name=StorageEncrypted,json=storageEncrypted" json:"StorageEncrypted,omitempty"`
+	StorageType                           *string                       `protobuf:"bytes,44,opt,name=StorageType,json=storageType" json:"StorageType,omitempty"`
+	TdeCredentialArn                      *string                       `protobuf:"bytes,45,opt,name=TdeCredentialArn,json=tdeCredentialArn" json:"TdeCredentialArn,omitempty"`
+	VpcSecurityGroups                     []*VpcSecurityGroupMembership `protobuf:"bytes,46,rep,name=VpcSecurityGroups,json=vpcSecurityGroups" json:"VpcSecurityGroups,omitempty"`
 	XXX_unrecognized                      []byte                        `json:"-"`
 }
 
-func (m *DBInstance) Reset()         { *m = DBInstance{} }
-func (m *DBInstance) String() string { return proto.CompactTextString(m) }
-func (*DBInstance) ProtoMessage()    {}
+func (m *DBInstance) Reset()                    { *m = DBInstance{} }
+func (m *DBInstance) String() string            { return proto.CompactTextString(m) }
+func (*DBInstance) ProtoMessage()               {}
+func (*DBInstance) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
 
 func (m *DBInstance) GetAllocatedStorage() int64 {
 	if m != nil && m.AllocatedStorage != nil {
@@ -224,6 +240,13 @@ func (m *DBInstance) GetDbiResourceId() string {
 	return ""
 }
 
+func (m *DBInstance) GetDomainMemberships() []*DomainMembership {
+	if m != nil {
+		return m.DomainMemberships
+	}
+	return nil
+}
+
 func (m *DBInstance) GetEndpoint() *Endpoint {
 	if m != nil {
 		return m.Endpoint
@@ -252,11 +275,11 @@ func (m *DBInstance) GetEnhancedMonitoringResourceArn() string {
 	return ""
 }
 
-func (m *DBInstance) GetInstanceCreateTime() int64 {
-	if m != nil && m.InstanceCreateTime != nil {
-		return *m.InstanceCreateTime
+func (m *DBInstance) GetInstanceCreateTime() *opsee_types.Timestamp {
+	if m != nil {
+		return m.InstanceCreateTime
 	}
-	return 0
+	return nil
 }
 
 func (m *DBInstance) GetIops() int64 {
@@ -273,11 +296,11 @@ func (m *DBInstance) GetKmsKeyId() string {
 	return ""
 }
 
-func (m *DBInstance) GetLatestRestorableTime() int64 {
-	if m != nil && m.LatestRestorableTime != nil {
-		return *m.LatestRestorableTime
+func (m *DBInstance) GetLatestRestorableTime() *opsee_types.Timestamp {
+	if m != nil {
+		return m.LatestRestorableTime
 	}
-	return 0
+	return nil
 }
 
 func (m *DBInstance) GetLicenseModel() string {
@@ -341,6 +364,13 @@ func (m *DBInstance) GetPreferredMaintenanceWindow() string {
 		return *m.PreferredMaintenanceWindow
 	}
 	return ""
+}
+
+func (m *DBInstance) GetPromotionTier() int64 {
+	if m != nil && m.PromotionTier != nil {
+		return *m.PromotionTier
+	}
+	return 0
 }
 
 func (m *DBInstance) GetPubliclyAccessible() bool {
@@ -407,16 +437,17 @@ func (m *DBInstance) GetVpcSecurityGroups() []*VpcSecurityGroupMembership {
 }
 
 type DBInstanceStatusInfo struct {
-	Message          *string `protobuf:"bytes,2,opt,name=Message" json:"Message,omitempty"`
-	Normal           *bool   `protobuf:"varint,3,opt,name=Normal" json:"Normal,omitempty"`
-	Status           *string `protobuf:"bytes,4,opt,name=Status" json:"Status,omitempty"`
-	StatusType       *string `protobuf:"bytes,5,opt,name=StatusType" json:"StatusType,omitempty"`
+	Message          *string `protobuf:"bytes,2,opt,name=Message,json=message" json:"Message,omitempty"`
+	Normal           *bool   `protobuf:"varint,3,opt,name=Normal,json=normal" json:"Normal,omitempty"`
+	Status           *string `protobuf:"bytes,4,opt,name=Status,json=status" json:"Status,omitempty"`
+	StatusType       *string `protobuf:"bytes,5,opt,name=StatusType,json=statusType" json:"StatusType,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *DBInstanceStatusInfo) Reset()         { *m = DBInstanceStatusInfo{} }
-func (m *DBInstanceStatusInfo) String() string { return proto.CompactTextString(m) }
-func (*DBInstanceStatusInfo) ProtoMessage()    {}
+func (m *DBInstanceStatusInfo) Reset()                    { *m = DBInstanceStatusInfo{} }
+func (m *DBInstanceStatusInfo) String() string            { return proto.CompactTextString(m) }
+func (*DBInstanceStatusInfo) ProtoMessage()               {}
+func (*DBInstanceStatusInfo) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 func (m *DBInstanceStatusInfo) GetMessage() string {
 	if m != nil && m.Message != nil {
@@ -447,14 +478,15 @@ func (m *DBInstanceStatusInfo) GetStatusType() string {
 }
 
 type DBParameterGroupStatus struct {
-	DBParameterGroupName *string `protobuf:"bytes,2,opt,name=DBParameterGroupName" json:"DBParameterGroupName,omitempty"`
-	ParameterApplyStatus *string `protobuf:"bytes,3,opt,name=ParameterApplyStatus" json:"ParameterApplyStatus,omitempty"`
+	DBParameterGroupName *string `protobuf:"bytes,2,opt,name=DBParameterGroupName,json=dBParameterGroupName" json:"DBParameterGroupName,omitempty"`
+	ParameterApplyStatus *string `protobuf:"bytes,3,opt,name=ParameterApplyStatus,json=parameterApplyStatus" json:"ParameterApplyStatus,omitempty"`
 	XXX_unrecognized     []byte  `json:"-"`
 }
 
-func (m *DBParameterGroupStatus) Reset()         { *m = DBParameterGroupStatus{} }
-func (m *DBParameterGroupStatus) String() string { return proto.CompactTextString(m) }
-func (*DBParameterGroupStatus) ProtoMessage()    {}
+func (m *DBParameterGroupStatus) Reset()                    { *m = DBParameterGroupStatus{} }
+func (m *DBParameterGroupStatus) String() string            { return proto.CompactTextString(m) }
+func (*DBParameterGroupStatus) ProtoMessage()               {}
+func (*DBParameterGroupStatus) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
 func (m *DBParameterGroupStatus) GetDBParameterGroupName() string {
 	if m != nil && m.DBParameterGroupName != nil {
@@ -471,14 +503,15 @@ func (m *DBParameterGroupStatus) GetParameterApplyStatus() string {
 }
 
 type DBSecurityGroupMembership struct {
-	DBSecurityGroupName *string `protobuf:"bytes,2,opt,name=DBSecurityGroupName" json:"DBSecurityGroupName,omitempty"`
-	Status              *string `protobuf:"bytes,3,opt,name=Status" json:"Status,omitempty"`
+	DBSecurityGroupName *string `protobuf:"bytes,2,opt,name=DBSecurityGroupName,json=dBSecurityGroupName" json:"DBSecurityGroupName,omitempty"`
+	Status              *string `protobuf:"bytes,3,opt,name=Status,json=status" json:"Status,omitempty"`
 	XXX_unrecognized    []byte  `json:"-"`
 }
 
-func (m *DBSecurityGroupMembership) Reset()         { *m = DBSecurityGroupMembership{} }
-func (m *DBSecurityGroupMembership) String() string { return proto.CompactTextString(m) }
-func (*DBSecurityGroupMembership) ProtoMessage()    {}
+func (m *DBSecurityGroupMembership) Reset()                    { *m = DBSecurityGroupMembership{} }
+func (m *DBSecurityGroupMembership) String() string            { return proto.CompactTextString(m) }
+func (*DBSecurityGroupMembership) ProtoMessage()               {}
+func (*DBSecurityGroupMembership) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
 
 func (m *DBSecurityGroupMembership) GetDBSecurityGroupName() string {
 	if m != nil && m.DBSecurityGroupName != nil {
@@ -495,17 +528,18 @@ func (m *DBSecurityGroupMembership) GetStatus() string {
 }
 
 type DBSubnetGroup struct {
-	DBSubnetGroupDescription *string   `protobuf:"bytes,2,opt,name=DBSubnetGroupDescription" json:"DBSubnetGroupDescription,omitempty"`
-	DBSubnetGroupName        *string   `protobuf:"bytes,3,opt,name=DBSubnetGroupName" json:"DBSubnetGroupName,omitempty"`
-	SubnetGroupStatus        *string   `protobuf:"bytes,4,opt,name=SubnetGroupStatus" json:"SubnetGroupStatus,omitempty"`
-	Subnets                  []*Subnet `protobuf:"bytes,5,rep,name=Subnets" json:"Subnets,omitempty"`
-	VpcId                    *string   `protobuf:"bytes,6,opt,name=VpcId" json:"VpcId,omitempty"`
+	DBSubnetGroupDescription *string   `protobuf:"bytes,2,opt,name=DBSubnetGroupDescription,json=dBSubnetGroupDescription" json:"DBSubnetGroupDescription,omitempty"`
+	DBSubnetGroupName        *string   `protobuf:"bytes,3,opt,name=DBSubnetGroupName,json=dBSubnetGroupName" json:"DBSubnetGroupName,omitempty"`
+	SubnetGroupStatus        *string   `protobuf:"bytes,4,opt,name=SubnetGroupStatus,json=subnetGroupStatus" json:"SubnetGroupStatus,omitempty"`
+	Subnets                  []*Subnet `protobuf:"bytes,5,rep,name=Subnets,json=subnets" json:"Subnets,omitempty"`
+	VpcId                    *string   `protobuf:"bytes,6,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
 	XXX_unrecognized         []byte    `json:"-"`
 }
 
-func (m *DBSubnetGroup) Reset()         { *m = DBSubnetGroup{} }
-func (m *DBSubnetGroup) String() string { return proto.CompactTextString(m) }
-func (*DBSubnetGroup) ProtoMessage()    {}
+func (m *DBSubnetGroup) Reset()                    { *m = DBSubnetGroup{} }
+func (m *DBSubnetGroup) String() string            { return proto.CompactTextString(m) }
+func (*DBSubnetGroup) ProtoMessage()               {}
+func (*DBSubnetGroup) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
 
 func (m *DBSubnetGroup) GetDBSubnetGroupDescription() string {
 	if m != nil && m.DBSubnetGroupDescription != nil {
@@ -542,16 +576,124 @@ func (m *DBSubnetGroup) GetVpcId() string {
 	return ""
 }
 
-type Endpoint struct {
-	Address          *string `protobuf:"bytes,2,opt,name=Address" json:"Address,omitempty"`
-	HostedZoneId     *string `protobuf:"bytes,3,opt,name=HostedZoneId" json:"HostedZoneId,omitempty"`
-	Port             *int64  `protobuf:"zigzag64,4,opt,name=Port" json:"Port,omitempty"`
+type DescribeDBInstancesInput struct {
+	DBInstanceIdentifier *string   `protobuf:"bytes,2,opt,name=DBInstanceIdentifier,json=dBInstanceIdentifier" json:"DBInstanceIdentifier,omitempty"`
+	Filters              []*Filter `protobuf:"bytes,3,rep,name=Filters,json=filters" json:"Filters,omitempty"`
+	Marker               *string   `protobuf:"bytes,4,opt,name=Marker,json=marker" json:"Marker,omitempty"`
+	MaxRecords           *int64    `protobuf:"zigzag64,5,opt,name=MaxRecords,json=maxRecords" json:"MaxRecords,omitempty"`
+	XXX_unrecognized     []byte    `json:"-"`
+}
+
+func (m *DescribeDBInstancesInput) Reset()                    { *m = DescribeDBInstancesInput{} }
+func (m *DescribeDBInstancesInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeDBInstancesInput) ProtoMessage()               {}
+func (*DescribeDBInstancesInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+
+func (m *DescribeDBInstancesInput) GetDBInstanceIdentifier() string {
+	if m != nil && m.DBInstanceIdentifier != nil {
+		return *m.DBInstanceIdentifier
+	}
+	return ""
+}
+
+func (m *DescribeDBInstancesInput) GetFilters() []*Filter {
+	if m != nil {
+		return m.Filters
+	}
+	return nil
+}
+
+func (m *DescribeDBInstancesInput) GetMarker() string {
+	if m != nil && m.Marker != nil {
+		return *m.Marker
+	}
+	return ""
+}
+
+func (m *DescribeDBInstancesInput) GetMaxRecords() int64 {
+	if m != nil && m.MaxRecords != nil {
+		return *m.MaxRecords
+	}
+	return 0
+}
+
+type DescribeDBInstancesOutput struct {
+	DBInstances      []*DBInstance `protobuf:"bytes,2,rep,name=DBInstances,json=dBInstances" json:"DBInstances,omitempty"`
+	Marker           *string       `protobuf:"bytes,3,opt,name=Marker,json=marker" json:"Marker,omitempty"`
+	XXX_unrecognized []byte        `json:"-"`
+}
+
+func (m *DescribeDBInstancesOutput) Reset()                    { *m = DescribeDBInstancesOutput{} }
+func (m *DescribeDBInstancesOutput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeDBInstancesOutput) ProtoMessage()               {}
+func (*DescribeDBInstancesOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+
+func (m *DescribeDBInstancesOutput) GetDBInstances() []*DBInstance {
+	if m != nil {
+		return m.DBInstances
+	}
+	return nil
+}
+
+func (m *DescribeDBInstancesOutput) GetMarker() string {
+	if m != nil && m.Marker != nil {
+		return *m.Marker
+	}
+	return ""
+}
+
+type DomainMembership struct {
+	Domain           *string `protobuf:"bytes,2,opt,name=Domain,json=domain" json:"Domain,omitempty"`
+	FQDN             *string `protobuf:"bytes,3,opt,name=FQDN,json=fQDN" json:"FQDN,omitempty"`
+	IAMRoleName      *string `protobuf:"bytes,4,opt,name=IAMRoleName,json=iAMRoleName" json:"IAMRoleName,omitempty"`
+	Status           *string `protobuf:"bytes,5,opt,name=Status,json=status" json:"Status,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Endpoint) Reset()         { *m = Endpoint{} }
-func (m *Endpoint) String() string { return proto.CompactTextString(m) }
-func (*Endpoint) ProtoMessage()    {}
+func (m *DomainMembership) Reset()                    { *m = DomainMembership{} }
+func (m *DomainMembership) String() string            { return proto.CompactTextString(m) }
+func (*DomainMembership) ProtoMessage()               {}
+func (*DomainMembership) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+
+func (m *DomainMembership) GetDomain() string {
+	if m != nil && m.Domain != nil {
+		return *m.Domain
+	}
+	return ""
+}
+
+func (m *DomainMembership) GetFQDN() string {
+	if m != nil && m.FQDN != nil {
+		return *m.FQDN
+	}
+	return ""
+}
+
+func (m *DomainMembership) GetIAMRoleName() string {
+	if m != nil && m.IAMRoleName != nil {
+		return *m.IAMRoleName
+	}
+	return ""
+}
+
+func (m *DomainMembership) GetStatus() string {
+	if m != nil && m.Status != nil {
+		return *m.Status
+	}
+	return ""
+}
+
+type Endpoint struct {
+	Address          *string `protobuf:"bytes,2,opt,name=Address,json=address" json:"Address,omitempty"`
+	HostedZoneId     *string `protobuf:"bytes,3,opt,name=HostedZoneId,json=hostedZoneId" json:"HostedZoneId,omitempty"`
+	Port             *int64  `protobuf:"zigzag64,4,opt,name=Port,json=port" json:"Port,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *Endpoint) Reset()                    { *m = Endpoint{} }
+func (m *Endpoint) String() string            { return proto.CompactTextString(m) }
+func (*Endpoint) ProtoMessage()               {}
+func (*Endpoint) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
 
 func (m *Endpoint) GetAddress() string {
 	if m != nil && m.Address != nil {
@@ -574,15 +716,41 @@ func (m *Endpoint) GetPort() int64 {
 	return 0
 }
 
+type Filter struct {
+	Name             *string  `protobuf:"bytes,2,opt,name=Name,json=name" json:"Name,omitempty"`
+	Values           []string `protobuf:"bytes,3,rep,name=Values,json=values" json:"Values,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *Filter) Reset()                    { *m = Filter{} }
+func (m *Filter) String() string            { return proto.CompactTextString(m) }
+func (*Filter) ProtoMessage()               {}
+func (*Filter) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+
+func (m *Filter) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *Filter) GetValues() []string {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
 type OptionGroupMembership struct {
-	OptionGroupName  *string `protobuf:"bytes,2,opt,name=OptionGroupName" json:"OptionGroupName,omitempty"`
-	Status           *string `protobuf:"bytes,3,opt,name=Status" json:"Status,omitempty"`
+	OptionGroupName  *string `protobuf:"bytes,2,opt,name=OptionGroupName,json=optionGroupName" json:"OptionGroupName,omitempty"`
+	Status           *string `protobuf:"bytes,3,opt,name=Status,json=status" json:"Status,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *OptionGroupMembership) Reset()         { *m = OptionGroupMembership{} }
-func (m *OptionGroupMembership) String() string { return proto.CompactTextString(m) }
-func (*OptionGroupMembership) ProtoMessage()    {}
+func (m *OptionGroupMembership) Reset()                    { *m = OptionGroupMembership{} }
+func (m *OptionGroupMembership) String() string            { return proto.CompactTextString(m) }
+func (*OptionGroupMembership) ProtoMessage()               {}
+func (*OptionGroupMembership) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 func (m *OptionGroupMembership) GetOptionGroupName() string {
 	if m != nil && m.OptionGroupName != nil {
@@ -599,23 +767,24 @@ func (m *OptionGroupMembership) GetStatus() string {
 }
 
 type PendingModifiedValues struct {
-	AllocatedStorage        *int64  `protobuf:"zigzag64,2,opt,name=AllocatedStorage" json:"AllocatedStorage,omitempty"`
-	BackupRetentionPeriod   *int64  `protobuf:"zigzag64,3,opt,name=BackupRetentionPeriod" json:"BackupRetentionPeriod,omitempty"`
-	CACertificateIdentifier *string `protobuf:"bytes,4,opt,name=CACertificateIdentifier" json:"CACertificateIdentifier,omitempty"`
-	DBInstanceClass         *string `protobuf:"bytes,5,opt,name=DBInstanceClass" json:"DBInstanceClass,omitempty"`
-	DBInstanceIdentifier    *string `protobuf:"bytes,6,opt,name=DBInstanceIdentifier" json:"DBInstanceIdentifier,omitempty"`
-	EngineVersion           *string `protobuf:"bytes,7,opt,name=EngineVersion" json:"EngineVersion,omitempty"`
-	Iops                    *int64  `protobuf:"zigzag64,8,opt,name=Iops" json:"Iops,omitempty"`
-	MasterUserPassword      *string `protobuf:"bytes,9,opt,name=MasterUserPassword" json:"MasterUserPassword,omitempty"`
-	MultiAZ                 *bool   `protobuf:"varint,10,opt,name=MultiAZ" json:"MultiAZ,omitempty"`
-	Port                    *int64  `protobuf:"zigzag64,11,opt,name=Port" json:"Port,omitempty"`
-	StorageType             *string `protobuf:"bytes,12,opt,name=StorageType" json:"StorageType,omitempty"`
+	AllocatedStorage        *int64  `protobuf:"zigzag64,2,opt,name=AllocatedStorage,json=allocatedStorage" json:"AllocatedStorage,omitempty"`
+	BackupRetentionPeriod   *int64  `protobuf:"zigzag64,3,opt,name=BackupRetentionPeriod,json=backupRetentionPeriod" json:"BackupRetentionPeriod,omitempty"`
+	CACertificateIdentifier *string `protobuf:"bytes,4,opt,name=CACertificateIdentifier,json=cACertificateIdentifier" json:"CACertificateIdentifier,omitempty"`
+	DBInstanceClass         *string `protobuf:"bytes,5,opt,name=DBInstanceClass,json=dBInstanceClass" json:"DBInstanceClass,omitempty"`
+	DBInstanceIdentifier    *string `protobuf:"bytes,6,opt,name=DBInstanceIdentifier,json=dBInstanceIdentifier" json:"DBInstanceIdentifier,omitempty"`
+	EngineVersion           *string `protobuf:"bytes,7,opt,name=EngineVersion,json=engineVersion" json:"EngineVersion,omitempty"`
+	Iops                    *int64  `protobuf:"zigzag64,8,opt,name=Iops,json=iops" json:"Iops,omitempty"`
+	MasterUserPassword      *string `protobuf:"bytes,9,opt,name=MasterUserPassword,json=masterUserPassword" json:"MasterUserPassword,omitempty"`
+	MultiAZ                 *bool   `protobuf:"varint,10,opt,name=MultiAZ,json=multiAZ" json:"MultiAZ,omitempty"`
+	Port                    *int64  `protobuf:"zigzag64,11,opt,name=Port,json=port" json:"Port,omitempty"`
+	StorageType             *string `protobuf:"bytes,12,opt,name=StorageType,json=storageType" json:"StorageType,omitempty"`
 	XXX_unrecognized        []byte  `json:"-"`
 }
 
-func (m *PendingModifiedValues) Reset()         { *m = PendingModifiedValues{} }
-func (m *PendingModifiedValues) String() string { return proto.CompactTextString(m) }
-func (*PendingModifiedValues) ProtoMessage()    {}
+func (m *PendingModifiedValues) Reset()                    { *m = PendingModifiedValues{} }
+func (m *PendingModifiedValues) String() string            { return proto.CompactTextString(m) }
+func (*PendingModifiedValues) ProtoMessage()               {}
+func (*PendingModifiedValues) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 func (m *PendingModifiedValues) GetAllocatedStorage() int64 {
 	if m != nil && m.AllocatedStorage != nil {
@@ -695,15 +864,16 @@ func (m *PendingModifiedValues) GetStorageType() string {
 }
 
 type Subnet struct {
-	SubnetAvailabilityZone *AvailabilityZone `protobuf:"bytes,2,opt,name=SubnetAvailabilityZone" json:"SubnetAvailabilityZone,omitempty"`
-	SubnetIdentifier       *string           `protobuf:"bytes,3,opt,name=SubnetIdentifier" json:"SubnetIdentifier,omitempty"`
-	SubnetStatus           *string           `protobuf:"bytes,4,opt,name=SubnetStatus" json:"SubnetStatus,omitempty"`
+	SubnetAvailabilityZone *AvailabilityZone `protobuf:"bytes,2,opt,name=SubnetAvailabilityZone,json=subnetAvailabilityZone" json:"SubnetAvailabilityZone,omitempty"`
+	SubnetIdentifier       *string           `protobuf:"bytes,3,opt,name=SubnetIdentifier,json=subnetIdentifier" json:"SubnetIdentifier,omitempty"`
+	SubnetStatus           *string           `protobuf:"bytes,4,opt,name=SubnetStatus,json=subnetStatus" json:"SubnetStatus,omitempty"`
 	XXX_unrecognized       []byte            `json:"-"`
 }
 
-func (m *Subnet) Reset()         { *m = Subnet{} }
-func (m *Subnet) String() string { return proto.CompactTextString(m) }
-func (*Subnet) ProtoMessage()    {}
+func (m *Subnet) Reset()                    { *m = Subnet{} }
+func (m *Subnet) String() string            { return proto.CompactTextString(m) }
+func (*Subnet) ProtoMessage()               {}
+func (*Subnet) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
 
 func (m *Subnet) GetSubnetAvailabilityZone() *AvailabilityZone {
 	if m != nil {
@@ -727,14 +897,15 @@ func (m *Subnet) GetSubnetStatus() string {
 }
 
 type VpcSecurityGroupMembership struct {
-	Status             *string `protobuf:"bytes,2,opt,name=Status" json:"Status,omitempty"`
-	VpcSecurityGroupId *string `protobuf:"bytes,3,opt,name=VpcSecurityGroupId" json:"VpcSecurityGroupId,omitempty"`
+	Status             *string `protobuf:"bytes,2,opt,name=Status,json=status" json:"Status,omitempty"`
+	VpcSecurityGroupId *string `protobuf:"bytes,3,opt,name=VpcSecurityGroupId,json=vpcSecurityGroupId" json:"VpcSecurityGroupId,omitempty"`
 	XXX_unrecognized   []byte  `json:"-"`
 }
 
-func (m *VpcSecurityGroupMembership) Reset()         { *m = VpcSecurityGroupMembership{} }
-func (m *VpcSecurityGroupMembership) String() string { return proto.CompactTextString(m) }
-func (*VpcSecurityGroupMembership) ProtoMessage()    {}
+func (m *VpcSecurityGroupMembership) Reset()                    { *m = VpcSecurityGroupMembership{} }
+func (m *VpcSecurityGroupMembership) String() string            { return proto.CompactTextString(m) }
+func (*VpcSecurityGroupMembership) ProtoMessage()               {}
+func (*VpcSecurityGroupMembership) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 func (m *VpcSecurityGroupMembership) GetStatus() string {
 	if m != nil && m.Status != nil {
@@ -757,7 +928,11 @@ func init() {
 	proto.RegisterType((*DBParameterGroupStatus)(nil), "opsee.aws.rds.DBParameterGroupStatus")
 	proto.RegisterType((*DBSecurityGroupMembership)(nil), "opsee.aws.rds.DBSecurityGroupMembership")
 	proto.RegisterType((*DBSubnetGroup)(nil), "opsee.aws.rds.DBSubnetGroup")
+	proto.RegisterType((*DescribeDBInstancesInput)(nil), "opsee.aws.rds.DescribeDBInstancesInput")
+	proto.RegisterType((*DescribeDBInstancesOutput)(nil), "opsee.aws.rds.DescribeDBInstancesOutput")
+	proto.RegisterType((*DomainMembership)(nil), "opsee.aws.rds.DomainMembership")
 	proto.RegisterType((*Endpoint)(nil), "opsee.aws.rds.Endpoint")
+	proto.RegisterType((*Filter)(nil), "opsee.aws.rds.Filter")
 	proto.RegisterType((*OptionGroupMembership)(nil), "opsee.aws.rds.OptionGroupMembership")
 	proto.RegisterType((*PendingModifiedValues)(nil), "opsee.aws.rds.PendingModifiedValues")
 	proto.RegisterType((*Subnet)(nil), "opsee.aws.rds.Subnet")
@@ -972,6 +1147,14 @@ func (this *DBInstance) Equal(that interface{}) bool {
 	} else if that1.DbiResourceId != nil {
 		return false
 	}
+	if len(this.DomainMemberships) != len(that1.DomainMemberships) {
+		return false
+	}
+	for i := range this.DomainMemberships {
+		if !this.DomainMemberships[i].Equal(that1.DomainMemberships[i]) {
+			return false
+		}
+	}
 	if !this.Endpoint.Equal(that1.Endpoint) {
 		return false
 	}
@@ -1002,13 +1185,7 @@ func (this *DBInstance) Equal(that interface{}) bool {
 	} else if that1.EnhancedMonitoringResourceArn != nil {
 		return false
 	}
-	if this.InstanceCreateTime != nil && that1.InstanceCreateTime != nil {
-		if *this.InstanceCreateTime != *that1.InstanceCreateTime {
-			return false
-		}
-	} else if this.InstanceCreateTime != nil {
-		return false
-	} else if that1.InstanceCreateTime != nil {
+	if !this.InstanceCreateTime.Equal(that1.InstanceCreateTime) {
 		return false
 	}
 	if this.Iops != nil && that1.Iops != nil {
@@ -1029,13 +1206,7 @@ func (this *DBInstance) Equal(that interface{}) bool {
 	} else if that1.KmsKeyId != nil {
 		return false
 	}
-	if this.LatestRestorableTime != nil && that1.LatestRestorableTime != nil {
-		if *this.LatestRestorableTime != *that1.LatestRestorableTime {
-			return false
-		}
-	} else if this.LatestRestorableTime != nil {
-		return false
-	} else if that1.LatestRestorableTime != nil {
+	if !this.LatestRestorableTime.Equal(that1.LatestRestorableTime) {
 		return false
 	}
 	if this.LicenseModel != nil && that1.LicenseModel != nil {
@@ -1110,6 +1281,15 @@ func (this *DBInstance) Equal(that interface{}) bool {
 	} else if this.PreferredMaintenanceWindow != nil {
 		return false
 	} else if that1.PreferredMaintenanceWindow != nil {
+		return false
+	}
+	if this.PromotionTier != nil && that1.PromotionTier != nil {
+		if *this.PromotionTier != *that1.PromotionTier {
+			return false
+		}
+	} else if this.PromotionTier != nil {
+		return false
+	} else if that1.PromotionTier != nil {
 		return false
 	}
 	if this.PubliclyAccessible != nil && that1.PubliclyAccessible != nil {
@@ -1431,6 +1611,184 @@ func (this *DBSubnetGroup) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DescribeDBInstancesInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeDBInstancesInput)
+	if !ok {
+		that2, ok := that.(DescribeDBInstancesInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DBInstanceIdentifier != nil && that1.DBInstanceIdentifier != nil {
+		if *this.DBInstanceIdentifier != *that1.DBInstanceIdentifier {
+			return false
+		}
+	} else if this.DBInstanceIdentifier != nil {
+		return false
+	} else if that1.DBInstanceIdentifier != nil {
+		return false
+	}
+	if len(this.Filters) != len(that1.Filters) {
+		return false
+	}
+	for i := range this.Filters {
+		if !this.Filters[i].Equal(that1.Filters[i]) {
+			return false
+		}
+	}
+	if this.Marker != nil && that1.Marker != nil {
+		if *this.Marker != *that1.Marker {
+			return false
+		}
+	} else if this.Marker != nil {
+		return false
+	} else if that1.Marker != nil {
+		return false
+	}
+	if this.MaxRecords != nil && that1.MaxRecords != nil {
+		if *this.MaxRecords != *that1.MaxRecords {
+			return false
+		}
+	} else if this.MaxRecords != nil {
+		return false
+	} else if that1.MaxRecords != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeDBInstancesOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeDBInstancesOutput)
+	if !ok {
+		that2, ok := that.(DescribeDBInstancesOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.DBInstances) != len(that1.DBInstances) {
+		return false
+	}
+	for i := range this.DBInstances {
+		if !this.DBInstances[i].Equal(that1.DBInstances[i]) {
+			return false
+		}
+	}
+	if this.Marker != nil && that1.Marker != nil {
+		if *this.Marker != *that1.Marker {
+			return false
+		}
+	} else if this.Marker != nil {
+		return false
+	} else if that1.Marker != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DomainMembership) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DomainMembership)
+	if !ok {
+		that2, ok := that.(DomainMembership)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Domain != nil && that1.Domain != nil {
+		if *this.Domain != *that1.Domain {
+			return false
+		}
+	} else if this.Domain != nil {
+		return false
+	} else if that1.Domain != nil {
+		return false
+	}
+	if this.FQDN != nil && that1.FQDN != nil {
+		if *this.FQDN != *that1.FQDN {
+			return false
+		}
+	} else if this.FQDN != nil {
+		return false
+	} else if that1.FQDN != nil {
+		return false
+	}
+	if this.IAMRoleName != nil && that1.IAMRoleName != nil {
+		if *this.IAMRoleName != *that1.IAMRoleName {
+			return false
+		}
+	} else if this.IAMRoleName != nil {
+		return false
+	} else if that1.IAMRoleName != nil {
+		return false
+	}
+	if this.Status != nil && that1.Status != nil {
+		if *this.Status != *that1.Status {
+			return false
+		}
+	} else if this.Status != nil {
+		return false
+	} else if that1.Status != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
 func (this *Endpoint) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
@@ -1482,6 +1840,53 @@ func (this *Endpoint) Equal(that interface{}) bool {
 		return false
 	} else if that1.Port != nil {
 		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *Filter) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Filter)
+	if !ok {
+		that2, ok := that.(Filter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Name != nil && that1.Name != nil {
+		if *this.Name != *that1.Name {
+			return false
+		}
+	} else if this.Name != nil {
+		return false
+	} else if that1.Name != nil {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if this.Values[i] != that1.Values[i] {
+			return false
+		}
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return false
@@ -1801,11 +2206,35 @@ type DBSubnetGroupGetter interface {
 
 var GraphQLDBSubnetGroupType *github_com_graphql_go_graphql.Object
 
+type DescribeDBInstancesInputGetter interface {
+	GetDescribeDBInstancesInput() *DescribeDBInstancesInput
+}
+
+var GraphQLDescribeDBInstancesInputType *github_com_graphql_go_graphql.Object
+
+type DescribeDBInstancesOutputGetter interface {
+	GetDescribeDBInstancesOutput() *DescribeDBInstancesOutput
+}
+
+var GraphQLDescribeDBInstancesOutputType *github_com_graphql_go_graphql.Object
+
+type DomainMembershipGetter interface {
+	GetDomainMembership() *DomainMembership
+}
+
+var GraphQLDomainMembershipType *github_com_graphql_go_graphql.Object
+
 type EndpointGetter interface {
 	GetEndpoint() *Endpoint
 }
 
 var GraphQLEndpointType *github_com_graphql_go_graphql.Object
+
+type FilterGetter interface {
+	GetFilter() *Filter
+}
+
+var GraphQLFilterType *github_com_graphql_go_graphql.Object
 
 type OptionGroupMembershipGetter interface {
 	GetOptionGroupMembership() *OptionGroupMembership
@@ -2283,6 +2712,25 @@ func init() {
 						return nil, fmt.Errorf("field DbiResourceId not resolved")
 					},
 				},
+				"DomainMemberships": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLDomainMembershipType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DBInstance)
+						if ok {
+							return obj.DomainMemberships, nil
+						}
+						inter, ok := p.Source.(DBInstanceGetter)
+						if ok {
+							face := inter.GetDBInstance()
+							if face == nil {
+								return nil, nil
+							}
+							return face.DomainMemberships, nil
+						}
+						return nil, fmt.Errorf("field DomainMemberships not resolved")
+					},
+				},
 				"Endpoint": &github_com_graphql_go_graphql.Field{
 					Type:        GraphQLEndpointType,
 					Description: "",
@@ -2384,7 +2832,7 @@ func init() {
 					},
 				},
 				"InstanceCreateTime": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*DBInstance)
@@ -2459,7 +2907,7 @@ func init() {
 					},
 				},
 				"LatestRestorableTime": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*DBInstance)
@@ -2700,6 +3148,31 @@ func init() {
 							return face.GetPreferredMaintenanceWindow(), nil
 						}
 						return nil, fmt.Errorf("field PreferredMaintenanceWindow not resolved")
+					},
+				},
+				"PromotionTier": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DBInstance)
+						if ok {
+							if obj.PromotionTier == nil {
+								return nil, nil
+							}
+							return obj.GetPromotionTier(), nil
+						}
+						inter, ok := p.Source.(DBInstanceGetter)
+						if ok {
+							face := inter.GetDBInstance()
+							if face == nil {
+								return nil, nil
+							}
+							if face.PromotionTier == nil {
+								return nil, nil
+							}
+							return face.GetPromotionTier(), nil
+						}
+						return nil, fmt.Errorf("field PromotionTier not resolved")
 					},
 				},
 				"PubliclyAccessible": &github_com_graphql_go_graphql.Field{
@@ -3263,6 +3736,268 @@ func init() {
 			}
 		}),
 	})
+	GraphQLDescribeDBInstancesInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "rdsDescribeDBInstancesInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DBInstanceIdentifier": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeDBInstancesInput)
+						if ok {
+							if obj.DBInstanceIdentifier == nil {
+								return nil, nil
+							}
+							return obj.GetDBInstanceIdentifier(), nil
+						}
+						inter, ok := p.Source.(DescribeDBInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeDBInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DBInstanceIdentifier == nil {
+								return nil, nil
+							}
+							return face.GetDBInstanceIdentifier(), nil
+						}
+						return nil, fmt.Errorf("field DBInstanceIdentifier not resolved")
+					},
+				},
+				"Filters": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLFilterType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeDBInstancesInput)
+						if ok {
+							return obj.Filters, nil
+						}
+						inter, ok := p.Source.(DescribeDBInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeDBInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Filters, nil
+						}
+						return nil, fmt.Errorf("field Filters not resolved")
+					},
+				},
+				"Marker": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeDBInstancesInput)
+						if ok {
+							if obj.Marker == nil {
+								return nil, nil
+							}
+							return obj.GetMarker(), nil
+						}
+						inter, ok := p.Source.(DescribeDBInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeDBInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Marker == nil {
+								return nil, nil
+							}
+							return face.GetMarker(), nil
+						}
+						return nil, fmt.Errorf("field Marker not resolved")
+					},
+				},
+				"MaxRecords": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeDBInstancesInput)
+						if ok {
+							if obj.MaxRecords == nil {
+								return nil, nil
+							}
+							return obj.GetMaxRecords(), nil
+						}
+						inter, ok := p.Source.(DescribeDBInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeDBInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MaxRecords == nil {
+								return nil, nil
+							}
+							return face.GetMaxRecords(), nil
+						}
+						return nil, fmt.Errorf("field MaxRecords not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeDBInstancesOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "rdsDescribeDBInstancesOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DBInstances": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLDBInstanceType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeDBInstancesOutput)
+						if ok {
+							return obj.DBInstances, nil
+						}
+						inter, ok := p.Source.(DescribeDBInstancesOutputGetter)
+						if ok {
+							face := inter.GetDescribeDBInstancesOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.DBInstances, nil
+						}
+						return nil, fmt.Errorf("field DBInstances not resolved")
+					},
+				},
+				"Marker": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeDBInstancesOutput)
+						if ok {
+							if obj.Marker == nil {
+								return nil, nil
+							}
+							return obj.GetMarker(), nil
+						}
+						inter, ok := p.Source.(DescribeDBInstancesOutputGetter)
+						if ok {
+							face := inter.GetDescribeDBInstancesOutput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Marker == nil {
+								return nil, nil
+							}
+							return face.GetMarker(), nil
+						}
+						return nil, fmt.Errorf("field Marker not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDomainMembershipType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "rdsDomainMembership",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Domain": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DomainMembership)
+						if ok {
+							if obj.Domain == nil {
+								return nil, nil
+							}
+							return obj.GetDomain(), nil
+						}
+						inter, ok := p.Source.(DomainMembershipGetter)
+						if ok {
+							face := inter.GetDomainMembership()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Domain == nil {
+								return nil, nil
+							}
+							return face.GetDomain(), nil
+						}
+						return nil, fmt.Errorf("field Domain not resolved")
+					},
+				},
+				"FQDN": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DomainMembership)
+						if ok {
+							if obj.FQDN == nil {
+								return nil, nil
+							}
+							return obj.GetFQDN(), nil
+						}
+						inter, ok := p.Source.(DomainMembershipGetter)
+						if ok {
+							face := inter.GetDomainMembership()
+							if face == nil {
+								return nil, nil
+							}
+							if face.FQDN == nil {
+								return nil, nil
+							}
+							return face.GetFQDN(), nil
+						}
+						return nil, fmt.Errorf("field FQDN not resolved")
+					},
+				},
+				"IAMRoleName": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DomainMembership)
+						if ok {
+							if obj.IAMRoleName == nil {
+								return nil, nil
+							}
+							return obj.GetIAMRoleName(), nil
+						}
+						inter, ok := p.Source.(DomainMembershipGetter)
+						if ok {
+							face := inter.GetDomainMembership()
+							if face == nil {
+								return nil, nil
+							}
+							if face.IAMRoleName == nil {
+								return nil, nil
+							}
+							return face.GetIAMRoleName(), nil
+						}
+						return nil, fmt.Errorf("field IAMRoleName not resolved")
+					},
+				},
+				"Status": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DomainMembership)
+						if ok {
+							if obj.Status == nil {
+								return nil, nil
+							}
+							return obj.GetStatus(), nil
+						}
+						inter, ok := p.Source.(DomainMembershipGetter)
+						if ok {
+							face := inter.GetDomainMembership()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Status == nil {
+								return nil, nil
+							}
+							return face.GetStatus(), nil
+						}
+						return nil, fmt.Errorf("field Status not resolved")
+					},
+				},
+			}
+		}),
+	})
 	GraphQLEndpointType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "rdsEndpoint",
 		Description: "",
@@ -3341,6 +4076,58 @@ func init() {
 							return face.GetPort(), nil
 						}
 						return nil, fmt.Errorf("field Port not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLFilterType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "rdsFilter",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Name": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Filter)
+						if ok {
+							if obj.Name == nil {
+								return nil, nil
+							}
+							return obj.GetName(), nil
+						}
+						inter, ok := p.Source.(FilterGetter)
+						if ok {
+							face := inter.GetFilter()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Name == nil {
+								return nil, nil
+							}
+							return face.GetName(), nil
+						}
+						return nil, fmt.Errorf("field Name not resolved")
+					},
+				},
+				"Values": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Filter)
+						if ok {
+							return obj.Values, nil
+						}
+						inter, ok := p.Source.(FilterGetter)
+						if ok {
+							face := inter.GetFilter()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Values, nil
+						}
+						return nil, fmt.Errorf("field Values not resolved")
 					},
 				},
 			}
@@ -3829,6 +4616,1074 @@ func init() {
 		}),
 	})
 }
+func (m *AvailabilityZone) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *AvailabilityZone) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Name != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Name)))
+		i += copy(data[i:], *m.Name)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DBInstance) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DBInstance) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AllocatedStorage != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.AllocatedStorage)<<1)^uint64((*m.AllocatedStorage>>63))))
+	}
+	if m.AutoMinorVersionUpgrade != nil {
+		data[i] = 0x18
+		i++
+		if *m.AutoMinorVersionUpgrade {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.AvailabilityZone != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AvailabilityZone)))
+		i += copy(data[i:], *m.AvailabilityZone)
+	}
+	if m.BackupRetentionPeriod != nil {
+		data[i] = 0x28
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.BackupRetentionPeriod)<<1)^uint64((*m.BackupRetentionPeriod>>63))))
+	}
+	if m.CACertificateIdentifier != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.CACertificateIdentifier)))
+		i += copy(data[i:], *m.CACertificateIdentifier)
+	}
+	if m.CharacterSetName != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.CharacterSetName)))
+		i += copy(data[i:], *m.CharacterSetName)
+	}
+	if m.CopyTagsToSnapshot != nil {
+		data[i] = 0x40
+		i++
+		if *m.CopyTagsToSnapshot {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.DBClusterIdentifier != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBClusterIdentifier)))
+		i += copy(data[i:], *m.DBClusterIdentifier)
+	}
+	if m.DBInstanceClass != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBInstanceClass)))
+		i += copy(data[i:], *m.DBInstanceClass)
+	}
+	if m.DBInstanceIdentifier != nil {
+		data[i] = 0x5a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBInstanceIdentifier)))
+		i += copy(data[i:], *m.DBInstanceIdentifier)
+	}
+	if m.DBInstanceStatus != nil {
+		data[i] = 0x62
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBInstanceStatus)))
+		i += copy(data[i:], *m.DBInstanceStatus)
+	}
+	if m.DBName != nil {
+		data[i] = 0x6a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBName)))
+		i += copy(data[i:], *m.DBName)
+	}
+	if len(m.DBParameterGroups) > 0 {
+		for _, msg := range m.DBParameterGroups {
+			data[i] = 0x72
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.DBSecurityGroups) > 0 {
+		for _, msg := range m.DBSecurityGroups {
+			data[i] = 0x7a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.DBSubnetGroup != nil {
+		data[i] = 0x82
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.DBSubnetGroup.Size()))
+		n1, err := m.DBSubnetGroup.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if m.DbInstancePort != nil {
+		data[i] = 0x88
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.DbInstancePort)<<1)^uint64((*m.DbInstancePort>>63))))
+	}
+	if m.DbiResourceId != nil {
+		data[i] = 0x92
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DbiResourceId)))
+		i += copy(data[i:], *m.DbiResourceId)
+	}
+	if len(m.DomainMemberships) > 0 {
+		for _, msg := range m.DomainMemberships {
+			data[i] = 0x9a
+			i++
+			data[i] = 0x1
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Endpoint != nil {
+		data[i] = 0xa2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Endpoint.Size()))
+		n2, err := m.Endpoint.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if m.Engine != nil {
+		data[i] = 0xaa
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Engine)))
+		i += copy(data[i:], *m.Engine)
+	}
+	if m.EngineVersion != nil {
+		data[i] = 0xb2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.EngineVersion)))
+		i += copy(data[i:], *m.EngineVersion)
+	}
+	if m.EnhancedMonitoringResourceArn != nil {
+		data[i] = 0xba
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.EnhancedMonitoringResourceArn)))
+		i += copy(data[i:], *m.EnhancedMonitoringResourceArn)
+	}
+	if m.InstanceCreateTime != nil {
+		data[i] = 0xc2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.InstanceCreateTime.Size()))
+		n3, err := m.InstanceCreateTime.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if m.Iops != nil {
+		data[i] = 0xc8
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Iops)<<1)^uint64((*m.Iops>>63))))
+	}
+	if m.KmsKeyId != nil {
+		data[i] = 0xd2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.KmsKeyId)))
+		i += copy(data[i:], *m.KmsKeyId)
+	}
+	if m.LatestRestorableTime != nil {
+		data[i] = 0xda
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.LatestRestorableTime.Size()))
+		n4, err := m.LatestRestorableTime.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if m.LicenseModel != nil {
+		data[i] = 0xe2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.LicenseModel)))
+		i += copy(data[i:], *m.LicenseModel)
+	}
+	if m.MasterUsername != nil {
+		data[i] = 0xea
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.MasterUsername)))
+		i += copy(data[i:], *m.MasterUsername)
+	}
+	if m.MonitoringInterval != nil {
+		data[i] = 0xf0
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MonitoringInterval)<<1)^uint64((*m.MonitoringInterval>>63))))
+	}
+	if m.MonitoringRoleArn != nil {
+		data[i] = 0xfa
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.MonitoringRoleArn)))
+		i += copy(data[i:], *m.MonitoringRoleArn)
+	}
+	if m.MultiAZ != nil {
+		data[i] = 0x80
+		i++
+		data[i] = 0x2
+		i++
+		if *m.MultiAZ {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.OptionGroupMemberships) > 0 {
+		for _, msg := range m.OptionGroupMemberships {
+			data[i] = 0x8a
+			i++
+			data[i] = 0x2
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.PendingModifiedValues != nil {
+		data[i] = 0x92
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.PendingModifiedValues.Size()))
+		n5, err := m.PendingModifiedValues.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	if m.PreferredBackupWindow != nil {
+		data[i] = 0x9a
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PreferredBackupWindow)))
+		i += copy(data[i:], *m.PreferredBackupWindow)
+	}
+	if m.PreferredMaintenanceWindow != nil {
+		data[i] = 0xa2
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PreferredMaintenanceWindow)))
+		i += copy(data[i:], *m.PreferredMaintenanceWindow)
+	}
+	if m.PromotionTier != nil {
+		data[i] = 0xa8
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.PromotionTier)<<1)^uint64((*m.PromotionTier>>63))))
+	}
+	if m.PubliclyAccessible != nil {
+		data[i] = 0xb0
+		i++
+		data[i] = 0x2
+		i++
+		if *m.PubliclyAccessible {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.ReadReplicaDBInstanceIdentifiers) > 0 {
+		for _, s := range m.ReadReplicaDBInstanceIdentifiers {
+			data[i] = 0xba
+			i++
+			data[i] = 0x2
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.ReadReplicaSourceDBInstanceIdentifier != nil {
+		data[i] = 0xc2
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ReadReplicaSourceDBInstanceIdentifier)))
+		i += copy(data[i:], *m.ReadReplicaSourceDBInstanceIdentifier)
+	}
+	if m.SecondaryAvailabilityZone != nil {
+		data[i] = 0xca
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SecondaryAvailabilityZone)))
+		i += copy(data[i:], *m.SecondaryAvailabilityZone)
+	}
+	if len(m.StatusInfos) > 0 {
+		for _, msg := range m.StatusInfos {
+			data[i] = 0xd2
+			i++
+			data[i] = 0x2
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.StorageEncrypted != nil {
+		data[i] = 0xd8
+		i++
+		data[i] = 0x2
+		i++
+		if *m.StorageEncrypted {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.StorageType != nil {
+		data[i] = 0xe2
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StorageType)))
+		i += copy(data[i:], *m.StorageType)
+	}
+	if m.TdeCredentialArn != nil {
+		data[i] = 0xea
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.TdeCredentialArn)))
+		i += copy(data[i:], *m.TdeCredentialArn)
+	}
+	if len(m.VpcSecurityGroups) > 0 {
+		for _, msg := range m.VpcSecurityGroups {
+			data[i] = 0xf2
+			i++
+			data[i] = 0x2
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DBInstanceStatusInfo) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DBInstanceStatusInfo) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Message != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Message)))
+		i += copy(data[i:], *m.Message)
+	}
+	if m.Normal != nil {
+		data[i] = 0x18
+		i++
+		if *m.Normal {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Status != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.StatusType != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StatusType)))
+		i += copy(data[i:], *m.StatusType)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DBParameterGroupStatus) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DBParameterGroupStatus) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DBParameterGroupName != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBParameterGroupName)))
+		i += copy(data[i:], *m.DBParameterGroupName)
+	}
+	if m.ParameterApplyStatus != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ParameterApplyStatus)))
+		i += copy(data[i:], *m.ParameterApplyStatus)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DBSecurityGroupMembership) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DBSecurityGroupMembership) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DBSecurityGroupName != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBSecurityGroupName)))
+		i += copy(data[i:], *m.DBSecurityGroupName)
+	}
+	if m.Status != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DBSubnetGroup) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DBSubnetGroup) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DBSubnetGroupDescription != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBSubnetGroupDescription)))
+		i += copy(data[i:], *m.DBSubnetGroupDescription)
+	}
+	if m.DBSubnetGroupName != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBSubnetGroupName)))
+		i += copy(data[i:], *m.DBSubnetGroupName)
+	}
+	if m.SubnetGroupStatus != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetGroupStatus)))
+		i += copy(data[i:], *m.SubnetGroupStatus)
+	}
+	if len(m.Subnets) > 0 {
+		for _, msg := range m.Subnets {
+			data[i] = 0x2a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.VpcId != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeDBInstancesInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeDBInstancesInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DBInstanceIdentifier != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBInstanceIdentifier)))
+		i += copy(data[i:], *m.DBInstanceIdentifier)
+	}
+	if len(m.Filters) > 0 {
+		for _, msg := range m.Filters {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Marker != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Marker)))
+		i += copy(data[i:], *m.Marker)
+	}
+	if m.MaxRecords != nil {
+		data[i] = 0x28
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MaxRecords)<<1)^uint64((*m.MaxRecords>>63))))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeDBInstancesOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeDBInstancesOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.DBInstances) > 0 {
+		for _, msg := range m.DBInstances {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Marker != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Marker)))
+		i += copy(data[i:], *m.Marker)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DomainMembership) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DomainMembership) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Domain != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Domain)))
+		i += copy(data[i:], *m.Domain)
+	}
+	if m.FQDN != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.FQDN)))
+		i += copy(data[i:], *m.FQDN)
+	}
+	if m.IAMRoleName != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.IAMRoleName)))
+		i += copy(data[i:], *m.IAMRoleName)
+	}
+	if m.Status != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Endpoint) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Endpoint) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Address != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Address)))
+		i += copy(data[i:], *m.Address)
+	}
+	if m.HostedZoneId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.HostedZoneId)))
+		i += copy(data[i:], *m.HostedZoneId)
+	}
+	if m.Port != nil {
+		data[i] = 0x20
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Port)<<1)^uint64((*m.Port>>63))))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Filter) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Filter) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Name != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Name)))
+		i += copy(data[i:], *m.Name)
+	}
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			data[i] = 0x1a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *OptionGroupMembership) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *OptionGroupMembership) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.OptionGroupName != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.OptionGroupName)))
+		i += copy(data[i:], *m.OptionGroupName)
+	}
+	if m.Status != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *PendingModifiedValues) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *PendingModifiedValues) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AllocatedStorage != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.AllocatedStorage)<<1)^uint64((*m.AllocatedStorage>>63))))
+	}
+	if m.BackupRetentionPeriod != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.BackupRetentionPeriod)<<1)^uint64((*m.BackupRetentionPeriod>>63))))
+	}
+	if m.CACertificateIdentifier != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.CACertificateIdentifier)))
+		i += copy(data[i:], *m.CACertificateIdentifier)
+	}
+	if m.DBInstanceClass != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBInstanceClass)))
+		i += copy(data[i:], *m.DBInstanceClass)
+	}
+	if m.DBInstanceIdentifier != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DBInstanceIdentifier)))
+		i += copy(data[i:], *m.DBInstanceIdentifier)
+	}
+	if m.EngineVersion != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.EngineVersion)))
+		i += copy(data[i:], *m.EngineVersion)
+	}
+	if m.Iops != nil {
+		data[i] = 0x40
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Iops)<<1)^uint64((*m.Iops>>63))))
+	}
+	if m.MasterUserPassword != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.MasterUserPassword)))
+		i += copy(data[i:], *m.MasterUserPassword)
+	}
+	if m.MultiAZ != nil {
+		data[i] = 0x50
+		i++
+		if *m.MultiAZ {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Port != nil {
+		data[i] = 0x58
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Port)<<1)^uint64((*m.Port>>63))))
+	}
+	if m.StorageType != nil {
+		data[i] = 0x62
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StorageType)))
+		i += copy(data[i:], *m.StorageType)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Subnet) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Subnet) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.SubnetAvailabilityZone != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.SubnetAvailabilityZone.Size()))
+		n6, err := m.SubnetAvailabilityZone.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	if m.SubnetIdentifier != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetIdentifier)))
+		i += copy(data[i:], *m.SubnetIdentifier)
+	}
+	if m.SubnetStatus != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetStatus)))
+		i += copy(data[i:], *m.SubnetStatus)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *VpcSecurityGroupMembership) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *VpcSecurityGroupMembership) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Status != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.VpcSecurityGroupId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcSecurityGroupId)))
+		i += copy(data[i:], *m.VpcSecurityGroupId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func encodeFixed64Types(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Types(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintTypes(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
 func NewPopulatedAvailabilityZone(r randyTypes, easy bool) *AvailabilityZone {
 	this := &AvailabilityZone{}
 	if r.Intn(10) != 0 {
@@ -3926,26 +5781,29 @@ func NewPopulatedDBInstance(r randyTypes, easy bool) *DBInstance {
 		this.DbiResourceId = &v17
 	}
 	if r.Intn(10) != 0 {
+		v18 := r.Intn(5)
+		this.DomainMemberships = make([]*DomainMembership, v18)
+		for i := 0; i < v18; i++ {
+			this.DomainMemberships[i] = NewPopulatedDomainMembership(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
 		this.Endpoint = NewPopulatedEndpoint(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v18 := randStringTypes(r)
-		this.Engine = &v18
-	}
-	if r.Intn(10) != 0 {
 		v19 := randStringTypes(r)
-		this.EngineVersion = &v19
+		this.Engine = &v19
 	}
 	if r.Intn(10) != 0 {
 		v20 := randStringTypes(r)
-		this.EnhancedMonitoringResourceArn = &v20
+		this.EngineVersion = &v20
 	}
 	if r.Intn(10) != 0 {
-		v21 := int64(r.Int63())
-		if r.Intn(2) == 0 {
-			v21 *= -1
-		}
-		this.InstanceCreateTime = &v21
+		v21 := randStringTypes(r)
+		this.EnhancedMonitoringResourceArn = &v21
+	}
+	if r.Intn(10) != 0 {
+		this.InstanceCreateTime = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		v22 := int64(r.Int63())
@@ -3959,39 +5817,35 @@ func NewPopulatedDBInstance(r randyTypes, easy bool) *DBInstance {
 		this.KmsKeyId = &v23
 	}
 	if r.Intn(10) != 0 {
-		v24 := int64(r.Int63())
-		if r.Intn(2) == 0 {
-			v24 *= -1
-		}
-		this.LatestRestorableTime = &v24
+		this.LatestRestorableTime = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v24 := randStringTypes(r)
+		this.LicenseModel = &v24
 	}
 	if r.Intn(10) != 0 {
 		v25 := randStringTypes(r)
-		this.LicenseModel = &v25
+		this.MasterUsername = &v25
 	}
 	if r.Intn(10) != 0 {
-		v26 := randStringTypes(r)
-		this.MasterUsername = &v26
-	}
-	if r.Intn(10) != 0 {
-		v27 := int64(r.Int63())
+		v26 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v27 *= -1
+			v26 *= -1
 		}
-		this.MonitoringInterval = &v27
+		this.MonitoringInterval = &v26
 	}
 	if r.Intn(10) != 0 {
-		v28 := randStringTypes(r)
-		this.MonitoringRoleArn = &v28
+		v27 := randStringTypes(r)
+		this.MonitoringRoleArn = &v27
 	}
 	if r.Intn(10) != 0 {
-		v29 := bool(bool(r.Intn(2) == 0))
-		this.MultiAZ = &v29
+		v28 := bool(bool(r.Intn(2) == 0))
+		this.MultiAZ = &v28
 	}
 	if r.Intn(10) != 0 {
-		v30 := r.Intn(5)
-		this.OptionGroupMemberships = make([]*OptionGroupMembership, v30)
-		for i := 0; i < v30; i++ {
+		v29 := r.Intn(5)
+		this.OptionGroupMemberships = make([]*OptionGroupMembership, v29)
+		for i := 0; i < v29; i++ {
 			this.OptionGroupMemberships[i] = NewPopulatedOptionGroupMembership(r, easy)
 		}
 	}
@@ -3999,12 +5853,19 @@ func NewPopulatedDBInstance(r randyTypes, easy bool) *DBInstance {
 		this.PendingModifiedValues = NewPopulatedPendingModifiedValues(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v31 := randStringTypes(r)
-		this.PreferredBackupWindow = &v31
+		v30 := randStringTypes(r)
+		this.PreferredBackupWindow = &v30
 	}
 	if r.Intn(10) != 0 {
-		v32 := randStringTypes(r)
-		this.PreferredMaintenanceWindow = &v32
+		v31 := randStringTypes(r)
+		this.PreferredMaintenanceWindow = &v31
+	}
+	if r.Intn(10) != 0 {
+		v32 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v32 *= -1
+		}
+		this.PromotionTier = &v32
 	}
 	if r.Intn(10) != 0 {
 		v33 := bool(bool(r.Intn(2) == 0))
@@ -4052,7 +5913,7 @@ func NewPopulatedDBInstance(r randyTypes, easy bool) *DBInstance {
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedTypes(r, 45)
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 47)
 	}
 	return this
 }
@@ -4144,22 +6005,95 @@ func NewPopulatedDBSubnetGroup(r randyTypes, easy bool) *DBSubnetGroup {
 	return this
 }
 
+func NewPopulatedDescribeDBInstancesInput(r randyTypes, easy bool) *DescribeDBInstancesInput {
+	this := &DescribeDBInstancesInput{}
+	if r.Intn(10) != 0 {
+		v55 := randStringTypes(r)
+		this.DBInstanceIdentifier = &v55
+	}
+	if r.Intn(10) != 0 {
+		v56 := r.Intn(5)
+		this.Filters = make([]*Filter, v56)
+		for i := 0; i < v56; i++ {
+			this.Filters[i] = NewPopulatedFilter(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v57 := randStringTypes(r)
+		this.Marker = &v57
+	}
+	if r.Intn(10) != 0 {
+		v58 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v58 *= -1
+		}
+		this.MaxRecords = &v58
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
+	}
+	return this
+}
+
+func NewPopulatedDescribeDBInstancesOutput(r randyTypes, easy bool) *DescribeDBInstancesOutput {
+	this := &DescribeDBInstancesOutput{}
+	if r.Intn(10) != 0 {
+		v59 := r.Intn(5)
+		this.DBInstances = make([]*DBInstance, v59)
+		for i := 0; i < v59; i++ {
+			this.DBInstances[i] = NewPopulatedDBInstance(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v60 := randStringTypes(r)
+		this.Marker = &v60
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
+	}
+	return this
+}
+
+func NewPopulatedDomainMembership(r randyTypes, easy bool) *DomainMembership {
+	this := &DomainMembership{}
+	if r.Intn(10) != 0 {
+		v61 := randStringTypes(r)
+		this.Domain = &v61
+	}
+	if r.Intn(10) != 0 {
+		v62 := randStringTypes(r)
+		this.FQDN = &v62
+	}
+	if r.Intn(10) != 0 {
+		v63 := randStringTypes(r)
+		this.IAMRoleName = &v63
+	}
+	if r.Intn(10) != 0 {
+		v64 := randStringTypes(r)
+		this.Status = &v64
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
+	}
+	return this
+}
+
 func NewPopulatedEndpoint(r randyTypes, easy bool) *Endpoint {
 	this := &Endpoint{}
 	if r.Intn(10) != 0 {
-		v55 := randStringTypes(r)
-		this.Address = &v55
+		v65 := randStringTypes(r)
+		this.Address = &v65
 	}
 	if r.Intn(10) != 0 {
-		v56 := randStringTypes(r)
-		this.HostedZoneId = &v56
+		v66 := randStringTypes(r)
+		this.HostedZoneId = &v66
 	}
 	if r.Intn(10) != 0 {
-		v57 := int64(r.Int63())
+		v67 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v57 *= -1
+			v67 *= -1
 		}
-		this.Port = &v57
+		this.Port = &v67
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
@@ -4167,15 +6101,34 @@ func NewPopulatedEndpoint(r randyTypes, easy bool) *Endpoint {
 	return this
 }
 
+func NewPopulatedFilter(r randyTypes, easy bool) *Filter {
+	this := &Filter{}
+	if r.Intn(10) != 0 {
+		v68 := randStringTypes(r)
+		this.Name = &v68
+	}
+	if r.Intn(10) != 0 {
+		v69 := r.Intn(10)
+		this.Values = make([]string, v69)
+		for i := 0; i < v69; i++ {
+			this.Values[i] = randStringTypes(r)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
+	}
+	return this
+}
+
 func NewPopulatedOptionGroupMembership(r randyTypes, easy bool) *OptionGroupMembership {
 	this := &OptionGroupMembership{}
 	if r.Intn(10) != 0 {
-		v58 := randStringTypes(r)
-		this.OptionGroupName = &v58
+		v70 := randStringTypes(r)
+		this.OptionGroupName = &v70
 	}
 	if r.Intn(10) != 0 {
-		v59 := randStringTypes(r)
-		this.Status = &v59
+		v71 := randStringTypes(r)
+		this.Status = &v71
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -4186,60 +6139,60 @@ func NewPopulatedOptionGroupMembership(r randyTypes, easy bool) *OptionGroupMemb
 func NewPopulatedPendingModifiedValues(r randyTypes, easy bool) *PendingModifiedValues {
 	this := &PendingModifiedValues{}
 	if r.Intn(10) != 0 {
-		v60 := int64(r.Int63())
+		v72 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v60 *= -1
+			v72 *= -1
 		}
-		this.AllocatedStorage = &v60
+		this.AllocatedStorage = &v72
 	}
 	if r.Intn(10) != 0 {
-		v61 := int64(r.Int63())
+		v73 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v61 *= -1
+			v73 *= -1
 		}
-		this.BackupRetentionPeriod = &v61
+		this.BackupRetentionPeriod = &v73
 	}
 	if r.Intn(10) != 0 {
-		v62 := randStringTypes(r)
-		this.CACertificateIdentifier = &v62
+		v74 := randStringTypes(r)
+		this.CACertificateIdentifier = &v74
 	}
 	if r.Intn(10) != 0 {
-		v63 := randStringTypes(r)
-		this.DBInstanceClass = &v63
+		v75 := randStringTypes(r)
+		this.DBInstanceClass = &v75
 	}
 	if r.Intn(10) != 0 {
-		v64 := randStringTypes(r)
-		this.DBInstanceIdentifier = &v64
+		v76 := randStringTypes(r)
+		this.DBInstanceIdentifier = &v76
 	}
 	if r.Intn(10) != 0 {
-		v65 := randStringTypes(r)
-		this.EngineVersion = &v65
+		v77 := randStringTypes(r)
+		this.EngineVersion = &v77
 	}
 	if r.Intn(10) != 0 {
-		v66 := int64(r.Int63())
+		v78 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v66 *= -1
+			v78 *= -1
 		}
-		this.Iops = &v66
+		this.Iops = &v78
 	}
 	if r.Intn(10) != 0 {
-		v67 := randStringTypes(r)
-		this.MasterUserPassword = &v67
+		v79 := randStringTypes(r)
+		this.MasterUserPassword = &v79
 	}
 	if r.Intn(10) != 0 {
-		v68 := bool(bool(r.Intn(2) == 0))
-		this.MultiAZ = &v68
+		v80 := bool(bool(r.Intn(2) == 0))
+		this.MultiAZ = &v80
 	}
 	if r.Intn(10) != 0 {
-		v69 := int64(r.Int63())
+		v81 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v69 *= -1
+			v81 *= -1
 		}
-		this.Port = &v69
+		this.Port = &v81
 	}
 	if r.Intn(10) != 0 {
-		v70 := randStringTypes(r)
-		this.StorageType = &v70
+		v82 := randStringTypes(r)
+		this.StorageType = &v82
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 13)
@@ -4253,12 +6206,12 @@ func NewPopulatedSubnet(r randyTypes, easy bool) *Subnet {
 		this.SubnetAvailabilityZone = NewPopulatedAvailabilityZone(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v71 := randStringTypes(r)
-		this.SubnetIdentifier = &v71
+		v83 := randStringTypes(r)
+		this.SubnetIdentifier = &v83
 	}
 	if r.Intn(10) != 0 {
-		v72 := randStringTypes(r)
-		this.SubnetStatus = &v72
+		v84 := randStringTypes(r)
+		this.SubnetStatus = &v84
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
@@ -4269,12 +6222,12 @@ func NewPopulatedSubnet(r randyTypes, easy bool) *Subnet {
 func NewPopulatedVpcSecurityGroupMembership(r randyTypes, easy bool) *VpcSecurityGroupMembership {
 	this := &VpcSecurityGroupMembership{}
 	if r.Intn(10) != 0 {
-		v73 := randStringTypes(r)
-		this.Status = &v73
+		v85 := randStringTypes(r)
+		this.Status = &v85
 	}
 	if r.Intn(10) != 0 {
-		v74 := randStringTypes(r)
-		this.VpcSecurityGroupId = &v74
+		v86 := randStringTypes(r)
+		this.VpcSecurityGroupId = &v86
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -4301,9 +6254,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v75 := r.Intn(100)
-	tmps := make([]rune, v75)
-	for i := 0; i < v75; i++ {
+	v87 := r.Intn(100)
+	tmps := make([]rune, v87)
+	for i := 0; i < v87; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -4325,11 +6278,11 @@ func randFieldTypes(data []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateTypes(data, uint64(key))
-		v76 := r.Int63()
+		v88 := r.Int63()
 		if r.Intn(2) == 0 {
-			v76 *= -1
+			v88 *= -1
 		}
-		data = encodeVarintPopulateTypes(data, uint64(v76))
+		data = encodeVarintPopulateTypes(data, uint64(v88))
 	case 1:
 		data = encodeVarintPopulateTypes(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -4353,4 +6306,4130 @@ func encodeVarintPopulateTypes(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *AvailabilityZone) Size() (n int) {
+	var l int
+	_ = l
+	if m.Name != nil {
+		l = len(*m.Name)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DBInstance) Size() (n int) {
+	var l int
+	_ = l
+	if m.AllocatedStorage != nil {
+		n += 1 + sozTypes(uint64(*m.AllocatedStorage))
+	}
+	if m.AutoMinorVersionUpgrade != nil {
+		n += 2
+	}
+	if m.AvailabilityZone != nil {
+		l = len(*m.AvailabilityZone)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.BackupRetentionPeriod != nil {
+		n += 1 + sozTypes(uint64(*m.BackupRetentionPeriod))
+	}
+	if m.CACertificateIdentifier != nil {
+		l = len(*m.CACertificateIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CharacterSetName != nil {
+		l = len(*m.CharacterSetName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CopyTagsToSnapshot != nil {
+		n += 2
+	}
+	if m.DBClusterIdentifier != nil {
+		l = len(*m.DBClusterIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBInstanceClass != nil {
+		l = len(*m.DBInstanceClass)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBInstanceIdentifier != nil {
+		l = len(*m.DBInstanceIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBInstanceStatus != nil {
+		l = len(*m.DBInstanceStatus)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBName != nil {
+		l = len(*m.DBName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.DBParameterGroups) > 0 {
+		for _, e := range m.DBParameterGroups {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.DBSecurityGroups) > 0 {
+		for _, e := range m.DBSecurityGroups {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.DBSubnetGroup != nil {
+		l = m.DBSubnetGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.DbInstancePort != nil {
+		n += 2 + sozTypes(uint64(*m.DbInstancePort))
+	}
+	if m.DbiResourceId != nil {
+		l = len(*m.DbiResourceId)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.DomainMemberships) > 0 {
+		for _, e := range m.DomainMemberships {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.Endpoint != nil {
+		l = m.Endpoint.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Engine != nil {
+		l = len(*m.Engine)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.EngineVersion != nil {
+		l = len(*m.EngineVersion)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.EnhancedMonitoringResourceArn != nil {
+		l = len(*m.EnhancedMonitoringResourceArn)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceCreateTime != nil {
+		l = m.InstanceCreateTime.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Iops != nil {
+		n += 2 + sozTypes(uint64(*m.Iops))
+	}
+	if m.KmsKeyId != nil {
+		l = len(*m.KmsKeyId)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.LatestRestorableTime != nil {
+		l = m.LatestRestorableTime.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.LicenseModel != nil {
+		l = len(*m.LicenseModel)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.MasterUsername != nil {
+		l = len(*m.MasterUsername)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.MonitoringInterval != nil {
+		n += 2 + sozTypes(uint64(*m.MonitoringInterval))
+	}
+	if m.MonitoringRoleArn != nil {
+		l = len(*m.MonitoringRoleArn)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.MultiAZ != nil {
+		n += 3
+	}
+	if len(m.OptionGroupMemberships) > 0 {
+		for _, e := range m.OptionGroupMemberships {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.PendingModifiedValues != nil {
+		l = m.PendingModifiedValues.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.PreferredBackupWindow != nil {
+		l = len(*m.PreferredBackupWindow)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.PreferredMaintenanceWindow != nil {
+		l = len(*m.PreferredMaintenanceWindow)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.PromotionTier != nil {
+		n += 2 + sozTypes(uint64(*m.PromotionTier))
+	}
+	if m.PubliclyAccessible != nil {
+		n += 3
+	}
+	if len(m.ReadReplicaDBInstanceIdentifiers) > 0 {
+		for _, s := range m.ReadReplicaDBInstanceIdentifiers {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.ReadReplicaSourceDBInstanceIdentifier != nil {
+		l = len(*m.ReadReplicaSourceDBInstanceIdentifier)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SecondaryAvailabilityZone != nil {
+		l = len(*m.SecondaryAvailabilityZone)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.StatusInfos) > 0 {
+		for _, e := range m.StatusInfos {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.StorageEncrypted != nil {
+		n += 3
+	}
+	if m.StorageType != nil {
+		l = len(*m.StorageType)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.TdeCredentialArn != nil {
+		l = len(*m.TdeCredentialArn)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.VpcSecurityGroups) > 0 {
+		for _, e := range m.VpcSecurityGroups {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DBInstanceStatusInfo) Size() (n int) {
+	var l int
+	_ = l
+	if m.Message != nil {
+		l = len(*m.Message)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Normal != nil {
+		n += 2
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.StatusType != nil {
+		l = len(*m.StatusType)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DBParameterGroupStatus) Size() (n int) {
+	var l int
+	_ = l
+	if m.DBParameterGroupName != nil {
+		l = len(*m.DBParameterGroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ParameterApplyStatus != nil {
+		l = len(*m.ParameterApplyStatus)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DBSecurityGroupMembership) Size() (n int) {
+	var l int
+	_ = l
+	if m.DBSecurityGroupName != nil {
+		l = len(*m.DBSecurityGroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DBSubnetGroup) Size() (n int) {
+	var l int
+	_ = l
+	if m.DBSubnetGroupDescription != nil {
+		l = len(*m.DBSubnetGroupDescription)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBSubnetGroupName != nil {
+		l = len(*m.DBSubnetGroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetGroupStatus != nil {
+		l = len(*m.SubnetGroupStatus)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Subnets) > 0 {
+		for _, e := range m.Subnets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeDBInstancesInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.DBInstanceIdentifier != nil {
+		l = len(*m.DBInstanceIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Filters) > 0 {
+		for _, e := range m.Filters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.Marker != nil {
+		l = len(*m.Marker)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MaxRecords != nil {
+		n += 1 + sozTypes(uint64(*m.MaxRecords))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeDBInstancesOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.DBInstances) > 0 {
+		for _, e := range m.DBInstances {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.Marker != nil {
+		l = len(*m.Marker)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DomainMembership) Size() (n int) {
+	var l int
+	_ = l
+	if m.Domain != nil {
+		l = len(*m.Domain)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.FQDN != nil {
+		l = len(*m.FQDN)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IAMRoleName != nil {
+		l = len(*m.IAMRoleName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Endpoint) Size() (n int) {
+	var l int
+	_ = l
+	if m.Address != nil {
+		l = len(*m.Address)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HostedZoneId != nil {
+		l = len(*m.HostedZoneId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Port != nil {
+		n += 1 + sozTypes(uint64(*m.Port))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Filter) Size() (n int) {
+	var l int
+	_ = l
+	if m.Name != nil {
+		l = len(*m.Name)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *OptionGroupMembership) Size() (n int) {
+	var l int
+	_ = l
+	if m.OptionGroupName != nil {
+		l = len(*m.OptionGroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *PendingModifiedValues) Size() (n int) {
+	var l int
+	_ = l
+	if m.AllocatedStorage != nil {
+		n += 1 + sozTypes(uint64(*m.AllocatedStorage))
+	}
+	if m.BackupRetentionPeriod != nil {
+		n += 1 + sozTypes(uint64(*m.BackupRetentionPeriod))
+	}
+	if m.CACertificateIdentifier != nil {
+		l = len(*m.CACertificateIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBInstanceClass != nil {
+		l = len(*m.DBInstanceClass)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DBInstanceIdentifier != nil {
+		l = len(*m.DBInstanceIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EngineVersion != nil {
+		l = len(*m.EngineVersion)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Iops != nil {
+		n += 1 + sozTypes(uint64(*m.Iops))
+	}
+	if m.MasterUserPassword != nil {
+		l = len(*m.MasterUserPassword)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MultiAZ != nil {
+		n += 2
+	}
+	if m.Port != nil {
+		n += 1 + sozTypes(uint64(*m.Port))
+	}
+	if m.StorageType != nil {
+		l = len(*m.StorageType)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Subnet) Size() (n int) {
+	var l int
+	_ = l
+	if m.SubnetAvailabilityZone != nil {
+		l = m.SubnetAvailabilityZone.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetIdentifier != nil {
+		l = len(*m.SubnetIdentifier)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetStatus != nil {
+		l = len(*m.SubnetStatus)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *VpcSecurityGroupMembership) Size() (n int) {
+	var l int
+	_ = l
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcSecurityGroupId != nil {
+		l = len(*m.VpcSecurityGroupId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func sovTypes(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozTypes(x uint64) (n int) {
+	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *AvailabilityZone) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AvailabilityZone: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AvailabilityZone: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Name = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DBInstance) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DBInstance: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DBInstance: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllocatedStorage", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.AllocatedStorage = &v2
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoMinorVersionUpgrade", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.AutoMinorVersionUpgrade = &b
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityZone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AvailabilityZone = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BackupRetentionPeriod", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.BackupRetentionPeriod = &v2
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CACertificateIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.CACertificateIdentifier = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CharacterSetName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.CharacterSetName = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CopyTagsToSnapshot", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.CopyTagsToSnapshot = &b
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBClusterIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBClusterIdentifier = &s
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstanceClass", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBInstanceClass = &s
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstanceIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBInstanceIdentifier = &s
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstanceStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBInstanceStatus = &s
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBName = &s
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBParameterGroups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DBParameterGroups = append(m.DBParameterGroups, &DBParameterGroupStatus{})
+			if err := m.DBParameterGroups[len(m.DBParameterGroups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBSecurityGroups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DBSecurityGroups = append(m.DBSecurityGroups, &DBSecurityGroupMembership{})
+			if err := m.DBSecurityGroups[len(m.DBSecurityGroups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBSubnetGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DBSubnetGroup == nil {
+				m.DBSubnetGroup = &DBSubnetGroup{}
+			}
+			if err := m.DBSubnetGroup.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DbInstancePort", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.DbInstancePort = &v2
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DbiResourceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DbiResourceId = &s
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DomainMemberships", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DomainMemberships = append(m.DomainMemberships, &DomainMembership{})
+			if err := m.DomainMemberships[len(m.DomainMemberships)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endpoint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Endpoint == nil {
+				m.Endpoint = &Endpoint{}
+			}
+			if err := m.Endpoint.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Engine", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Engine = &s
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EngineVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.EngineVersion = &s
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnhancedMonitoringResourceArn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.EnhancedMonitoringResourceArn = &s
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceCreateTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.InstanceCreateTime == nil {
+				m.InstanceCreateTime = &opsee_types.Timestamp{}
+			}
+			if err := m.InstanceCreateTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 25:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Iops", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Iops = &v2
+		case 26:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KmsKeyId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.KmsKeyId = &s
+			iNdEx = postIndex
+		case 27:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatestRestorableTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LatestRestorableTime == nil {
+				m.LatestRestorableTime = &opsee_types.Timestamp{}
+			}
+			if err := m.LatestRestorableTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LicenseModel", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.LicenseModel = &s
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MasterUsername", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.MasterUsername = &s
+			iNdEx = postIndex
+		case 30:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MonitoringInterval", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MonitoringInterval = &v2
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MonitoringRoleArn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.MonitoringRoleArn = &s
+			iNdEx = postIndex
+		case 32:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiAZ", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.MultiAZ = &b
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OptionGroupMemberships", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OptionGroupMemberships = append(m.OptionGroupMemberships, &OptionGroupMembership{})
+			if err := m.OptionGroupMemberships[len(m.OptionGroupMemberships)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 34:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingModifiedValues", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PendingModifiedValues == nil {
+				m.PendingModifiedValues = &PendingModifiedValues{}
+			}
+			if err := m.PendingModifiedValues.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 35:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PreferredBackupWindow", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PreferredBackupWindow = &s
+			iNdEx = postIndex
+		case 36:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PreferredMaintenanceWindow", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PreferredMaintenanceWindow = &s
+			iNdEx = postIndex
+		case 37:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PromotionTier", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.PromotionTier = &v2
+		case 38:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PubliclyAccessible", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.PubliclyAccessible = &b
+		case 39:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadReplicaDBInstanceIdentifiers", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReadReplicaDBInstanceIdentifiers = append(m.ReadReplicaDBInstanceIdentifiers, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 40:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadReplicaSourceDBInstanceIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ReadReplicaSourceDBInstanceIdentifier = &s
+			iNdEx = postIndex
+		case 41:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecondaryAvailabilityZone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SecondaryAvailabilityZone = &s
+			iNdEx = postIndex
+		case 42:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusInfos", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StatusInfos = append(m.StatusInfos, &DBInstanceStatusInfo{})
+			if err := m.StatusInfos[len(m.StatusInfos)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 43:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StorageEncrypted", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.StorageEncrypted = &b
+		case 44:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StorageType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StorageType = &s
+			iNdEx = postIndex
+		case 45:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TdeCredentialArn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.TdeCredentialArn = &s
+			iNdEx = postIndex
+		case 46:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcSecurityGroups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VpcSecurityGroups = append(m.VpcSecurityGroups, &VpcSecurityGroupMembership{})
+			if err := m.VpcSecurityGroups[len(m.VpcSecurityGroups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DBInstanceStatusInfo) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DBInstanceStatusInfo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DBInstanceStatusInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Message = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Normal", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Normal = &b
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StatusType = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DBParameterGroupStatus) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DBParameterGroupStatus: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DBParameterGroupStatus: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBParameterGroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBParameterGroupName = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ParameterApplyStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ParameterApplyStatus = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DBSecurityGroupMembership) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DBSecurityGroupMembership: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DBSecurityGroupMembership: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBSecurityGroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBSecurityGroupName = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DBSubnetGroup) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DBSubnetGroup: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DBSubnetGroup: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBSubnetGroupDescription", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBSubnetGroupDescription = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBSubnetGroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBSubnetGroupName = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetGroupStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetGroupStatus = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Subnets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Subnets = append(m.Subnets, &Subnet{})
+			if err := m.Subnets[len(m.Subnets)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeDBInstancesInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeDBInstancesInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeDBInstancesInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstanceIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBInstanceIdentifier = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filters = append(m.Filters, &Filter{})
+			if err := m.Filters[len(m.Filters)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Marker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Marker = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRecords", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MaxRecords = &v2
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeDBInstancesOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeDBInstancesOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeDBInstancesOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstances", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DBInstances = append(m.DBInstances, &DBInstance{})
+			if err := m.DBInstances[len(m.DBInstances)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Marker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Marker = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DomainMembership) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DomainMembership: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DomainMembership: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Domain = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FQDN", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.FQDN = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IAMRoleName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.IAMRoleName = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Endpoint) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Endpoint: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Endpoint: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Address = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HostedZoneId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.HostedZoneId = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Port = &v2
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Filter) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Filter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Filter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Name = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OptionGroupMembership) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OptionGroupMembership: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OptionGroupMembership: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OptionGroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.OptionGroupName = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PendingModifiedValues) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PendingModifiedValues: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PendingModifiedValues: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllocatedStorage", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.AllocatedStorage = &v2
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BackupRetentionPeriod", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.BackupRetentionPeriod = &v2
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CACertificateIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.CACertificateIdentifier = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstanceClass", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBInstanceClass = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBInstanceIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DBInstanceIdentifier = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EngineVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.EngineVersion = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Iops", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Iops = &v2
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MasterUserPassword", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.MasterUserPassword = &s
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiAZ", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.MultiAZ = &b
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Port = &v2
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StorageType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StorageType = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Subnet) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Subnet: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Subnet: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetAvailabilityZone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SubnetAvailabilityZone == nil {
+				m.SubnetAvailabilityZone = &AvailabilityZone{}
+			}
+			if err := m.SubnetAvailabilityZone.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetIdentifier = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetStatus = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VpcSecurityGroupMembership) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VpcSecurityGroupMembership: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VpcSecurityGroupMembership: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcSecurityGroupId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcSecurityGroupId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipTypes(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthTypes
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipTypes(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorTypes = []byte{
+	// 1715 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x9c, 0x17, 0x4d, 0x73, 0x13, 0xc9,
+	0xb5, 0x64, 0xd9, 0xb2, 0xdd, 0xf2, 0x97, 0xda, 0x96, 0xdc, 0x76, 0xc0, 0x18, 0x81, 0x89, 0x21,
+	0x20, 0x53, 0x84, 0x43, 0x8a, 0xa4, 0x52, 0x25, 0x5b, 0x26, 0x71, 0x40, 0xa0, 0x8c, 0x05, 0x54,
+	0x5c, 0x5c, 0x46, 0x9a, 0xb6, 0x3c, 0xc5, 0xcc, 0xf4, 0xd4, 0xf4, 0xc8, 0xa0, 0x5b, 0xee, 0xf9,
+	0x17, 0x39, 0xe5, 0x9a, 0x53, 0x72, 0xdc, 0xe3, 0x56, 0xed, 0x65, 0x7f, 0xc2, 0xee, 0xfe, 0x80,
+	0x3d, 0xef, 0x71, 0x5f, 0xbf, 0x1e, 0x59, 0xf3, 0x25, 0x2f, 0xec, 0x61, 0xaa, 0xa6, 0xdf, 0x57,
+	0xbf, 0xef, 0xf7, 0x9a, 0x94, 0xc3, 0x91, 0xcf, 0x65, 0xc3, 0x0f, 0x44, 0x28, 0xe8, 0xb2, 0xf0,
+	0x25, 0xe7, 0x0d, 0xf3, 0xa3, 0x6c, 0x04, 0x96, 0xdc, 0x7e, 0x34, 0xb0, 0xc3, 0x8b, 0x61, 0xaf,
+	0xd1, 0x17, 0xee, 0xc1, 0x40, 0x0c, 0xc4, 0x01, 0x52, 0xf5, 0x86, 0xe7, 0x78, 0xc2, 0x03, 0xfe,
+	0x69, 0xee, 0xed, 0xc7, 0x31, 0x72, 0x14, 0x34, 0xa1, 0xc7, 0xa3, 0x66, 0xd0, 0x57, 0x68, 0x8e,
+	0x67, 0x9f, 0xc5, 0x81, 0x1a, 0x1e, 0x84, 0xb6, 0xcb, 0x65, 0x68, 0xba, 0xbe, 0xe6, 0xad, 0xdf,
+	0x23, 0x6b, 0xcd, 0x4b, 0xd3, 0x76, 0xcc, 0x9e, 0xed, 0xd8, 0xe1, 0xe8, 0x4c, 0x78, 0x9c, 0x52,
+	0x32, 0xfb, 0xca, 0x74, 0x39, 0x9b, 0xd9, 0x2d, 0xec, 0x2f, 0x1a, 0xb3, 0x1e, 0xfc, 0xd7, 0xff,
+	0xb5, 0x4e, 0x48, 0xeb, 0xf0, 0xc4, 0x03, 0x5e, 0xaf, 0xcf, 0xe9, 0x03, 0x60, 0x73, 0x1c, 0xd1,
+	0x37, 0x43, 0x6e, 0x9d, 0x86, 0x22, 0x30, 0x07, 0x9a, 0x9c, 0x1a, 0x6b, 0x66, 0x0a, 0x4e, 0xff,
+	0x40, 0x36, 0x9b, 0xc3, 0x50, 0xb4, 0x6d, 0x4f, 0x04, 0x6f, 0x79, 0x20, 0x6d, 0xe1, 0xbd, 0xf1,
+	0x07, 0x81, 0x69, 0x71, 0x56, 0x04, 0x96, 0x05, 0x63, 0xd3, 0xcc, 0x47, 0xe3, 0x2d, 0x29, 0xe5,
+	0xd8, 0x2c, 0x2a, 0xb5, 0x66, 0xa6, 0x95, 0x7e, 0x4a, 0xaa, 0x87, 0x66, 0xff, 0xc3, 0xd0, 0x37,
+	0x78, 0xc8, 0xbd, 0x10, 0xa4, 0x74, 0x78, 0x60, 0x0b, 0x8b, 0xcd, 0xa1, 0x5a, 0xd5, 0x5e, 0x1e,
+	0x52, 0xe9, 0x76, 0xd4, 0x3c, 0xe2, 0x41, 0x68, 0x9f, 0xdb, 0x4a, 0xe9, 0x13, 0x4b, 0xa1, 0xcf,
+	0x6d, 0x1e, 0xb0, 0x12, 0x5e, 0xb4, 0xd9, 0xcf, 0x47, 0x2b, 0xdd, 0x8e, 0x2e, 0xcc, 0xc0, 0xec,
+	0x87, 0x3c, 0x38, 0xe5, 0x21, 0x3a, 0x6c, 0x5e, 0xeb, 0xd6, 0x4f, 0xc1, 0x69, 0x83, 0xd0, 0x23,
+	0xe1, 0x8f, 0xba, 0xe6, 0x40, 0x76, 0xc5, 0xa9, 0x67, 0xfa, 0xf2, 0x42, 0x84, 0x6c, 0x01, 0x8d,
+	0xa7, 0xfd, 0x0c, 0x86, 0x3e, 0x26, 0xeb, 0xad, 0xc3, 0x23, 0x67, 0x28, 0x41, 0x46, 0x4c, 0xa3,
+	0x45, 0x14, 0xbf, 0x6e, 0x65, 0x51, 0x74, 0x9f, 0xac, 0x4e, 0xa2, 0x73, 0xe4, 0x98, 0x52, 0x32,
+	0x82, 0xd4, 0xab, 0x56, 0x12, 0x4c, 0x9f, 0x90, 0x8d, 0x09, 0x65, 0x4c, 0x78, 0x19, 0xc9, 0x37,
+	0xac, 0x1c, 0x9c, 0xb2, 0x75, 0xc2, 0x73, 0x1a, 0x9a, 0xe1, 0x50, 0xb2, 0x25, 0x6d, 0xab, 0x95,
+	0x82, 0xd3, 0x1a, 0x29, 0xb5, 0x0e, 0xd1, 0x1b, 0xcb, 0x48, 0x51, 0xb2, 0xf0, 0x44, 0x4f, 0x49,
+	0xa5, 0x75, 0xd8, 0x01, 0xc7, 0xb8, 0x10, 0x82, 0xe0, 0x2f, 0x81, 0x18, 0xfa, 0x92, 0xad, 0xec,
+	0x16, 0xf7, 0xcb, 0x4f, 0xf6, 0x1a, 0x89, 0x82, 0x69, 0xa4, 0xe9, 0xb4, 0x64, 0xa3, 0x62, 0xa5,
+	0xf9, 0x69, 0x57, 0x29, 0x76, 0xca, 0xfb, 0xc3, 0x00, 0xd2, 0x20, 0x92, 0xb9, 0x8a, 0x32, 0xf7,
+	0x33, 0x32, 0x13, 0x64, 0x6d, 0xee, 0xf6, 0x20, 0xd7, 0x2e, 0x6c, 0x5f, 0x99, 0x90, 0x94, 0x40,
+	0x0f, 0xc9, 0x32, 0x90, 0x0f, 0x7b, 0x1e, 0x0f, 0x11, 0xc2, 0xd6, 0xc0, 0x92, 0xf2, 0x93, 0x1b,
+	0x59, 0x91, 0x13, 0x1a, 0x63, 0xd9, 0x8a, 0x1f, 0xe9, 0x3d, 0xb2, 0xd2, 0xea, 0x8d, 0x5d, 0xd3,
+	0x11, 0x41, 0xc8, 0x2a, 0x98, 0x87, 0x2b, 0x56, 0x02, 0x4a, 0xef, 0xc2, 0x5d, 0x3d, 0xdb, 0xe0,
+	0x52, 0x0c, 0x03, 0xe5, 0x73, 0x46, 0xd1, 0x6b, 0xcb, 0x56, 0x1c, 0x48, 0xdb, 0xe0, 0x3c, 0xe1,
+	0x9a, 0xb6, 0x37, 0xd1, 0x5b, 0xb2, 0x75, 0x34, 0xf4, 0x56, 0x5a, 0xab, 0x14, 0x1d, 0xb8, 0x2d,
+	0xcd, 0x49, 0x7f, 0x4f, 0x16, 0x8e, 0x3d, 0xcb, 0x17, 0xb6, 0x17, 0xb2, 0x0d, 0xb4, 0x6d, 0x33,
+	0x25, 0x65, 0x8c, 0x36, 0x16, 0x78, 0xf4, 0xa7, 0x02, 0x7b, 0xec, 0x0d, 0x6c, 0x28, 0xc1, 0xaa,
+	0x0e, 0x2c, 0xc7, 0x93, 0xb2, 0x40, 0xc3, 0xa3, 0xe2, 0x65, 0x35, 0x6d, 0x01, 0x8f, 0x03, 0x69,
+	0x8b, 0xdc, 0x3c, 0xf6, 0x2e, 0x94, 0xd9, 0x56, 0x5b, 0x78, 0x36, 0xb4, 0x06, 0xdb, 0x1b, 0x8c,
+	0x2d, 0x6c, 0x06, 0x1e, 0xdb, 0x44, 0xae, 0x9b, 0xfc, 0x3a, 0x22, 0xfa, 0x9c, 0xd0, 0xab, 0x6c,
+	0x0e, 0x38, 0x14, 0x64, 0x17, 0xda, 0x19, 0x63, 0x68, 0x42, 0x2d, 0x32, 0x41, 0x77, 0xe2, 0xee,
+	0xb8, 0xcf, 0x19, 0xd4, 0xce, 0x70, 0xa8, 0x0e, 0x77, 0x02, 0xd4, 0x6c, 0x0b, 0x63, 0x32, 0x6b,
+	0xc3, 0x3f, 0xdd, 0x26, 0x0b, 0x2f, 0x5c, 0xf9, 0x82, 0x8f, 0x20, 0x08, 0xdb, 0xa8, 0xcc, 0xc2,
+	0x87, 0xe8, 0x4c, 0xff, 0x46, 0x36, 0x5e, 0x02, 0xaf, 0x0c, 0x41, 0x19, 0xd5, 0xd5, 0x7a, 0x8e,
+	0xbe, 0xf9, 0x37, 0xd7, 0xde, 0xbc, 0xe1, 0xe4, 0xf0, 0xd0, 0x3a, 0x59, 0x7a, 0x69, 0xf7, 0xb9,
+	0x27, 0x79, 0x5b, 0x58, 0xdc, 0x61, 0x37, 0xf0, 0xae, 0x25, 0x27, 0x06, 0x53, 0xd9, 0xd3, 0x36,
+	0x55, 0x89, 0xbf, 0x91, 0x3c, 0x50, 0xfd, 0x97, 0xdd, 0x44, 0xaa, 0x15, 0x37, 0x01, 0x55, 0x8d,
+	0x65, 0xe2, 0xa8, 0x13, 0x0f, 0x50, 0x97, 0xa6, 0xc3, 0x76, 0xd0, 0x2a, 0xea, 0x66, 0x30, 0xf4,
+	0x21, 0xa9, 0xc4, 0x1c, 0x2b, 0x1c, 0xf4, 0xfc, 0x2d, 0x14, 0x5d, 0x71, 0xd3, 0x08, 0xca, 0xc8,
+	0x7c, 0x7b, 0xe8, 0x84, 0x76, 0xf3, 0x8c, 0xed, 0x62, 0xaf, 0x9a, 0x77, 0xf5, 0x91, 0xbe, 0x27,
+	0xb5, 0xd7, 0xbe, 0x6a, 0xa3, 0xa9, 0x62, 0x92, 0xec, 0x36, 0x26, 0xe5, 0xdd, 0x54, 0x3a, 0xe5,
+	0x12, 0x1b, 0x35, 0x91, 0x2b, 0x83, 0x9e, 0x91, 0x6a, 0x07, 0xd2, 0x0e, 0x34, 0x01, 0x6f, 0xa8,
+	0x0e, 0x64, 0xbd, 0x35, 0x9d, 0x21, 0x97, 0xac, 0x8e, 0xee, 0x4e, 0x0b, 0xcf, 0xa5, 0x35, 0xaa,
+	0x7e, 0x1e, 0x58, 0x8d, 0x89, 0x4e, 0xc0, 0xcf, 0x79, 0x10, 0x70, 0x4b, 0xcf, 0x8b, 0x77, 0xb6,
+	0x67, 0x89, 0x8f, 0xec, 0x0e, 0x7a, 0xa1, 0xea, 0xe7, 0x21, 0xe9, 0x9f, 0xc9, 0xf6, 0x15, 0x57,
+	0x1b, 0x8a, 0x09, 0x86, 0x88, 0xca, 0xa8, 0x88, 0xf5, 0x2e, 0xb2, 0x6e, 0xfb, 0x53, 0x29, 0x54,
+	0x8d, 0x74, 0x02, 0xe1, 0x0a, 0x65, 0x6e, 0x57, 0x75, 0xdb, 0x3d, 0x0c, 0xd1, 0xb2, 0x1f, 0x07,
+	0xaa, 0x68, 0x76, 0x86, 0x3d, 0x48, 0x04, 0x67, 0xd4, 0xec, 0xf7, 0xb9, 0x94, 0x36, 0xe4, 0x0c,
+	0xbb, 0xa7, 0xc7, 0x84, 0x9f, 0xc1, 0x40, 0x56, 0xee, 0x1a, 0xdc, 0xb4, 0x0c, 0xee, 0x03, 0xc6,
+	0xcc, 0xeb, 0xea, 0x92, 0xfd, 0x16, 0xe2, 0xb1, 0x68, 0xec, 0x06, 0xbf, 0x40, 0x07, 0x9d, 0x74,
+	0x2f, 0x26, 0xeb, 0x14, 0x2b, 0x2e, 0x77, 0x4e, 0xec, 0xa3, 0xb1, 0x7b, 0xc1, 0xe7, 0x10, 0xd3,
+	0x3f, 0x91, 0x2d, 0xe8, 0xad, 0xc2, 0xb3, 0xcc, 0x60, 0x94, 0x99, 0xe4, 0xf7, 0x51, 0xd2, 0x96,
+	0x9c, 0x46, 0x40, 0x8f, 0x49, 0x59, 0xb7, 0xfe, 0x13, 0xef, 0x5c, 0x48, 0xf6, 0x00, 0x53, 0xeb,
+	0x4e, 0xa6, 0x0b, 0x27, 0x07, 0x90, 0xa2, 0x35, 0xca, 0x72, 0xc2, 0xa7, 0xa6, 0x57, 0xb4, 0x8a,
+	0x1c, 0x7b, 0xfd, 0x60, 0xe4, 0xc3, 0x6a, 0xc2, 0x7e, 0x87, 0x4e, 0x5d, 0x93, 0x29, 0x38, 0xdd,
+	0x55, 0x57, 0x22, 0xac, 0x0b, 0xc5, 0xcc, 0x1e, 0xa2, 0x8a, 0x65, 0x39, 0x01, 0x29, 0x69, 0x5d,
+	0x4b, 0xf5, 0x12, 0xb4, 0xd2, 0x74, 0x54, 0x05, 0x3d, 0xd2, 0xb3, 0x30, 0x4c, 0xc1, 0xe9, 0x3b,
+	0x52, 0x79, 0xeb, 0xf7, 0x53, 0xf3, 0xa9, 0x81, 0x66, 0xdc, 0x4f, 0x99, 0x91, 0xa6, 0x8b, 0x37,
+	0xf0, 0xcb, 0xb4, 0x8c, 0xfa, 0x3f, 0x0b, 0xf1, 0x29, 0x3e, 0x31, 0x1c, 0x4b, 0x16, 0xd2, 0x63,
+	0xbc, 0x8e, 0x2d, 0x42, 0xc9, 0xea, 0xa3, 0x6a, 0xdf, 0xaf, 0x44, 0xe0, 0x42, 0x7b, 0xd0, 0x4b,
+	0x57, 0xc9, 0xc3, 0x93, 0x82, 0x47, 0x13, 0x5d, 0x6f, 0x56, 0x25, 0xed, 0x3a, 0xba, 0x43, 0x88,
+	0x86, 0xa3, 0x23, 0xe6, 0x10, 0x47, 0xe4, 0x15, 0x44, 0xa9, 0x50, 0xcb, 0x1f, 0xd4, 0x7a, 0xc5,
+	0x48, 0x62, 0x62, 0xfb, 0xe4, 0x86, 0x95, 0x83, 0x53, 0x3c, 0x57, 0xd0, 0xa6, 0xef, 0x3b, 0xa3,
+	0x48, 0xa9, 0xa2, 0xe6, 0xf1, 0x73, 0x70, 0x75, 0x4e, 0xb6, 0xa6, 0x8e, 0x75, 0xbd, 0x43, 0x25,
+	0x90, 0x31, 0x1d, 0xd6, 0xad, 0x2c, 0x2a, 0xe6, 0x89, 0x62, 0xdc, 0x13, 0xf5, 0x1f, 0x0b, 0xa9,
+	0x7d, 0x80, 0x3e, 0x23, 0x2c, 0x01, 0x68, 0x71, 0xd9, 0x0f, 0x6c, 0x6c, 0x66, 0xd1, 0x05, 0xcc,
+	0x9a, 0x82, 0x57, 0x2d, 0x38, 0xc1, 0x8b, 0x5a, 0xe9, 0x0b, 0x2b, 0x56, 0x1a, 0xa1, 0xa8, 0x63,
+	0xa0, 0x44, 0xa0, 0x2a, 0x32, 0x8d, 0xa0, 0x07, 0x64, 0x5e, 0x53, 0x4b, 0x08, 0x98, 0xca, 0xb2,
+	0x6a, 0x2a, 0xcb, 0x34, 0xd6, 0x98, 0xd7, 0xac, 0x92, 0x6e, 0x90, 0x39, 0x48, 0x3c, 0x18, 0x78,
+	0x7a, 0xd9, 0x9d, 0xbb, 0x54, 0x87, 0xfa, 0xff, 0x0a, 0x60, 0x1f, 0xaa, 0xdc, 0x8b, 0x95, 0x35,
+	0x24, 0x98, 0x3f, 0x0c, 0xa7, 0xee, 0x8f, 0x33, 0xd7, 0xec, 0x8f, 0xa0, 0xd7, 0x73, 0xdb, 0x09,
+	0x55, 0x3f, 0x2a, 0xe6, 0xea, 0xa5, 0xb1, 0xc6, 0xfc, 0xb9, 0xa6, 0x52, 0xa1, 0x68, 0x9b, 0xc1,
+	0x07, 0x10, 0x1b, 0x25, 0xa5, 0x8b, 0x27, 0x95, 0x94, 0x6d, 0xf3, 0x93, 0x01, 0x1d, 0x03, 0xb8,
+	0xa2, 0xcd, 0x9e, 0xb8, 0x57, 0x90, 0xba, 0x0f, 0x19, 0x91, 0x55, 0xfc, 0xf5, 0x30, 0x54, 0x9a,
+	0xff, 0x91, 0x94, 0x63, 0x40, 0x50, 0x58, 0x69, 0xb2, 0x35, 0xb5, 0x9d, 0x18, 0xe5, 0x89, 0x2d,
+	0x71, 0x8d, 0x8a, 0x71, 0x8d, 0xea, 0x9f, 0x60, 0x03, 0x4d, 0xed, 0x57, 0xb8, 0x02, 0x23, 0x2c,
+	0x72, 0x4a, 0x49, 0x6f, 0x60, 0x6a, 0xeb, 0x78, 0xfe, 0xf7, 0xd6, 0xab, 0x48, 0xc2, 0xec, 0x39,
+	0xfc, 0xab, 0x86, 0x73, 0xd2, 0x6c, 0xab, 0x89, 0x8b, 0x89, 0xa0, 0xcd, 0x2d, 0xdb, 0x13, 0x50,
+	0x2c, 0x2d, 0xe7, 0x12, 0x69, 0xf9, 0x7e, 0xb2, 0xc4, 0xa9, 0xb2, 0x6f, 0x5a, 0x56, 0x00, 0xa5,
+	0x3e, 0x2e, 0x7b, 0x53, 0x1f, 0xd5, 0xb6, 0xf1, 0x57, 0x01, 0x3b, 0x83, 0xa5, 0x3a, 0x2a, 0x04,
+	0x5a, 0xdf, 0xbd, 0x74, 0x11, 0x83, 0x29, 0xbd, 0x70, 0x43, 0x9d, 0xd5, 0xdb, 0x90, 0x0f, 0xff,
+	0xf5, 0xa7, 0xa4, 0xa4, 0x83, 0x92, 0xf7, 0x1a, 0x54, 0x3a, 0x45, 0x23, 0xb9, 0x88, 0xf3, 0xa5,
+	0x74, 0x89, 0xa7, 0xfa, 0x3f, 0x48, 0x35, 0x77, 0xd4, 0xab, 0xf7, 0x49, 0x0c, 0x11, 0x93, 0xb7,
+	0x2a, 0x92, 0xe0, 0xa9, 0x55, 0xf8, 0x4d, 0x71, 0xca, 0x56, 0xf0, 0x45, 0x6f, 0xd1, 0xa9, 0xaf,
+	0xc4, 0xe2, 0xaf, 0x7c, 0x25, 0xce, 0x5e, 0xff, 0x4a, 0xcc, 0x79, 0x97, 0xcd, 0x7d, 0xd9, 0xbb,
+	0xac, 0x74, 0x4d, 0x5d, 0x65, 0x56, 0xef, 0xf9, 0xbc, 0xd5, 0x7b, 0xbc, 0xec, 0x2e, 0xc4, 0x96,
+	0x5d, 0xb5, 0x38, 0x5e, 0xad, 0x92, 0x1d, 0xb8, 0xff, 0x23, 0xd4, 0x4f, 0xf4, 0xc0, 0xa4, 0x6e,
+	0x06, 0x13, 0x5f, 0x05, 0x49, 0x72, 0x15, 0x1c, 0x27, 0x4f, 0x79, 0x92, 0x3c, 0xe9, 0x29, 0xba,
+	0x94, 0x99, 0xa2, 0xf5, 0xff, 0x16, 0x20, 0xcc, 0xd8, 0x84, 0x60, 0x48, 0xd6, 0xf4, 0x5f, 0x66,
+	0x41, 0x98, 0xc1, 0x75, 0x2f, 0xfd, 0xc0, 0x49, 0x93, 0x19, 0x35, 0x99, 0xcb, 0x8e, 0x73, 0x1f,
+	0x31, 0x31, 0x6f, 0xea, 0x9c, 0x5a, 0x93, 0x29, 0xb8, 0x2a, 0x13, 0x4d, 0x9b, 0x68, 0xb1, 0x4b,
+	0x32, 0x06, 0xab, 0x5b, 0x64, 0x7b, 0xfa, 0x94, 0x8e, 0xe5, 0xed, 0x4c, 0x62, 0x8e, 0x82, 0xa7,
+	0xd3, 0x5c, 0x57, 0x65, 0x48, 0x2f, 0x33, 0x98, 0xc3, 0xdb, 0x3f, 0x7d, 0xbf, 0x53, 0xf8, 0xcf,
+	0x0f, 0x3b, 0x85, 0xff, 0xc3, 0xf7, 0x35, 0x7c, 0xdf, 0xc2, 0xf7, 0x1d, 0x7c, 0x5f, 0xfd, 0xfb,
+	0x56, 0xe1, 0xac, 0x08, 0x1e, 0xf8, 0x39, 0x00, 0x00, 0xff, 0xff, 0xc4, 0x96, 0x7e, 0xb4, 0x6d,
+	0x12, 0x00, 0x00,
 }

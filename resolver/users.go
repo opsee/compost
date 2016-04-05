@@ -7,7 +7,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func (c *client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest) (*opsee.ListCustomersResponse, error) {
+func (c *Client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest) (*opsee.ListCustomersResponse, error) {
 	log.Info("list users request")
 
 	resp, err := c.Vape.ListUsers(ctx, req)
@@ -67,7 +67,7 @@ func (c *client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest)
 	}, nil
 }
 
-func (c *client) GetUser(ctx context.Context, req *opsee.GetUserRequest) (*opsee.GetUserResponse, error) {
+func (c *Client) GetUser(ctx context.Context, req *opsee.GetUserRequest) (*opsee.GetUserResponse, error) {
 	log.WithFields(log.Fields{
 		"customer_id": req.CustomerId,
 		"id":          req.Id,

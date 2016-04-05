@@ -14,6 +14,8 @@ import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
 import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 
+import io "io"
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
@@ -21,21 +23,22 @@ var _ = math.Inf
 
 type User struct {
 	Id           int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" token:"id"`
-	CustomerId   string                 `protobuf:"bytes,2,opt,name=customer_id,proto3" json:"customer_id,omitempty" token:"customer_id" db:"customer_id"`
+	CustomerId   string                 `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" token:"customer_id" db:"customer_id"`
 	Email        string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" token:"email"`
 	Name         string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" token:"name"`
 	Verified     bool                   `protobuf:"varint,5,opt,name=verified,proto3" json:"verified,omitempty" token:"verified"`
 	Admin        bool                   `protobuf:"varint,6,opt,name=admin,proto3" json:"admin,omitempty" token:"admin"`
 	Active       bool                   `protobuf:"varint,7,opt,name=active,proto3" json:"active,omitempty" token:"active"`
-	AdminId      int32                  `protobuf:"varint,8,opt,name=admin_id,proto3" json:"admin_id,omitempty" token:"admin_id"`
-	PasswordHash string                 `protobuf:"bytes,9,opt,name=password_hash,proto3" json:"-" db:"password_hash"`
-	CreatedAt    *opsee_types.Timestamp `protobuf:"bytes,10,opt,name=created_at" json:"created_at,omitempty" db:"created_at"`
-	UpdatedAt    *opsee_types.Timestamp `protobuf:"bytes,11,opt,name=updated_at" json:"updated_at,omitempty" db:"updated_at"`
+	AdminId      int32                  `protobuf:"varint,8,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty" token:"admin_id"`
+	PasswordHash string                 `protobuf:"bytes,9,opt,name=password_hash,json=passwordHash,proto3" json:"-" db:"password_hash"`
+	CreatedAt    *opsee_types.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt" json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt    *opsee_types.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty" db:"updated_at"`
 }
 
-func (m *User) Reset()         { *m = User{} }
-func (m *User) String() string { return proto.CompactTextString(m) }
-func (*User) ProtoMessage()    {}
+func (m *User) Reset()                    { *m = User{} }
+func (m *User) String() string            { return proto.CompactTextString(m) }
+func (*User) ProtoMessage()               {}
+func (*User) Descriptor() ([]byte, []int) { return fileDescriptorUser, []int{0} }
 
 func (m *User) GetCreatedAt() *opsee_types.Timestamp {
 	if m != nil {
@@ -54,15 +57,16 @@ func (m *User) GetUpdatedAt() *opsee_types.Timestamp {
 type Customer struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	CreatedAt     *opsee_types.Timestamp `protobuf:"bytes,3,opt,name=created_at" json:"created_at,omitempty" db:"created_at"`
-	UpdatedAt     *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=updated_at" json:"updated_at,omitempty" db:"updated_at"`
+	CreatedAt     *opsee_types.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt" json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt     *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty" db:"updated_at"`
 	Users         []*User                `protobuf:"bytes,5,rep,name=users" json:"users,omitempty"`
-	BastionStates []*BastionState        `protobuf:"bytes,6,rep,name=bastion_states" json:"bastion_states,omitempty"`
+	BastionStates []*BastionState        `protobuf:"bytes,6,rep,name=bastion_states,json=bastionStates" json:"bastion_states,omitempty"`
 }
 
-func (m *Customer) Reset()         { *m = Customer{} }
-func (m *Customer) String() string { return proto.CompactTextString(m) }
-func (*Customer) ProtoMessage()    {}
+func (m *Customer) Reset()                    { *m = Customer{} }
+func (m *Customer) String() string            { return proto.CompactTextString(m) }
+func (*Customer) ProtoMessage()               {}
+func (*Customer) Descriptor() ([]byte, []int) { return fileDescriptorUser, []int{1} }
 
 func (m *Customer) GetCreatedAt() *opsee_types.Timestamp {
 	if m != nil {
@@ -589,6 +593,209 @@ func init() {
 		}),
 	})
 }
+func (m *User) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *User) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		data[i] = 0x8
+		i++
+		i = encodeVarintUser(data, i, uint64(m.Id))
+	}
+	if len(m.CustomerId) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintUser(data, i, uint64(len(m.CustomerId)))
+		i += copy(data[i:], m.CustomerId)
+	}
+	if len(m.Email) > 0 {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintUser(data, i, uint64(len(m.Email)))
+		i += copy(data[i:], m.Email)
+	}
+	if len(m.Name) > 0 {
+		data[i] = 0x22
+		i++
+		i = encodeVarintUser(data, i, uint64(len(m.Name)))
+		i += copy(data[i:], m.Name)
+	}
+	if m.Verified {
+		data[i] = 0x28
+		i++
+		if m.Verified {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Admin {
+		data[i] = 0x30
+		i++
+		if m.Admin {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Active {
+		data[i] = 0x38
+		i++
+		if m.Active {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.AdminId != 0 {
+		data[i] = 0x40
+		i++
+		i = encodeVarintUser(data, i, uint64(m.AdminId))
+	}
+	if len(m.PasswordHash) > 0 {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintUser(data, i, uint64(len(m.PasswordHash)))
+		i += copy(data[i:], m.PasswordHash)
+	}
+	if m.CreatedAt != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintUser(data, i, uint64(m.CreatedAt.Size()))
+		n1, err := m.CreatedAt.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if m.UpdatedAt != nil {
+		data[i] = 0x5a
+		i++
+		i = encodeVarintUser(data, i, uint64(m.UpdatedAt.Size()))
+		n2, err := m.UpdatedAt.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	return i, nil
+}
+
+func (m *Customer) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Customer) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintUser(data, i, uint64(len(m.Id)))
+		i += copy(data[i:], m.Id)
+	}
+	if len(m.Name) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintUser(data, i, uint64(len(m.Name)))
+		i += copy(data[i:], m.Name)
+	}
+	if m.CreatedAt != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintUser(data, i, uint64(m.CreatedAt.Size()))
+		n3, err := m.CreatedAt.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if m.UpdatedAt != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintUser(data, i, uint64(m.UpdatedAt.Size()))
+		n4, err := m.UpdatedAt.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if len(m.Users) > 0 {
+		for _, msg := range m.Users {
+			data[i] = 0x2a
+			i++
+			i = encodeVarintUser(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.BastionStates) > 0 {
+		for _, msg := range m.BastionStates {
+			data[i] = 0x32
+			i++
+			i = encodeVarintUser(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func encodeFixed64User(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32User(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintUser(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
 func NewPopulatedUser(r randyUser, easy bool) *User {
 	this := &User{}
 	this.Id = int32(r.Int31())
@@ -717,4 +924,805 @@ func encodeVarintPopulateUser(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *User) Size() (n int) {
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovUser(uint64(m.Id))
+	}
+	l = len(m.CustomerId)
+	if l > 0 {
+		n += 1 + l + sovUser(uint64(l))
+	}
+	l = len(m.Email)
+	if l > 0 {
+		n += 1 + l + sovUser(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovUser(uint64(l))
+	}
+	if m.Verified {
+		n += 2
+	}
+	if m.Admin {
+		n += 2
+	}
+	if m.Active {
+		n += 2
+	}
+	if m.AdminId != 0 {
+		n += 1 + sovUser(uint64(m.AdminId))
+	}
+	l = len(m.PasswordHash)
+	if l > 0 {
+		n += 1 + l + sovUser(uint64(l))
+	}
+	if m.CreatedAt != nil {
+		l = m.CreatedAt.Size()
+		n += 1 + l + sovUser(uint64(l))
+	}
+	if m.UpdatedAt != nil {
+		l = m.UpdatedAt.Size()
+		n += 1 + l + sovUser(uint64(l))
+	}
+	return n
+}
+
+func (m *Customer) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovUser(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovUser(uint64(l))
+	}
+	if m.CreatedAt != nil {
+		l = m.CreatedAt.Size()
+		n += 1 + l + sovUser(uint64(l))
+	}
+	if m.UpdatedAt != nil {
+		l = m.UpdatedAt.Size()
+		n += 1 + l + sovUser(uint64(l))
+	}
+	if len(m.Users) > 0 {
+		for _, e := range m.Users {
+			l = e.Size()
+			n += 1 + l + sovUser(uint64(l))
+		}
+	}
+	if len(m.BastionStates) > 0 {
+		for _, e := range m.BastionStates {
+			l = e.Size()
+			n += 1 + l + sovUser(uint64(l))
+		}
+	}
+	return n
+}
+
+func sovUser(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozUser(x uint64) (n int) {
+	return sovUser(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *User) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowUser
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: User: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: User: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Id |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CustomerId = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Email = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Verified", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Verified = bool(v != 0)
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Admin = bool(v != 0)
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Active", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Active = bool(v != 0)
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminId", wireType)
+			}
+			m.AdminId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.AdminId |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PasswordHash", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PasswordHash = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreatedAt == nil {
+				m.CreatedAt = &opsee_types.Timestamp{}
+			}
+			if err := m.CreatedAt.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UpdatedAt == nil {
+				m.UpdatedAt = &opsee_types.Timestamp{}
+			}
+			if err := m.UpdatedAt.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipUser(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthUser
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Customer) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowUser
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Customer: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Customer: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreatedAt == nil {
+				m.CreatedAt = &opsee_types.Timestamp{}
+			}
+			if err := m.CreatedAt.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UpdatedAt == nil {
+				m.UpdatedAt = &opsee_types.Timestamp{}
+			}
+			if err := m.UpdatedAt.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Users", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Users = append(m.Users, &User{})
+			if err := m.Users[len(m.Users)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BastionStates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthUser
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BastionStates = append(m.BastionStates, &BastionState{})
+			if err := m.BastionStates[len(m.BastionStates)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipUser(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthUser
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipUser(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowUser
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowUser
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthUser
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowUser
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipUser(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthUser = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowUser   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorUser = []byte{
+	// 554 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x93, 0x3f, 0x6f, 0x13, 0x3f,
+	0x18, 0xc7, 0x75, 0xf9, 0xd7, 0xc4, 0x69, 0xf2, 0xfb, 0xc9, 0x2d, 0xd5, 0xa9, 0x88, 0xa6, 0x58,
+	0x1d, 0x2a, 0x41, 0x2f, 0x08, 0x98, 0x32, 0xd1, 0x63, 0x01, 0x24, 0x16, 0x03, 0x0b, 0x4b, 0xe4,
+	0xbb, 0x73, 0x13, 0xab, 0x5c, 0x7c, 0x3a, 0xfb, 0x8a, 0xd8, 0x78, 0x2d, 0x48, 0x20, 0x5e, 0x02,
+	0x23, 0x23, 0x23, 0xaf, 0xa0, 0x02, 0x46, 0x06, 0x06, 0x26, 0x46, 0x9e, 0x7b, 0xce, 0x97, 0x26,
+	0x4c, 0x95, 0x60, 0xb0, 0x72, 0x4f, 0xbe, 0x9f, 0xef, 0x57, 0x8f, 0xed, 0xc7, 0x84, 0x14, 0x46,
+	0xe6, 0x41, 0x96, 0x6b, 0xab, 0x69, 0x5b, 0x67, 0x46, 0xca, 0xdd, 0xa3, 0x99, 0xb2, 0xf3, 0x22,
+	0x0a, 0x62, 0x9d, 0x8e, 0x67, 0x7a, 0xa6, 0xc7, 0xa8, 0x46, 0xc5, 0x09, 0x56, 0x58, 0xe0, 0x57,
+	0xe5, 0xda, 0xbd, 0xb5, 0x82, 0x63, 0xc0, 0x05, 0x8f, 0x65, 0x65, 0xc0, 0x4f, 0xe7, 0x98, 0x5c,
+	0xca, 0x61, 0x5f, 0x65, 0xd2, 0x8c, 0xad, 0x4a, 0xa5, 0xb1, 0x22, 0xcd, 0x9c, 0xb7, 0x0f, 0x45,
+	0x7c, 0x5a, 0x15, 0xec, 0x47, 0x8b, 0xb4, 0x9e, 0x41, 0xff, 0x94, 0x91, 0x86, 0x4a, 0x7c, 0x6f,
+	0xdf, 0x3b, 0x6c, 0x87, 0xf4, 0xf5, 0xbb, 0x6b, 0xde, 0xcf, 0xf3, 0x11, 0xb1, 0xfa, 0x54, 0x2e,
+	0x26, 0x4c, 0x25, 0x8c, 0x83, 0x4a, 0x1f, 0x93, 0x7e, 0x5c, 0x18, 0xab, 0x53, 0x99, 0x4f, 0x01,
+	0x6e, 0x00, 0xdc, 0x0b, 0x6f, 0x3a, 0xf8, 0xc0, 0xc1, 0x2b, 0x04, 0xdb, 0x4f, 0xa2, 0xf5, 0x3f,
+	0x38, 0xa9, 0xab, 0x87, 0x09, 0xbd, 0x41, 0xda, 0x32, 0x15, 0xea, 0x85, 0xdf, 0xc4, 0xa0, 0x2b,
+	0x2e, 0x68, 0xe0, 0x82, 0x50, 0x63, 0xbc, 0x62, 0xe8, 0x21, 0x69, 0x2d, 0x44, 0x2a, 0xfd, 0x16,
+	0xb2, 0xdb, 0x8e, 0xdd, 0x74, 0x6c, 0x29, 0x31, 0x8e, 0x04, 0xbd, 0x4b, 0xba, 0x67, 0x32, 0x57,
+	0x27, 0x4a, 0x26, 0x7e, 0x1b, 0xe8, 0x6e, 0xe8, 0x3b, 0xfa, 0x7f, 0x47, 0xd7, 0x32, 0xe3, 0x4b,
+	0xb2, 0x6c, 0x46, 0x24, 0xa9, 0x5a, 0xf8, 0x1d, 0xb4, 0xfc, 0xd9, 0x0c, 0x6a, 0xd0, 0x0c, 0xfe,
+	0xd2, 0x80, 0x74, 0x44, 0x6c, 0xd5, 0x99, 0xf4, 0x37, 0x90, 0xde, 0x71, 0xf4, 0xb0, 0xa6, 0x51,
+	0x64, 0xdc, 0x51, 0x74, 0x4c, 0xba, 0x68, 0x2c, 0x4f, 0xad, 0x8b, 0x47, 0xbc, 0xbd, 0xd2, 0x4e,
+	0x2d, 0x31, 0xbe, 0x81, 0x9f, 0x70, 0x34, 0xf7, 0xc8, 0x20, 0x13, 0xc6, 0xbc, 0xd4, 0x79, 0x32,
+	0x9d, 0x0b, 0x33, 0xf7, 0x7b, 0xb8, 0xed, 0xab, 0xdf, 0xcf, 0x47, 0xde, 0x11, 0x58, 0x69, 0x79,
+	0xb0, 0x6b, 0x04, 0xe3, 0x9b, 0x75, 0xfd, 0x00, 0x4a, 0xfa, 0x88, 0x90, 0x38, 0x97, 0xc2, 0xca,
+	0x64, 0x2a, 0xac, 0x4f, 0xc0, 0xde, 0xbf, 0xbd, 0x13, 0x54, 0x33, 0x84, 0x73, 0x11, 0x3c, 0xad,
+	0xe7, 0x22, 0xdc, 0x82, 0xc4, 0xff, 0xf0, 0xaa, 0x96, 0x0e, 0xc6, 0x7b, 0xae, 0x38, 0xb6, 0x65,
+	0x56, 0x91, 0x25, 0x75, 0x56, 0xff, 0x72, 0x59, 0x17, 0x0e, 0xc8, 0x72, 0xc5, 0xb1, 0x65, 0x6f,
+	0x1b, 0xa4, 0x7b, 0xdf, 0xcd, 0x00, 0x1d, 0x2e, 0x87, 0xae, 0x87, 0x03, 0x46, 0xdd, 0x25, 0xe3,
+	0x64, 0xb9, 0xeb, 0x5c, 0xdf, 0x48, 0xf3, 0x1f, 0x6e, 0xa4, 0xf5, 0x37, 0x1b, 0xa1, 0xd7, 0x49,
+	0xbb, 0x7c, 0xf8, 0x06, 0x66, 0xac, 0x09, 0x31, 0x7d, 0x17, 0x53, 0x3e, 0x26, 0x5e, 0x29, 0x74,
+	0x42, 0x86, 0x91, 0x30, 0x56, 0xe9, 0xc5, 0x14, 0x32, 0xad, 0x34, 0x30, 0x5c, 0x25, 0xbb, 0xe5,
+	0xd8, 0xb0, 0x12, 0x9f, 0x94, 0x1a, 0x1f, 0x44, 0x2b, 0x95, 0x09, 0x0f, 0x7e, 0x7d, 0xdd, 0xf3,
+	0xde, 0x7f, 0xdb, 0xf3, 0x3e, 0xc0, 0xfa, 0x04, 0xeb, 0x33, 0xac, 0x2f, 0xb0, 0x3e, 0xbe, 0x19,
+	0x79, 0xcf, 0x3b, 0x26, 0x9e, 0xc3, 0xbb, 0x88, 0x3a, 0xf8, 0x8a, 0xef, 0xfc, 0x0e, 0x00, 0x00,
+	0xff, 0xff, 0xed, 0xcd, 0xeb, 0xf8, 0x84, 0x04, 0x00, 0x00,
 }
