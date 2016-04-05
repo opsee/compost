@@ -5,66 +5,68 @@ import (
 	"crypto/tls"
 	"github.com/opsee/basic/clients/bartnet"
 	"github.com/opsee/basic/clients/beavis"
-	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
 
-type Client interface {
-	ListChecks(context.Context, *schema.User) ([]*schema.Check, error)
-	GetCredentials(context.Context, string) (*opsee.GetCredentialsResponse, error)
-	ListCustomers(context.Context, *opsee.ListUsersRequest) (*opsee.ListCustomersResponse, error)
-	GetUser(context.Context, *opsee.GetUserRequest) (*opsee.GetUserResponse, error)
-}
-
 type ClientConfig struct {
-	Bartnet  string
-	Beavis   string
-	Spanx    string
-	Vape     string
-	Keelhaul string
+	SkipVerify bool
+	Bartnet    string
+	Beavis     string
+	Spanx      string
+	Vape       string
+	Keelhaul   string
+	Bezos      string
 }
 
-type client struct {
+type Client struct {
 	Bartnet  bartnet.Client
 	Beavis   beavis.Client
 	Spanx    opsee.SpanxClient
 	Vape     opsee.VapeClient
 	Keelhaul opsee.KeelhaulClient
+	// Bezos    opsee.BezosClient
 }
 
-func NewClient(config ClientConfig) (Client, error) {
-	spanxConn, err := grpcConn(config.Spanx)
+func NewClient(config ClientConfig) (*Client, error) {
+	spanxConn, err := grpcConn(config.Spanx, config.SkipVerify)
 	if err != nil {
 		return nil, err
 	}
 
-	vapeConn, err := grpcConn(config.Vape)
+	vapeConn, err := grpcConn(config.Vape, config.SkipVerify)
 	if err != nil {
 		return nil, err
 	}
 
-	keelhaulConn, err := grpcConn(config.Keelhaul)
+	keelhaulConn, err := grpcConn(config.Keelhaul, config.SkipVerify)
 	if err != nil {
 		return nil, err
 	}
 
-	return &client{
+	// bezosConn, err := grpcConn(config.Bezos, config.SkipVerify)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	return &Client{
 		Bartnet:  bartnet.New(config.Bartnet),
 		Beavis:   beavis.New(config.Beavis),
 		Spanx:    opsee.NewSpanxClient(spanxConn),
 		Vape:     opsee.NewVapeClient(vapeConn),
 		Keelhaul: opsee.NewKeelhaulClient(keelhaulConn),
+		// Bezos:    opsee.NewBezosClient(bezosConn),
 	}, nil
 }
 
-func grpcConn(addr string) (*grpc.ClientConn, error) {
+func grpcConn(addr string, skipVerify bool) (*grpc.ClientConn, error) {
 	return grpc.Dial(
 		addr,
 		grpc.WithTransportCredentials(
-			credentials.NewTLS(&tls.Config{}),
+			credentials.NewTLS(&tls.Config{
+				InsecureSkipVerify: skipVerify,
+			}),
 		),
 	)
 }

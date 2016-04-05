@@ -3,17 +3,19 @@
 // DO NOT EDIT!
 
 /*
-Package autoscaling is a generated protocol buffer package.
+	Package autoscaling is a generated protocol buffer package.
 
-It is generated from these files:
-	types.proto
+	It is generated from these files:
+		types.proto
 
-It has these top-level messages:
-	EnabledMetric
-	Group
-	Instance
-	SuspendedProcess
-	TagDescription
+	It has these top-level messages:
+		DescribeAutoScalingGroupsInput
+		DescribeAutoScalingGroupsOutput
+		EnabledMetric
+		Group
+		Instance
+		SuspendedProcess
+		TagDescription
 */
 package autoscaling
 
@@ -22,25 +24,96 @@ import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/protobuf/opseeproto"
+import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 
 import bytes "bytes"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
+import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
+
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
+
+type DescribeAutoScalingGroupsInput struct {
+	AutoScalingGroupNames []string `protobuf:"bytes,2,rep,name=AutoScalingGroupNames,json=autoScalingGroupNames" json:"AutoScalingGroupNames,omitempty"`
+	MaxRecords            *int64   `protobuf:"zigzag64,3,opt,name=MaxRecords,json=maxRecords" json:"MaxRecords,omitempty"`
+	NextToken             *string  `protobuf:"bytes,4,opt,name=NextToken,json=nextToken" json:"NextToken,omitempty"`
+	XXX_unrecognized      []byte   `json:"-"`
+}
+
+func (m *DescribeAutoScalingGroupsInput) Reset()         { *m = DescribeAutoScalingGroupsInput{} }
+func (m *DescribeAutoScalingGroupsInput) String() string { return proto.CompactTextString(m) }
+func (*DescribeAutoScalingGroupsInput) ProtoMessage()    {}
+func (*DescribeAutoScalingGroupsInput) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{0}
+}
+
+func (m *DescribeAutoScalingGroupsInput) GetAutoScalingGroupNames() []string {
+	if m != nil {
+		return m.AutoScalingGroupNames
+	}
+	return nil
+}
+
+func (m *DescribeAutoScalingGroupsInput) GetMaxRecords() int64 {
+	if m != nil && m.MaxRecords != nil {
+		return *m.MaxRecords
+	}
+	return 0
+}
+
+func (m *DescribeAutoScalingGroupsInput) GetNextToken() string {
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
+	}
+	return ""
+}
+
+type DescribeAutoScalingGroupsOutput struct {
+	AutoScalingGroups []*Group `protobuf:"bytes,2,rep,name=AutoScalingGroups,json=autoScalingGroups" json:"AutoScalingGroups,omitempty"`
+	NextToken         *string  `protobuf:"bytes,3,opt,name=NextToken,json=nextToken" json:"NextToken,omitempty"`
+	XXX_unrecognized  []byte   `json:"-"`
+}
+
+func (m *DescribeAutoScalingGroupsOutput) Reset()         { *m = DescribeAutoScalingGroupsOutput{} }
+func (m *DescribeAutoScalingGroupsOutput) String() string { return proto.CompactTextString(m) }
+func (*DescribeAutoScalingGroupsOutput) ProtoMessage()    {}
+func (*DescribeAutoScalingGroupsOutput) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{1}
+}
+
+func (m *DescribeAutoScalingGroupsOutput) GetAutoScalingGroups() []*Group {
+	if m != nil {
+		return m.AutoScalingGroups
+	}
+	return nil
+}
+
+func (m *DescribeAutoScalingGroupsOutput) GetNextToken() string {
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
+	}
+	return ""
+}
+
 type EnabledMetric struct {
-	Granularity      *string `protobuf:"bytes,2,opt,name=Granularity" json:"Granularity,omitempty"`
-	Metric           *string `protobuf:"bytes,3,opt,name=Metric" json:"Metric,omitempty"`
+	Granularity      *string `protobuf:"bytes,2,opt,name=Granularity,json=granularity" json:"Granularity,omitempty"`
+	Metric           *string `protobuf:"bytes,3,opt,name=Metric,json=metric" json:"Metric,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *EnabledMetric) Reset()         { *m = EnabledMetric{} }
-func (m *EnabledMetric) String() string { return proto.CompactTextString(m) }
-func (*EnabledMetric) ProtoMessage()    {}
+func (m *EnabledMetric) Reset()                    { *m = EnabledMetric{} }
+func (m *EnabledMetric) String() string            { return proto.CompactTextString(m) }
+func (*EnabledMetric) ProtoMessage()               {}
+func (*EnabledMetric) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 func (m *EnabledMetric) GetGranularity() string {
 	if m != nil && m.Granularity != nil {
@@ -57,33 +130,34 @@ func (m *EnabledMetric) GetMetric() string {
 }
 
 type Group struct {
-	AutoScalingGroupARN              *string             `protobuf:"bytes,2,opt,name=AutoScalingGroupARN" json:"AutoScalingGroupARN,omitempty"`
-	AutoScalingGroupName             *string             `protobuf:"bytes,3,opt,name=AutoScalingGroupName" json:"AutoScalingGroupName,omitempty"`
-	AvailabilityZones                []string            `protobuf:"bytes,4,rep,name=AvailabilityZones" json:"AvailabilityZones,omitempty"`
-	CreatedTime                      *int64              `protobuf:"fixed64,5,opt,name=CreatedTime" json:"CreatedTime,omitempty"`
-	DefaultCooldown                  *int64              `protobuf:"zigzag64,6,opt,name=DefaultCooldown" json:"DefaultCooldown,omitempty"`
-	DesiredCapacity                  *int64              `protobuf:"zigzag64,7,opt,name=DesiredCapacity" json:"DesiredCapacity,omitempty"`
-	EnabledMetrics                   []*EnabledMetric    `protobuf:"bytes,8,rep,name=EnabledMetrics" json:"EnabledMetrics,omitempty"`
-	HealthCheckGracePeriod           *int64              `protobuf:"zigzag64,9,opt,name=HealthCheckGracePeriod" json:"HealthCheckGracePeriod,omitempty"`
-	HealthCheckType                  *string             `protobuf:"bytes,10,opt,name=HealthCheckType" json:"HealthCheckType,omitempty"`
-	Instances                        []*Instance         `protobuf:"bytes,11,rep,name=Instances" json:"Instances,omitempty"`
-	LaunchConfigurationName          *string             `protobuf:"bytes,12,opt,name=LaunchConfigurationName" json:"LaunchConfigurationName,omitempty"`
-	LoadBalancerNames                []string            `protobuf:"bytes,13,rep,name=LoadBalancerNames" json:"LoadBalancerNames,omitempty"`
-	MaxSize                          *int64              `protobuf:"zigzag64,14,opt,name=MaxSize" json:"MaxSize,omitempty"`
-	MinSize                          *int64              `protobuf:"zigzag64,15,opt,name=MinSize" json:"MinSize,omitempty"`
-	NewInstancesProtectedFromScaleIn *bool               `protobuf:"varint,16,opt,name=NewInstancesProtectedFromScaleIn" json:"NewInstancesProtectedFromScaleIn,omitempty"`
-	PlacementGroup                   *string             `protobuf:"bytes,17,opt,name=PlacementGroup" json:"PlacementGroup,omitempty"`
-	Status                           *string             `protobuf:"bytes,18,opt,name=Status" json:"Status,omitempty"`
-	SuspendedProcesses               []*SuspendedProcess `protobuf:"bytes,19,rep,name=SuspendedProcesses" json:"SuspendedProcesses,omitempty"`
-	Tags                             []*TagDescription   `protobuf:"bytes,20,rep,name=Tags" json:"Tags,omitempty"`
-	TerminationPolicies              []string            `protobuf:"bytes,21,rep,name=TerminationPolicies" json:"TerminationPolicies,omitempty"`
-	VPCZoneIdentifier                *string             `protobuf:"bytes,22,opt,name=VPCZoneIdentifier" json:"VPCZoneIdentifier,omitempty"`
-	XXX_unrecognized                 []byte              `json:"-"`
+	AutoScalingGroupARN              *string                `protobuf:"bytes,2,opt,name=AutoScalingGroupARN,json=autoScalingGroupARN" json:"AutoScalingGroupARN,omitempty"`
+	AutoScalingGroupName             *string                `protobuf:"bytes,3,opt,name=AutoScalingGroupName,json=autoScalingGroupName" json:"AutoScalingGroupName,omitempty"`
+	AvailabilityZones                []string               `protobuf:"bytes,4,rep,name=AvailabilityZones,json=availabilityZones" json:"AvailabilityZones,omitempty"`
+	CreatedTime                      *opsee_types.Timestamp `protobuf:"bytes,5,opt,name=CreatedTime,json=createdTime" json:"CreatedTime,omitempty"`
+	DefaultCooldown                  *int64                 `protobuf:"zigzag64,6,opt,name=DefaultCooldown,json=defaultCooldown" json:"DefaultCooldown,omitempty"`
+	DesiredCapacity                  *int64                 `protobuf:"zigzag64,7,opt,name=DesiredCapacity,json=desiredCapacity" json:"DesiredCapacity,omitempty"`
+	EnabledMetrics                   []*EnabledMetric       `protobuf:"bytes,8,rep,name=EnabledMetrics,json=enabledMetrics" json:"EnabledMetrics,omitempty"`
+	HealthCheckGracePeriod           *int64                 `protobuf:"zigzag64,9,opt,name=HealthCheckGracePeriod,json=healthCheckGracePeriod" json:"HealthCheckGracePeriod,omitempty"`
+	HealthCheckType                  *string                `protobuf:"bytes,10,opt,name=HealthCheckType,json=healthCheckType" json:"HealthCheckType,omitempty"`
+	Instances                        []*Instance            `protobuf:"bytes,11,rep,name=Instances,json=instances" json:"Instances,omitempty"`
+	LaunchConfigurationName          *string                `protobuf:"bytes,12,opt,name=LaunchConfigurationName,json=launchConfigurationName" json:"LaunchConfigurationName,omitempty"`
+	LoadBalancerNames                []string               `protobuf:"bytes,13,rep,name=LoadBalancerNames,json=loadBalancerNames" json:"LoadBalancerNames,omitempty"`
+	MaxSize                          *int64                 `protobuf:"zigzag64,14,opt,name=MaxSize,json=maxSize" json:"MaxSize,omitempty"`
+	MinSize                          *int64                 `protobuf:"zigzag64,15,opt,name=MinSize,json=minSize" json:"MinSize,omitempty"`
+	NewInstancesProtectedFromScaleIn *bool                  `protobuf:"varint,16,opt,name=NewInstancesProtectedFromScaleIn,json=newInstancesProtectedFromScaleIn" json:"NewInstancesProtectedFromScaleIn,omitempty"`
+	PlacementGroup                   *string                `protobuf:"bytes,17,opt,name=PlacementGroup,json=placementGroup" json:"PlacementGroup,omitempty"`
+	Status                           *string                `protobuf:"bytes,18,opt,name=Status,json=status" json:"Status,omitempty"`
+	SuspendedProcesses               []*SuspendedProcess    `protobuf:"bytes,19,rep,name=SuspendedProcesses,json=suspendedProcesses" json:"SuspendedProcesses,omitempty"`
+	Tags                             []*TagDescription      `protobuf:"bytes,20,rep,name=Tags,json=tags" json:"Tags,omitempty"`
+	TerminationPolicies              []string               `protobuf:"bytes,21,rep,name=TerminationPolicies,json=terminationPolicies" json:"TerminationPolicies,omitempty"`
+	VPCZoneIdentifier                *string                `protobuf:"bytes,22,opt,name=VPCZoneIdentifier,json=vPCZoneIdentifier" json:"VPCZoneIdentifier,omitempty"`
+	XXX_unrecognized                 []byte                 `json:"-"`
 }
 
-func (m *Group) Reset()         { *m = Group{} }
-func (m *Group) String() string { return proto.CompactTextString(m) }
-func (*Group) ProtoMessage()    {}
+func (m *Group) Reset()                    { *m = Group{} }
+func (m *Group) String() string            { return proto.CompactTextString(m) }
+func (*Group) ProtoMessage()               {}
+func (*Group) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
 func (m *Group) GetAutoScalingGroupARN() string {
 	if m != nil && m.AutoScalingGroupARN != nil {
@@ -106,11 +180,11 @@ func (m *Group) GetAvailabilityZones() []string {
 	return nil
 }
 
-func (m *Group) GetCreatedTime() int64 {
-	if m != nil && m.CreatedTime != nil {
-		return *m.CreatedTime
+func (m *Group) GetCreatedTime() *opsee_types.Timestamp {
+	if m != nil {
+		return m.CreatedTime
 	}
-	return 0
+	return nil
 }
 
 func (m *Group) GetDefaultCooldown() int64 {
@@ -233,18 +307,19 @@ func (m *Group) GetVPCZoneIdentifier() string {
 }
 
 type Instance struct {
-	AvailabilityZone        *string `protobuf:"bytes,2,opt,name=AvailabilityZone" json:"AvailabilityZone,omitempty"`
-	HealthStatus            *string `protobuf:"bytes,3,opt,name=HealthStatus" json:"HealthStatus,omitempty"`
-	InstanceId              *string `protobuf:"bytes,4,opt,name=InstanceId" json:"InstanceId,omitempty"`
-	LaunchConfigurationName *string `protobuf:"bytes,5,opt,name=LaunchConfigurationName" json:"LaunchConfigurationName,omitempty"`
-	LifecycleState          *string `protobuf:"bytes,6,opt,name=LifecycleState" json:"LifecycleState,omitempty"`
-	ProtectedFromScaleIn    *bool   `protobuf:"varint,7,opt,name=ProtectedFromScaleIn" json:"ProtectedFromScaleIn,omitempty"`
+	AvailabilityZone        *string `protobuf:"bytes,2,opt,name=AvailabilityZone,json=availabilityZone" json:"AvailabilityZone,omitempty"`
+	HealthStatus            *string `protobuf:"bytes,3,opt,name=HealthStatus,json=healthStatus" json:"HealthStatus,omitempty"`
+	InstanceId              *string `protobuf:"bytes,4,opt,name=InstanceId,json=instanceId" json:"InstanceId,omitempty"`
+	LaunchConfigurationName *string `protobuf:"bytes,5,opt,name=LaunchConfigurationName,json=launchConfigurationName" json:"LaunchConfigurationName,omitempty"`
+	LifecycleState          *string `protobuf:"bytes,6,opt,name=LifecycleState,json=lifecycleState" json:"LifecycleState,omitempty"`
+	ProtectedFromScaleIn    *bool   `protobuf:"varint,7,opt,name=ProtectedFromScaleIn,json=protectedFromScaleIn" json:"ProtectedFromScaleIn,omitempty"`
 	XXX_unrecognized        []byte  `json:"-"`
 }
 
-func (m *Instance) Reset()         { *m = Instance{} }
-func (m *Instance) String() string { return proto.CompactTextString(m) }
-func (*Instance) ProtoMessage()    {}
+func (m *Instance) Reset()                    { *m = Instance{} }
+func (m *Instance) String() string            { return proto.CompactTextString(m) }
+func (*Instance) ProtoMessage()               {}
+func (*Instance) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
 
 func (m *Instance) GetAvailabilityZone() string {
 	if m != nil && m.AvailabilityZone != nil {
@@ -289,14 +364,15 @@ func (m *Instance) GetProtectedFromScaleIn() bool {
 }
 
 type SuspendedProcess struct {
-	ProcessName      *string `protobuf:"bytes,2,opt,name=ProcessName" json:"ProcessName,omitempty"`
-	SuspensionReason *string `protobuf:"bytes,3,opt,name=SuspensionReason" json:"SuspensionReason,omitempty"`
+	ProcessName      *string `protobuf:"bytes,2,opt,name=ProcessName,json=processName" json:"ProcessName,omitempty"`
+	SuspensionReason *string `protobuf:"bytes,3,opt,name=SuspensionReason,json=suspensionReason" json:"SuspensionReason,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *SuspendedProcess) Reset()         { *m = SuspendedProcess{} }
-func (m *SuspendedProcess) String() string { return proto.CompactTextString(m) }
-func (*SuspendedProcess) ProtoMessage()    {}
+func (m *SuspendedProcess) Reset()                    { *m = SuspendedProcess{} }
+func (m *SuspendedProcess) String() string            { return proto.CompactTextString(m) }
+func (*SuspendedProcess) ProtoMessage()               {}
+func (*SuspendedProcess) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
 
 func (m *SuspendedProcess) GetProcessName() string {
 	if m != nil && m.ProcessName != nil {
@@ -313,17 +389,18 @@ func (m *SuspendedProcess) GetSuspensionReason() string {
 }
 
 type TagDescription struct {
-	Key               *string `protobuf:"bytes,2,opt,name=Key" json:"Key,omitempty"`
-	PropagateAtLaunch *bool   `protobuf:"varint,3,opt,name=PropagateAtLaunch" json:"PropagateAtLaunch,omitempty"`
-	ResourceId        *string `protobuf:"bytes,4,opt,name=ResourceId" json:"ResourceId,omitempty"`
-	ResourceType      *string `protobuf:"bytes,5,opt,name=ResourceType" json:"ResourceType,omitempty"`
-	Value             *string `protobuf:"bytes,6,opt,name=Value" json:"Value,omitempty"`
+	Key               *string `protobuf:"bytes,2,opt,name=Key,json=key" json:"Key,omitempty"`
+	PropagateAtLaunch *bool   `protobuf:"varint,3,opt,name=PropagateAtLaunch,json=propagateAtLaunch" json:"PropagateAtLaunch,omitempty"`
+	ResourceId        *string `protobuf:"bytes,4,opt,name=ResourceId,json=resourceId" json:"ResourceId,omitempty"`
+	ResourceType      *string `protobuf:"bytes,5,opt,name=ResourceType,json=resourceType" json:"ResourceType,omitempty"`
+	Value             *string `protobuf:"bytes,6,opt,name=Value,json=value" json:"Value,omitempty"`
 	XXX_unrecognized  []byte  `json:"-"`
 }
 
-func (m *TagDescription) Reset()         { *m = TagDescription{} }
-func (m *TagDescription) String() string { return proto.CompactTextString(m) }
-func (*TagDescription) ProtoMessage()    {}
+func (m *TagDescription) Reset()                    { *m = TagDescription{} }
+func (m *TagDescription) String() string            { return proto.CompactTextString(m) }
+func (*TagDescription) ProtoMessage()               {}
+func (*TagDescription) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 func (m *TagDescription) GetKey() string {
 	if m != nil && m.Key != nil {
@@ -361,11 +438,116 @@ func (m *TagDescription) GetValue() string {
 }
 
 func init() {
+	proto.RegisterType((*DescribeAutoScalingGroupsInput)(nil), "opsee.aws.autoscaling.DescribeAutoScalingGroupsInput")
+	proto.RegisterType((*DescribeAutoScalingGroupsOutput)(nil), "opsee.aws.autoscaling.DescribeAutoScalingGroupsOutput")
 	proto.RegisterType((*EnabledMetric)(nil), "opsee.aws.autoscaling.EnabledMetric")
 	proto.RegisterType((*Group)(nil), "opsee.aws.autoscaling.Group")
 	proto.RegisterType((*Instance)(nil), "opsee.aws.autoscaling.Instance")
 	proto.RegisterType((*SuspendedProcess)(nil), "opsee.aws.autoscaling.SuspendedProcess")
 	proto.RegisterType((*TagDescription)(nil), "opsee.aws.autoscaling.TagDescription")
+}
+func (this *DescribeAutoScalingGroupsInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeAutoScalingGroupsInput)
+	if !ok {
+		that2, ok := that.(DescribeAutoScalingGroupsInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.AutoScalingGroupNames) != len(that1.AutoScalingGroupNames) {
+		return false
+	}
+	for i := range this.AutoScalingGroupNames {
+		if this.AutoScalingGroupNames[i] != that1.AutoScalingGroupNames[i] {
+			return false
+		}
+	}
+	if this.MaxRecords != nil && that1.MaxRecords != nil {
+		if *this.MaxRecords != *that1.MaxRecords {
+			return false
+		}
+	} else if this.MaxRecords != nil {
+		return false
+	} else if that1.MaxRecords != nil {
+		return false
+	}
+	if this.NextToken != nil && that1.NextToken != nil {
+		if *this.NextToken != *that1.NextToken {
+			return false
+		}
+	} else if this.NextToken != nil {
+		return false
+	} else if that1.NextToken != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeAutoScalingGroupsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeAutoScalingGroupsOutput)
+	if !ok {
+		that2, ok := that.(DescribeAutoScalingGroupsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.AutoScalingGroups) != len(that1.AutoScalingGroups) {
+		return false
+	}
+	for i := range this.AutoScalingGroups {
+		if !this.AutoScalingGroups[i].Equal(that1.AutoScalingGroups[i]) {
+			return false
+		}
+	}
+	if this.NextToken != nil && that1.NextToken != nil {
+		if *this.NextToken != *that1.NextToken {
+			return false
+		}
+	} else if this.NextToken != nil {
+		return false
+	} else if that1.NextToken != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
 }
 func (this *EnabledMetric) Equal(that interface{}) bool {
 	if that == nil {
@@ -466,13 +648,7 @@ func (this *Group) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if this.CreatedTime != nil && that1.CreatedTime != nil {
-		if *this.CreatedTime != *that1.CreatedTime {
-			return false
-		}
-	} else if this.CreatedTime != nil {
-		return false
-	} else if that1.CreatedTime != nil {
+	if !this.CreatedTime.Equal(that1.CreatedTime) {
 		return false
 	}
 	if this.DefaultCooldown != nil && that1.DefaultCooldown != nil {
@@ -835,6 +1011,18 @@ func (this *TagDescription) Equal(that interface{}) bool {
 	return true
 }
 
+type DescribeAutoScalingGroupsInputGetter interface {
+	GetDescribeAutoScalingGroupsInput() *DescribeAutoScalingGroupsInput
+}
+
+var GraphQLDescribeAutoScalingGroupsInputType *github_com_graphql_go_graphql.Object
+
+type DescribeAutoScalingGroupsOutputGetter interface {
+	GetDescribeAutoScalingGroupsOutput() *DescribeAutoScalingGroupsOutput
+}
+
+var GraphQLDescribeAutoScalingGroupsOutputType *github_com_graphql_go_graphql.Object
+
 type EnabledMetricGetter interface {
 	GetEnabledMetric() *EnabledMetric
 }
@@ -866,6 +1054,135 @@ type TagDescriptionGetter interface {
 var GraphQLTagDescriptionType *github_com_graphql_go_graphql.Object
 
 func init() {
+	GraphQLDescribeAutoScalingGroupsInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "autoscalingDescribeAutoScalingGroupsInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"AutoScalingGroupNames": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAutoScalingGroupsInput)
+						if ok {
+							return obj.AutoScalingGroupNames, nil
+						}
+						inter, ok := p.Source.(DescribeAutoScalingGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeAutoScalingGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.AutoScalingGroupNames, nil
+						}
+						return nil, fmt.Errorf("field AutoScalingGroupNames not resolved")
+					},
+				},
+				"MaxRecords": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAutoScalingGroupsInput)
+						if ok {
+							if obj.MaxRecords == nil {
+								return nil, nil
+							}
+							return obj.GetMaxRecords(), nil
+						}
+						inter, ok := p.Source.(DescribeAutoScalingGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeAutoScalingGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MaxRecords == nil {
+								return nil, nil
+							}
+							return face.GetMaxRecords(), nil
+						}
+						return nil, fmt.Errorf("field MaxRecords not resolved")
+					},
+				},
+				"NextToken": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAutoScalingGroupsInput)
+						if ok {
+							if obj.NextToken == nil {
+								return nil, nil
+							}
+							return obj.GetNextToken(), nil
+						}
+						inter, ok := p.Source.(DescribeAutoScalingGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeAutoScalingGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NextToken == nil {
+								return nil, nil
+							}
+							return face.GetNextToken(), nil
+						}
+						return nil, fmt.Errorf("field NextToken not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeAutoScalingGroupsOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "autoscalingDescribeAutoScalingGroupsOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"AutoScalingGroups": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLGroupType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAutoScalingGroupsOutput)
+						if ok {
+							return obj.AutoScalingGroups, nil
+						}
+						inter, ok := p.Source.(DescribeAutoScalingGroupsOutputGetter)
+						if ok {
+							face := inter.GetDescribeAutoScalingGroupsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.AutoScalingGroups, nil
+						}
+						return nil, fmt.Errorf("field AutoScalingGroups not resolved")
+					},
+				},
+				"NextToken": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAutoScalingGroupsOutput)
+						if ok {
+							if obj.NextToken == nil {
+								return nil, nil
+							}
+							return obj.GetNextToken(), nil
+						}
+						inter, ok := p.Source.(DescribeAutoScalingGroupsOutputGetter)
+						if ok {
+							face := inter.GetDescribeAutoScalingGroupsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NextToken == nil {
+								return nil, nil
+							}
+							return face.GetNextToken(), nil
+						}
+						return nil, fmt.Errorf("field NextToken not resolved")
+					},
+				},
+			}
+		}),
+	})
 	GraphQLEnabledMetricType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "autoscalingEnabledMetric",
 		Description: "",
@@ -999,7 +1316,7 @@ func init() {
 					},
 				},
 				"CreatedTime": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*Group)
@@ -1765,15 +2082,570 @@ func init() {
 		}),
 	})
 }
+func (m *DescribeAutoScalingGroupsInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeAutoScalingGroupsInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.AutoScalingGroupNames) > 0 {
+		for _, s := range m.AutoScalingGroupNames {
+			data[i] = 0x12
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.MaxRecords != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MaxRecords)<<1)^uint64((*m.MaxRecords>>63))))
+	}
+	if m.NextToken != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NextToken)))
+		i += copy(data[i:], *m.NextToken)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeAutoScalingGroupsOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeAutoScalingGroupsOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.AutoScalingGroups) > 0 {
+		for _, msg := range m.AutoScalingGroups {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.NextToken != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NextToken)))
+		i += copy(data[i:], *m.NextToken)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *EnabledMetric) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *EnabledMetric) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Granularity != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Granularity)))
+		i += copy(data[i:], *m.Granularity)
+	}
+	if m.Metric != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Metric)))
+		i += copy(data[i:], *m.Metric)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Group) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Group) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AutoScalingGroupARN != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AutoScalingGroupARN)))
+		i += copy(data[i:], *m.AutoScalingGroupARN)
+	}
+	if m.AutoScalingGroupName != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AutoScalingGroupName)))
+		i += copy(data[i:], *m.AutoScalingGroupName)
+	}
+	if len(m.AvailabilityZones) > 0 {
+		for _, s := range m.AvailabilityZones {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.CreatedTime != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.CreatedTime.Size()))
+		n1, err := m.CreatedTime.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if m.DefaultCooldown != nil {
+		data[i] = 0x30
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.DefaultCooldown)<<1)^uint64((*m.DefaultCooldown>>63))))
+	}
+	if m.DesiredCapacity != nil {
+		data[i] = 0x38
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.DesiredCapacity)<<1)^uint64((*m.DesiredCapacity>>63))))
+	}
+	if len(m.EnabledMetrics) > 0 {
+		for _, msg := range m.EnabledMetrics {
+			data[i] = 0x42
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.HealthCheckGracePeriod != nil {
+		data[i] = 0x48
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.HealthCheckGracePeriod)<<1)^uint64((*m.HealthCheckGracePeriod>>63))))
+	}
+	if m.HealthCheckType != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.HealthCheckType)))
+		i += copy(data[i:], *m.HealthCheckType)
+	}
+	if len(m.Instances) > 0 {
+		for _, msg := range m.Instances {
+			data[i] = 0x5a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.LaunchConfigurationName != nil {
+		data[i] = 0x62
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.LaunchConfigurationName)))
+		i += copy(data[i:], *m.LaunchConfigurationName)
+	}
+	if len(m.LoadBalancerNames) > 0 {
+		for _, s := range m.LoadBalancerNames {
+			data[i] = 0x6a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.MaxSize != nil {
+		data[i] = 0x70
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MaxSize)<<1)^uint64((*m.MaxSize>>63))))
+	}
+	if m.MinSize != nil {
+		data[i] = 0x78
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MinSize)<<1)^uint64((*m.MinSize>>63))))
+	}
+	if m.NewInstancesProtectedFromScaleIn != nil {
+		data[i] = 0x80
+		i++
+		data[i] = 0x1
+		i++
+		if *m.NewInstancesProtectedFromScaleIn {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.PlacementGroup != nil {
+		data[i] = 0x8a
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PlacementGroup)))
+		i += copy(data[i:], *m.PlacementGroup)
+	}
+	if m.Status != nil {
+		data[i] = 0x92
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if len(m.SuspendedProcesses) > 0 {
+		for _, msg := range m.SuspendedProcesses {
+			data[i] = 0x9a
+			i++
+			data[i] = 0x1
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Tags) > 0 {
+		for _, msg := range m.Tags {
+			data[i] = 0xa2
+			i++
+			data[i] = 0x1
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.TerminationPolicies) > 0 {
+		for _, s := range m.TerminationPolicies {
+			data[i] = 0xaa
+			i++
+			data[i] = 0x1
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.VPCZoneIdentifier != nil {
+		data[i] = 0xb2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VPCZoneIdentifier)))
+		i += copy(data[i:], *m.VPCZoneIdentifier)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Instance) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Instance) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AvailabilityZone != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AvailabilityZone)))
+		i += copy(data[i:], *m.AvailabilityZone)
+	}
+	if m.HealthStatus != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.HealthStatus)))
+		i += copy(data[i:], *m.HealthStatus)
+	}
+	if m.InstanceId != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceId)))
+		i += copy(data[i:], *m.InstanceId)
+	}
+	if m.LaunchConfigurationName != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.LaunchConfigurationName)))
+		i += copy(data[i:], *m.LaunchConfigurationName)
+	}
+	if m.LifecycleState != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.LifecycleState)))
+		i += copy(data[i:], *m.LifecycleState)
+	}
+	if m.ProtectedFromScaleIn != nil {
+		data[i] = 0x38
+		i++
+		if *m.ProtectedFromScaleIn {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *SuspendedProcess) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *SuspendedProcess) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ProcessName != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ProcessName)))
+		i += copy(data[i:], *m.ProcessName)
+	}
+	if m.SuspensionReason != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SuspensionReason)))
+		i += copy(data[i:], *m.SuspensionReason)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *TagDescription) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *TagDescription) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Key != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Key)))
+		i += copy(data[i:], *m.Key)
+	}
+	if m.PropagateAtLaunch != nil {
+		data[i] = 0x18
+		i++
+		if *m.PropagateAtLaunch {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.ResourceId != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ResourceId)))
+		i += copy(data[i:], *m.ResourceId)
+	}
+	if m.ResourceType != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ResourceType)))
+		i += copy(data[i:], *m.ResourceType)
+	}
+	if m.Value != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Value)))
+		i += copy(data[i:], *m.Value)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func encodeFixed64Types(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Types(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintTypes(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
+func NewPopulatedDescribeAutoScalingGroupsInput(r randyTypes, easy bool) *DescribeAutoScalingGroupsInput {
+	this := &DescribeAutoScalingGroupsInput{}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(10)
+		this.AutoScalingGroupNames = make([]string, v1)
+		for i := 0; i < v1; i++ {
+			this.AutoScalingGroupNames[i] = randStringTypes(r)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v2 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v2 *= -1
+		}
+		this.MaxRecords = &v2
+	}
+	if r.Intn(10) != 0 {
+		v3 := randStringTypes(r)
+		this.NextToken = &v3
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
+	}
+	return this
+}
+
+func NewPopulatedDescribeAutoScalingGroupsOutput(r randyTypes, easy bool) *DescribeAutoScalingGroupsOutput {
+	this := &DescribeAutoScalingGroupsOutput{}
+	if r.Intn(10) != 0 {
+		v4 := r.Intn(5)
+		this.AutoScalingGroups = make([]*Group, v4)
+		for i := 0; i < v4; i++ {
+			this.AutoScalingGroups[i] = NewPopulatedGroup(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v5 := randStringTypes(r)
+		this.NextToken = &v5
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
+	}
+	return this
+}
+
 func NewPopulatedEnabledMetric(r randyTypes, easy bool) *EnabledMetric {
 	this := &EnabledMetric{}
 	if r.Intn(10) != 0 {
-		v1 := randStringTypes(r)
-		this.Granularity = &v1
+		v6 := randStringTypes(r)
+		this.Granularity = &v6
 	}
 	if r.Intn(10) != 0 {
-		v2 := randStringTypes(r)
-		this.Metric = &v2
+		v7 := randStringTypes(r)
+		this.Metric = &v7
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -1784,127 +2656,123 @@ func NewPopulatedEnabledMetric(r randyTypes, easy bool) *EnabledMetric {
 func NewPopulatedGroup(r randyTypes, easy bool) *Group {
 	this := &Group{}
 	if r.Intn(10) != 0 {
-		v3 := randStringTypes(r)
-		this.AutoScalingGroupARN = &v3
+		v8 := randStringTypes(r)
+		this.AutoScalingGroupARN = &v8
 	}
 	if r.Intn(10) != 0 {
-		v4 := randStringTypes(r)
-		this.AutoScalingGroupName = &v4
+		v9 := randStringTypes(r)
+		this.AutoScalingGroupName = &v9
 	}
 	if r.Intn(10) != 0 {
-		v5 := r.Intn(10)
-		this.AvailabilityZones = make([]string, v5)
-		for i := 0; i < v5; i++ {
+		v10 := r.Intn(10)
+		this.AvailabilityZones = make([]string, v10)
+		for i := 0; i < v10; i++ {
 			this.AvailabilityZones[i] = randStringTypes(r)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v6 := int64(r.Int63())
-		if r.Intn(2) == 0 {
-			v6 *= -1
-		}
-		this.CreatedTime = &v6
+		this.CreatedTime = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v7 := int64(r.Int63())
+		v11 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v7 *= -1
+			v11 *= -1
 		}
-		this.DefaultCooldown = &v7
+		this.DefaultCooldown = &v11
 	}
 	if r.Intn(10) != 0 {
-		v8 := int64(r.Int63())
+		v12 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v8 *= -1
+			v12 *= -1
 		}
-		this.DesiredCapacity = &v8
+		this.DesiredCapacity = &v12
 	}
 	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.EnabledMetrics = make([]*EnabledMetric, v9)
-		for i := 0; i < v9; i++ {
+		v13 := r.Intn(5)
+		this.EnabledMetrics = make([]*EnabledMetric, v13)
+		for i := 0; i < v13; i++ {
 			this.EnabledMetrics[i] = NewPopulatedEnabledMetric(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v10 := int64(r.Int63())
+		v14 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v10 *= -1
+			v14 *= -1
 		}
-		this.HealthCheckGracePeriod = &v10
+		this.HealthCheckGracePeriod = &v14
 	}
 	if r.Intn(10) != 0 {
-		v11 := randStringTypes(r)
-		this.HealthCheckType = &v11
+		v15 := randStringTypes(r)
+		this.HealthCheckType = &v15
 	}
 	if r.Intn(10) != 0 {
-		v12 := r.Intn(5)
-		this.Instances = make([]*Instance, v12)
-		for i := 0; i < v12; i++ {
+		v16 := r.Intn(5)
+		this.Instances = make([]*Instance, v16)
+		for i := 0; i < v16; i++ {
 			this.Instances[i] = NewPopulatedInstance(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v13 := randStringTypes(r)
-		this.LaunchConfigurationName = &v13
+		v17 := randStringTypes(r)
+		this.LaunchConfigurationName = &v17
 	}
 	if r.Intn(10) != 0 {
-		v14 := r.Intn(10)
-		this.LoadBalancerNames = make([]string, v14)
-		for i := 0; i < v14; i++ {
+		v18 := r.Intn(10)
+		this.LoadBalancerNames = make([]string, v18)
+		for i := 0; i < v18; i++ {
 			this.LoadBalancerNames[i] = randStringTypes(r)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v15 := int64(r.Int63())
+		v19 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v15 *= -1
+			v19 *= -1
 		}
-		this.MaxSize = &v15
+		this.MaxSize = &v19
 	}
 	if r.Intn(10) != 0 {
-		v16 := int64(r.Int63())
+		v20 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v16 *= -1
+			v20 *= -1
 		}
-		this.MinSize = &v16
+		this.MinSize = &v20
 	}
 	if r.Intn(10) != 0 {
-		v17 := bool(bool(r.Intn(2) == 0))
-		this.NewInstancesProtectedFromScaleIn = &v17
+		v21 := bool(bool(r.Intn(2) == 0))
+		this.NewInstancesProtectedFromScaleIn = &v21
 	}
 	if r.Intn(10) != 0 {
-		v18 := randStringTypes(r)
-		this.PlacementGroup = &v18
+		v22 := randStringTypes(r)
+		this.PlacementGroup = &v22
 	}
 	if r.Intn(10) != 0 {
-		v19 := randStringTypes(r)
-		this.Status = &v19
+		v23 := randStringTypes(r)
+		this.Status = &v23
 	}
 	if r.Intn(10) != 0 {
-		v20 := r.Intn(5)
-		this.SuspendedProcesses = make([]*SuspendedProcess, v20)
-		for i := 0; i < v20; i++ {
+		v24 := r.Intn(5)
+		this.SuspendedProcesses = make([]*SuspendedProcess, v24)
+		for i := 0; i < v24; i++ {
 			this.SuspendedProcesses[i] = NewPopulatedSuspendedProcess(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v21 := r.Intn(5)
-		this.Tags = make([]*TagDescription, v21)
-		for i := 0; i < v21; i++ {
+		v25 := r.Intn(5)
+		this.Tags = make([]*TagDescription, v25)
+		for i := 0; i < v25; i++ {
 			this.Tags[i] = NewPopulatedTagDescription(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v22 := r.Intn(10)
-		this.TerminationPolicies = make([]string, v22)
-		for i := 0; i < v22; i++ {
+		v26 := r.Intn(10)
+		this.TerminationPolicies = make([]string, v26)
+		for i := 0; i < v26; i++ {
 			this.TerminationPolicies[i] = randStringTypes(r)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v23 := randStringTypes(r)
-		this.VPCZoneIdentifier = &v23
+		v27 := randStringTypes(r)
+		this.VPCZoneIdentifier = &v27
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 23)
@@ -1915,28 +2783,28 @@ func NewPopulatedGroup(r randyTypes, easy bool) *Group {
 func NewPopulatedInstance(r randyTypes, easy bool) *Instance {
 	this := &Instance{}
 	if r.Intn(10) != 0 {
-		v24 := randStringTypes(r)
-		this.AvailabilityZone = &v24
-	}
-	if r.Intn(10) != 0 {
-		v25 := randStringTypes(r)
-		this.HealthStatus = &v25
-	}
-	if r.Intn(10) != 0 {
-		v26 := randStringTypes(r)
-		this.InstanceId = &v26
-	}
-	if r.Intn(10) != 0 {
-		v27 := randStringTypes(r)
-		this.LaunchConfigurationName = &v27
-	}
-	if r.Intn(10) != 0 {
 		v28 := randStringTypes(r)
-		this.LifecycleState = &v28
+		this.AvailabilityZone = &v28
 	}
 	if r.Intn(10) != 0 {
-		v29 := bool(bool(r.Intn(2) == 0))
-		this.ProtectedFromScaleIn = &v29
+		v29 := randStringTypes(r)
+		this.HealthStatus = &v29
+	}
+	if r.Intn(10) != 0 {
+		v30 := randStringTypes(r)
+		this.InstanceId = &v30
+	}
+	if r.Intn(10) != 0 {
+		v31 := randStringTypes(r)
+		this.LaunchConfigurationName = &v31
+	}
+	if r.Intn(10) != 0 {
+		v32 := randStringTypes(r)
+		this.LifecycleState = &v32
+	}
+	if r.Intn(10) != 0 {
+		v33 := bool(bool(r.Intn(2) == 0))
+		this.ProtectedFromScaleIn = &v33
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 8)
@@ -1947,12 +2815,12 @@ func NewPopulatedInstance(r randyTypes, easy bool) *Instance {
 func NewPopulatedSuspendedProcess(r randyTypes, easy bool) *SuspendedProcess {
 	this := &SuspendedProcess{}
 	if r.Intn(10) != 0 {
-		v30 := randStringTypes(r)
-		this.ProcessName = &v30
+		v34 := randStringTypes(r)
+		this.ProcessName = &v34
 	}
 	if r.Intn(10) != 0 {
-		v31 := randStringTypes(r)
-		this.SuspensionReason = &v31
+		v35 := randStringTypes(r)
+		this.SuspensionReason = &v35
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -1963,24 +2831,24 @@ func NewPopulatedSuspendedProcess(r randyTypes, easy bool) *SuspendedProcess {
 func NewPopulatedTagDescription(r randyTypes, easy bool) *TagDescription {
 	this := &TagDescription{}
 	if r.Intn(10) != 0 {
-		v32 := randStringTypes(r)
-		this.Key = &v32
-	}
-	if r.Intn(10) != 0 {
-		v33 := bool(bool(r.Intn(2) == 0))
-		this.PropagateAtLaunch = &v33
-	}
-	if r.Intn(10) != 0 {
-		v34 := randStringTypes(r)
-		this.ResourceId = &v34
-	}
-	if r.Intn(10) != 0 {
-		v35 := randStringTypes(r)
-		this.ResourceType = &v35
-	}
-	if r.Intn(10) != 0 {
 		v36 := randStringTypes(r)
-		this.Value = &v36
+		this.Key = &v36
+	}
+	if r.Intn(10) != 0 {
+		v37 := bool(bool(r.Intn(2) == 0))
+		this.PropagateAtLaunch = &v37
+	}
+	if r.Intn(10) != 0 {
+		v38 := randStringTypes(r)
+		this.ResourceId = &v38
+	}
+	if r.Intn(10) != 0 {
+		v39 := randStringTypes(r)
+		this.ResourceType = &v39
+	}
+	if r.Intn(10) != 0 {
+		v40 := randStringTypes(r)
+		this.Value = &v40
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 7)
@@ -2007,9 +2875,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v37 := r.Intn(100)
-	tmps := make([]rune, v37)
-	for i := 0; i < v37; i++ {
+	v41 := r.Intn(100)
+	tmps := make([]rune, v41)
+	for i := 0; i < v41; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -2031,11 +2899,11 @@ func randFieldTypes(data []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateTypes(data, uint64(key))
-		v38 := r.Int63()
+		v42 := r.Int63()
 		if r.Intn(2) == 0 {
-			v38 *= -1
+			v42 *= -1
 		}
-		data = encodeVarintPopulateTypes(data, uint64(v38))
+		data = encodeVarintPopulateTypes(data, uint64(v42))
 	case 1:
 		data = encodeVarintPopulateTypes(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -2059,4 +2927,1938 @@ func encodeVarintPopulateTypes(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *DescribeAutoScalingGroupsInput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.AutoScalingGroupNames) > 0 {
+		for _, s := range m.AutoScalingGroupNames {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MaxRecords != nil {
+		n += 1 + sozTypes(uint64(*m.MaxRecords))
+	}
+	if m.NextToken != nil {
+		l = len(*m.NextToken)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeAutoScalingGroupsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.AutoScalingGroups) > 0 {
+		for _, e := range m.AutoScalingGroups {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.NextToken != nil {
+		l = len(*m.NextToken)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *EnabledMetric) Size() (n int) {
+	var l int
+	_ = l
+	if m.Granularity != nil {
+		l = len(*m.Granularity)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Metric != nil {
+		l = len(*m.Metric)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Group) Size() (n int) {
+	var l int
+	_ = l
+	if m.AutoScalingGroupARN != nil {
+		l = len(*m.AutoScalingGroupARN)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AutoScalingGroupName != nil {
+		l = len(*m.AutoScalingGroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.AvailabilityZones) > 0 {
+		for _, s := range m.AvailabilityZones {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.CreatedTime != nil {
+		l = m.CreatedTime.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DefaultCooldown != nil {
+		n += 1 + sozTypes(uint64(*m.DefaultCooldown))
+	}
+	if m.DesiredCapacity != nil {
+		n += 1 + sozTypes(uint64(*m.DesiredCapacity))
+	}
+	if len(m.EnabledMetrics) > 0 {
+		for _, e := range m.EnabledMetrics {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.HealthCheckGracePeriod != nil {
+		n += 1 + sozTypes(uint64(*m.HealthCheckGracePeriod))
+	}
+	if m.HealthCheckType != nil {
+		l = len(*m.HealthCheckType)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Instances) > 0 {
+		for _, e := range m.Instances {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.LaunchConfigurationName != nil {
+		l = len(*m.LaunchConfigurationName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.LoadBalancerNames) > 0 {
+		for _, s := range m.LoadBalancerNames {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MaxSize != nil {
+		n += 1 + sozTypes(uint64(*m.MaxSize))
+	}
+	if m.MinSize != nil {
+		n += 1 + sozTypes(uint64(*m.MinSize))
+	}
+	if m.NewInstancesProtectedFromScaleIn != nil {
+		n += 3
+	}
+	if m.PlacementGroup != nil {
+		l = len(*m.PlacementGroup)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.SuspendedProcesses) > 0 {
+		for _, e := range m.SuspendedProcesses {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Tags) > 0 {
+		for _, e := range m.Tags {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.TerminationPolicies) > 0 {
+		for _, s := range m.TerminationPolicies {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VPCZoneIdentifier != nil {
+		l = len(*m.VPCZoneIdentifier)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Instance) Size() (n int) {
+	var l int
+	_ = l
+	if m.AvailabilityZone != nil {
+		l = len(*m.AvailabilityZone)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HealthStatus != nil {
+		l = len(*m.HealthStatus)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceId != nil {
+		l = len(*m.InstanceId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.LaunchConfigurationName != nil {
+		l = len(*m.LaunchConfigurationName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.LifecycleState != nil {
+		l = len(*m.LifecycleState)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ProtectedFromScaleIn != nil {
+		n += 2
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *SuspendedProcess) Size() (n int) {
+	var l int
+	_ = l
+	if m.ProcessName != nil {
+		l = len(*m.ProcessName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SuspensionReason != nil {
+		l = len(*m.SuspensionReason)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *TagDescription) Size() (n int) {
+	var l int
+	_ = l
+	if m.Key != nil {
+		l = len(*m.Key)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PropagateAtLaunch != nil {
+		n += 2
+	}
+	if m.ResourceId != nil {
+		l = len(*m.ResourceId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ResourceType != nil {
+		l = len(*m.ResourceType)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Value != nil {
+		l = len(*m.Value)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func sovTypes(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozTypes(x uint64) (n int) {
+	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *DescribeAutoScalingGroupsInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeAutoScalingGroupsInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeAutoScalingGroupsInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoScalingGroupNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AutoScalingGroupNames = append(m.AutoScalingGroupNames, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRecords", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MaxRecords = &v2
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NextToken = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeAutoScalingGroupsOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeAutoScalingGroupsOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeAutoScalingGroupsOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoScalingGroups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AutoScalingGroups = append(m.AutoScalingGroups, &Group{})
+			if err := m.AutoScalingGroups[len(m.AutoScalingGroups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NextToken = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EnabledMetric) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnabledMetric: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnabledMetric: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Granularity", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Granularity = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metric", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Metric = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Group) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Group: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Group: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoScalingGroupARN", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AutoScalingGroupARN = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutoScalingGroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AutoScalingGroupName = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityZones", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AvailabilityZones = append(m.AvailabilityZones, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreatedTime == nil {
+				m.CreatedTime = &opsee_types.Timestamp{}
+			}
+			if err := m.CreatedTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultCooldown", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.DefaultCooldown = &v2
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DesiredCapacity", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.DesiredCapacity = &v2
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnabledMetrics", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EnabledMetrics = append(m.EnabledMetrics, &EnabledMetric{})
+			if err := m.EnabledMetrics[len(m.EnabledMetrics)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckGracePeriod", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.HealthCheckGracePeriod = &v2
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.HealthCheckType = &s
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Instances", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Instances = append(m.Instances, &Instance{})
+			if err := m.Instances[len(m.Instances)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LaunchConfigurationName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.LaunchConfigurationName = &s
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LoadBalancerNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LoadBalancerNames = append(m.LoadBalancerNames, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 14:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxSize", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MaxSize = &v2
+		case 15:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MinSize", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MinSize = &v2
+		case 16:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewInstancesProtectedFromScaleIn", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.NewInstancesProtectedFromScaleIn = &b
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PlacementGroup", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PlacementGroup = &s
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuspendedProcesses", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SuspendedProcesses = append(m.SuspendedProcesses, &SuspendedProcess{})
+			if err := m.SuspendedProcesses[len(m.SuspendedProcesses)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, &TagDescription{})
+			if err := m.Tags[len(m.Tags)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TerminationPolicies", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TerminationPolicies = append(m.TerminationPolicies, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VPCZoneIdentifier", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VPCZoneIdentifier = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Instance) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Instance: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Instance: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityZone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AvailabilityZone = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HealthStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.HealthStatus = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceId = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LaunchConfigurationName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.LaunchConfigurationName = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LifecycleState", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.LifecycleState = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtectedFromScaleIn", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.ProtectedFromScaleIn = &b
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SuspendedProcess) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SuspendedProcess: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SuspendedProcess: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProcessName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ProcessName = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuspensionReason", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SuspensionReason = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TagDescription) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TagDescription: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TagDescription: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Key = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PropagateAtLaunch", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.PropagateAtLaunch = &b
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResourceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ResourceId = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResourceType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ResourceType = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Value = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipTypes(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthTypes
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipTypes(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorTypes = []byte{
+	// 976 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x8c, 0x54, 0xcf, 0x6e, 0x23, 0xc5,
+	0x13, 0x96, 0xd7, 0x71, 0x62, 0xb7, 0xb3, 0x8e, 0xdd, 0x71, 0xbc, 0xa3, 0xd5, 0x2a, 0xb1, 0xac,
+	0xdf, 0x0f, 0x02, 0x02, 0x67, 0x15, 0x21, 0x04, 0x48, 0x1c, 0xb2, 0x5e, 0x58, 0x0c, 0xd9, 0x60,
+	0x4d, 0xac, 0x45, 0xda, 0x13, 0xed, 0x99, 0xb2, 0xdd, 0xca, 0x78, 0x7a, 0x34, 0xdd, 0x93, 0x6c,
+	0x78, 0x05, 0x2e, 0x1c, 0x78, 0x02, 0x4e, 0x88, 0x33, 0x07, 0x8e, 0x1c, 0x39, 0xf2, 0x08, 0xc0,
+	0x53, 0x70, 0xa4, 0xba, 0x7b, 0x26, 0xf1, 0x4c, 0xec, 0x85, 0xc3, 0x48, 0xd3, 0xf5, 0xd5, 0xbf,
+	0xfe, 0xbe, 0xea, 0x22, 0x75, 0x75, 0x1d, 0x81, 0xec, 0x47, 0xb1, 0x50, 0x82, 0xee, 0x89, 0x48,
+	0x02, 0xf4, 0xd9, 0x95, 0xec, 0xb3, 0x44, 0x09, 0xe9, 0xb1, 0x80, 0x87, 0xb3, 0x87, 0xef, 0xce,
+	0xb8, 0x9a, 0x27, 0x93, 0xbe, 0x27, 0x16, 0x47, 0x33, 0x31, 0x13, 0x47, 0xc6, 0x7b, 0x92, 0x4c,
+	0xcd, 0xc9, 0x1c, 0xcc, 0x9f, 0xcd, 0xf2, 0xf0, 0xf1, 0x92, 0xbb, 0x49, 0x78, 0xeb, 0x6f, 0x8e,
+	0x36, 0xc0, 0x96, 0xb2, 0x11, 0x1f, 0xfd, 0xa7, 0x08, 0xd3, 0xe9, 0x91, 0xe2, 0x0b, 0x90, 0x8a,
+	0x2d, 0x22, 0x1b, 0xdb, 0xfb, 0xbe, 0x44, 0xf6, 0x9f, 0x82, 0xf4, 0x62, 0x3e, 0x81, 0x13, 0x6c,
+	0xfa, 0xdc, 0x36, 0xfd, 0x2c, 0x16, 0x49, 0x24, 0x87, 0x61, 0x94, 0x28, 0xfa, 0x1e, 0xd9, 0x2b,
+	0x22, 0x67, 0x0c, 0xb3, 0x38, 0xf7, 0xba, 0xe5, 0xc3, 0x9a, 0xbb, 0xc7, 0x56, 0x81, 0x74, 0x9f,
+	0x90, 0xe7, 0xec, 0x95, 0x0b, 0x9e, 0x88, 0x7d, 0xe9, 0x94, 0xbb, 0xa5, 0x43, 0xea, 0x92, 0xc5,
+	0x8d, 0x85, 0x3e, 0x22, 0xb5, 0x33, 0x78, 0xa5, 0xc6, 0xe2, 0x02, 0x42, 0x67, 0x03, 0xe1, 0x9a,
+	0x5b, 0x0b, 0x33, 0x43, 0xef, 0xdb, 0x12, 0x39, 0x58, 0xdb, 0xd6, 0x97, 0x89, 0xd2, 0x7d, 0x7d,
+	0x4e, 0x5a, 0x77, 0x20, 0xd3, 0x53, 0xfd, 0xf8, 0x51, 0x7f, 0xa5, 0x14, 0x7d, 0xe3, 0xe4, 0xb6,
+	0x8a, 0x1d, 0x17, 0xba, 0x29, 0x17, 0xbb, 0x19, 0x92, 0xfb, 0x9f, 0x84, 0x6c, 0x12, 0x80, 0xff,
+	0x1c, 0x54, 0xcc, 0x3d, 0xda, 0x25, 0xf5, 0x67, 0x31, 0x0b, 0x93, 0x80, 0xc5, 0x5c, 0x5d, 0x63,
+	0x51, 0x1d, 0x50, 0x9f, 0xdd, 0x9a, 0x68, 0x87, 0x6c, 0x5a, 0xdf, 0x34, 0xdb, 0xe6, 0xc2, 0x9c,
+	0x7a, 0x3f, 0x57, 0x49, 0xc5, 0xd4, 0xa4, 0x8f, 0xc9, 0x6e, 0xb1, 0xfd, 0x13, 0xf7, 0x2c, 0xcd,
+	0xb5, 0xcb, 0xee, 0x42, 0xf4, 0x98, 0xb4, 0x57, 0x09, 0x91, 0x56, 0x68, 0xaf, 0xd2, 0x81, 0xbe,
+	0x83, 0x24, 0x5d, 0x32, 0x1e, 0xb0, 0x09, 0x0f, 0xb0, 0xaf, 0x97, 0x22, 0x44, 0xe1, 0x36, 0x8c,
+	0x70, 0x2d, 0x56, 0x04, 0xe8, 0x07, 0xa4, 0x3e, 0x88, 0x81, 0x29, 0xf0, 0xc7, 0x38, 0x27, 0x4e,
+	0x05, 0x13, 0xd7, 0x8f, 0x3b, 0x29, 0x99, 0x76, 0xd4, 0xc7, 0xd9, 0x00, 0xb9, 0x75, 0xef, 0xd6,
+	0x95, 0x1e, 0x92, 0x9d, 0xa7, 0x30, 0x65, 0x49, 0xa0, 0x06, 0x42, 0x04, 0xbe, 0xb8, 0x0a, 0x9d,
+	0x4d, 0xa3, 0xf9, 0x8e, 0x9f, 0x37, 0x5b, 0x4f, 0xc9, 0x63, 0xf0, 0x07, 0x2c, 0x62, 0x9e, 0xe6,
+	0x6f, 0x2b, 0xf3, 0xcc, 0x99, 0xe9, 0x29, 0x69, 0xe4, 0x68, 0x97, 0x4e, 0xd5, 0xa8, 0xfb, 0xbf,
+	0x35, 0xea, 0xe6, 0x9c, 0xdd, 0x06, 0xe4, 0x62, 0xe9, 0xfb, 0xa4, 0xf3, 0x19, 0xb0, 0x40, 0xcd,
+	0x07, 0x73, 0xf0, 0x2e, 0x50, 0x3e, 0x0f, 0x46, 0x10, 0x73, 0xe1, 0x3b, 0x35, 0x53, 0xbe, 0x33,
+	0x5f, 0x89, 0xea, 0x7e, 0x97, 0xe2, 0xc6, 0x48, 0x82, 0x43, 0x0c, 0xe1, 0x3b, 0xf3, 0xbc, 0x99,
+	0x7e, 0x4c, 0x6a, 0xc3, 0x10, 0xb9, 0x09, 0x3d, 0xe4, 0xb8, 0x6e, 0x5a, 0x3d, 0x58, 0xd3, 0x6a,
+	0xe6, 0xe7, 0xd6, 0x78, 0x16, 0x81, 0xe4, 0x3f, 0x38, 0x65, 0x49, 0xe8, 0xcd, 0x07, 0x22, 0x9c,
+	0xf2, 0x59, 0x12, 0x33, 0xc5, 0x45, 0x68, 0x14, 0xde, 0x36, 0x05, 0x1f, 0x04, 0xab, 0x61, 0x2d,
+	0xf2, 0xa9, 0x60, 0xfe, 0x13, 0x16, 0xe8, 0x4c, 0xb1, 0x7d, 0x9d, 0xf7, 0xad, 0xc8, 0x41, 0x11,
+	0xa0, 0x0e, 0xd9, 0xc2, 0x97, 0x79, 0xce, 0xbf, 0x01, 0xa7, 0x61, 0x6e, 0xbe, 0xb5, 0xb0, 0x47,
+	0x83, 0xf0, 0xd0, 0x20, 0x3b, 0x29, 0x62, 0x8f, 0xf8, 0xd6, 0xba, 0x67, 0x70, 0x75, 0x73, 0xbb,
+	0x11, 0xee, 0x0e, 0xf0, 0x50, 0xfb, 0x4f, 0x63, 0xb1, 0xd0, 0x33, 0x07, 0xc3, 0xd0, 0x69, 0x62,
+	0x48, 0xd5, 0xed, 0x86, 0xff, 0xe2, 0x47, 0xdf, 0x20, 0x8d, 0x51, 0x80, 0xfc, 0x2e, 0x20, 0x54,
+	0x66, 0x50, 0x9d, 0x96, 0xb9, 0x5e, 0x23, 0xca, 0x59, 0xf5, 0x13, 0x3a, 0x57, 0x4c, 0x25, 0xd2,
+	0xa1, 0xf6, 0x09, 0x49, 0x73, 0xa2, 0x5f, 0x11, 0x7a, 0x9e, 0xc8, 0x08, 0x42, 0x1f, 0x7c, 0x2c,
+	0x80, 0x65, 0x24, 0x5e, 0x77, 0xd7, 0xf0, 0xfd, 0xe6, 0x1a, 0xbe, 0x8b, 0x01, 0x2e, 0x95, 0x77,
+	0x52, 0xd0, 0x0f, 0xc9, 0xc6, 0x98, 0xcd, 0xa4, 0xd3, 0x36, 0xa9, 0xfe, 0xbf, 0x26, 0x15, 0xba,
+	0xd8, 0xcd, 0x14, 0x69, 0xfe, 0xdd, 0x0d, 0x85, 0x21, 0xfa, 0x31, 0x8f, 0x21, 0x46, 0xb6, 0x8c,
+	0x28, 0x23, 0x11, 0x70, 0x8f, 0x63, 0x53, 0x7b, 0x46, 0x83, 0x5d, 0x75, 0x17, 0xd2, 0x9a, 0xbd,
+	0x18, 0x0d, 0xf4, 0xb3, 0x1b, 0xfa, 0x78, 0x65, 0x3e, 0xe5, 0x10, 0x3b, 0x1d, 0x73, 0xd1, 0xd6,
+	0x65, 0x11, 0xe8, 0x7d, 0x77, 0x8f, 0x54, 0x33, 0x56, 0xe9, 0xdb, 0xa4, 0x59, 0x7c, 0xd3, 0xe9,
+	0xda, 0x68, 0x16, 0x9f, 0x34, 0xed, 0x91, 0x6d, 0x3b, 0xbd, 0x29, 0x95, 0x76, 0x57, 0x6c, 0xcf,
+	0x97, 0x6c, 0x7a, 0x55, 0x67, 0xb9, 0x87, 0x7e, 0xba, 0x8b, 0x09, 0xbf, 0xb1, 0xbc, 0x6e, 0x30,
+	0x2b, 0xaf, 0x1f, 0x4c, 0x94, 0xfa, 0x94, 0x4f, 0xc1, 0xbb, 0xf6, 0x02, 0xd0, 0xc5, 0xc0, 0x2c,
+	0x05, 0x94, 0x3a, 0xc8, 0x59, 0xf5, 0x66, 0x5b, 0x39, 0x52, 0x5b, 0x66, 0xa4, 0xda, 0xd1, 0x0a,
+	0xac, 0xf7, 0x35, 0x69, 0x16, 0x55, 0xd5, 0x7b, 0x39, 0xfd, 0x35, 0xdd, 0xa5, 0x7b, 0x39, 0xba,
+	0x35, 0x69, 0xee, 0x6c, 0x94, 0xd4, 0xe2, 0x01, 0x93, 0x22, 0xdb, 0xf7, 0x4d, 0x59, 0xb0, 0xf7,
+	0x7e, 0x2a, 0x91, 0x46, 0x5e, 0x6d, 0xda, 0x24, 0xe5, 0x2f, 0x20, 0x5b, 0xf8, 0xe5, 0x0b, 0xb8,
+	0xd6, 0x3a, 0x62, 0xc9, 0x88, 0xcd, 0xf0, 0x1e, 0x27, 0xca, 0xf2, 0x64, 0x32, 0x56, 0xdd, 0x56,
+	0x54, 0x04, 0x34, 0xd5, 0x2e, 0x48, 0x91, 0xc4, 0xcb, 0x54, 0xc7, 0x37, 0x16, 0x2d, 0x57, 0x86,
+	0x9b, 0x4d, 0x63, 0xf9, 0xdd, 0x8e, 0x97, 0x6c, 0xb4, 0x4d, 0x2a, 0x2f, 0x58, 0x90, 0x64, 0x5c,
+	0x56, 0x2e, 0xf5, 0xe1, 0xc9, 0x5b, 0x7f, 0xff, 0xb9, 0x5f, 0xfa, 0xf1, 0xaf, 0xfd, 0xd2, 0x2f,
+	0xf8, 0xfd, 0x86, 0xdf, 0xef, 0xf8, 0xfd, 0x81, 0xdf, 0xaf, 0x3f, 0x1c, 0x94, 0x5e, 0xd6, 0x97,
+	0x26, 0xf8, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x05, 0x60, 0xd9, 0x94, 0xb5, 0x08, 0x00, 0x00,
 }

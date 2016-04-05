@@ -18,29 +18,33 @@ import (
 	grpc "google.golang.org/grpc"
 )
 
+import io "io"
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
 type GetUserRequest struct {
-	CustomerId string `protobuf:"bytes,1,opt,name=customer_id,proto3" json:"customer_id,omitempty"`
+	CustomerId string `protobuf:"bytes,1,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
 	Id         int32  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Email      string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
 }
 
-func (m *GetUserRequest) Reset()         { *m = GetUserRequest{} }
-func (m *GetUserRequest) String() string { return proto.CompactTextString(m) }
-func (*GetUserRequest) ProtoMessage()    {}
+func (m *GetUserRequest) Reset()                    { *m = GetUserRequest{} }
+func (m *GetUserRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetUserRequest) ProtoMessage()               {}
+func (*GetUserRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{0} }
 
 type GetUserResponse struct {
 	User       *opsee2.User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
-	BasicToken string       `protobuf:"bytes,2,opt,name=basic_token,proto3" json:"basic_token,omitempty"`
+	BasicToken string       `protobuf:"bytes,2,opt,name=basic_token,json=basicToken,proto3" json:"basic_token,omitempty"`
 }
 
-func (m *GetUserResponse) Reset()         { *m = GetUserResponse{} }
-func (m *GetUserResponse) String() string { return proto.CompactTextString(m) }
-func (*GetUserResponse) ProtoMessage()    {}
+func (m *GetUserResponse) Reset()                    { *m = GetUserResponse{} }
+func (m *GetUserResponse) String() string            { return proto.CompactTextString(m) }
+func (*GetUserResponse) ProtoMessage()               {}
+func (*GetUserResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{1} }
 
 func (m *GetUserResponse) GetUser() *opsee2.User {
 	if m != nil {
@@ -51,23 +55,25 @@ func (m *GetUserResponse) GetUser() *opsee2.User {
 
 type ListUsersRequest struct {
 	Page    int32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PerPage int32 `protobuf:"varint,2,opt,name=per_page,proto3" json:"per_page,omitempty"`
+	PerPage int32 `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
 }
 
-func (m *ListUsersRequest) Reset()         { *m = ListUsersRequest{} }
-func (m *ListUsersRequest) String() string { return proto.CompactTextString(m) }
-func (*ListUsersRequest) ProtoMessage()    {}
+func (m *ListUsersRequest) Reset()                    { *m = ListUsersRequest{} }
+func (m *ListUsersRequest) String() string            { return proto.CompactTextString(m) }
+func (*ListUsersRequest) ProtoMessage()               {}
+func (*ListUsersRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{2} }
 
 type ListUsersResponse struct {
 	Users   []*opsee2.User `protobuf:"bytes,1,rep,name=users" json:"users,omitempty"`
 	Page    int32          `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PerPage int32          `protobuf:"varint,3,opt,name=per_page,proto3" json:"per_page,omitempty"`
+	PerPage int32          `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
 	Total   int32          `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
 }
 
-func (m *ListUsersResponse) Reset()         { *m = ListUsersResponse{} }
-func (m *ListUsersResponse) String() string { return proto.CompactTextString(m) }
-func (*ListUsersResponse) ProtoMessage()    {}
+func (m *ListUsersResponse) Reset()                    { *m = ListUsersResponse{} }
+func (m *ListUsersResponse) String() string            { return proto.CompactTextString(m) }
+func (*ListUsersResponse) ProtoMessage()               {}
+func (*ListUsersResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{3} }
 
 func (m *ListUsersResponse) GetUsers() []*opsee2.User {
 	if m != nil {
@@ -79,13 +85,14 @@ func (m *ListUsersResponse) GetUsers() []*opsee2.User {
 type ListCustomersResponse struct {
 	Customers []*opsee2.Customer `protobuf:"bytes,1,rep,name=customers" json:"customers,omitempty"`
 	Page      int32              `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PerPage   int32              `protobuf:"varint,3,opt,name=per_page,proto3" json:"per_page,omitempty"`
+	PerPage   int32              `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
 	Total     int32              `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
 }
 
-func (m *ListCustomersResponse) Reset()         { *m = ListCustomersResponse{} }
-func (m *ListCustomersResponse) String() string { return proto.CompactTextString(m) }
-func (*ListCustomersResponse) ProtoMessage()    {}
+func (m *ListCustomersResponse) Reset()                    { *m = ListCustomersResponse{} }
+func (m *ListCustomersResponse) String() string            { return proto.CompactTextString(m) }
+func (*ListCustomersResponse) ProtoMessage()               {}
+func (*ListCustomersResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{4} }
 
 func (m *ListCustomersResponse) GetCustomers() []*opsee2.Customer {
 	if m != nil {
@@ -744,6 +751,220 @@ var _Vape_serviceDesc = grpc.ServiceDesc{
 	Streams: []grpc.StreamDesc{},
 }
 
+func (m *GetUserRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *GetUserRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.CustomerId) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.CustomerId)))
+		i += copy(data[i:], m.CustomerId)
+	}
+	if m.Id != 0 {
+		data[i] = 0x10
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Id))
+	}
+	if len(m.Email) > 0 {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.Email)))
+		i += copy(data[i:], m.Email)
+	}
+	return i, nil
+}
+
+func (m *GetUserResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *GetUserResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.User != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.User.Size()))
+		n1, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if len(m.BasicToken) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.BasicToken)))
+		i += copy(data[i:], m.BasicToken)
+	}
+	return i, nil
+}
+
+func (m *ListUsersRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ListUsersRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Page != 0 {
+		data[i] = 0x8
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		data[i] = 0x10
+		i++
+		i = encodeVarintVape(data, i, uint64(m.PerPage))
+	}
+	return i, nil
+}
+
+func (m *ListUsersResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ListUsersResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Users) > 0 {
+		for _, msg := range m.Users {
+			data[i] = 0xa
+			i++
+			i = encodeVarintVape(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Page != 0 {
+		data[i] = 0x10
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		data[i] = 0x18
+		i++
+		i = encodeVarintVape(data, i, uint64(m.PerPage))
+	}
+	if m.Total != 0 {
+		data[i] = 0x20
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Total))
+	}
+	return i, nil
+}
+
+func (m *ListCustomersResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ListCustomersResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Customers) > 0 {
+		for _, msg := range m.Customers {
+			data[i] = 0xa
+			i++
+			i = encodeVarintVape(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Page != 0 {
+		data[i] = 0x10
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		data[i] = 0x18
+		i++
+		i = encodeVarintVape(data, i, uint64(m.PerPage))
+	}
+	if m.Total != 0 {
+		data[i] = 0x20
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Total))
+	}
+	return i, nil
+}
+
+func encodeFixed64Vape(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Vape(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintVape(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
 func NewPopulatedGetUserRequest(r randyVape, easy bool) *GetUserRequest {
 	this := &GetUserRequest{}
 	this.CustomerId = randStringVape(r)
@@ -906,4 +1127,841 @@ func encodeVarintPopulateVape(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *GetUserRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.CustomerId)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.Id != 0 {
+		n += 1 + sovVape(uint64(m.Id))
+	}
+	l = len(m.Email)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *GetUserResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	l = len(m.BasicToken)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *ListUsersRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Page != 0 {
+		n += 1 + sovVape(uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		n += 1 + sovVape(uint64(m.PerPage))
+	}
+	return n
+}
+
+func (m *ListUsersResponse) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Users) > 0 {
+		for _, e := range m.Users {
+			l = e.Size()
+			n += 1 + l + sovVape(uint64(l))
+		}
+	}
+	if m.Page != 0 {
+		n += 1 + sovVape(uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		n += 1 + sovVape(uint64(m.PerPage))
+	}
+	if m.Total != 0 {
+		n += 1 + sovVape(uint64(m.Total))
+	}
+	return n
+}
+
+func (m *ListCustomersResponse) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Customers) > 0 {
+		for _, e := range m.Customers {
+			l = e.Size()
+			n += 1 + l + sovVape(uint64(l))
+		}
+	}
+	if m.Page != 0 {
+		n += 1 + sovVape(uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		n += 1 + sovVape(uint64(m.PerPage))
+	}
+	if m.Total != 0 {
+		n += 1 + sovVape(uint64(m.Total))
+	}
+	return n
+}
+
+func sovVape(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozVape(x uint64) (n int) {
+	return sovVape(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *GetUserRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetUserRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetUserRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CustomerId = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Id |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Email = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetUserResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetUserResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetUserResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee2.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BasicToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BasicToken = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListUsersRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListUsersRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListUsersRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Page |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PerPage", wireType)
+			}
+			m.PerPage = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.PerPage |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListUsersResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListUsersResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListUsersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Users", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Users = append(m.Users, &opsee2.User{})
+			if err := m.Users[len(m.Users)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Page |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PerPage", wireType)
+			}
+			m.PerPage = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.PerPage |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Total", wireType)
+			}
+			m.Total = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Total |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListCustomersResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListCustomersResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListCustomersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Customers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Customers = append(m.Customers, &opsee2.Customer{})
+			if err := m.Customers[len(m.Customers)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Page |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PerPage", wireType)
+			}
+			m.PerPage = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.PerPage |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Total", wireType)
+			}
+			m.Total = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Total |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipVape(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthVape
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowVape
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipVape(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthVape = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowVape   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorVape = []byte{
+	// 433 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x52, 0x3d, 0x8f, 0xd3, 0x40,
+	0x10, 0xc5, 0x89, 0x4d, 0xc8, 0x44, 0x4a, 0x60, 0x45, 0xc0, 0xb8, 0x48, 0xc0, 0x12, 0x52, 0x1a,
+	0x62, 0x14, 0xba, 0x54, 0x7c, 0x14, 0x08, 0x89, 0x02, 0x99, 0x2f, 0x89, 0x26, 0xb2, 0x9d, 0x25,
+	0xb1, 0x88, 0xb3, 0x4b, 0x76, 0x1d, 0x09, 0xd1, 0xd2, 0xf1, 0x2f, 0xa8, 0xf8, 0x09, 0x94, 0x94,
+	0x94, 0xfc, 0x84, 0xbb, 0xfb, 0x15, 0x57, 0xde, 0x78, 0xd6, 0x4e, 0x2e, 0x89, 0x4e, 0xba, 0xe2,
+	0x8a, 0x95, 0x76, 0xde, 0xbc, 0x79, 0xef, 0x79, 0xbc, 0x00, 0xeb, 0x48, 0xf2, 0xa1, 0x5c, 0x09,
+	0x2d, 0x98, 0x23, 0xa4, 0xe2, 0xdc, 0x7b, 0x3c, 0x4b, 0xf5, 0x3c, 0x8f, 0x87, 0x89, 0xc8, 0x02,
+	0x42, 0x02, 0x6a, 0xc7, 0xf9, 0x67, 0x53, 0x52, 0x65, 0xae, 0x66, 0xd0, 0x1b, 0x5f, 0x6a, 0x42,
+	0x7f, 0x93, 0x5c, 0x05, 0x3a, 0xcd, 0xb8, 0xd2, 0x51, 0x26, 0xcb, 0xd9, 0xc1, 0xc1, 0x6c, 0x1c,
+	0xa9, 0x34, 0x09, 0x54, 0x32, 0xe7, 0x59, 0x14, 0xe4, 0x8a, 0xaf, 0x0c, 0xd3, 0xff, 0x08, 0xed,
+	0x97, 0x5c, 0xbf, 0x47, 0x20, 0xe4, 0x5f, 0x73, 0x14, 0x61, 0x7d, 0x68, 0x25, 0xb9, 0xd2, 0x22,
+	0xe3, 0xab, 0x49, 0x3a, 0x75, 0xad, 0xfb, 0xd6, 0xa0, 0x19, 0x42, 0x05, 0xbd, 0x9a, 0xb2, 0x36,
+	0xd4, 0x10, 0xaf, 0x21, 0xee, 0x84, 0x78, 0x63, 0xb7, 0xc1, 0x41, 0xd1, 0x74, 0xe1, 0xd6, 0x89,
+	0x6a, 0x0a, 0xff, 0x2d, 0x74, 0x36, 0xc2, 0x4a, 0x8a, 0xa5, 0xe2, 0xa8, 0x6c, 0x17, 0xce, 0x24,
+	0xd9, 0x1a, 0xb5, 0x86, 0xe6, 0x6b, 0x89, 0x42, 0x8d, 0xc2, 0x9a, 0x72, 0x4e, 0xb4, 0xf8, 0xc2,
+	0x97, 0x64, 0x81, 0xd6, 0x04, 0xbd, 0x2b, 0x10, 0xff, 0x19, 0xdc, 0x7c, 0x9d, 0x2a, 0x52, 0x55,
+	0x55, 0x5e, 0x06, 0xb6, 0x8c, 0x66, 0x9c, 0x54, 0x9d, 0x90, 0xee, 0xec, 0x1e, 0xdc, 0x90, 0x18,
+	0x9f, 0x70, 0x13, 0xb4, 0x81, 0xf5, 0x1b, 0x2c, 0xfd, 0xef, 0x70, 0xeb, 0x9c, 0x44, 0x99, 0xec,
+	0x01, 0x38, 0x45, 0x00, 0x85, 0x22, 0xf5, 0xfd, 0x68, 0xa6, 0xb3, 0xb1, 0xa9, 0x5d, 0x60, 0x53,
+	0xdf, 0xb1, 0x29, 0x96, 0xa2, 0x85, 0x8e, 0x16, 0xae, 0x4d, 0xb8, 0x29, 0xfc, 0x9f, 0x16, 0x74,
+	0x0b, 0xf7, 0x17, 0xe5, 0x36, 0xb7, 0x09, 0x1e, 0x41, 0xb3, 0x5a, 0x71, 0x95, 0xa2, 0x53, 0xa6,
+	0xa8, 0xc8, 0xe1, 0x96, 0x71, 0x25, 0x69, 0x46, 0x3f, 0x2c, 0xb0, 0x3f, 0xe0, 0x4b, 0x65, 0x63,
+	0x68, 0x94, 0xff, 0x8a, 0x75, 0x4b, 0xd3, 0xdd, 0x47, 0xe1, 0xdd, 0xd9, 0x87, 0x4d, 0x6c, 0xff,
+	0x1a, 0x7b, 0x0a, 0xcd, 0xcd, 0x3e, 0xd9, 0xdd, 0x92, 0xb6, 0xff, 0x93, 0x3c, 0xf7, 0xb0, 0x51,
+	0x29, 0x3c, 0x7f, 0x78, 0x7a, 0xdc, 0xb3, 0x7e, 0x9f, 0xf4, 0xac, 0x3f, 0x78, 0xfe, 0xe1, 0xf9,
+	0x8f, 0xe7, 0x08, 0xcf, 0xdf, 0x5f, 0x7d, 0xeb, 0x53, 0x03, 0xd9, 0xeb, 0x34, 0xe1, 0xf1, 0x75,
+	0x7a, 0xb0, 0x4f, 0xce, 0x02, 0x00, 0x00, 0xff, 0xff, 0xf8, 0xc2, 0xe5, 0x97, 0x5d, 0x03, 0x00,
+	0x00,
 }

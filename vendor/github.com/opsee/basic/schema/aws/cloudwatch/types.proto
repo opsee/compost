@@ -1,0 +1,65 @@
+syntax = "proto2";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+
+package opsee.aws.cloudwatch;
+
+option go_package = "cloudwatch";
+option (opseeproto.graphql) = true;
+
+
+message Datapoint {
+  optional double Average = 2;
+  optional double Maximum = 3;
+  optional double Minimum = 4;
+  optional double SampleCount = 5;
+  optional double Sum = 6;
+  optional opsee.types.Timestamp Timestamp = 7;
+  optional string Unit = 8;
+}
+
+message Dimension {
+  optional string Name = 2;
+  optional string Value = 3;
+}
+
+message DimensionFilter {
+  optional string Name = 2;
+  optional string Value = 3;
+}
+
+message GetMetricStatisticsInput {
+  repeated Dimension Dimensions = 2;
+  optional opsee.types.Timestamp EndTime = 3;
+  optional string MetricName = 4;
+  optional string Namespace = 5;
+  optional sint64 Period = 6;
+  optional opsee.types.Timestamp StartTime = 7;
+  repeated string Statistics = 8;
+  optional string Unit = 9;
+}
+
+message GetMetricStatisticsOutput {
+  repeated Datapoint Datapoints = 2;
+  optional string Label = 3;
+}
+
+message ListMetricsInput {
+  repeated DimensionFilter Dimensions = 2;
+  optional string MetricName = 3;
+  optional string Namespace = 4;
+  optional string NextToken = 5;
+}
+
+message ListMetricsOutput {
+  repeated Metric Metrics = 2;
+  optional string NextToken = 3;
+}
+
+message Metric {
+  repeated Dimension Dimensions = 2;
+  optional string MetricName = 3;
+  optional string Namespace = 4;
+}
+

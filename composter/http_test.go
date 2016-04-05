@@ -2,11 +2,9 @@ package composter
 
 import (
 	"bytes"
-	"github.com/opsee/basic/schema"
-	opsee "github.com/opsee/basic/service"
+	"github.com/opsee/compost/resolver"
 	"github.com/opsee/vaper"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/net/context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -20,31 +18,13 @@ var (
 	testVapeKey = []byte{194, 164, 235, 6, 138, 248, 171, 239, 24, 216, 11, 22, 137, 199, 215, 133}
 )
 
-type testResolverClient struct{}
-
-func (c *testResolverClient) ListChecks(ctx context.Context, _ *schema.User) ([]*schema.Check, error) {
-	return []*schema.Check{}, nil
-}
-
-func (c *testResolverClient) GetCredentials(ctx context.Context, _ string) (*opsee.GetCredentialsResponse, error) {
-	return &opsee.GetCredentialsResponse{}, nil
-}
-
-func (c *testResolverClient) ListCustomers(ctx context.Context, _ *opsee.ListUsersRequest) (*opsee.ListCustomersResponse, error) {
-	return &opsee.ListCustomersResponse{}, nil
-}
-
-func (c *testResolverClient) GetUser(ctx context.Context, _ *opsee.GetUserRequest) (*opsee.GetUserResponse, error) {
-	return &opsee.GetUserResponse{}, nil
-}
-
 func init() {
 	vaper.Init(testVapeKey)
 }
 
 func TestAdminAuth(t *testing.T) {
 	assert := assert.New(t)
-	c := New(&testResolverClient{})
+	c := New(&resolver.Client{})
 
 	req, err := http.NewRequest("POST", "http://compost/admin/graphql", bytes.NewBuffer([]byte(`{"query": "{}"}`)))
 	if err != nil {
@@ -57,5 +37,5 @@ func TestAdminAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	c.router.ServeHTTP(w, req)
 
-	assert.Equal(200, w.Code)
+	assert.Equal(401, w.Code)
 }

@@ -1,6 +1,7 @@
 syntax = "proto2";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 
 package opsee.aws.ec2;
 
@@ -8,11 +9,70 @@ option go_package = "ec2";
 option (opseeproto.graphql) = true;
 
 
+message DescribeInstancesInput {
+  optional bool DryRun = 2;
+  repeated Filter Filters = 3;
+  repeated string InstanceIds = 4;
+  optional sint64 MaxResults = 5;
+  optional string NextToken = 6;
+}
+
+message DescribeInstancesOutput {
+  optional string NextToken = 2;
+  repeated Reservation Reservations = 3;
+}
+
+message DescribeRouteTablesInput {
+  optional bool DryRun = 2;
+  repeated Filter Filters = 3;
+  repeated string RouteTableIds = 4;
+}
+
+message DescribeRouteTablesOutput {
+  repeated RouteTable RouteTables = 2;
+}
+
+message DescribeSecurityGroupsInput {
+  optional bool DryRun = 2;
+  repeated Filter Filters = 3;
+  repeated string GroupIds = 4;
+  repeated string GroupNames = 5;
+}
+
+message DescribeSecurityGroupsOutput {
+  repeated SecurityGroup SecurityGroups = 2;
+}
+
+message DescribeSubnetsInput {
+  optional bool DryRun = 2;
+  repeated Filter Filters = 3;
+  repeated string SubnetIds = 4;
+}
+
+message DescribeSubnetsOutput {
+  repeated Subnet Subnets = 2;
+}
+
+message DescribeVpcsInput {
+  optional bool DryRun = 2;
+  repeated Filter Filters = 3;
+  repeated string VpcIds = 4;
+}
+
+message DescribeVpcsOutput {
+  repeated Vpc Vpcs = 2;
+}
+
 message EbsInstanceBlockDevice {
-  optional sfixed64 AttachTime = 2;
+  optional opsee.types.Timestamp AttachTime = 2;
   optional bool DeleteOnTermination = 3;
   optional string Status = 4;
   optional string VolumeId = 5;
+}
+
+message Filter {
+  optional string Name = 2;
+  repeated string Values = 3;
 }
 
 message GroupIdentifier {
@@ -39,7 +99,7 @@ message Instance {
   optional string InstanceType = 12;
   optional string KernelId = 13;
   optional string KeyName = 14;
-  optional sfixed64 LaunchTime = 15;
+  optional opsee.types.Timestamp LaunchTime = 15;
   optional Monitoring Monitoring = 16;
   repeated InstanceNetworkInterface NetworkInterfaces = 17;
   optional Placement Placement = 18;
@@ -94,7 +154,7 @@ message InstanceNetworkInterfaceAssociation {
 }
 
 message InstanceNetworkInterfaceAttachment {
-  optional sfixed64 AttachTime = 2;
+  optional opsee.types.Timestamp AttachTime = 2;
   optional string AttachmentId = 3;
   optional bool DeleteOnTermination = 4;
   optional sint64 DeviceIndex = 5;
@@ -145,6 +205,47 @@ message PrefixListId {
 message ProductCode {
   optional string ProductCodeId = 2;
   optional string ProductCodeType = 3;
+}
+
+message PropagatingVgw {
+  optional string GatewayId = 2;
+}
+
+message Reservation {
+  repeated GroupIdentifier Groups = 2;
+  repeated Instance Instances = 3;
+  optional string OwnerId = 4;
+  optional string RequesterId = 5;
+  optional string ReservationId = 6;
+}
+
+message Route {
+  optional string DestinationCidrBlock = 2;
+  optional string DestinationPrefixListId = 3;
+  optional string GatewayId = 4;
+  optional string InstanceId = 5;
+  optional string InstanceOwnerId = 6;
+  optional string NatGatewayId = 7;
+  optional string NetworkInterfaceId = 8;
+  optional string Origin = 9;
+  optional string State = 10;
+  optional string VpcPeeringConnectionId = 11;
+}
+
+message RouteTable {
+  repeated RouteTableAssociation Associations = 2;
+  repeated PropagatingVgw PropagatingVgws = 3;
+  optional string RouteTableId = 4;
+  repeated Route Routes = 5;
+  repeated Tag Tags = 6;
+  optional string VpcId = 7;
+}
+
+message RouteTableAssociation {
+  optional bool Main = 2;
+  optional string RouteTableAssociationId = 3;
+  optional string RouteTableId = 4;
+  optional string SubnetId = 5;
 }
 
 message SecurityGroup {

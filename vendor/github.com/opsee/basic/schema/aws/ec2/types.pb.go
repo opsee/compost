@@ -3,34 +3,50 @@
 // DO NOT EDIT!
 
 /*
-Package ec2 is a generated protocol buffer package.
+	Package ec2 is a generated protocol buffer package.
 
-It is generated from these files:
-	types.proto
+	It is generated from these files:
+		types.proto
 
-It has these top-level messages:
-	EbsInstanceBlockDevice
-	GroupIdentifier
-	IamInstanceProfile
-	Instance
-	InstanceBlockDeviceMapping
-	InstanceNetworkInterface
-	InstanceNetworkInterfaceAssociation
-	InstanceNetworkInterfaceAttachment
-	InstancePrivateIpAddress
-	InstanceState
-	IpPermission
-	IpRange
-	Monitoring
-	Placement
-	PrefixListId
-	ProductCode
-	SecurityGroup
-	StateReason
-	Subnet
-	Tag
-	UserIdGroupPair
-	Vpc
+	It has these top-level messages:
+		DescribeInstancesInput
+		DescribeInstancesOutput
+		DescribeRouteTablesInput
+		DescribeRouteTablesOutput
+		DescribeSecurityGroupsInput
+		DescribeSecurityGroupsOutput
+		DescribeSubnetsInput
+		DescribeSubnetsOutput
+		DescribeVpcsInput
+		DescribeVpcsOutput
+		EbsInstanceBlockDevice
+		Filter
+		GroupIdentifier
+		IamInstanceProfile
+		Instance
+		InstanceBlockDeviceMapping
+		InstanceNetworkInterface
+		InstanceNetworkInterfaceAssociation
+		InstanceNetworkInterfaceAttachment
+		InstancePrivateIpAddress
+		InstanceState
+		IpPermission
+		IpRange
+		Monitoring
+		Placement
+		PrefixListId
+		ProductCode
+		PropagatingVgw
+		Reservation
+		Route
+		RouteTable
+		RouteTableAssociation
+		SecurityGroup
+		StateReason
+		Subnet
+		Tag
+		UserIdGroupPair
+		Vpc
 */
 package ec2
 
@@ -39,33 +55,326 @@ import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/protobuf/opseeproto"
+import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 
 import bytes "bytes"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
+import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
+
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-type EbsInstanceBlockDevice struct {
-	AttachTime          *int64  `protobuf:"fixed64,2,opt,name=AttachTime" json:"AttachTime,omitempty"`
-	DeleteOnTermination *bool   `protobuf:"varint,3,opt,name=DeleteOnTermination" json:"DeleteOnTermination,omitempty"`
-	Status              *string `protobuf:"bytes,4,opt,name=Status" json:"Status,omitempty"`
-	VolumeId            *string `protobuf:"bytes,5,opt,name=VolumeId" json:"VolumeId,omitempty"`
-	XXX_unrecognized    []byte  `json:"-"`
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
+
+type DescribeInstancesInput struct {
+	DryRun           *bool     `protobuf:"varint,2,opt,name=DryRun,json=dryRun" json:"DryRun,omitempty"`
+	Filters          []*Filter `protobuf:"bytes,3,rep,name=Filters,json=filters" json:"Filters,omitempty"`
+	InstanceIds      []string  `protobuf:"bytes,4,rep,name=InstanceIds,json=instanceIds" json:"InstanceIds,omitempty"`
+	MaxResults       *int64    `protobuf:"zigzag64,5,opt,name=MaxResults,json=maxResults" json:"MaxResults,omitempty"`
+	NextToken        *string   `protobuf:"bytes,6,opt,name=NextToken,json=nextToken" json:"NextToken,omitempty"`
+	XXX_unrecognized []byte    `json:"-"`
 }
 
-func (m *EbsInstanceBlockDevice) Reset()         { *m = EbsInstanceBlockDevice{} }
-func (m *EbsInstanceBlockDevice) String() string { return proto.CompactTextString(m) }
-func (*EbsInstanceBlockDevice) ProtoMessage()    {}
+func (m *DescribeInstancesInput) Reset()                    { *m = DescribeInstancesInput{} }
+func (m *DescribeInstancesInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeInstancesInput) ProtoMessage()               {}
+func (*DescribeInstancesInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
 
-func (m *EbsInstanceBlockDevice) GetAttachTime() int64 {
-	if m != nil && m.AttachTime != nil {
-		return *m.AttachTime
+func (m *DescribeInstancesInput) GetDryRun() bool {
+	if m != nil && m.DryRun != nil {
+		return *m.DryRun
+	}
+	return false
+}
+
+func (m *DescribeInstancesInput) GetFilters() []*Filter {
+	if m != nil {
+		return m.Filters
+	}
+	return nil
+}
+
+func (m *DescribeInstancesInput) GetInstanceIds() []string {
+	if m != nil {
+		return m.InstanceIds
+	}
+	return nil
+}
+
+func (m *DescribeInstancesInput) GetMaxResults() int64 {
+	if m != nil && m.MaxResults != nil {
+		return *m.MaxResults
 	}
 	return 0
+}
+
+func (m *DescribeInstancesInput) GetNextToken() string {
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
+	}
+	return ""
+}
+
+type DescribeInstancesOutput struct {
+	NextToken        *string        `protobuf:"bytes,2,opt,name=NextToken,json=nextToken" json:"NextToken,omitempty"`
+	Reservations     []*Reservation `protobuf:"bytes,3,rep,name=Reservations,json=reservations" json:"Reservations,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *DescribeInstancesOutput) Reset()                    { *m = DescribeInstancesOutput{} }
+func (m *DescribeInstancesOutput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeInstancesOutput) ProtoMessage()               {}
+func (*DescribeInstancesOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+
+func (m *DescribeInstancesOutput) GetNextToken() string {
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
+	}
+	return ""
+}
+
+func (m *DescribeInstancesOutput) GetReservations() []*Reservation {
+	if m != nil {
+		return m.Reservations
+	}
+	return nil
+}
+
+type DescribeRouteTablesInput struct {
+	DryRun           *bool     `protobuf:"varint,2,opt,name=DryRun,json=dryRun" json:"DryRun,omitempty"`
+	Filters          []*Filter `protobuf:"bytes,3,rep,name=Filters,json=filters" json:"Filters,omitempty"`
+	RouteTableIds    []string  `protobuf:"bytes,4,rep,name=RouteTableIds,json=routeTableIds" json:"RouteTableIds,omitempty"`
+	XXX_unrecognized []byte    `json:"-"`
+}
+
+func (m *DescribeRouteTablesInput) Reset()                    { *m = DescribeRouteTablesInput{} }
+func (m *DescribeRouteTablesInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeRouteTablesInput) ProtoMessage()               {}
+func (*DescribeRouteTablesInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+
+func (m *DescribeRouteTablesInput) GetDryRun() bool {
+	if m != nil && m.DryRun != nil {
+		return *m.DryRun
+	}
+	return false
+}
+
+func (m *DescribeRouteTablesInput) GetFilters() []*Filter {
+	if m != nil {
+		return m.Filters
+	}
+	return nil
+}
+
+func (m *DescribeRouteTablesInput) GetRouteTableIds() []string {
+	if m != nil {
+		return m.RouteTableIds
+	}
+	return nil
+}
+
+type DescribeRouteTablesOutput struct {
+	RouteTables      []*RouteTable `protobuf:"bytes,2,rep,name=RouteTables,json=routeTables" json:"RouteTables,omitempty"`
+	XXX_unrecognized []byte        `json:"-"`
+}
+
+func (m *DescribeRouteTablesOutput) Reset()                    { *m = DescribeRouteTablesOutput{} }
+func (m *DescribeRouteTablesOutput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeRouteTablesOutput) ProtoMessage()               {}
+func (*DescribeRouteTablesOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+
+func (m *DescribeRouteTablesOutput) GetRouteTables() []*RouteTable {
+	if m != nil {
+		return m.RouteTables
+	}
+	return nil
+}
+
+type DescribeSecurityGroupsInput struct {
+	DryRun           *bool     `protobuf:"varint,2,opt,name=DryRun,json=dryRun" json:"DryRun,omitempty"`
+	Filters          []*Filter `protobuf:"bytes,3,rep,name=Filters,json=filters" json:"Filters,omitempty"`
+	GroupIds         []string  `protobuf:"bytes,4,rep,name=GroupIds,json=groupIds" json:"GroupIds,omitempty"`
+	GroupNames       []string  `protobuf:"bytes,5,rep,name=GroupNames,json=groupNames" json:"GroupNames,omitempty"`
+	XXX_unrecognized []byte    `json:"-"`
+}
+
+func (m *DescribeSecurityGroupsInput) Reset()                    { *m = DescribeSecurityGroupsInput{} }
+func (m *DescribeSecurityGroupsInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeSecurityGroupsInput) ProtoMessage()               {}
+func (*DescribeSecurityGroupsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+
+func (m *DescribeSecurityGroupsInput) GetDryRun() bool {
+	if m != nil && m.DryRun != nil {
+		return *m.DryRun
+	}
+	return false
+}
+
+func (m *DescribeSecurityGroupsInput) GetFilters() []*Filter {
+	if m != nil {
+		return m.Filters
+	}
+	return nil
+}
+
+func (m *DescribeSecurityGroupsInput) GetGroupIds() []string {
+	if m != nil {
+		return m.GroupIds
+	}
+	return nil
+}
+
+func (m *DescribeSecurityGroupsInput) GetGroupNames() []string {
+	if m != nil {
+		return m.GroupNames
+	}
+	return nil
+}
+
+type DescribeSecurityGroupsOutput struct {
+	SecurityGroups   []*SecurityGroup `protobuf:"bytes,2,rep,name=SecurityGroups,json=securityGroups" json:"SecurityGroups,omitempty"`
+	XXX_unrecognized []byte           `json:"-"`
+}
+
+func (m *DescribeSecurityGroupsOutput) Reset()         { *m = DescribeSecurityGroupsOutput{} }
+func (m *DescribeSecurityGroupsOutput) String() string { return proto.CompactTextString(m) }
+func (*DescribeSecurityGroupsOutput) ProtoMessage()    {}
+func (*DescribeSecurityGroupsOutput) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{5}
+}
+
+func (m *DescribeSecurityGroupsOutput) GetSecurityGroups() []*SecurityGroup {
+	if m != nil {
+		return m.SecurityGroups
+	}
+	return nil
+}
+
+type DescribeSubnetsInput struct {
+	DryRun           *bool     `protobuf:"varint,2,opt,name=DryRun,json=dryRun" json:"DryRun,omitempty"`
+	Filters          []*Filter `protobuf:"bytes,3,rep,name=Filters,json=filters" json:"Filters,omitempty"`
+	SubnetIds        []string  `protobuf:"bytes,4,rep,name=SubnetIds,json=subnetIds" json:"SubnetIds,omitempty"`
+	XXX_unrecognized []byte    `json:"-"`
+}
+
+func (m *DescribeSubnetsInput) Reset()                    { *m = DescribeSubnetsInput{} }
+func (m *DescribeSubnetsInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeSubnetsInput) ProtoMessage()               {}
+func (*DescribeSubnetsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+
+func (m *DescribeSubnetsInput) GetDryRun() bool {
+	if m != nil && m.DryRun != nil {
+		return *m.DryRun
+	}
+	return false
+}
+
+func (m *DescribeSubnetsInput) GetFilters() []*Filter {
+	if m != nil {
+		return m.Filters
+	}
+	return nil
+}
+
+func (m *DescribeSubnetsInput) GetSubnetIds() []string {
+	if m != nil {
+		return m.SubnetIds
+	}
+	return nil
+}
+
+type DescribeSubnetsOutput struct {
+	Subnets          []*Subnet `protobuf:"bytes,2,rep,name=Subnets,json=subnets" json:"Subnets,omitempty"`
+	XXX_unrecognized []byte    `json:"-"`
+}
+
+func (m *DescribeSubnetsOutput) Reset()                    { *m = DescribeSubnetsOutput{} }
+func (m *DescribeSubnetsOutput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeSubnetsOutput) ProtoMessage()               {}
+func (*DescribeSubnetsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+
+func (m *DescribeSubnetsOutput) GetSubnets() []*Subnet {
+	if m != nil {
+		return m.Subnets
+	}
+	return nil
+}
+
+type DescribeVpcsInput struct {
+	DryRun           *bool     `protobuf:"varint,2,opt,name=DryRun,json=dryRun" json:"DryRun,omitempty"`
+	Filters          []*Filter `protobuf:"bytes,3,rep,name=Filters,json=filters" json:"Filters,omitempty"`
+	VpcIds           []string  `protobuf:"bytes,4,rep,name=VpcIds,json=vpcIds" json:"VpcIds,omitempty"`
+	XXX_unrecognized []byte    `json:"-"`
+}
+
+func (m *DescribeVpcsInput) Reset()                    { *m = DescribeVpcsInput{} }
+func (m *DescribeVpcsInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeVpcsInput) ProtoMessage()               {}
+func (*DescribeVpcsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+
+func (m *DescribeVpcsInput) GetDryRun() bool {
+	if m != nil && m.DryRun != nil {
+		return *m.DryRun
+	}
+	return false
+}
+
+func (m *DescribeVpcsInput) GetFilters() []*Filter {
+	if m != nil {
+		return m.Filters
+	}
+	return nil
+}
+
+func (m *DescribeVpcsInput) GetVpcIds() []string {
+	if m != nil {
+		return m.VpcIds
+	}
+	return nil
+}
+
+type DescribeVpcsOutput struct {
+	Vpcs             []*Vpc `protobuf:"bytes,2,rep,name=Vpcs,json=vpcs" json:"Vpcs,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *DescribeVpcsOutput) Reset()                    { *m = DescribeVpcsOutput{} }
+func (m *DescribeVpcsOutput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeVpcsOutput) ProtoMessage()               {}
+func (*DescribeVpcsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+
+func (m *DescribeVpcsOutput) GetVpcs() []*Vpc {
+	if m != nil {
+		return m.Vpcs
+	}
+	return nil
+}
+
+type EbsInstanceBlockDevice struct {
+	AttachTime          *opsee_types.Timestamp `protobuf:"bytes,2,opt,name=AttachTime,json=attachTime" json:"AttachTime,omitempty"`
+	DeleteOnTermination *bool                  `protobuf:"varint,3,opt,name=DeleteOnTermination,json=deleteOnTermination" json:"DeleteOnTermination,omitempty"`
+	Status              *string                `protobuf:"bytes,4,opt,name=Status,json=status" json:"Status,omitempty"`
+	VolumeId            *string                `protobuf:"bytes,5,opt,name=VolumeId,json=volumeId" json:"VolumeId,omitempty"`
+	XXX_unrecognized    []byte                 `json:"-"`
+}
+
+func (m *EbsInstanceBlockDevice) Reset()                    { *m = EbsInstanceBlockDevice{} }
+func (m *EbsInstanceBlockDevice) String() string            { return proto.CompactTextString(m) }
+func (*EbsInstanceBlockDevice) ProtoMessage()               {}
+func (*EbsInstanceBlockDevice) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+
+func (m *EbsInstanceBlockDevice) GetAttachTime() *opsee_types.Timestamp {
+	if m != nil {
+		return m.AttachTime
+	}
+	return nil
 }
 
 func (m *EbsInstanceBlockDevice) GetDeleteOnTermination() bool {
@@ -89,15 +398,41 @@ func (m *EbsInstanceBlockDevice) GetVolumeId() string {
 	return ""
 }
 
+type Filter struct {
+	Name             *string  `protobuf:"bytes,2,opt,name=Name,json=name" json:"Name,omitempty"`
+	Values           []string `protobuf:"bytes,3,rep,name=Values,json=values" json:"Values,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *Filter) Reset()                    { *m = Filter{} }
+func (m *Filter) String() string            { return proto.CompactTextString(m) }
+func (*Filter) ProtoMessage()               {}
+func (*Filter) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+
+func (m *Filter) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *Filter) GetValues() []string {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
 type GroupIdentifier struct {
-	GroupId          *string `protobuf:"bytes,2,opt,name=GroupId" json:"GroupId,omitempty"`
-	GroupName        *string `protobuf:"bytes,3,opt,name=GroupName" json:"GroupName,omitempty"`
+	GroupId          *string `protobuf:"bytes,2,opt,name=GroupId,json=groupId" json:"GroupId,omitempty"`
+	GroupName        *string `protobuf:"bytes,3,opt,name=GroupName,json=groupName" json:"GroupName,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *GroupIdentifier) Reset()         { *m = GroupIdentifier{} }
-func (m *GroupIdentifier) String() string { return proto.CompactTextString(m) }
-func (*GroupIdentifier) ProtoMessage()    {}
+func (m *GroupIdentifier) Reset()                    { *m = GroupIdentifier{} }
+func (m *GroupIdentifier) String() string            { return proto.CompactTextString(m) }
+func (*GroupIdentifier) ProtoMessage()               {}
+func (*GroupIdentifier) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 func (m *GroupIdentifier) GetGroupId() string {
 	if m != nil && m.GroupId != nil {
@@ -114,14 +449,15 @@ func (m *GroupIdentifier) GetGroupName() string {
 }
 
 type IamInstanceProfile struct {
-	Arn              *string `protobuf:"bytes,2,opt,name=Arn" json:"Arn,omitempty"`
-	Id               *string `protobuf:"bytes,3,opt,name=Id" json:"Id,omitempty"`
+	Arn              *string `protobuf:"bytes,2,opt,name=Arn,json=arn" json:"Arn,omitempty"`
+	Id               *string `protobuf:"bytes,3,opt,name=Id,json=id" json:"Id,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *IamInstanceProfile) Reset()         { *m = IamInstanceProfile{} }
-func (m *IamInstanceProfile) String() string { return proto.CompactTextString(m) }
-func (*IamInstanceProfile) ProtoMessage()    {}
+func (m *IamInstanceProfile) Reset()                    { *m = IamInstanceProfile{} }
+func (m *IamInstanceProfile) String() string            { return proto.CompactTextString(m) }
+func (*IamInstanceProfile) ProtoMessage()               {}
+func (*IamInstanceProfile) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
 
 func (m *IamInstanceProfile) GetArn() string {
 	if m != nil && m.Arn != nil {
@@ -138,49 +474,50 @@ func (m *IamInstanceProfile) GetId() string {
 }
 
 type Instance struct {
-	AmiLaunchIndex        *int64                        `protobuf:"zigzag64,2,opt,name=AmiLaunchIndex" json:"AmiLaunchIndex,omitempty"`
-	Architecture          *string                       `protobuf:"bytes,3,opt,name=Architecture" json:"Architecture,omitempty"`
-	BlockDeviceMappings   []*InstanceBlockDeviceMapping `protobuf:"bytes,4,rep,name=BlockDeviceMappings" json:"BlockDeviceMappings,omitempty"`
-	ClientToken           *string                       `protobuf:"bytes,5,opt,name=ClientToken" json:"ClientToken,omitempty"`
-	EbsOptimized          *bool                         `protobuf:"varint,6,opt,name=EbsOptimized" json:"EbsOptimized,omitempty"`
-	Hypervisor            *string                       `protobuf:"bytes,7,opt,name=Hypervisor" json:"Hypervisor,omitempty"`
-	IamInstanceProfile    *IamInstanceProfile           `protobuf:"bytes,8,opt,name=IamInstanceProfile" json:"IamInstanceProfile,omitempty"`
-	ImageId               *string                       `protobuf:"bytes,9,opt,name=ImageId" json:"ImageId,omitempty"`
-	InstanceId            *string                       `protobuf:"bytes,10,opt,name=InstanceId" json:"InstanceId,omitempty"`
-	InstanceLifecycle     *string                       `protobuf:"bytes,11,opt,name=InstanceLifecycle" json:"InstanceLifecycle,omitempty"`
-	InstanceType          *string                       `protobuf:"bytes,12,opt,name=InstanceType" json:"InstanceType,omitempty"`
-	KernelId              *string                       `protobuf:"bytes,13,opt,name=KernelId" json:"KernelId,omitempty"`
-	KeyName               *string                       `protobuf:"bytes,14,opt,name=KeyName" json:"KeyName,omitempty"`
-	LaunchTime            *int64                        `protobuf:"fixed64,15,opt,name=LaunchTime" json:"LaunchTime,omitempty"`
-	Monitoring            *Monitoring                   `protobuf:"bytes,16,opt,name=Monitoring" json:"Monitoring,omitempty"`
-	NetworkInterfaces     []*InstanceNetworkInterface   `protobuf:"bytes,17,rep,name=NetworkInterfaces" json:"NetworkInterfaces,omitempty"`
-	Placement             *Placement                    `protobuf:"bytes,18,opt,name=Placement" json:"Placement,omitempty"`
-	Platform              *string                       `protobuf:"bytes,19,opt,name=Platform" json:"Platform,omitempty"`
-	PrivateDnsName        *string                       `protobuf:"bytes,20,opt,name=PrivateDnsName" json:"PrivateDnsName,omitempty"`
-	PrivateIpAddress      *string                       `protobuf:"bytes,21,opt,name=PrivateIpAddress" json:"PrivateIpAddress,omitempty"`
-	ProductCodes          []*ProductCode                `protobuf:"bytes,22,rep,name=ProductCodes" json:"ProductCodes,omitempty"`
-	PublicDnsName         *string                       `protobuf:"bytes,23,opt,name=PublicDnsName" json:"PublicDnsName,omitempty"`
-	PublicIpAddress       *string                       `protobuf:"bytes,24,opt,name=PublicIpAddress" json:"PublicIpAddress,omitempty"`
-	RamdiskId             *string                       `protobuf:"bytes,25,opt,name=RamdiskId" json:"RamdiskId,omitempty"`
-	RootDeviceName        *string                       `protobuf:"bytes,26,opt,name=RootDeviceName" json:"RootDeviceName,omitempty"`
-	RootDeviceType        *string                       `protobuf:"bytes,27,opt,name=RootDeviceType" json:"RootDeviceType,omitempty"`
-	SecurityGroups        []*GroupIdentifier            `protobuf:"bytes,28,rep,name=SecurityGroups" json:"SecurityGroups,omitempty"`
-	SourceDestCheck       *bool                         `protobuf:"varint,29,opt,name=SourceDestCheck" json:"SourceDestCheck,omitempty"`
-	SpotInstanceRequestId *string                       `protobuf:"bytes,30,opt,name=SpotInstanceRequestId" json:"SpotInstanceRequestId,omitempty"`
-	SriovNetSupport       *string                       `protobuf:"bytes,31,opt,name=SriovNetSupport" json:"SriovNetSupport,omitempty"`
-	State                 *InstanceState                `protobuf:"bytes,32,opt,name=State" json:"State,omitempty"`
-	StateReason           *StateReason                  `protobuf:"bytes,33,opt,name=StateReason" json:"StateReason,omitempty"`
-	StateTransitionReason *string                       `protobuf:"bytes,34,opt,name=StateTransitionReason" json:"StateTransitionReason,omitempty"`
-	SubnetId              *string                       `protobuf:"bytes,35,opt,name=SubnetId" json:"SubnetId,omitempty"`
-	Tags                  []*Tag                        `protobuf:"bytes,36,rep,name=Tags" json:"Tags,omitempty"`
-	VirtualizationType    *string                       `protobuf:"bytes,37,opt,name=VirtualizationType" json:"VirtualizationType,omitempty"`
-	VpcId                 *string                       `protobuf:"bytes,38,opt,name=VpcId" json:"VpcId,omitempty"`
+	AmiLaunchIndex        *int64                        `protobuf:"zigzag64,2,opt,name=AmiLaunchIndex,json=amiLaunchIndex" json:"AmiLaunchIndex,omitempty"`
+	Architecture          *string                       `protobuf:"bytes,3,opt,name=Architecture,json=architecture" json:"Architecture,omitempty"`
+	BlockDeviceMappings   []*InstanceBlockDeviceMapping `protobuf:"bytes,4,rep,name=BlockDeviceMappings,json=blockDeviceMappings" json:"BlockDeviceMappings,omitempty"`
+	ClientToken           *string                       `protobuf:"bytes,5,opt,name=ClientToken,json=clientToken" json:"ClientToken,omitempty"`
+	EbsOptimized          *bool                         `protobuf:"varint,6,opt,name=EbsOptimized,json=ebsOptimized" json:"EbsOptimized,omitempty"`
+	Hypervisor            *string                       `protobuf:"bytes,7,opt,name=Hypervisor,json=hypervisor" json:"Hypervisor,omitempty"`
+	IamInstanceProfile    *IamInstanceProfile           `protobuf:"bytes,8,opt,name=IamInstanceProfile,json=iamInstanceProfile" json:"IamInstanceProfile,omitempty"`
+	ImageId               *string                       `protobuf:"bytes,9,opt,name=ImageId,json=imageId" json:"ImageId,omitempty"`
+	InstanceId            *string                       `protobuf:"bytes,10,opt,name=InstanceId,json=instanceId" json:"InstanceId,omitempty"`
+	InstanceLifecycle     *string                       `protobuf:"bytes,11,opt,name=InstanceLifecycle,json=instanceLifecycle" json:"InstanceLifecycle,omitempty"`
+	InstanceType          *string                       `protobuf:"bytes,12,opt,name=InstanceType,json=instanceType" json:"InstanceType,omitempty"`
+	KernelId              *string                       `protobuf:"bytes,13,opt,name=KernelId,json=kernelId" json:"KernelId,omitempty"`
+	KeyName               *string                       `protobuf:"bytes,14,opt,name=KeyName,json=keyName" json:"KeyName,omitempty"`
+	LaunchTime            *opsee_types.Timestamp        `protobuf:"bytes,15,opt,name=LaunchTime,json=launchTime" json:"LaunchTime,omitempty"`
+	Monitoring            *Monitoring                   `protobuf:"bytes,16,opt,name=Monitoring,json=monitoring" json:"Monitoring,omitempty"`
+	NetworkInterfaces     []*InstanceNetworkInterface   `protobuf:"bytes,17,rep,name=NetworkInterfaces,json=networkInterfaces" json:"NetworkInterfaces,omitempty"`
+	Placement             *Placement                    `protobuf:"bytes,18,opt,name=Placement,json=placement" json:"Placement,omitempty"`
+	Platform              *string                       `protobuf:"bytes,19,opt,name=Platform,json=platform" json:"Platform,omitempty"`
+	PrivateDnsName        *string                       `protobuf:"bytes,20,opt,name=PrivateDnsName,json=privateDnsName" json:"PrivateDnsName,omitempty"`
+	PrivateIpAddress      *string                       `protobuf:"bytes,21,opt,name=PrivateIpAddress,json=privateIpAddress" json:"PrivateIpAddress,omitempty"`
+	ProductCodes          []*ProductCode                `protobuf:"bytes,22,rep,name=ProductCodes,json=productCodes" json:"ProductCodes,omitempty"`
+	PublicDnsName         *string                       `protobuf:"bytes,23,opt,name=PublicDnsName,json=publicDnsName" json:"PublicDnsName,omitempty"`
+	PublicIpAddress       *string                       `protobuf:"bytes,24,opt,name=PublicIpAddress,json=publicIpAddress" json:"PublicIpAddress,omitempty"`
+	RamdiskId             *string                       `protobuf:"bytes,25,opt,name=RamdiskId,json=ramdiskId" json:"RamdiskId,omitempty"`
+	RootDeviceName        *string                       `protobuf:"bytes,26,opt,name=RootDeviceName,json=rootDeviceName" json:"RootDeviceName,omitempty"`
+	RootDeviceType        *string                       `protobuf:"bytes,27,opt,name=RootDeviceType,json=rootDeviceType" json:"RootDeviceType,omitempty"`
+	SecurityGroups        []*GroupIdentifier            `protobuf:"bytes,28,rep,name=SecurityGroups,json=securityGroups" json:"SecurityGroups,omitempty"`
+	SourceDestCheck       *bool                         `protobuf:"varint,29,opt,name=SourceDestCheck,json=sourceDestCheck" json:"SourceDestCheck,omitempty"`
+	SpotInstanceRequestId *string                       `protobuf:"bytes,30,opt,name=SpotInstanceRequestId,json=spotInstanceRequestId" json:"SpotInstanceRequestId,omitempty"`
+	SriovNetSupport       *string                       `protobuf:"bytes,31,opt,name=SriovNetSupport,json=sriovNetSupport" json:"SriovNetSupport,omitempty"`
+	State                 *InstanceState                `protobuf:"bytes,32,opt,name=State,json=state" json:"State,omitempty"`
+	StateReason           *StateReason                  `protobuf:"bytes,33,opt,name=StateReason,json=stateReason" json:"StateReason,omitempty"`
+	StateTransitionReason *string                       `protobuf:"bytes,34,opt,name=StateTransitionReason,json=stateTransitionReason" json:"StateTransitionReason,omitempty"`
+	SubnetId              *string                       `protobuf:"bytes,35,opt,name=SubnetId,json=subnetId" json:"SubnetId,omitempty"`
+	Tags                  []*Tag                        `protobuf:"bytes,36,rep,name=Tags,json=tags" json:"Tags,omitempty"`
+	VirtualizationType    *string                       `protobuf:"bytes,37,opt,name=VirtualizationType,json=virtualizationType" json:"VirtualizationType,omitempty"`
+	VpcId                 *string                       `protobuf:"bytes,38,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
 	XXX_unrecognized      []byte                        `json:"-"`
 }
 
-func (m *Instance) Reset()         { *m = Instance{} }
-func (m *Instance) String() string { return proto.CompactTextString(m) }
-func (*Instance) ProtoMessage()    {}
+func (m *Instance) Reset()                    { *m = Instance{} }
+func (m *Instance) String() string            { return proto.CompactTextString(m) }
+func (*Instance) ProtoMessage()               {}
+func (*Instance) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 func (m *Instance) GetAmiLaunchIndex() int64 {
 	if m != nil && m.AmiLaunchIndex != nil {
@@ -273,11 +610,11 @@ func (m *Instance) GetKeyName() string {
 	return ""
 }
 
-func (m *Instance) GetLaunchTime() int64 {
-	if m != nil && m.LaunchTime != nil {
-		return *m.LaunchTime
+func (m *Instance) GetLaunchTime() *opsee_types.Timestamp {
+	if m != nil {
+		return m.LaunchTime
 	}
-	return 0
+	return nil
 }
 
 func (m *Instance) GetMonitoring() *Monitoring {
@@ -442,14 +779,15 @@ func (m *Instance) GetVpcId() string {
 }
 
 type InstanceBlockDeviceMapping struct {
-	DeviceName       *string                 `protobuf:"bytes,2,opt,name=DeviceName" json:"DeviceName,omitempty"`
-	Ebs              *EbsInstanceBlockDevice `protobuf:"bytes,3,opt,name=Ebs" json:"Ebs,omitempty"`
+	DeviceName       *string                 `protobuf:"bytes,2,opt,name=DeviceName,json=deviceName" json:"DeviceName,omitempty"`
+	Ebs              *EbsInstanceBlockDevice `protobuf:"bytes,3,opt,name=Ebs,json=ebs" json:"Ebs,omitempty"`
 	XXX_unrecognized []byte                  `json:"-"`
 }
 
-func (m *InstanceBlockDeviceMapping) Reset()         { *m = InstanceBlockDeviceMapping{} }
-func (m *InstanceBlockDeviceMapping) String() string { return proto.CompactTextString(m) }
-func (*InstanceBlockDeviceMapping) ProtoMessage()    {}
+func (m *InstanceBlockDeviceMapping) Reset()                    { *m = InstanceBlockDeviceMapping{} }
+func (m *InstanceBlockDeviceMapping) String() string            { return proto.CompactTextString(m) }
+func (*InstanceBlockDeviceMapping) ProtoMessage()               {}
+func (*InstanceBlockDeviceMapping) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
 
 func (m *InstanceBlockDeviceMapping) GetDeviceName() string {
 	if m != nil && m.DeviceName != nil {
@@ -466,26 +804,27 @@ func (m *InstanceBlockDeviceMapping) GetEbs() *EbsInstanceBlockDevice {
 }
 
 type InstanceNetworkInterface struct {
-	Association        *InstanceNetworkInterfaceAssociation `protobuf:"bytes,2,opt,name=Association" json:"Association,omitempty"`
-	Attachment         *InstanceNetworkInterfaceAttachment  `protobuf:"bytes,3,opt,name=Attachment" json:"Attachment,omitempty"`
-	Description        *string                              `protobuf:"bytes,4,opt,name=Description" json:"Description,omitempty"`
-	Groups             []*GroupIdentifier                   `protobuf:"bytes,5,rep,name=Groups" json:"Groups,omitempty"`
-	MacAddress         *string                              `protobuf:"bytes,6,opt,name=MacAddress" json:"MacAddress,omitempty"`
-	NetworkInterfaceId *string                              `protobuf:"bytes,7,opt,name=NetworkInterfaceId" json:"NetworkInterfaceId,omitempty"`
-	OwnerId            *string                              `protobuf:"bytes,8,opt,name=OwnerId" json:"OwnerId,omitempty"`
-	PrivateDnsName     *string                              `protobuf:"bytes,9,opt,name=PrivateDnsName" json:"PrivateDnsName,omitempty"`
-	PrivateIpAddress   *string                              `protobuf:"bytes,10,opt,name=PrivateIpAddress" json:"PrivateIpAddress,omitempty"`
-	PrivateIpAddresses []*InstancePrivateIpAddress          `protobuf:"bytes,11,rep,name=PrivateIpAddresses" json:"PrivateIpAddresses,omitempty"`
-	SourceDestCheck    *bool                                `protobuf:"varint,12,opt,name=SourceDestCheck" json:"SourceDestCheck,omitempty"`
-	Status             *string                              `protobuf:"bytes,13,opt,name=Status" json:"Status,omitempty"`
-	SubnetId           *string                              `protobuf:"bytes,14,opt,name=SubnetId" json:"SubnetId,omitempty"`
-	VpcId              *string                              `protobuf:"bytes,15,opt,name=VpcId" json:"VpcId,omitempty"`
+	Association        *InstanceNetworkInterfaceAssociation `protobuf:"bytes,2,opt,name=Association,json=association" json:"Association,omitempty"`
+	Attachment         *InstanceNetworkInterfaceAttachment  `protobuf:"bytes,3,opt,name=Attachment,json=attachment" json:"Attachment,omitempty"`
+	Description        *string                              `protobuf:"bytes,4,opt,name=Description,json=description" json:"Description,omitempty"`
+	Groups             []*GroupIdentifier                   `protobuf:"bytes,5,rep,name=Groups,json=groups" json:"Groups,omitempty"`
+	MacAddress         *string                              `protobuf:"bytes,6,opt,name=MacAddress,json=macAddress" json:"MacAddress,omitempty"`
+	NetworkInterfaceId *string                              `protobuf:"bytes,7,opt,name=NetworkInterfaceId,json=networkInterfaceId" json:"NetworkInterfaceId,omitempty"`
+	OwnerId            *string                              `protobuf:"bytes,8,opt,name=OwnerId,json=ownerId" json:"OwnerId,omitempty"`
+	PrivateDnsName     *string                              `protobuf:"bytes,9,opt,name=PrivateDnsName,json=privateDnsName" json:"PrivateDnsName,omitempty"`
+	PrivateIpAddress   *string                              `protobuf:"bytes,10,opt,name=PrivateIpAddress,json=privateIpAddress" json:"PrivateIpAddress,omitempty"`
+	PrivateIpAddresses []*InstancePrivateIpAddress          `protobuf:"bytes,11,rep,name=PrivateIpAddresses,json=privateIpAddresses" json:"PrivateIpAddresses,omitempty"`
+	SourceDestCheck    *bool                                `protobuf:"varint,12,opt,name=SourceDestCheck,json=sourceDestCheck" json:"SourceDestCheck,omitempty"`
+	Status             *string                              `protobuf:"bytes,13,opt,name=Status,json=status" json:"Status,omitempty"`
+	SubnetId           *string                              `protobuf:"bytes,14,opt,name=SubnetId,json=subnetId" json:"SubnetId,omitempty"`
+	VpcId              *string                              `protobuf:"bytes,15,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
 	XXX_unrecognized   []byte                               `json:"-"`
 }
 
-func (m *InstanceNetworkInterface) Reset()         { *m = InstanceNetworkInterface{} }
-func (m *InstanceNetworkInterface) String() string { return proto.CompactTextString(m) }
-func (*InstanceNetworkInterface) ProtoMessage()    {}
+func (m *InstanceNetworkInterface) Reset()                    { *m = InstanceNetworkInterface{} }
+func (m *InstanceNetworkInterface) String() string            { return proto.CompactTextString(m) }
+func (*InstanceNetworkInterface) ProtoMessage()               {}
+func (*InstanceNetworkInterface) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
 
 func (m *InstanceNetworkInterface) GetAssociation() *InstanceNetworkInterfaceAssociation {
 	if m != nil {
@@ -586,15 +925,18 @@ func (m *InstanceNetworkInterface) GetVpcId() string {
 }
 
 type InstanceNetworkInterfaceAssociation struct {
-	IpOwnerId        *string `protobuf:"bytes,2,opt,name=IpOwnerId" json:"IpOwnerId,omitempty"`
-	PublicDnsName    *string `protobuf:"bytes,3,opt,name=PublicDnsName" json:"PublicDnsName,omitempty"`
-	PublicIp         *string `protobuf:"bytes,4,opt,name=PublicIp" json:"PublicIp,omitempty"`
+	IpOwnerId        *string `protobuf:"bytes,2,opt,name=IpOwnerId,json=ipOwnerId" json:"IpOwnerId,omitempty"`
+	PublicDnsName    *string `protobuf:"bytes,3,opt,name=PublicDnsName,json=publicDnsName" json:"PublicDnsName,omitempty"`
+	PublicIp         *string `protobuf:"bytes,4,opt,name=PublicIp,json=publicIp" json:"PublicIp,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *InstanceNetworkInterfaceAssociation) Reset()         { *m = InstanceNetworkInterfaceAssociation{} }
 func (m *InstanceNetworkInterfaceAssociation) String() string { return proto.CompactTextString(m) }
 func (*InstanceNetworkInterfaceAssociation) ProtoMessage()    {}
+func (*InstanceNetworkInterfaceAssociation) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{17}
+}
 
 func (m *InstanceNetworkInterfaceAssociation) GetIpOwnerId() string {
 	if m != nil && m.IpOwnerId != nil {
@@ -618,23 +960,26 @@ func (m *InstanceNetworkInterfaceAssociation) GetPublicIp() string {
 }
 
 type InstanceNetworkInterfaceAttachment struct {
-	AttachTime          *int64  `protobuf:"fixed64,2,opt,name=AttachTime" json:"AttachTime,omitempty"`
-	AttachmentId        *string `protobuf:"bytes,3,opt,name=AttachmentId" json:"AttachmentId,omitempty"`
-	DeleteOnTermination *bool   `protobuf:"varint,4,opt,name=DeleteOnTermination" json:"DeleteOnTermination,omitempty"`
-	DeviceIndex         *int64  `protobuf:"zigzag64,5,opt,name=DeviceIndex" json:"DeviceIndex,omitempty"`
-	Status              *string `protobuf:"bytes,6,opt,name=Status" json:"Status,omitempty"`
-	XXX_unrecognized    []byte  `json:"-"`
+	AttachTime          *opsee_types.Timestamp `protobuf:"bytes,2,opt,name=AttachTime,json=attachTime" json:"AttachTime,omitempty"`
+	AttachmentId        *string                `protobuf:"bytes,3,opt,name=AttachmentId,json=attachmentId" json:"AttachmentId,omitempty"`
+	DeleteOnTermination *bool                  `protobuf:"varint,4,opt,name=DeleteOnTermination,json=deleteOnTermination" json:"DeleteOnTermination,omitempty"`
+	DeviceIndex         *int64                 `protobuf:"zigzag64,5,opt,name=DeviceIndex,json=deviceIndex" json:"DeviceIndex,omitempty"`
+	Status              *string                `protobuf:"bytes,6,opt,name=Status,json=status" json:"Status,omitempty"`
+	XXX_unrecognized    []byte                 `json:"-"`
 }
 
 func (m *InstanceNetworkInterfaceAttachment) Reset()         { *m = InstanceNetworkInterfaceAttachment{} }
 func (m *InstanceNetworkInterfaceAttachment) String() string { return proto.CompactTextString(m) }
 func (*InstanceNetworkInterfaceAttachment) ProtoMessage()    {}
+func (*InstanceNetworkInterfaceAttachment) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{18}
+}
 
-func (m *InstanceNetworkInterfaceAttachment) GetAttachTime() int64 {
-	if m != nil && m.AttachTime != nil {
-		return *m.AttachTime
+func (m *InstanceNetworkInterfaceAttachment) GetAttachTime() *opsee_types.Timestamp {
+	if m != nil {
+		return m.AttachTime
 	}
-	return 0
+	return nil
 }
 
 func (m *InstanceNetworkInterfaceAttachment) GetAttachmentId() string {
@@ -666,16 +1011,17 @@ func (m *InstanceNetworkInterfaceAttachment) GetStatus() string {
 }
 
 type InstancePrivateIpAddress struct {
-	Association      *InstanceNetworkInterfaceAssociation `protobuf:"bytes,2,opt,name=Association" json:"Association,omitempty"`
-	Primary          *bool                                `protobuf:"varint,3,opt,name=Primary" json:"Primary,omitempty"`
-	PrivateDnsName   *string                              `protobuf:"bytes,4,opt,name=PrivateDnsName" json:"PrivateDnsName,omitempty"`
-	PrivateIpAddress *string                              `protobuf:"bytes,5,opt,name=PrivateIpAddress" json:"PrivateIpAddress,omitempty"`
+	Association      *InstanceNetworkInterfaceAssociation `protobuf:"bytes,2,opt,name=Association,json=association" json:"Association,omitempty"`
+	Primary          *bool                                `protobuf:"varint,3,opt,name=Primary,json=primary" json:"Primary,omitempty"`
+	PrivateDnsName   *string                              `protobuf:"bytes,4,opt,name=PrivateDnsName,json=privateDnsName" json:"PrivateDnsName,omitempty"`
+	PrivateIpAddress *string                              `protobuf:"bytes,5,opt,name=PrivateIpAddress,json=privateIpAddress" json:"PrivateIpAddress,omitempty"`
 	XXX_unrecognized []byte                               `json:"-"`
 }
 
-func (m *InstancePrivateIpAddress) Reset()         { *m = InstancePrivateIpAddress{} }
-func (m *InstancePrivateIpAddress) String() string { return proto.CompactTextString(m) }
-func (*InstancePrivateIpAddress) ProtoMessage()    {}
+func (m *InstancePrivateIpAddress) Reset()                    { *m = InstancePrivateIpAddress{} }
+func (m *InstancePrivateIpAddress) String() string            { return proto.CompactTextString(m) }
+func (*InstancePrivateIpAddress) ProtoMessage()               {}
+func (*InstancePrivateIpAddress) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{19} }
 
 func (m *InstancePrivateIpAddress) GetAssociation() *InstanceNetworkInterfaceAssociation {
 	if m != nil {
@@ -706,14 +1052,15 @@ func (m *InstancePrivateIpAddress) GetPrivateIpAddress() string {
 }
 
 type InstanceState struct {
-	Code             *int64  `protobuf:"zigzag64,2,opt,name=Code" json:"Code,omitempty"`
-	Name             *string `protobuf:"bytes,3,opt,name=Name" json:"Name,omitempty"`
+	Code             *int64  `protobuf:"zigzag64,2,opt,name=Code,json=code" json:"Code,omitempty"`
+	Name             *string `protobuf:"bytes,3,opt,name=Name,json=name" json:"Name,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *InstanceState) Reset()         { *m = InstanceState{} }
-func (m *InstanceState) String() string { return proto.CompactTextString(m) }
-func (*InstanceState) ProtoMessage()    {}
+func (m *InstanceState) Reset()                    { *m = InstanceState{} }
+func (m *InstanceState) String() string            { return proto.CompactTextString(m) }
+func (*InstanceState) ProtoMessage()               {}
+func (*InstanceState) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{20} }
 
 func (m *InstanceState) GetCode() int64 {
 	if m != nil && m.Code != nil {
@@ -730,18 +1077,19 @@ func (m *InstanceState) GetName() string {
 }
 
 type IpPermission struct {
-	FromPort         *int64             `protobuf:"zigzag64,2,opt,name=FromPort" json:"FromPort,omitempty"`
-	IpProtocol       *string            `protobuf:"bytes,3,opt,name=IpProtocol" json:"IpProtocol,omitempty"`
-	IpRanges         []*IpRange         `protobuf:"bytes,4,rep,name=IpRanges" json:"IpRanges,omitempty"`
-	PrefixListIds    []*PrefixListId    `protobuf:"bytes,5,rep,name=PrefixListIds" json:"PrefixListIds,omitempty"`
-	ToPort           *int64             `protobuf:"zigzag64,6,opt,name=ToPort" json:"ToPort,omitempty"`
-	UserIdGroupPairs []*UserIdGroupPair `protobuf:"bytes,7,rep,name=UserIdGroupPairs" json:"UserIdGroupPairs,omitempty"`
+	FromPort         *int64             `protobuf:"zigzag64,2,opt,name=FromPort,json=fromPort" json:"FromPort,omitempty"`
+	IpProtocol       *string            `protobuf:"bytes,3,opt,name=IpProtocol,json=ipProtocol" json:"IpProtocol,omitempty"`
+	IpRanges         []*IpRange         `protobuf:"bytes,4,rep,name=IpRanges,json=ipRanges" json:"IpRanges,omitempty"`
+	PrefixListIds    []*PrefixListId    `protobuf:"bytes,5,rep,name=PrefixListIds,json=prefixListIds" json:"PrefixListIds,omitempty"`
+	ToPort           *int64             `protobuf:"zigzag64,6,opt,name=ToPort,json=toPort" json:"ToPort,omitempty"`
+	UserIdGroupPairs []*UserIdGroupPair `protobuf:"bytes,7,rep,name=UserIdGroupPairs,json=userIdGroupPairs" json:"UserIdGroupPairs,omitempty"`
 	XXX_unrecognized []byte             `json:"-"`
 }
 
-func (m *IpPermission) Reset()         { *m = IpPermission{} }
-func (m *IpPermission) String() string { return proto.CompactTextString(m) }
-func (*IpPermission) ProtoMessage()    {}
+func (m *IpPermission) Reset()                    { *m = IpPermission{} }
+func (m *IpPermission) String() string            { return proto.CompactTextString(m) }
+func (*IpPermission) ProtoMessage()               {}
+func (*IpPermission) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{21} }
 
 func (m *IpPermission) GetFromPort() int64 {
 	if m != nil && m.FromPort != nil {
@@ -786,13 +1134,14 @@ func (m *IpPermission) GetUserIdGroupPairs() []*UserIdGroupPair {
 }
 
 type IpRange struct {
-	CidrIp           *string `protobuf:"bytes,2,opt,name=CidrIp" json:"CidrIp,omitempty"`
+	CidrIp           *string `protobuf:"bytes,2,opt,name=CidrIp,json=cidrIp" json:"CidrIp,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *IpRange) Reset()         { *m = IpRange{} }
-func (m *IpRange) String() string { return proto.CompactTextString(m) }
-func (*IpRange) ProtoMessage()    {}
+func (m *IpRange) Reset()                    { *m = IpRange{} }
+func (m *IpRange) String() string            { return proto.CompactTextString(m) }
+func (*IpRange) ProtoMessage()               {}
+func (*IpRange) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{22} }
 
 func (m *IpRange) GetCidrIp() string {
 	if m != nil && m.CidrIp != nil {
@@ -802,13 +1151,14 @@ func (m *IpRange) GetCidrIp() string {
 }
 
 type Monitoring struct {
-	State            *string `protobuf:"bytes,2,opt,name=State" json:"State,omitempty"`
+	State            *string `protobuf:"bytes,2,opt,name=State,json=state" json:"State,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Monitoring) Reset()         { *m = Monitoring{} }
-func (m *Monitoring) String() string { return proto.CompactTextString(m) }
-func (*Monitoring) ProtoMessage()    {}
+func (m *Monitoring) Reset()                    { *m = Monitoring{} }
+func (m *Monitoring) String() string            { return proto.CompactTextString(m) }
+func (*Monitoring) ProtoMessage()               {}
+func (*Monitoring) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{23} }
 
 func (m *Monitoring) GetState() string {
 	if m != nil && m.State != nil {
@@ -818,17 +1168,18 @@ func (m *Monitoring) GetState() string {
 }
 
 type Placement struct {
-	Affinity         *string `protobuf:"bytes,2,opt,name=Affinity" json:"Affinity,omitempty"`
-	AvailabilityZone *string `protobuf:"bytes,3,opt,name=AvailabilityZone" json:"AvailabilityZone,omitempty"`
-	GroupName        *string `protobuf:"bytes,4,opt,name=GroupName" json:"GroupName,omitempty"`
-	HostId           *string `protobuf:"bytes,5,opt,name=HostId" json:"HostId,omitempty"`
-	Tenancy          *string `protobuf:"bytes,6,opt,name=Tenancy" json:"Tenancy,omitempty"`
+	Affinity         *string `protobuf:"bytes,2,opt,name=Affinity,json=affinity" json:"Affinity,omitempty"`
+	AvailabilityZone *string `protobuf:"bytes,3,opt,name=AvailabilityZone,json=availabilityZone" json:"AvailabilityZone,omitempty"`
+	GroupName        *string `protobuf:"bytes,4,opt,name=GroupName,json=groupName" json:"GroupName,omitempty"`
+	HostId           *string `protobuf:"bytes,5,opt,name=HostId,json=hostId" json:"HostId,omitempty"`
+	Tenancy          *string `protobuf:"bytes,6,opt,name=Tenancy,json=tenancy" json:"Tenancy,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Placement) Reset()         { *m = Placement{} }
-func (m *Placement) String() string { return proto.CompactTextString(m) }
-func (*Placement) ProtoMessage()    {}
+func (m *Placement) Reset()                    { *m = Placement{} }
+func (m *Placement) String() string            { return proto.CompactTextString(m) }
+func (*Placement) ProtoMessage()               {}
+func (*Placement) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{24} }
 
 func (m *Placement) GetAffinity() string {
 	if m != nil && m.Affinity != nil {
@@ -866,13 +1217,14 @@ func (m *Placement) GetTenancy() string {
 }
 
 type PrefixListId struct {
-	PrefixListId     *string `protobuf:"bytes,2,opt,name=PrefixListId" json:"PrefixListId,omitempty"`
+	PrefixListId     *string `protobuf:"bytes,2,opt,name=PrefixListId,json=prefixListId" json:"PrefixListId,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *PrefixListId) Reset()         { *m = PrefixListId{} }
-func (m *PrefixListId) String() string { return proto.CompactTextString(m) }
-func (*PrefixListId) ProtoMessage()    {}
+func (m *PrefixListId) Reset()                    { *m = PrefixListId{} }
+func (m *PrefixListId) String() string            { return proto.CompactTextString(m) }
+func (*PrefixListId) ProtoMessage()               {}
+func (*PrefixListId) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{25} }
 
 func (m *PrefixListId) GetPrefixListId() string {
 	if m != nil && m.PrefixListId != nil {
@@ -882,14 +1234,15 @@ func (m *PrefixListId) GetPrefixListId() string {
 }
 
 type ProductCode struct {
-	ProductCodeId    *string `protobuf:"bytes,2,opt,name=ProductCodeId" json:"ProductCodeId,omitempty"`
-	ProductCodeType  *string `protobuf:"bytes,3,opt,name=ProductCodeType" json:"ProductCodeType,omitempty"`
+	ProductCodeId    *string `protobuf:"bytes,2,opt,name=ProductCodeId,json=productCodeId" json:"ProductCodeId,omitempty"`
+	ProductCodeType  *string `protobuf:"bytes,3,opt,name=ProductCodeType,json=productCodeType" json:"ProductCodeType,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *ProductCode) Reset()         { *m = ProductCode{} }
-func (m *ProductCode) String() string { return proto.CompactTextString(m) }
-func (*ProductCode) ProtoMessage()    {}
+func (m *ProductCode) Reset()                    { *m = ProductCode{} }
+func (m *ProductCode) String() string            { return proto.CompactTextString(m) }
+func (*ProductCode) ProtoMessage()               {}
+func (*ProductCode) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{26} }
 
 func (m *ProductCode) GetProductCodeId() string {
 	if m != nil && m.ProductCodeId != nil {
@@ -905,21 +1258,275 @@ func (m *ProductCode) GetProductCodeType() string {
 	return ""
 }
 
+type PropagatingVgw struct {
+	GatewayId        *string `protobuf:"bytes,2,opt,name=GatewayId,json=gatewayId" json:"GatewayId,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *PropagatingVgw) Reset()                    { *m = PropagatingVgw{} }
+func (m *PropagatingVgw) String() string            { return proto.CompactTextString(m) }
+func (*PropagatingVgw) ProtoMessage()               {}
+func (*PropagatingVgw) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{27} }
+
+func (m *PropagatingVgw) GetGatewayId() string {
+	if m != nil && m.GatewayId != nil {
+		return *m.GatewayId
+	}
+	return ""
+}
+
+type Reservation struct {
+	Groups           []*GroupIdentifier `protobuf:"bytes,2,rep,name=Groups,json=groups" json:"Groups,omitempty"`
+	Instances        []*Instance        `protobuf:"bytes,3,rep,name=Instances,json=instances" json:"Instances,omitempty"`
+	OwnerId          *string            `protobuf:"bytes,4,opt,name=OwnerId,json=ownerId" json:"OwnerId,omitempty"`
+	RequesterId      *string            `protobuf:"bytes,5,opt,name=RequesterId,json=requesterId" json:"RequesterId,omitempty"`
+	ReservationId    *string            `protobuf:"bytes,6,opt,name=ReservationId,json=reservationId" json:"ReservationId,omitempty"`
+	XXX_unrecognized []byte             `json:"-"`
+}
+
+func (m *Reservation) Reset()                    { *m = Reservation{} }
+func (m *Reservation) String() string            { return proto.CompactTextString(m) }
+func (*Reservation) ProtoMessage()               {}
+func (*Reservation) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{28} }
+
+func (m *Reservation) GetGroups() []*GroupIdentifier {
+	if m != nil {
+		return m.Groups
+	}
+	return nil
+}
+
+func (m *Reservation) GetInstances() []*Instance {
+	if m != nil {
+		return m.Instances
+	}
+	return nil
+}
+
+func (m *Reservation) GetOwnerId() string {
+	if m != nil && m.OwnerId != nil {
+		return *m.OwnerId
+	}
+	return ""
+}
+
+func (m *Reservation) GetRequesterId() string {
+	if m != nil && m.RequesterId != nil {
+		return *m.RequesterId
+	}
+	return ""
+}
+
+func (m *Reservation) GetReservationId() string {
+	if m != nil && m.ReservationId != nil {
+		return *m.ReservationId
+	}
+	return ""
+}
+
+type Route struct {
+	DestinationCidrBlock    *string `protobuf:"bytes,2,opt,name=DestinationCidrBlock,json=destinationCidrBlock" json:"DestinationCidrBlock,omitempty"`
+	DestinationPrefixListId *string `protobuf:"bytes,3,opt,name=DestinationPrefixListId,json=destinationPrefixListId" json:"DestinationPrefixListId,omitempty"`
+	GatewayId               *string `protobuf:"bytes,4,opt,name=GatewayId,json=gatewayId" json:"GatewayId,omitempty"`
+	InstanceId              *string `protobuf:"bytes,5,opt,name=InstanceId,json=instanceId" json:"InstanceId,omitempty"`
+	InstanceOwnerId         *string `protobuf:"bytes,6,opt,name=InstanceOwnerId,json=instanceOwnerId" json:"InstanceOwnerId,omitempty"`
+	NatGatewayId            *string `protobuf:"bytes,7,opt,name=NatGatewayId,json=natGatewayId" json:"NatGatewayId,omitempty"`
+	NetworkInterfaceId      *string `protobuf:"bytes,8,opt,name=NetworkInterfaceId,json=networkInterfaceId" json:"NetworkInterfaceId,omitempty"`
+	Origin                  *string `protobuf:"bytes,9,opt,name=Origin,json=origin" json:"Origin,omitempty"`
+	State                   *string `protobuf:"bytes,10,opt,name=State,json=state" json:"State,omitempty"`
+	VpcPeeringConnectionId  *string `protobuf:"bytes,11,opt,name=VpcPeeringConnectionId,json=vpcPeeringConnectionId" json:"VpcPeeringConnectionId,omitempty"`
+	XXX_unrecognized        []byte  `json:"-"`
+}
+
+func (m *Route) Reset()                    { *m = Route{} }
+func (m *Route) String() string            { return proto.CompactTextString(m) }
+func (*Route) ProtoMessage()               {}
+func (*Route) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{29} }
+
+func (m *Route) GetDestinationCidrBlock() string {
+	if m != nil && m.DestinationCidrBlock != nil {
+		return *m.DestinationCidrBlock
+	}
+	return ""
+}
+
+func (m *Route) GetDestinationPrefixListId() string {
+	if m != nil && m.DestinationPrefixListId != nil {
+		return *m.DestinationPrefixListId
+	}
+	return ""
+}
+
+func (m *Route) GetGatewayId() string {
+	if m != nil && m.GatewayId != nil {
+		return *m.GatewayId
+	}
+	return ""
+}
+
+func (m *Route) GetInstanceId() string {
+	if m != nil && m.InstanceId != nil {
+		return *m.InstanceId
+	}
+	return ""
+}
+
+func (m *Route) GetInstanceOwnerId() string {
+	if m != nil && m.InstanceOwnerId != nil {
+		return *m.InstanceOwnerId
+	}
+	return ""
+}
+
+func (m *Route) GetNatGatewayId() string {
+	if m != nil && m.NatGatewayId != nil {
+		return *m.NatGatewayId
+	}
+	return ""
+}
+
+func (m *Route) GetNetworkInterfaceId() string {
+	if m != nil && m.NetworkInterfaceId != nil {
+		return *m.NetworkInterfaceId
+	}
+	return ""
+}
+
+func (m *Route) GetOrigin() string {
+	if m != nil && m.Origin != nil {
+		return *m.Origin
+	}
+	return ""
+}
+
+func (m *Route) GetState() string {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return ""
+}
+
+func (m *Route) GetVpcPeeringConnectionId() string {
+	if m != nil && m.VpcPeeringConnectionId != nil {
+		return *m.VpcPeeringConnectionId
+	}
+	return ""
+}
+
+type RouteTable struct {
+	Associations     []*RouteTableAssociation `protobuf:"bytes,2,rep,name=Associations,json=associations" json:"Associations,omitempty"`
+	PropagatingVgws  []*PropagatingVgw        `protobuf:"bytes,3,rep,name=PropagatingVgws,json=propagatingVgws" json:"PropagatingVgws,omitempty"`
+	RouteTableId     *string                  `protobuf:"bytes,4,opt,name=RouteTableId,json=routeTableId" json:"RouteTableId,omitempty"`
+	Routes           []*Route                 `protobuf:"bytes,5,rep,name=Routes,json=routes" json:"Routes,omitempty"`
+	Tags             []*Tag                   `protobuf:"bytes,6,rep,name=Tags,json=tags" json:"Tags,omitempty"`
+	VpcId            *string                  `protobuf:"bytes,7,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
+	XXX_unrecognized []byte                   `json:"-"`
+}
+
+func (m *RouteTable) Reset()                    { *m = RouteTable{} }
+func (m *RouteTable) String() string            { return proto.CompactTextString(m) }
+func (*RouteTable) ProtoMessage()               {}
+func (*RouteTable) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{30} }
+
+func (m *RouteTable) GetAssociations() []*RouteTableAssociation {
+	if m != nil {
+		return m.Associations
+	}
+	return nil
+}
+
+func (m *RouteTable) GetPropagatingVgws() []*PropagatingVgw {
+	if m != nil {
+		return m.PropagatingVgws
+	}
+	return nil
+}
+
+func (m *RouteTable) GetRouteTableId() string {
+	if m != nil && m.RouteTableId != nil {
+		return *m.RouteTableId
+	}
+	return ""
+}
+
+func (m *RouteTable) GetRoutes() []*Route {
+	if m != nil {
+		return m.Routes
+	}
+	return nil
+}
+
+func (m *RouteTable) GetTags() []*Tag {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *RouteTable) GetVpcId() string {
+	if m != nil && m.VpcId != nil {
+		return *m.VpcId
+	}
+	return ""
+}
+
+type RouteTableAssociation struct {
+	Main                    *bool   `protobuf:"varint,2,opt,name=Main,json=main" json:"Main,omitempty"`
+	RouteTableAssociationId *string `protobuf:"bytes,3,opt,name=RouteTableAssociationId,json=routeTableAssociationId" json:"RouteTableAssociationId,omitempty"`
+	RouteTableId            *string `protobuf:"bytes,4,opt,name=RouteTableId,json=routeTableId" json:"RouteTableId,omitempty"`
+	SubnetId                *string `protobuf:"bytes,5,opt,name=SubnetId,json=subnetId" json:"SubnetId,omitempty"`
+	XXX_unrecognized        []byte  `json:"-"`
+}
+
+func (m *RouteTableAssociation) Reset()                    { *m = RouteTableAssociation{} }
+func (m *RouteTableAssociation) String() string            { return proto.CompactTextString(m) }
+func (*RouteTableAssociation) ProtoMessage()               {}
+func (*RouteTableAssociation) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{31} }
+
+func (m *RouteTableAssociation) GetMain() bool {
+	if m != nil && m.Main != nil {
+		return *m.Main
+	}
+	return false
+}
+
+func (m *RouteTableAssociation) GetRouteTableAssociationId() string {
+	if m != nil && m.RouteTableAssociationId != nil {
+		return *m.RouteTableAssociationId
+	}
+	return ""
+}
+
+func (m *RouteTableAssociation) GetRouteTableId() string {
+	if m != nil && m.RouteTableId != nil {
+		return *m.RouteTableId
+	}
+	return ""
+}
+
+func (m *RouteTableAssociation) GetSubnetId() string {
+	if m != nil && m.SubnetId != nil {
+		return *m.SubnetId
+	}
+	return ""
+}
+
 type SecurityGroup struct {
-	Description         *string         `protobuf:"bytes,2,opt,name=Description" json:"Description,omitempty"`
-	GroupId             *string         `protobuf:"bytes,3,opt,name=GroupId" json:"GroupId,omitempty"`
-	GroupName           *string         `protobuf:"bytes,4,opt,name=GroupName" json:"GroupName,omitempty"`
-	IpPermissions       []*IpPermission `protobuf:"bytes,5,rep,name=IpPermissions" json:"IpPermissions,omitempty"`
-	IpPermissionsEgress []*IpPermission `protobuf:"bytes,6,rep,name=IpPermissionsEgress" json:"IpPermissionsEgress,omitempty"`
-	OwnerId             *string         `protobuf:"bytes,7,opt,name=OwnerId" json:"OwnerId,omitempty"`
-	Tags                []*Tag          `protobuf:"bytes,8,rep,name=Tags" json:"Tags,omitempty"`
-	VpcId               *string         `protobuf:"bytes,9,opt,name=VpcId" json:"VpcId,omitempty"`
+	Description         *string         `protobuf:"bytes,2,opt,name=Description,json=description" json:"Description,omitempty"`
+	GroupId             *string         `protobuf:"bytes,3,opt,name=GroupId,json=groupId" json:"GroupId,omitempty"`
+	GroupName           *string         `protobuf:"bytes,4,opt,name=GroupName,json=groupName" json:"GroupName,omitempty"`
+	IpPermissions       []*IpPermission `protobuf:"bytes,5,rep,name=IpPermissions,json=ipPermissions" json:"IpPermissions,omitempty"`
+	IpPermissionsEgress []*IpPermission `protobuf:"bytes,6,rep,name=IpPermissionsEgress,json=ipPermissionsEgress" json:"IpPermissionsEgress,omitempty"`
+	OwnerId             *string         `protobuf:"bytes,7,opt,name=OwnerId,json=ownerId" json:"OwnerId,omitempty"`
+	Tags                []*Tag          `protobuf:"bytes,8,rep,name=Tags,json=tags" json:"Tags,omitempty"`
+	VpcId               *string         `protobuf:"bytes,9,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
 	XXX_unrecognized    []byte          `json:"-"`
 }
 
-func (m *SecurityGroup) Reset()         { *m = SecurityGroup{} }
-func (m *SecurityGroup) String() string { return proto.CompactTextString(m) }
-func (*SecurityGroup) ProtoMessage()    {}
+func (m *SecurityGroup) Reset()                    { *m = SecurityGroup{} }
+func (m *SecurityGroup) String() string            { return proto.CompactTextString(m) }
+func (*SecurityGroup) ProtoMessage()               {}
+func (*SecurityGroup) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{32} }
 
 func (m *SecurityGroup) GetDescription() string {
 	if m != nil && m.Description != nil {
@@ -978,14 +1585,15 @@ func (m *SecurityGroup) GetVpcId() string {
 }
 
 type StateReason struct {
-	Code             *string `protobuf:"bytes,2,opt,name=Code" json:"Code,omitempty"`
-	Message          *string `protobuf:"bytes,3,opt,name=Message" json:"Message,omitempty"`
+	Code             *string `protobuf:"bytes,2,opt,name=Code,json=code" json:"Code,omitempty"`
+	Message          *string `protobuf:"bytes,3,opt,name=Message,json=message" json:"Message,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *StateReason) Reset()         { *m = StateReason{} }
-func (m *StateReason) String() string { return proto.CompactTextString(m) }
-func (*StateReason) ProtoMessage()    {}
+func (m *StateReason) Reset()                    { *m = StateReason{} }
+func (m *StateReason) String() string            { return proto.CompactTextString(m) }
+func (*StateReason) ProtoMessage()               {}
+func (*StateReason) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{33} }
 
 func (m *StateReason) GetCode() string {
 	if m != nil && m.Code != nil {
@@ -1002,21 +1610,22 @@ func (m *StateReason) GetMessage() string {
 }
 
 type Subnet struct {
-	AvailabilityZone        *string `protobuf:"bytes,2,opt,name=AvailabilityZone" json:"AvailabilityZone,omitempty"`
-	AvailableIpAddressCount *int64  `protobuf:"zigzag64,3,opt,name=AvailableIpAddressCount" json:"AvailableIpAddressCount,omitempty"`
-	CidrBlock               *string `protobuf:"bytes,4,opt,name=CidrBlock" json:"CidrBlock,omitempty"`
-	DefaultForAz            *bool   `protobuf:"varint,5,opt,name=DefaultForAz" json:"DefaultForAz,omitempty"`
-	MapPublicIpOnLaunch     *bool   `protobuf:"varint,6,opt,name=MapPublicIpOnLaunch" json:"MapPublicIpOnLaunch,omitempty"`
-	State                   *string `protobuf:"bytes,7,opt,name=State" json:"State,omitempty"`
-	SubnetId                *string `protobuf:"bytes,8,opt,name=SubnetId" json:"SubnetId,omitempty"`
-	Tags                    []*Tag  `protobuf:"bytes,9,rep,name=Tags" json:"Tags,omitempty"`
-	VpcId                   *string `protobuf:"bytes,10,opt,name=VpcId" json:"VpcId,omitempty"`
+	AvailabilityZone        *string `protobuf:"bytes,2,opt,name=AvailabilityZone,json=availabilityZone" json:"AvailabilityZone,omitempty"`
+	AvailableIpAddressCount *int64  `protobuf:"zigzag64,3,opt,name=AvailableIpAddressCount,json=availableIpAddressCount" json:"AvailableIpAddressCount,omitempty"`
+	CidrBlock               *string `protobuf:"bytes,4,opt,name=CidrBlock,json=cidrBlock" json:"CidrBlock,omitempty"`
+	DefaultForAz            *bool   `protobuf:"varint,5,opt,name=DefaultForAz,json=defaultForAz" json:"DefaultForAz,omitempty"`
+	MapPublicIpOnLaunch     *bool   `protobuf:"varint,6,opt,name=MapPublicIpOnLaunch,json=mapPublicIpOnLaunch" json:"MapPublicIpOnLaunch,omitempty"`
+	State                   *string `protobuf:"bytes,7,opt,name=State,json=state" json:"State,omitempty"`
+	SubnetId                *string `protobuf:"bytes,8,opt,name=SubnetId,json=subnetId" json:"SubnetId,omitempty"`
+	Tags                    []*Tag  `protobuf:"bytes,9,rep,name=Tags,json=tags" json:"Tags,omitempty"`
+	VpcId                   *string `protobuf:"bytes,10,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
 	XXX_unrecognized        []byte  `json:"-"`
 }
 
-func (m *Subnet) Reset()         { *m = Subnet{} }
-func (m *Subnet) String() string { return proto.CompactTextString(m) }
-func (*Subnet) ProtoMessage()    {}
+func (m *Subnet) Reset()                    { *m = Subnet{} }
+func (m *Subnet) String() string            { return proto.CompactTextString(m) }
+func (*Subnet) ProtoMessage()               {}
+func (*Subnet) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{34} }
 
 func (m *Subnet) GetAvailabilityZone() string {
 	if m != nil && m.AvailabilityZone != nil {
@@ -1082,14 +1691,15 @@ func (m *Subnet) GetVpcId() string {
 }
 
 type Tag struct {
-	Key              *string `protobuf:"bytes,2,opt,name=Key" json:"Key,omitempty"`
-	Value            *string `protobuf:"bytes,3,opt,name=Value" json:"Value,omitempty"`
+	Key              *string `protobuf:"bytes,2,opt,name=Key,json=key" json:"Key,omitempty"`
+	Value            *string `protobuf:"bytes,3,opt,name=Value,json=value" json:"Value,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Tag) Reset()         { *m = Tag{} }
-func (m *Tag) String() string { return proto.CompactTextString(m) }
-func (*Tag) ProtoMessage()    {}
+func (m *Tag) Reset()                    { *m = Tag{} }
+func (m *Tag) String() string            { return proto.CompactTextString(m) }
+func (*Tag) ProtoMessage()               {}
+func (*Tag) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{35} }
 
 func (m *Tag) GetKey() string {
 	if m != nil && m.Key != nil {
@@ -1106,18 +1716,19 @@ func (m *Tag) GetValue() string {
 }
 
 type UserIdGroupPair struct {
-	GroupId                *string `protobuf:"bytes,2,opt,name=GroupId" json:"GroupId,omitempty"`
-	GroupName              *string `protobuf:"bytes,3,opt,name=GroupName" json:"GroupName,omitempty"`
-	PeeringStatus          *string `protobuf:"bytes,4,opt,name=PeeringStatus" json:"PeeringStatus,omitempty"`
-	UserId                 *string `protobuf:"bytes,5,opt,name=UserId" json:"UserId,omitempty"`
-	VpcId                  *string `protobuf:"bytes,6,opt,name=VpcId" json:"VpcId,omitempty"`
-	VpcPeeringConnectionId *string `protobuf:"bytes,7,opt,name=VpcPeeringConnectionId" json:"VpcPeeringConnectionId,omitempty"`
+	GroupId                *string `protobuf:"bytes,2,opt,name=GroupId,json=groupId" json:"GroupId,omitempty"`
+	GroupName              *string `protobuf:"bytes,3,opt,name=GroupName,json=groupName" json:"GroupName,omitempty"`
+	PeeringStatus          *string `protobuf:"bytes,4,opt,name=PeeringStatus,json=peeringStatus" json:"PeeringStatus,omitempty"`
+	UserId                 *string `protobuf:"bytes,5,opt,name=UserId,json=userId" json:"UserId,omitempty"`
+	VpcId                  *string `protobuf:"bytes,6,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
+	VpcPeeringConnectionId *string `protobuf:"bytes,7,opt,name=VpcPeeringConnectionId,json=vpcPeeringConnectionId" json:"VpcPeeringConnectionId,omitempty"`
 	XXX_unrecognized       []byte  `json:"-"`
 }
 
-func (m *UserIdGroupPair) Reset()         { *m = UserIdGroupPair{} }
-func (m *UserIdGroupPair) String() string { return proto.CompactTextString(m) }
-func (*UserIdGroupPair) ProtoMessage()    {}
+func (m *UserIdGroupPair) Reset()                    { *m = UserIdGroupPair{} }
+func (m *UserIdGroupPair) String() string            { return proto.CompactTextString(m) }
+func (*UserIdGroupPair) ProtoMessage()               {}
+func (*UserIdGroupPair) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{36} }
 
 func (m *UserIdGroupPair) GetGroupId() string {
 	if m != nil && m.GroupId != nil {
@@ -1162,19 +1773,20 @@ func (m *UserIdGroupPair) GetVpcPeeringConnectionId() string {
 }
 
 type Vpc struct {
-	CidrBlock        *string `protobuf:"bytes,2,opt,name=CidrBlock" json:"CidrBlock,omitempty"`
-	DhcpOptionsId    *string `protobuf:"bytes,3,opt,name=DhcpOptionsId" json:"DhcpOptionsId,omitempty"`
-	InstanceTenancy  *string `protobuf:"bytes,4,opt,name=InstanceTenancy" json:"InstanceTenancy,omitempty"`
-	IsDefault        *bool   `protobuf:"varint,5,opt,name=IsDefault" json:"IsDefault,omitempty"`
-	State            *string `protobuf:"bytes,6,opt,name=State" json:"State,omitempty"`
-	Tags             []*Tag  `protobuf:"bytes,7,rep,name=Tags" json:"Tags,omitempty"`
-	VpcId            *string `protobuf:"bytes,8,opt,name=VpcId" json:"VpcId,omitempty"`
+	CidrBlock        *string `protobuf:"bytes,2,opt,name=CidrBlock,json=cidrBlock" json:"CidrBlock,omitempty"`
+	DhcpOptionsId    *string `protobuf:"bytes,3,opt,name=DhcpOptionsId,json=dhcpOptionsId" json:"DhcpOptionsId,omitempty"`
+	InstanceTenancy  *string `protobuf:"bytes,4,opt,name=InstanceTenancy,json=instanceTenancy" json:"InstanceTenancy,omitempty"`
+	IsDefault        *bool   `protobuf:"varint,5,opt,name=IsDefault,json=isDefault" json:"IsDefault,omitempty"`
+	State            *string `protobuf:"bytes,6,opt,name=State,json=state" json:"State,omitempty"`
+	Tags             []*Tag  `protobuf:"bytes,7,rep,name=Tags,json=tags" json:"Tags,omitempty"`
+	VpcId            *string `protobuf:"bytes,8,opt,name=VpcId,json=vpcId" json:"VpcId,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Vpc) Reset()         { *m = Vpc{} }
-func (m *Vpc) String() string { return proto.CompactTextString(m) }
-func (*Vpc) ProtoMessage()    {}
+func (m *Vpc) Reset()                    { *m = Vpc{} }
+func (m *Vpc) String() string            { return proto.CompactTextString(m) }
+func (*Vpc) ProtoMessage()               {}
+func (*Vpc) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{37} }
 
 func (m *Vpc) GetCidrBlock() string {
 	if m != nil && m.CidrBlock != nil {
@@ -1226,7 +1838,18 @@ func (m *Vpc) GetVpcId() string {
 }
 
 func init() {
+	proto.RegisterType((*DescribeInstancesInput)(nil), "opsee.aws.ec2.DescribeInstancesInput")
+	proto.RegisterType((*DescribeInstancesOutput)(nil), "opsee.aws.ec2.DescribeInstancesOutput")
+	proto.RegisterType((*DescribeRouteTablesInput)(nil), "opsee.aws.ec2.DescribeRouteTablesInput")
+	proto.RegisterType((*DescribeRouteTablesOutput)(nil), "opsee.aws.ec2.DescribeRouteTablesOutput")
+	proto.RegisterType((*DescribeSecurityGroupsInput)(nil), "opsee.aws.ec2.DescribeSecurityGroupsInput")
+	proto.RegisterType((*DescribeSecurityGroupsOutput)(nil), "opsee.aws.ec2.DescribeSecurityGroupsOutput")
+	proto.RegisterType((*DescribeSubnetsInput)(nil), "opsee.aws.ec2.DescribeSubnetsInput")
+	proto.RegisterType((*DescribeSubnetsOutput)(nil), "opsee.aws.ec2.DescribeSubnetsOutput")
+	proto.RegisterType((*DescribeVpcsInput)(nil), "opsee.aws.ec2.DescribeVpcsInput")
+	proto.RegisterType((*DescribeVpcsOutput)(nil), "opsee.aws.ec2.DescribeVpcsOutput")
 	proto.RegisterType((*EbsInstanceBlockDevice)(nil), "opsee.aws.ec2.EbsInstanceBlockDevice")
+	proto.RegisterType((*Filter)(nil), "opsee.aws.ec2.Filter")
 	proto.RegisterType((*GroupIdentifier)(nil), "opsee.aws.ec2.GroupIdentifier")
 	proto.RegisterType((*IamInstanceProfile)(nil), "opsee.aws.ec2.IamInstanceProfile")
 	proto.RegisterType((*Instance)(nil), "opsee.aws.ec2.Instance")
@@ -1242,12 +1865,517 @@ func init() {
 	proto.RegisterType((*Placement)(nil), "opsee.aws.ec2.Placement")
 	proto.RegisterType((*PrefixListId)(nil), "opsee.aws.ec2.PrefixListId")
 	proto.RegisterType((*ProductCode)(nil), "opsee.aws.ec2.ProductCode")
+	proto.RegisterType((*PropagatingVgw)(nil), "opsee.aws.ec2.PropagatingVgw")
+	proto.RegisterType((*Reservation)(nil), "opsee.aws.ec2.Reservation")
+	proto.RegisterType((*Route)(nil), "opsee.aws.ec2.Route")
+	proto.RegisterType((*RouteTable)(nil), "opsee.aws.ec2.RouteTable")
+	proto.RegisterType((*RouteTableAssociation)(nil), "opsee.aws.ec2.RouteTableAssociation")
 	proto.RegisterType((*SecurityGroup)(nil), "opsee.aws.ec2.SecurityGroup")
 	proto.RegisterType((*StateReason)(nil), "opsee.aws.ec2.StateReason")
 	proto.RegisterType((*Subnet)(nil), "opsee.aws.ec2.Subnet")
 	proto.RegisterType((*Tag)(nil), "opsee.aws.ec2.Tag")
 	proto.RegisterType((*UserIdGroupPair)(nil), "opsee.aws.ec2.UserIdGroupPair")
 	proto.RegisterType((*Vpc)(nil), "opsee.aws.ec2.Vpc")
+}
+func (this *DescribeInstancesInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeInstancesInput)
+	if !ok {
+		that2, ok := that.(DescribeInstancesInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DryRun != nil && that1.DryRun != nil {
+		if *this.DryRun != *that1.DryRun {
+			return false
+		}
+	} else if this.DryRun != nil {
+		return false
+	} else if that1.DryRun != nil {
+		return false
+	}
+	if len(this.Filters) != len(that1.Filters) {
+		return false
+	}
+	for i := range this.Filters {
+		if !this.Filters[i].Equal(that1.Filters[i]) {
+			return false
+		}
+	}
+	if len(this.InstanceIds) != len(that1.InstanceIds) {
+		return false
+	}
+	for i := range this.InstanceIds {
+		if this.InstanceIds[i] != that1.InstanceIds[i] {
+			return false
+		}
+	}
+	if this.MaxResults != nil && that1.MaxResults != nil {
+		if *this.MaxResults != *that1.MaxResults {
+			return false
+		}
+	} else if this.MaxResults != nil {
+		return false
+	} else if that1.MaxResults != nil {
+		return false
+	}
+	if this.NextToken != nil && that1.NextToken != nil {
+		if *this.NextToken != *that1.NextToken {
+			return false
+		}
+	} else if this.NextToken != nil {
+		return false
+	} else if that1.NextToken != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeInstancesOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeInstancesOutput)
+	if !ok {
+		that2, ok := that.(DescribeInstancesOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.NextToken != nil && that1.NextToken != nil {
+		if *this.NextToken != *that1.NextToken {
+			return false
+		}
+	} else if this.NextToken != nil {
+		return false
+	} else if that1.NextToken != nil {
+		return false
+	}
+	if len(this.Reservations) != len(that1.Reservations) {
+		return false
+	}
+	for i := range this.Reservations {
+		if !this.Reservations[i].Equal(that1.Reservations[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeRouteTablesInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeRouteTablesInput)
+	if !ok {
+		that2, ok := that.(DescribeRouteTablesInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DryRun != nil && that1.DryRun != nil {
+		if *this.DryRun != *that1.DryRun {
+			return false
+		}
+	} else if this.DryRun != nil {
+		return false
+	} else if that1.DryRun != nil {
+		return false
+	}
+	if len(this.Filters) != len(that1.Filters) {
+		return false
+	}
+	for i := range this.Filters {
+		if !this.Filters[i].Equal(that1.Filters[i]) {
+			return false
+		}
+	}
+	if len(this.RouteTableIds) != len(that1.RouteTableIds) {
+		return false
+	}
+	for i := range this.RouteTableIds {
+		if this.RouteTableIds[i] != that1.RouteTableIds[i] {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeRouteTablesOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeRouteTablesOutput)
+	if !ok {
+		that2, ok := that.(DescribeRouteTablesOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.RouteTables) != len(that1.RouteTables) {
+		return false
+	}
+	for i := range this.RouteTables {
+		if !this.RouteTables[i].Equal(that1.RouteTables[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeSecurityGroupsInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeSecurityGroupsInput)
+	if !ok {
+		that2, ok := that.(DescribeSecurityGroupsInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DryRun != nil && that1.DryRun != nil {
+		if *this.DryRun != *that1.DryRun {
+			return false
+		}
+	} else if this.DryRun != nil {
+		return false
+	} else if that1.DryRun != nil {
+		return false
+	}
+	if len(this.Filters) != len(that1.Filters) {
+		return false
+	}
+	for i := range this.Filters {
+		if !this.Filters[i].Equal(that1.Filters[i]) {
+			return false
+		}
+	}
+	if len(this.GroupIds) != len(that1.GroupIds) {
+		return false
+	}
+	for i := range this.GroupIds {
+		if this.GroupIds[i] != that1.GroupIds[i] {
+			return false
+		}
+	}
+	if len(this.GroupNames) != len(that1.GroupNames) {
+		return false
+	}
+	for i := range this.GroupNames {
+		if this.GroupNames[i] != that1.GroupNames[i] {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeSecurityGroupsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeSecurityGroupsOutput)
+	if !ok {
+		that2, ok := that.(DescribeSecurityGroupsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.SecurityGroups) != len(that1.SecurityGroups) {
+		return false
+	}
+	for i := range this.SecurityGroups {
+		if !this.SecurityGroups[i].Equal(that1.SecurityGroups[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeSubnetsInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeSubnetsInput)
+	if !ok {
+		that2, ok := that.(DescribeSubnetsInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DryRun != nil && that1.DryRun != nil {
+		if *this.DryRun != *that1.DryRun {
+			return false
+		}
+	} else if this.DryRun != nil {
+		return false
+	} else if that1.DryRun != nil {
+		return false
+	}
+	if len(this.Filters) != len(that1.Filters) {
+		return false
+	}
+	for i := range this.Filters {
+		if !this.Filters[i].Equal(that1.Filters[i]) {
+			return false
+		}
+	}
+	if len(this.SubnetIds) != len(that1.SubnetIds) {
+		return false
+	}
+	for i := range this.SubnetIds {
+		if this.SubnetIds[i] != that1.SubnetIds[i] {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeSubnetsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeSubnetsOutput)
+	if !ok {
+		that2, ok := that.(DescribeSubnetsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Subnets) != len(that1.Subnets) {
+		return false
+	}
+	for i := range this.Subnets {
+		if !this.Subnets[i].Equal(that1.Subnets[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeVpcsInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeVpcsInput)
+	if !ok {
+		that2, ok := that.(DescribeVpcsInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DryRun != nil && that1.DryRun != nil {
+		if *this.DryRun != *that1.DryRun {
+			return false
+		}
+	} else if this.DryRun != nil {
+		return false
+	} else if that1.DryRun != nil {
+		return false
+	}
+	if len(this.Filters) != len(that1.Filters) {
+		return false
+	}
+	for i := range this.Filters {
+		if !this.Filters[i].Equal(that1.Filters[i]) {
+			return false
+		}
+	}
+	if len(this.VpcIds) != len(that1.VpcIds) {
+		return false
+	}
+	for i := range this.VpcIds {
+		if this.VpcIds[i] != that1.VpcIds[i] {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeVpcsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeVpcsOutput)
+	if !ok {
+		that2, ok := that.(DescribeVpcsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Vpcs) != len(that1.Vpcs) {
+		return false
+	}
+	for i := range this.Vpcs {
+		if !this.Vpcs[i].Equal(that1.Vpcs[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
 }
 func (this *EbsInstanceBlockDevice) Equal(that interface{}) bool {
 	if that == nil {
@@ -1274,13 +2402,7 @@ func (this *EbsInstanceBlockDevice) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.AttachTime != nil && that1.AttachTime != nil {
-		if *this.AttachTime != *that1.AttachTime {
-			return false
-		}
-	} else if this.AttachTime != nil {
-		return false
-	} else if that1.AttachTime != nil {
+	if !this.AttachTime.Equal(that1.AttachTime) {
 		return false
 	}
 	if this.DeleteOnTermination != nil && that1.DeleteOnTermination != nil {
@@ -1309,6 +2431,53 @@ func (this *EbsInstanceBlockDevice) Equal(that interface{}) bool {
 		return false
 	} else if that1.VolumeId != nil {
 		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *Filter) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Filter)
+	if !ok {
+		that2, ok := that.(Filter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Name != nil && that1.Name != nil {
+		if *this.Name != *that1.Name {
+			return false
+		}
+	} else if this.Name != nil {
+		return false
+	} else if that1.Name != nil {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if this.Values[i] != that1.Values[i] {
+			return false
+		}
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return false
@@ -1546,13 +2715,7 @@ func (this *Instance) Equal(that interface{}) bool {
 	} else if that1.KeyName != nil {
 		return false
 	}
-	if this.LaunchTime != nil && that1.LaunchTime != nil {
-		if *this.LaunchTime != *that1.LaunchTime {
-			return false
-		}
-	} else if this.LaunchTime != nil {
-		return false
-	} else if that1.LaunchTime != nil {
+	if !this.LaunchTime.Equal(that1.LaunchTime) {
 		return false
 	}
 	if !this.Monitoring.Equal(that1.Monitoring) {
@@ -2005,13 +3168,7 @@ func (this *InstanceNetworkInterfaceAttachment) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.AttachTime != nil && that1.AttachTime != nil {
-		if *this.AttachTime != *that1.AttachTime {
-			return false
-		}
-	} else if this.AttachTime != nil {
-		return false
-	} else if that1.AttachTime != nil {
+	if !this.AttachTime.Equal(that1.AttachTime) {
 		return false
 	}
 	if this.AttachmentId != nil && that1.AttachmentId != nil {
@@ -2477,6 +3634,384 @@ func (this *ProductCode) Equal(that interface{}) bool {
 	} else if this.ProductCodeType != nil {
 		return false
 	} else if that1.ProductCodeType != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *PropagatingVgw) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*PropagatingVgw)
+	if !ok {
+		that2, ok := that.(PropagatingVgw)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.GatewayId != nil && that1.GatewayId != nil {
+		if *this.GatewayId != *that1.GatewayId {
+			return false
+		}
+	} else if this.GatewayId != nil {
+		return false
+	} else if that1.GatewayId != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *Reservation) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Reservation)
+	if !ok {
+		that2, ok := that.(Reservation)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Groups) != len(that1.Groups) {
+		return false
+	}
+	for i := range this.Groups {
+		if !this.Groups[i].Equal(that1.Groups[i]) {
+			return false
+		}
+	}
+	if len(this.Instances) != len(that1.Instances) {
+		return false
+	}
+	for i := range this.Instances {
+		if !this.Instances[i].Equal(that1.Instances[i]) {
+			return false
+		}
+	}
+	if this.OwnerId != nil && that1.OwnerId != nil {
+		if *this.OwnerId != *that1.OwnerId {
+			return false
+		}
+	} else if this.OwnerId != nil {
+		return false
+	} else if that1.OwnerId != nil {
+		return false
+	}
+	if this.RequesterId != nil && that1.RequesterId != nil {
+		if *this.RequesterId != *that1.RequesterId {
+			return false
+		}
+	} else if this.RequesterId != nil {
+		return false
+	} else if that1.RequesterId != nil {
+		return false
+	}
+	if this.ReservationId != nil && that1.ReservationId != nil {
+		if *this.ReservationId != *that1.ReservationId {
+			return false
+		}
+	} else if this.ReservationId != nil {
+		return false
+	} else if that1.ReservationId != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *Route) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Route)
+	if !ok {
+		that2, ok := that.(Route)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.DestinationCidrBlock != nil && that1.DestinationCidrBlock != nil {
+		if *this.DestinationCidrBlock != *that1.DestinationCidrBlock {
+			return false
+		}
+	} else if this.DestinationCidrBlock != nil {
+		return false
+	} else if that1.DestinationCidrBlock != nil {
+		return false
+	}
+	if this.DestinationPrefixListId != nil && that1.DestinationPrefixListId != nil {
+		if *this.DestinationPrefixListId != *that1.DestinationPrefixListId {
+			return false
+		}
+	} else if this.DestinationPrefixListId != nil {
+		return false
+	} else if that1.DestinationPrefixListId != nil {
+		return false
+	}
+	if this.GatewayId != nil && that1.GatewayId != nil {
+		if *this.GatewayId != *that1.GatewayId {
+			return false
+		}
+	} else if this.GatewayId != nil {
+		return false
+	} else if that1.GatewayId != nil {
+		return false
+	}
+	if this.InstanceId != nil && that1.InstanceId != nil {
+		if *this.InstanceId != *that1.InstanceId {
+			return false
+		}
+	} else if this.InstanceId != nil {
+		return false
+	} else if that1.InstanceId != nil {
+		return false
+	}
+	if this.InstanceOwnerId != nil && that1.InstanceOwnerId != nil {
+		if *this.InstanceOwnerId != *that1.InstanceOwnerId {
+			return false
+		}
+	} else if this.InstanceOwnerId != nil {
+		return false
+	} else if that1.InstanceOwnerId != nil {
+		return false
+	}
+	if this.NatGatewayId != nil && that1.NatGatewayId != nil {
+		if *this.NatGatewayId != *that1.NatGatewayId {
+			return false
+		}
+	} else if this.NatGatewayId != nil {
+		return false
+	} else if that1.NatGatewayId != nil {
+		return false
+	}
+	if this.NetworkInterfaceId != nil && that1.NetworkInterfaceId != nil {
+		if *this.NetworkInterfaceId != *that1.NetworkInterfaceId {
+			return false
+		}
+	} else if this.NetworkInterfaceId != nil {
+		return false
+	} else if that1.NetworkInterfaceId != nil {
+		return false
+	}
+	if this.Origin != nil && that1.Origin != nil {
+		if *this.Origin != *that1.Origin {
+			return false
+		}
+	} else if this.Origin != nil {
+		return false
+	} else if that1.Origin != nil {
+		return false
+	}
+	if this.State != nil && that1.State != nil {
+		if *this.State != *that1.State {
+			return false
+		}
+	} else if this.State != nil {
+		return false
+	} else if that1.State != nil {
+		return false
+	}
+	if this.VpcPeeringConnectionId != nil && that1.VpcPeeringConnectionId != nil {
+		if *this.VpcPeeringConnectionId != *that1.VpcPeeringConnectionId {
+			return false
+		}
+	} else if this.VpcPeeringConnectionId != nil {
+		return false
+	} else if that1.VpcPeeringConnectionId != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *RouteTable) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*RouteTable)
+	if !ok {
+		that2, ok := that.(RouteTable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Associations) != len(that1.Associations) {
+		return false
+	}
+	for i := range this.Associations {
+		if !this.Associations[i].Equal(that1.Associations[i]) {
+			return false
+		}
+	}
+	if len(this.PropagatingVgws) != len(that1.PropagatingVgws) {
+		return false
+	}
+	for i := range this.PropagatingVgws {
+		if !this.PropagatingVgws[i].Equal(that1.PropagatingVgws[i]) {
+			return false
+		}
+	}
+	if this.RouteTableId != nil && that1.RouteTableId != nil {
+		if *this.RouteTableId != *that1.RouteTableId {
+			return false
+		}
+	} else if this.RouteTableId != nil {
+		return false
+	} else if that1.RouteTableId != nil {
+		return false
+	}
+	if len(this.Routes) != len(that1.Routes) {
+		return false
+	}
+	for i := range this.Routes {
+		if !this.Routes[i].Equal(that1.Routes[i]) {
+			return false
+		}
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if !this.Tags[i].Equal(that1.Tags[i]) {
+			return false
+		}
+	}
+	if this.VpcId != nil && that1.VpcId != nil {
+		if *this.VpcId != *that1.VpcId {
+			return false
+		}
+	} else if this.VpcId != nil {
+		return false
+	} else if that1.VpcId != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *RouteTableAssociation) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*RouteTableAssociation)
+	if !ok {
+		that2, ok := that.(RouteTableAssociation)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Main != nil && that1.Main != nil {
+		if *this.Main != *that1.Main {
+			return false
+		}
+	} else if this.Main != nil {
+		return false
+	} else if that1.Main != nil {
+		return false
+	}
+	if this.RouteTableAssociationId != nil && that1.RouteTableAssociationId != nil {
+		if *this.RouteTableAssociationId != *that1.RouteTableAssociationId {
+			return false
+		}
+	} else if this.RouteTableAssociationId != nil {
+		return false
+	} else if that1.RouteTableAssociationId != nil {
+		return false
+	}
+	if this.RouteTableId != nil && that1.RouteTableId != nil {
+		if *this.RouteTableId != *that1.RouteTableId {
+			return false
+		}
+	} else if this.RouteTableId != nil {
+		return false
+	} else if that1.RouteTableId != nil {
+		return false
+	}
+	if this.SubnetId != nil && that1.SubnetId != nil {
+		if *this.SubnetId != *that1.SubnetId {
+			return false
+		}
+	} else if this.SubnetId != nil {
+		return false
+	} else if that1.SubnetId != nil {
 		return false
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -2966,11 +4501,77 @@ func (this *Vpc) Equal(that interface{}) bool {
 	return true
 }
 
+type DescribeInstancesInputGetter interface {
+	GetDescribeInstancesInput() *DescribeInstancesInput
+}
+
+var GraphQLDescribeInstancesInputType *github_com_graphql_go_graphql.Object
+
+type DescribeInstancesOutputGetter interface {
+	GetDescribeInstancesOutput() *DescribeInstancesOutput
+}
+
+var GraphQLDescribeInstancesOutputType *github_com_graphql_go_graphql.Object
+
+type DescribeRouteTablesInputGetter interface {
+	GetDescribeRouteTablesInput() *DescribeRouteTablesInput
+}
+
+var GraphQLDescribeRouteTablesInputType *github_com_graphql_go_graphql.Object
+
+type DescribeRouteTablesOutputGetter interface {
+	GetDescribeRouteTablesOutput() *DescribeRouteTablesOutput
+}
+
+var GraphQLDescribeRouteTablesOutputType *github_com_graphql_go_graphql.Object
+
+type DescribeSecurityGroupsInputGetter interface {
+	GetDescribeSecurityGroupsInput() *DescribeSecurityGroupsInput
+}
+
+var GraphQLDescribeSecurityGroupsInputType *github_com_graphql_go_graphql.Object
+
+type DescribeSecurityGroupsOutputGetter interface {
+	GetDescribeSecurityGroupsOutput() *DescribeSecurityGroupsOutput
+}
+
+var GraphQLDescribeSecurityGroupsOutputType *github_com_graphql_go_graphql.Object
+
+type DescribeSubnetsInputGetter interface {
+	GetDescribeSubnetsInput() *DescribeSubnetsInput
+}
+
+var GraphQLDescribeSubnetsInputType *github_com_graphql_go_graphql.Object
+
+type DescribeSubnetsOutputGetter interface {
+	GetDescribeSubnetsOutput() *DescribeSubnetsOutput
+}
+
+var GraphQLDescribeSubnetsOutputType *github_com_graphql_go_graphql.Object
+
+type DescribeVpcsInputGetter interface {
+	GetDescribeVpcsInput() *DescribeVpcsInput
+}
+
+var GraphQLDescribeVpcsInputType *github_com_graphql_go_graphql.Object
+
+type DescribeVpcsOutputGetter interface {
+	GetDescribeVpcsOutput() *DescribeVpcsOutput
+}
+
+var GraphQLDescribeVpcsOutputType *github_com_graphql_go_graphql.Object
+
 type EbsInstanceBlockDeviceGetter interface {
 	GetEbsInstanceBlockDevice() *EbsInstanceBlockDevice
 }
 
 var GraphQLEbsInstanceBlockDeviceType *github_com_graphql_go_graphql.Object
+
+type FilterGetter interface {
+	GetFilter() *Filter
+}
+
+var GraphQLFilterType *github_com_graphql_go_graphql.Object
 
 type GroupIdentifierGetter interface {
 	GetGroupIdentifier() *GroupIdentifier
@@ -3062,6 +4663,36 @@ type ProductCodeGetter interface {
 
 var GraphQLProductCodeType *github_com_graphql_go_graphql.Object
 
+type PropagatingVgwGetter interface {
+	GetPropagatingVgw() *PropagatingVgw
+}
+
+var GraphQLPropagatingVgwType *github_com_graphql_go_graphql.Object
+
+type ReservationGetter interface {
+	GetReservation() *Reservation
+}
+
+var GraphQLReservationType *github_com_graphql_go_graphql.Object
+
+type RouteGetter interface {
+	GetRoute() *Route
+}
+
+var GraphQLRouteType *github_com_graphql_go_graphql.Object
+
+type RouteTableGetter interface {
+	GetRouteTable() *RouteTable
+}
+
+var GraphQLRouteTableType *github_com_graphql_go_graphql.Object
+
+type RouteTableAssociationGetter interface {
+	GetRouteTableAssociation() *RouteTableAssociation
+}
+
+var GraphQLRouteTableAssociationType *github_com_graphql_go_graphql.Object
+
 type SecurityGroupGetter interface {
 	GetSecurityGroup() *SecurityGroup
 }
@@ -3099,13 +4730,597 @@ type VpcGetter interface {
 var GraphQLVpcType *github_com_graphql_go_graphql.Object
 
 func init() {
+	GraphQLDescribeInstancesInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeInstancesInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DryRun": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesInput)
+						if ok {
+							if obj.DryRun == nil {
+								return nil, nil
+							}
+							return obj.GetDryRun(), nil
+						}
+						inter, ok := p.Source.(DescribeInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DryRun == nil {
+								return nil, nil
+							}
+							return face.GetDryRun(), nil
+						}
+						return nil, fmt.Errorf("field DryRun not resolved")
+					},
+				},
+				"Filters": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLFilterType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesInput)
+						if ok {
+							return obj.Filters, nil
+						}
+						inter, ok := p.Source.(DescribeInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Filters, nil
+						}
+						return nil, fmt.Errorf("field Filters not resolved")
+					},
+				},
+				"InstanceIds": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesInput)
+						if ok {
+							return obj.InstanceIds, nil
+						}
+						inter, ok := p.Source.(DescribeInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.InstanceIds, nil
+						}
+						return nil, fmt.Errorf("field InstanceIds not resolved")
+					},
+				},
+				"MaxResults": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesInput)
+						if ok {
+							if obj.MaxResults == nil {
+								return nil, nil
+							}
+							return obj.GetMaxResults(), nil
+						}
+						inter, ok := p.Source.(DescribeInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MaxResults == nil {
+								return nil, nil
+							}
+							return face.GetMaxResults(), nil
+						}
+						return nil, fmt.Errorf("field MaxResults not resolved")
+					},
+				},
+				"NextToken": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesInput)
+						if ok {
+							if obj.NextToken == nil {
+								return nil, nil
+							}
+							return obj.GetNextToken(), nil
+						}
+						inter, ok := p.Source.(DescribeInstancesInputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NextToken == nil {
+								return nil, nil
+							}
+							return face.GetNextToken(), nil
+						}
+						return nil, fmt.Errorf("field NextToken not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeInstancesOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeInstancesOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"NextToken": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesOutput)
+						if ok {
+							if obj.NextToken == nil {
+								return nil, nil
+							}
+							return obj.GetNextToken(), nil
+						}
+						inter, ok := p.Source.(DescribeInstancesOutputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesOutput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NextToken == nil {
+								return nil, nil
+							}
+							return face.GetNextToken(), nil
+						}
+						return nil, fmt.Errorf("field NextToken not resolved")
+					},
+				},
+				"Reservations": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLReservationType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeInstancesOutput)
+						if ok {
+							return obj.Reservations, nil
+						}
+						inter, ok := p.Source.(DescribeInstancesOutputGetter)
+						if ok {
+							face := inter.GetDescribeInstancesOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Reservations, nil
+						}
+						return nil, fmt.Errorf("field Reservations not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeRouteTablesInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeRouteTablesInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DryRun": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeRouteTablesInput)
+						if ok {
+							if obj.DryRun == nil {
+								return nil, nil
+							}
+							return obj.GetDryRun(), nil
+						}
+						inter, ok := p.Source.(DescribeRouteTablesInputGetter)
+						if ok {
+							face := inter.GetDescribeRouteTablesInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DryRun == nil {
+								return nil, nil
+							}
+							return face.GetDryRun(), nil
+						}
+						return nil, fmt.Errorf("field DryRun not resolved")
+					},
+				},
+				"Filters": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLFilterType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeRouteTablesInput)
+						if ok {
+							return obj.Filters, nil
+						}
+						inter, ok := p.Source.(DescribeRouteTablesInputGetter)
+						if ok {
+							face := inter.GetDescribeRouteTablesInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Filters, nil
+						}
+						return nil, fmt.Errorf("field Filters not resolved")
+					},
+				},
+				"RouteTableIds": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeRouteTablesInput)
+						if ok {
+							return obj.RouteTableIds, nil
+						}
+						inter, ok := p.Source.(DescribeRouteTablesInputGetter)
+						if ok {
+							face := inter.GetDescribeRouteTablesInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.RouteTableIds, nil
+						}
+						return nil, fmt.Errorf("field RouteTableIds not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeRouteTablesOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeRouteTablesOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"RouteTables": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLRouteTableType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeRouteTablesOutput)
+						if ok {
+							return obj.RouteTables, nil
+						}
+						inter, ok := p.Source.(DescribeRouteTablesOutputGetter)
+						if ok {
+							face := inter.GetDescribeRouteTablesOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.RouteTables, nil
+						}
+						return nil, fmt.Errorf("field RouteTables not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeSecurityGroupsInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeSecurityGroupsInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DryRun": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSecurityGroupsInput)
+						if ok {
+							if obj.DryRun == nil {
+								return nil, nil
+							}
+							return obj.GetDryRun(), nil
+						}
+						inter, ok := p.Source.(DescribeSecurityGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeSecurityGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DryRun == nil {
+								return nil, nil
+							}
+							return face.GetDryRun(), nil
+						}
+						return nil, fmt.Errorf("field DryRun not resolved")
+					},
+				},
+				"Filters": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLFilterType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSecurityGroupsInput)
+						if ok {
+							return obj.Filters, nil
+						}
+						inter, ok := p.Source.(DescribeSecurityGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeSecurityGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Filters, nil
+						}
+						return nil, fmt.Errorf("field Filters not resolved")
+					},
+				},
+				"GroupIds": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSecurityGroupsInput)
+						if ok {
+							return obj.GroupIds, nil
+						}
+						inter, ok := p.Source.(DescribeSecurityGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeSecurityGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.GroupIds, nil
+						}
+						return nil, fmt.Errorf("field GroupIds not resolved")
+					},
+				},
+				"GroupNames": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSecurityGroupsInput)
+						if ok {
+							return obj.GroupNames, nil
+						}
+						inter, ok := p.Source.(DescribeSecurityGroupsInputGetter)
+						if ok {
+							face := inter.GetDescribeSecurityGroupsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.GroupNames, nil
+						}
+						return nil, fmt.Errorf("field GroupNames not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeSecurityGroupsOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeSecurityGroupsOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"SecurityGroups": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLSecurityGroupType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSecurityGroupsOutput)
+						if ok {
+							return obj.SecurityGroups, nil
+						}
+						inter, ok := p.Source.(DescribeSecurityGroupsOutputGetter)
+						if ok {
+							face := inter.GetDescribeSecurityGroupsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.SecurityGroups, nil
+						}
+						return nil, fmt.Errorf("field SecurityGroups not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeSubnetsInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeSubnetsInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DryRun": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSubnetsInput)
+						if ok {
+							if obj.DryRun == nil {
+								return nil, nil
+							}
+							return obj.GetDryRun(), nil
+						}
+						inter, ok := p.Source.(DescribeSubnetsInputGetter)
+						if ok {
+							face := inter.GetDescribeSubnetsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DryRun == nil {
+								return nil, nil
+							}
+							return face.GetDryRun(), nil
+						}
+						return nil, fmt.Errorf("field DryRun not resolved")
+					},
+				},
+				"Filters": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLFilterType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSubnetsInput)
+						if ok {
+							return obj.Filters, nil
+						}
+						inter, ok := p.Source.(DescribeSubnetsInputGetter)
+						if ok {
+							face := inter.GetDescribeSubnetsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Filters, nil
+						}
+						return nil, fmt.Errorf("field Filters not resolved")
+					},
+				},
+				"SubnetIds": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSubnetsInput)
+						if ok {
+							return obj.SubnetIds, nil
+						}
+						inter, ok := p.Source.(DescribeSubnetsInputGetter)
+						if ok {
+							face := inter.GetDescribeSubnetsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.SubnetIds, nil
+						}
+						return nil, fmt.Errorf("field SubnetIds not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeSubnetsOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeSubnetsOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Subnets": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLSubnetType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeSubnetsOutput)
+						if ok {
+							return obj.Subnets, nil
+						}
+						inter, ok := p.Source.(DescribeSubnetsOutputGetter)
+						if ok {
+							face := inter.GetDescribeSubnetsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Subnets, nil
+						}
+						return nil, fmt.Errorf("field Subnets not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeVpcsInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeVpcsInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DryRun": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeVpcsInput)
+						if ok {
+							if obj.DryRun == nil {
+								return nil, nil
+							}
+							return obj.GetDryRun(), nil
+						}
+						inter, ok := p.Source.(DescribeVpcsInputGetter)
+						if ok {
+							face := inter.GetDescribeVpcsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DryRun == nil {
+								return nil, nil
+							}
+							return face.GetDryRun(), nil
+						}
+						return nil, fmt.Errorf("field DryRun not resolved")
+					},
+				},
+				"Filters": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLFilterType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeVpcsInput)
+						if ok {
+							return obj.Filters, nil
+						}
+						inter, ok := p.Source.(DescribeVpcsInputGetter)
+						if ok {
+							face := inter.GetDescribeVpcsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Filters, nil
+						}
+						return nil, fmt.Errorf("field Filters not resolved")
+					},
+				},
+				"VpcIds": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeVpcsInput)
+						if ok {
+							return obj.VpcIds, nil
+						}
+						inter, ok := p.Source.(DescribeVpcsInputGetter)
+						if ok {
+							face := inter.GetDescribeVpcsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.VpcIds, nil
+						}
+						return nil, fmt.Errorf("field VpcIds not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeVpcsOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2DescribeVpcsOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Vpcs": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLVpcType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeVpcsOutput)
+						if ok {
+							return obj.Vpcs, nil
+						}
+						inter, ok := p.Source.(DescribeVpcsOutputGetter)
+						if ok {
+							face := inter.GetDescribeVpcsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Vpcs, nil
+						}
+						return nil, fmt.Errorf("field Vpcs not resolved")
+					},
+				},
+			}
+		}),
+	})
 	GraphQLEbsInstanceBlockDeviceType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "ec2EbsInstanceBlockDevice",
 		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
 				"AttachTime": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*EbsInstanceBlockDevice)
@@ -3202,6 +5417,58 @@ func init() {
 							return face.GetVolumeId(), nil
 						}
 						return nil, fmt.Errorf("field VolumeId not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLFilterType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2Filter",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Name": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Filter)
+						if ok {
+							if obj.Name == nil {
+								return nil, nil
+							}
+							return obj.GetName(), nil
+						}
+						inter, ok := p.Source.(FilterGetter)
+						if ok {
+							face := inter.GetFilter()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Name == nil {
+								return nil, nil
+							}
+							return face.GetName(), nil
+						}
+						return nil, fmt.Errorf("field Name not resolved")
+					},
+				},
+				"Values": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Filter)
+						if ok {
+							return obj.Values, nil
+						}
+						inter, ok := p.Source.(FilterGetter)
+						if ok {
+							face := inter.GetFilter()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Values, nil
+						}
+						return nil, fmt.Errorf("field Values not resolved")
 					},
 				},
 			}
@@ -3648,7 +5915,7 @@ func init() {
 					},
 				},
 				"LaunchTime": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*Instance)
@@ -4719,7 +6986,7 @@ func init() {
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
 				"AttachTime": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*InstanceNetworkInterfaceAttachment)
@@ -5437,6 +7704,660 @@ func init() {
 							return face.GetProductCodeType(), nil
 						}
 						return nil, fmt.Errorf("field ProductCodeType not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLPropagatingVgwType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2PropagatingVgw",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"GatewayId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*PropagatingVgw)
+						if ok {
+							if obj.GatewayId == nil {
+								return nil, nil
+							}
+							return obj.GetGatewayId(), nil
+						}
+						inter, ok := p.Source.(PropagatingVgwGetter)
+						if ok {
+							face := inter.GetPropagatingVgw()
+							if face == nil {
+								return nil, nil
+							}
+							if face.GatewayId == nil {
+								return nil, nil
+							}
+							return face.GetGatewayId(), nil
+						}
+						return nil, fmt.Errorf("field GatewayId not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLReservationType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2Reservation",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Groups": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLGroupIdentifierType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Reservation)
+						if ok {
+							return obj.Groups, nil
+						}
+						inter, ok := p.Source.(ReservationGetter)
+						if ok {
+							face := inter.GetReservation()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Groups, nil
+						}
+						return nil, fmt.Errorf("field Groups not resolved")
+					},
+				},
+				"Instances": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLInstanceType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Reservation)
+						if ok {
+							return obj.Instances, nil
+						}
+						inter, ok := p.Source.(ReservationGetter)
+						if ok {
+							face := inter.GetReservation()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Instances, nil
+						}
+						return nil, fmt.Errorf("field Instances not resolved")
+					},
+				},
+				"OwnerId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Reservation)
+						if ok {
+							if obj.OwnerId == nil {
+								return nil, nil
+							}
+							return obj.GetOwnerId(), nil
+						}
+						inter, ok := p.Source.(ReservationGetter)
+						if ok {
+							face := inter.GetReservation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.OwnerId == nil {
+								return nil, nil
+							}
+							return face.GetOwnerId(), nil
+						}
+						return nil, fmt.Errorf("field OwnerId not resolved")
+					},
+				},
+				"RequesterId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Reservation)
+						if ok {
+							if obj.RequesterId == nil {
+								return nil, nil
+							}
+							return obj.GetRequesterId(), nil
+						}
+						inter, ok := p.Source.(ReservationGetter)
+						if ok {
+							face := inter.GetReservation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.RequesterId == nil {
+								return nil, nil
+							}
+							return face.GetRequesterId(), nil
+						}
+						return nil, fmt.Errorf("field RequesterId not resolved")
+					},
+				},
+				"ReservationId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Reservation)
+						if ok {
+							if obj.ReservationId == nil {
+								return nil, nil
+							}
+							return obj.GetReservationId(), nil
+						}
+						inter, ok := p.Source.(ReservationGetter)
+						if ok {
+							face := inter.GetReservation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.ReservationId == nil {
+								return nil, nil
+							}
+							return face.GetReservationId(), nil
+						}
+						return nil, fmt.Errorf("field ReservationId not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLRouteType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2Route",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"DestinationCidrBlock": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.DestinationCidrBlock == nil {
+								return nil, nil
+							}
+							return obj.GetDestinationCidrBlock(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DestinationCidrBlock == nil {
+								return nil, nil
+							}
+							return face.GetDestinationCidrBlock(), nil
+						}
+						return nil, fmt.Errorf("field DestinationCidrBlock not resolved")
+					},
+				},
+				"DestinationPrefixListId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.DestinationPrefixListId == nil {
+								return nil, nil
+							}
+							return obj.GetDestinationPrefixListId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.DestinationPrefixListId == nil {
+								return nil, nil
+							}
+							return face.GetDestinationPrefixListId(), nil
+						}
+						return nil, fmt.Errorf("field DestinationPrefixListId not resolved")
+					},
+				},
+				"GatewayId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.GatewayId == nil {
+								return nil, nil
+							}
+							return obj.GetGatewayId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.GatewayId == nil {
+								return nil, nil
+							}
+							return face.GetGatewayId(), nil
+						}
+						return nil, fmt.Errorf("field GatewayId not resolved")
+					},
+				},
+				"InstanceId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.InstanceId == nil {
+								return nil, nil
+							}
+							return obj.GetInstanceId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.InstanceId == nil {
+								return nil, nil
+							}
+							return face.GetInstanceId(), nil
+						}
+						return nil, fmt.Errorf("field InstanceId not resolved")
+					},
+				},
+				"InstanceOwnerId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.InstanceOwnerId == nil {
+								return nil, nil
+							}
+							return obj.GetInstanceOwnerId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.InstanceOwnerId == nil {
+								return nil, nil
+							}
+							return face.GetInstanceOwnerId(), nil
+						}
+						return nil, fmt.Errorf("field InstanceOwnerId not resolved")
+					},
+				},
+				"NatGatewayId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.NatGatewayId == nil {
+								return nil, nil
+							}
+							return obj.GetNatGatewayId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NatGatewayId == nil {
+								return nil, nil
+							}
+							return face.GetNatGatewayId(), nil
+						}
+						return nil, fmt.Errorf("field NatGatewayId not resolved")
+					},
+				},
+				"NetworkInterfaceId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.NetworkInterfaceId == nil {
+								return nil, nil
+							}
+							return obj.GetNetworkInterfaceId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NetworkInterfaceId == nil {
+								return nil, nil
+							}
+							return face.GetNetworkInterfaceId(), nil
+						}
+						return nil, fmt.Errorf("field NetworkInterfaceId not resolved")
+					},
+				},
+				"Origin": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.Origin == nil {
+								return nil, nil
+							}
+							return obj.GetOrigin(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Origin == nil {
+								return nil, nil
+							}
+							return face.GetOrigin(), nil
+						}
+						return nil, fmt.Errorf("field Origin not resolved")
+					},
+				},
+				"State": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.State == nil {
+								return nil, nil
+							}
+							return obj.GetState(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.State == nil {
+								return nil, nil
+							}
+							return face.GetState(), nil
+						}
+						return nil, fmt.Errorf("field State not resolved")
+					},
+				},
+				"VpcPeeringConnectionId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Route)
+						if ok {
+							if obj.VpcPeeringConnectionId == nil {
+								return nil, nil
+							}
+							return obj.GetVpcPeeringConnectionId(), nil
+						}
+						inter, ok := p.Source.(RouteGetter)
+						if ok {
+							face := inter.GetRoute()
+							if face == nil {
+								return nil, nil
+							}
+							if face.VpcPeeringConnectionId == nil {
+								return nil, nil
+							}
+							return face.GetVpcPeeringConnectionId(), nil
+						}
+						return nil, fmt.Errorf("field VpcPeeringConnectionId not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLRouteTableType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2RouteTable",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Associations": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLRouteTableAssociationType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTable)
+						if ok {
+							return obj.Associations, nil
+						}
+						inter, ok := p.Source.(RouteTableGetter)
+						if ok {
+							face := inter.GetRouteTable()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Associations, nil
+						}
+						return nil, fmt.Errorf("field Associations not resolved")
+					},
+				},
+				"PropagatingVgws": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLPropagatingVgwType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTable)
+						if ok {
+							return obj.PropagatingVgws, nil
+						}
+						inter, ok := p.Source.(RouteTableGetter)
+						if ok {
+							face := inter.GetRouteTable()
+							if face == nil {
+								return nil, nil
+							}
+							return face.PropagatingVgws, nil
+						}
+						return nil, fmt.Errorf("field PropagatingVgws not resolved")
+					},
+				},
+				"RouteTableId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTable)
+						if ok {
+							if obj.RouteTableId == nil {
+								return nil, nil
+							}
+							return obj.GetRouteTableId(), nil
+						}
+						inter, ok := p.Source.(RouteTableGetter)
+						if ok {
+							face := inter.GetRouteTable()
+							if face == nil {
+								return nil, nil
+							}
+							if face.RouteTableId == nil {
+								return nil, nil
+							}
+							return face.GetRouteTableId(), nil
+						}
+						return nil, fmt.Errorf("field RouteTableId not resolved")
+					},
+				},
+				"Routes": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLRouteType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTable)
+						if ok {
+							return obj.Routes, nil
+						}
+						inter, ok := p.Source.(RouteTableGetter)
+						if ok {
+							face := inter.GetRouteTable()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Routes, nil
+						}
+						return nil, fmt.Errorf("field Routes not resolved")
+					},
+				},
+				"Tags": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLTagType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTable)
+						if ok {
+							return obj.Tags, nil
+						}
+						inter, ok := p.Source.(RouteTableGetter)
+						if ok {
+							face := inter.GetRouteTable()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Tags, nil
+						}
+						return nil, fmt.Errorf("field Tags not resolved")
+					},
+				},
+				"VpcId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTable)
+						if ok {
+							if obj.VpcId == nil {
+								return nil, nil
+							}
+							return obj.GetVpcId(), nil
+						}
+						inter, ok := p.Source.(RouteTableGetter)
+						if ok {
+							face := inter.GetRouteTable()
+							if face == nil {
+								return nil, nil
+							}
+							if face.VpcId == nil {
+								return nil, nil
+							}
+							return face.GetVpcId(), nil
+						}
+						return nil, fmt.Errorf("field VpcId not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLRouteTableAssociationType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "ec2RouteTableAssociation",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Main": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTableAssociation)
+						if ok {
+							if obj.Main == nil {
+								return nil, nil
+							}
+							return obj.GetMain(), nil
+						}
+						inter, ok := p.Source.(RouteTableAssociationGetter)
+						if ok {
+							face := inter.GetRouteTableAssociation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Main == nil {
+								return nil, nil
+							}
+							return face.GetMain(), nil
+						}
+						return nil, fmt.Errorf("field Main not resolved")
+					},
+				},
+				"RouteTableAssociationId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTableAssociation)
+						if ok {
+							if obj.RouteTableAssociationId == nil {
+								return nil, nil
+							}
+							return obj.GetRouteTableAssociationId(), nil
+						}
+						inter, ok := p.Source.(RouteTableAssociationGetter)
+						if ok {
+							face := inter.GetRouteTableAssociation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.RouteTableAssociationId == nil {
+								return nil, nil
+							}
+							return face.GetRouteTableAssociationId(), nil
+						}
+						return nil, fmt.Errorf("field RouteTableAssociationId not resolved")
+					},
+				},
+				"RouteTableId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTableAssociation)
+						if ok {
+							if obj.RouteTableId == nil {
+								return nil, nil
+							}
+							return obj.GetRouteTableId(), nil
+						}
+						inter, ok := p.Source.(RouteTableAssociationGetter)
+						if ok {
+							face := inter.GetRouteTableAssociation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.RouteTableId == nil {
+								return nil, nil
+							}
+							return face.GetRouteTableId(), nil
+						}
+						return nil, fmt.Errorf("field RouteTableId not resolved")
+					},
+				},
+				"SubnetId": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*RouteTableAssociation)
+						if ok {
+							if obj.SubnetId == nil {
+								return nil, nil
+							}
+							return obj.GetSubnetId(), nil
+						}
+						inter, ok := p.Source.(RouteTableAssociationGetter)
+						if ok {
+							face := inter.GetRouteTableAssociation()
+							if face == nil {
+								return nil, nil
+							}
+							if face.SubnetId == nil {
+								return nil, nil
+							}
+							return face.GetSubnetId(), nil
+						}
+						return nil, fmt.Errorf("field SubnetId not resolved")
 					},
 				},
 			}
@@ -6311,26 +9232,2412 @@ func init() {
 		}),
 	})
 }
-func NewPopulatedEbsInstanceBlockDevice(r randyTypes, easy bool) *EbsInstanceBlockDevice {
-	this := &EbsInstanceBlockDevice{}
-	if r.Intn(10) != 0 {
-		v1 := int64(r.Int63())
-		if r.Intn(2) == 0 {
-			v1 *= -1
+func (m *DescribeInstancesInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeInstancesInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		data[i] = 0x10
+		i++
+		if *m.DryRun {
+			data[i] = 1
+		} else {
+			data[i] = 0
 		}
-		this.AttachTime = &v1
+		i++
+	}
+	if len(m.Filters) > 0 {
+		for _, msg := range m.Filters {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.InstanceIds) > 0 {
+		for _, s := range m.InstanceIds {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.MaxResults != nil {
+		data[i] = 0x28
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MaxResults)<<1)^uint64((*m.MaxResults>>63))))
+	}
+	if m.NextToken != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NextToken)))
+		i += copy(data[i:], *m.NextToken)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeInstancesOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeInstancesOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.NextToken != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NextToken)))
+		i += copy(data[i:], *m.NextToken)
+	}
+	if len(m.Reservations) > 0 {
+		for _, msg := range m.Reservations {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeRouteTablesInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeRouteTablesInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		data[i] = 0x10
+		i++
+		if *m.DryRun {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.Filters) > 0 {
+		for _, msg := range m.Filters {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.RouteTableIds) > 0 {
+		for _, s := range m.RouteTableIds {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeRouteTablesOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeRouteTablesOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.RouteTables) > 0 {
+		for _, msg := range m.RouteTables {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeSecurityGroupsInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeSecurityGroupsInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		data[i] = 0x10
+		i++
+		if *m.DryRun {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.Filters) > 0 {
+		for _, msg := range m.Filters {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.GroupIds) > 0 {
+		for _, s := range m.GroupIds {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if len(m.GroupNames) > 0 {
+		for _, s := range m.GroupNames {
+			data[i] = 0x2a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeSecurityGroupsOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeSecurityGroupsOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.SecurityGroups) > 0 {
+		for _, msg := range m.SecurityGroups {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeSubnetsInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeSubnetsInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		data[i] = 0x10
+		i++
+		if *m.DryRun {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.Filters) > 0 {
+		for _, msg := range m.Filters {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.SubnetIds) > 0 {
+		for _, s := range m.SubnetIds {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeSubnetsOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeSubnetsOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Subnets) > 0 {
+		for _, msg := range m.Subnets {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeVpcsInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeVpcsInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		data[i] = 0x10
+		i++
+		if *m.DryRun {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.Filters) > 0 {
+		for _, msg := range m.Filters {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.VpcIds) > 0 {
+		for _, s := range m.VpcIds {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeVpcsOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeVpcsOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Vpcs) > 0 {
+		for _, msg := range m.Vpcs {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *EbsInstanceBlockDevice) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *EbsInstanceBlockDevice) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AttachTime != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.AttachTime.Size()))
+		n1, err := m.AttachTime.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if m.DeleteOnTermination != nil {
+		data[i] = 0x18
+		i++
+		if *m.DeleteOnTermination {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Status != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.VolumeId != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VolumeId)))
+		i += copy(data[i:], *m.VolumeId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Filter) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Filter) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Name != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Name)))
+		i += copy(data[i:], *m.Name)
+	}
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			data[i] = 0x1a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *GroupIdentifier) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *GroupIdentifier) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.GroupId != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupId)))
+		i += copy(data[i:], *m.GroupId)
+	}
+	if m.GroupName != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupName)))
+		i += copy(data[i:], *m.GroupName)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *IamInstanceProfile) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *IamInstanceProfile) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Arn != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Arn)))
+		i += copy(data[i:], *m.Arn)
+	}
+	if m.Id != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Id)))
+		i += copy(data[i:], *m.Id)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Instance) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Instance) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AmiLaunchIndex != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.AmiLaunchIndex)<<1)^uint64((*m.AmiLaunchIndex>>63))))
+	}
+	if m.Architecture != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Architecture)))
+		i += copy(data[i:], *m.Architecture)
+	}
+	if len(m.BlockDeviceMappings) > 0 {
+		for _, msg := range m.BlockDeviceMappings {
+			data[i] = 0x22
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.ClientToken != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ClientToken)))
+		i += copy(data[i:], *m.ClientToken)
+	}
+	if m.EbsOptimized != nil {
+		data[i] = 0x30
+		i++
+		if *m.EbsOptimized {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Hypervisor != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Hypervisor)))
+		i += copy(data[i:], *m.Hypervisor)
+	}
+	if m.IamInstanceProfile != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.IamInstanceProfile.Size()))
+		n2, err := m.IamInstanceProfile.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if m.ImageId != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ImageId)))
+		i += copy(data[i:], *m.ImageId)
+	}
+	if m.InstanceId != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceId)))
+		i += copy(data[i:], *m.InstanceId)
+	}
+	if m.InstanceLifecycle != nil {
+		data[i] = 0x5a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceLifecycle)))
+		i += copy(data[i:], *m.InstanceLifecycle)
+	}
+	if m.InstanceType != nil {
+		data[i] = 0x62
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceType)))
+		i += copy(data[i:], *m.InstanceType)
+	}
+	if m.KernelId != nil {
+		data[i] = 0x6a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.KernelId)))
+		i += copy(data[i:], *m.KernelId)
+	}
+	if m.KeyName != nil {
+		data[i] = 0x72
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.KeyName)))
+		i += copy(data[i:], *m.KeyName)
+	}
+	if m.LaunchTime != nil {
+		data[i] = 0x7a
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.LaunchTime.Size()))
+		n3, err := m.LaunchTime.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if m.Monitoring != nil {
+		data[i] = 0x82
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Monitoring.Size()))
+		n4, err := m.Monitoring.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if len(m.NetworkInterfaces) > 0 {
+		for _, msg := range m.NetworkInterfaces {
+			data[i] = 0x8a
+			i++
+			data[i] = 0x1
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Placement != nil {
+		data[i] = 0x92
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Placement.Size()))
+		n5, err := m.Placement.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	if m.Platform != nil {
+		data[i] = 0x9a
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Platform)))
+		i += copy(data[i:], *m.Platform)
+	}
+	if m.PrivateDnsName != nil {
+		data[i] = 0xa2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrivateDnsName)))
+		i += copy(data[i:], *m.PrivateDnsName)
+	}
+	if m.PrivateIpAddress != nil {
+		data[i] = 0xaa
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrivateIpAddress)))
+		i += copy(data[i:], *m.PrivateIpAddress)
+	}
+	if len(m.ProductCodes) > 0 {
+		for _, msg := range m.ProductCodes {
+			data[i] = 0xb2
+			i++
+			data[i] = 0x1
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.PublicDnsName != nil {
+		data[i] = 0xba
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PublicDnsName)))
+		i += copy(data[i:], *m.PublicDnsName)
+	}
+	if m.PublicIpAddress != nil {
+		data[i] = 0xc2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PublicIpAddress)))
+		i += copy(data[i:], *m.PublicIpAddress)
+	}
+	if m.RamdiskId != nil {
+		data[i] = 0xca
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RamdiskId)))
+		i += copy(data[i:], *m.RamdiskId)
+	}
+	if m.RootDeviceName != nil {
+		data[i] = 0xd2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RootDeviceName)))
+		i += copy(data[i:], *m.RootDeviceName)
+	}
+	if m.RootDeviceType != nil {
+		data[i] = 0xda
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RootDeviceType)))
+		i += copy(data[i:], *m.RootDeviceType)
+	}
+	if len(m.SecurityGroups) > 0 {
+		for _, msg := range m.SecurityGroups {
+			data[i] = 0xe2
+			i++
+			data[i] = 0x1
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.SourceDestCheck != nil {
+		data[i] = 0xe8
+		i++
+		data[i] = 0x1
+		i++
+		if *m.SourceDestCheck {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.SpotInstanceRequestId != nil {
+		data[i] = 0xf2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SpotInstanceRequestId)))
+		i += copy(data[i:], *m.SpotInstanceRequestId)
+	}
+	if m.SriovNetSupport != nil {
+		data[i] = 0xfa
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SriovNetSupport)))
+		i += copy(data[i:], *m.SriovNetSupport)
+	}
+	if m.State != nil {
+		data[i] = 0x82
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.State.Size()))
+		n6, err := m.State.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	if m.StateReason != nil {
+		data[i] = 0x8a
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.StateReason.Size()))
+		n7, err := m.StateReason.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	if m.StateTransitionReason != nil {
+		data[i] = 0x92
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StateTransitionReason)))
+		i += copy(data[i:], *m.StateTransitionReason)
+	}
+	if m.SubnetId != nil {
+		data[i] = 0x9a
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetId)))
+		i += copy(data[i:], *m.SubnetId)
+	}
+	if len(m.Tags) > 0 {
+		for _, msg := range m.Tags {
+			data[i] = 0xa2
+			i++
+			data[i] = 0x2
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.VirtualizationType != nil {
+		data[i] = 0xaa
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VirtualizationType)))
+		i += copy(data[i:], *m.VirtualizationType)
+	}
+	if m.VpcId != nil {
+		data[i] = 0xb2
+		i++
+		data[i] = 0x2
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *InstanceBlockDeviceMapping) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InstanceBlockDeviceMapping) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DeviceName != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DeviceName)))
+		i += copy(data[i:], *m.DeviceName)
+	}
+	if m.Ebs != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Ebs.Size()))
+		n8, err := m.Ebs.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *InstanceNetworkInterface) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InstanceNetworkInterface) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Association != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Association.Size()))
+		n9, err := m.Association.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	if m.Attachment != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Attachment.Size()))
+		n10, err := m.Attachment.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
+	}
+	if m.Description != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Description)))
+		i += copy(data[i:], *m.Description)
+	}
+	if len(m.Groups) > 0 {
+		for _, msg := range m.Groups {
+			data[i] = 0x2a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.MacAddress != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.MacAddress)))
+		i += copy(data[i:], *m.MacAddress)
+	}
+	if m.NetworkInterfaceId != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NetworkInterfaceId)))
+		i += copy(data[i:], *m.NetworkInterfaceId)
+	}
+	if m.OwnerId != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.OwnerId)))
+		i += copy(data[i:], *m.OwnerId)
+	}
+	if m.PrivateDnsName != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrivateDnsName)))
+		i += copy(data[i:], *m.PrivateDnsName)
+	}
+	if m.PrivateIpAddress != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrivateIpAddress)))
+		i += copy(data[i:], *m.PrivateIpAddress)
+	}
+	if len(m.PrivateIpAddresses) > 0 {
+		for _, msg := range m.PrivateIpAddresses {
+			data[i] = 0x5a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.SourceDestCheck != nil {
+		data[i] = 0x60
+		i++
+		if *m.SourceDestCheck {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Status != nil {
+		data[i] = 0x6a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.SubnetId != nil {
+		data[i] = 0x72
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetId)))
+		i += copy(data[i:], *m.SubnetId)
+	}
+	if m.VpcId != nil {
+		data[i] = 0x7a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *InstanceNetworkInterfaceAssociation) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InstanceNetworkInterfaceAssociation) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.IpOwnerId != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.IpOwnerId)))
+		i += copy(data[i:], *m.IpOwnerId)
+	}
+	if m.PublicDnsName != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PublicDnsName)))
+		i += copy(data[i:], *m.PublicDnsName)
+	}
+	if m.PublicIp != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PublicIp)))
+		i += copy(data[i:], *m.PublicIp)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *InstanceNetworkInterfaceAttachment) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InstanceNetworkInterfaceAttachment) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AttachTime != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.AttachTime.Size()))
+		n11, err := m.AttachTime.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	if m.AttachmentId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AttachmentId)))
+		i += copy(data[i:], *m.AttachmentId)
+	}
+	if m.DeleteOnTermination != nil {
+		data[i] = 0x20
+		i++
+		if *m.DeleteOnTermination {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.DeviceIndex != nil {
+		data[i] = 0x28
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.DeviceIndex)<<1)^uint64((*m.DeviceIndex>>63))))
+	}
+	if m.Status != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Status)))
+		i += copy(data[i:], *m.Status)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *InstancePrivateIpAddress) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InstancePrivateIpAddress) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Association != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.Association.Size()))
+		n12, err := m.Association.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
+	}
+	if m.Primary != nil {
+		data[i] = 0x18
+		i++
+		if *m.Primary {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.PrivateDnsName != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrivateDnsName)))
+		i += copy(data[i:], *m.PrivateDnsName)
+	}
+	if m.PrivateIpAddress != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrivateIpAddress)))
+		i += copy(data[i:], *m.PrivateIpAddress)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *InstanceState) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InstanceState) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Code != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Code)<<1)^uint64((*m.Code>>63))))
+	}
+	if m.Name != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Name)))
+		i += copy(data[i:], *m.Name)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *IpPermission) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *IpPermission) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.FromPort != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.FromPort)<<1)^uint64((*m.FromPort>>63))))
+	}
+	if m.IpProtocol != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.IpProtocol)))
+		i += copy(data[i:], *m.IpProtocol)
+	}
+	if len(m.IpRanges) > 0 {
+		for _, msg := range m.IpRanges {
+			data[i] = 0x22
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.PrefixListIds) > 0 {
+		for _, msg := range m.PrefixListIds {
+			data[i] = 0x2a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.ToPort != nil {
+		data[i] = 0x30
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.ToPort)<<1)^uint64((*m.ToPort>>63))))
+	}
+	if len(m.UserIdGroupPairs) > 0 {
+		for _, msg := range m.UserIdGroupPairs {
+			data[i] = 0x3a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *IpRange) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *IpRange) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.CidrIp != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.CidrIp)))
+		i += copy(data[i:], *m.CidrIp)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Monitoring) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Monitoring) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.State != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.State)))
+		i += copy(data[i:], *m.State)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Placement) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Placement) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Affinity != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Affinity)))
+		i += copy(data[i:], *m.Affinity)
+	}
+	if m.AvailabilityZone != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AvailabilityZone)))
+		i += copy(data[i:], *m.AvailabilityZone)
+	}
+	if m.GroupName != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupName)))
+		i += copy(data[i:], *m.GroupName)
+	}
+	if m.HostId != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.HostId)))
+		i += copy(data[i:], *m.HostId)
+	}
+	if m.Tenancy != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Tenancy)))
+		i += copy(data[i:], *m.Tenancy)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *PrefixListId) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *PrefixListId) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.PrefixListId != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PrefixListId)))
+		i += copy(data[i:], *m.PrefixListId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *ProductCode) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ProductCode) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ProductCodeId != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ProductCodeId)))
+		i += copy(data[i:], *m.ProductCodeId)
+	}
+	if m.ProductCodeType != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ProductCodeType)))
+		i += copy(data[i:], *m.ProductCodeType)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *PropagatingVgw) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *PropagatingVgw) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.GatewayId != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GatewayId)))
+		i += copy(data[i:], *m.GatewayId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Reservation) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Reservation) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Groups) > 0 {
+		for _, msg := range m.Groups {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Instances) > 0 {
+		for _, msg := range m.Instances {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.OwnerId != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.OwnerId)))
+		i += copy(data[i:], *m.OwnerId)
+	}
+	if m.RequesterId != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RequesterId)))
+		i += copy(data[i:], *m.RequesterId)
+	}
+	if m.ReservationId != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ReservationId)))
+		i += copy(data[i:], *m.ReservationId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Route) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Route) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.DestinationCidrBlock != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DestinationCidrBlock)))
+		i += copy(data[i:], *m.DestinationCidrBlock)
+	}
+	if m.DestinationPrefixListId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DestinationPrefixListId)))
+		i += copy(data[i:], *m.DestinationPrefixListId)
+	}
+	if m.GatewayId != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GatewayId)))
+		i += copy(data[i:], *m.GatewayId)
+	}
+	if m.InstanceId != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceId)))
+		i += copy(data[i:], *m.InstanceId)
+	}
+	if m.InstanceOwnerId != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceOwnerId)))
+		i += copy(data[i:], *m.InstanceOwnerId)
+	}
+	if m.NatGatewayId != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NatGatewayId)))
+		i += copy(data[i:], *m.NatGatewayId)
+	}
+	if m.NetworkInterfaceId != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NetworkInterfaceId)))
+		i += copy(data[i:], *m.NetworkInterfaceId)
+	}
+	if m.Origin != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Origin)))
+		i += copy(data[i:], *m.Origin)
+	}
+	if m.State != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.State)))
+		i += copy(data[i:], *m.State)
+	}
+	if m.VpcPeeringConnectionId != nil {
+		data[i] = 0x5a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcPeeringConnectionId)))
+		i += copy(data[i:], *m.VpcPeeringConnectionId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *RouteTable) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *RouteTable) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Associations) > 0 {
+		for _, msg := range m.Associations {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.PropagatingVgws) > 0 {
+		for _, msg := range m.PropagatingVgws {
+			data[i] = 0x1a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.RouteTableId != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RouteTableId)))
+		i += copy(data[i:], *m.RouteTableId)
+	}
+	if len(m.Routes) > 0 {
+		for _, msg := range m.Routes {
+			data[i] = 0x2a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Tags) > 0 {
+		for _, msg := range m.Tags {
+			data[i] = 0x32
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.VpcId != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *RouteTableAssociation) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *RouteTableAssociation) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Main != nil {
+		data[i] = 0x10
+		i++
+		if *m.Main {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.RouteTableAssociationId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RouteTableAssociationId)))
+		i += copy(data[i:], *m.RouteTableAssociationId)
+	}
+	if m.RouteTableId != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.RouteTableId)))
+		i += copy(data[i:], *m.RouteTableId)
+	}
+	if m.SubnetId != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetId)))
+		i += copy(data[i:], *m.SubnetId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *SecurityGroup) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *SecurityGroup) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Description != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Description)))
+		i += copy(data[i:], *m.Description)
+	}
+	if m.GroupId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupId)))
+		i += copy(data[i:], *m.GroupId)
+	}
+	if m.GroupName != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupName)))
+		i += copy(data[i:], *m.GroupName)
+	}
+	if len(m.IpPermissions) > 0 {
+		for _, msg := range m.IpPermissions {
+			data[i] = 0x2a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.IpPermissionsEgress) > 0 {
+		for _, msg := range m.IpPermissionsEgress {
+			data[i] = 0x32
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.OwnerId != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.OwnerId)))
+		i += copy(data[i:], *m.OwnerId)
+	}
+	if len(m.Tags) > 0 {
+		for _, msg := range m.Tags {
+			data[i] = 0x42
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.VpcId != nil {
+		data[i] = 0x4a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *StateReason) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *StateReason) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Code != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Code)))
+		i += copy(data[i:], *m.Code)
+	}
+	if m.Message != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Message)))
+		i += copy(data[i:], *m.Message)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Subnet) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Subnet) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AvailabilityZone != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AvailabilityZone)))
+		i += copy(data[i:], *m.AvailabilityZone)
+	}
+	if m.AvailableIpAddressCount != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.AvailableIpAddressCount)<<1)^uint64((*m.AvailableIpAddressCount>>63))))
+	}
+	if m.CidrBlock != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.CidrBlock)))
+		i += copy(data[i:], *m.CidrBlock)
+	}
+	if m.DefaultForAz != nil {
+		data[i] = 0x28
+		i++
+		if *m.DefaultForAz {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.MapPublicIpOnLaunch != nil {
+		data[i] = 0x30
+		i++
+		if *m.MapPublicIpOnLaunch {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.State != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.State)))
+		i += copy(data[i:], *m.State)
+	}
+	if m.SubnetId != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.SubnetId)))
+		i += copy(data[i:], *m.SubnetId)
+	}
+	if len(m.Tags) > 0 {
+		for _, msg := range m.Tags {
+			data[i] = 0x4a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.VpcId != nil {
+		data[i] = 0x52
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Tag) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Tag) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Key != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Key)))
+		i += copy(data[i:], *m.Key)
+	}
+	if m.Value != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Value)))
+		i += copy(data[i:], *m.Value)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *UserIdGroupPair) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UserIdGroupPair) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.GroupId != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupId)))
+		i += copy(data[i:], *m.GroupId)
+	}
+	if m.GroupName != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.GroupName)))
+		i += copy(data[i:], *m.GroupName)
+	}
+	if m.PeeringStatus != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.PeeringStatus)))
+		i += copy(data[i:], *m.PeeringStatus)
+	}
+	if m.UserId != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.UserId)))
+		i += copy(data[i:], *m.UserId)
+	}
+	if m.VpcId != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.VpcPeeringConnectionId != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcPeeringConnectionId)))
+		i += copy(data[i:], *m.VpcPeeringConnectionId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Vpc) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Vpc) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.CidrBlock != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.CidrBlock)))
+		i += copy(data[i:], *m.CidrBlock)
+	}
+	if m.DhcpOptionsId != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.DhcpOptionsId)))
+		i += copy(data[i:], *m.DhcpOptionsId)
+	}
+	if m.InstanceTenancy != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.InstanceTenancy)))
+		i += copy(data[i:], *m.InstanceTenancy)
+	}
+	if m.IsDefault != nil {
+		data[i] = 0x28
+		i++
+		if *m.IsDefault {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.State != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.State)))
+		i += copy(data[i:], *m.State)
+	}
+	if len(m.Tags) > 0 {
+		for _, msg := range m.Tags {
+			data[i] = 0x3a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.VpcId != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.VpcId)))
+		i += copy(data[i:], *m.VpcId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func encodeFixed64Types(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Types(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintTypes(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
+func NewPopulatedDescribeInstancesInput(r randyTypes, easy bool) *DescribeInstancesInput {
+	this := &DescribeInstancesInput{}
+	if r.Intn(10) != 0 {
+		v1 := bool(bool(r.Intn(2) == 0))
+		this.DryRun = &v1
 	}
 	if r.Intn(10) != 0 {
-		v2 := bool(bool(r.Intn(2) == 0))
-		this.DeleteOnTermination = &v2
+		v2 := r.Intn(5)
+		this.Filters = make([]*Filter, v2)
+		for i := 0; i < v2; i++ {
+			this.Filters[i] = NewPopulatedFilter(r, easy)
+		}
 	}
 	if r.Intn(10) != 0 {
-		v3 := randStringTypes(r)
-		this.Status = &v3
+		v3 := r.Intn(10)
+		this.InstanceIds = make([]string, v3)
+		for i := 0; i < v3; i++ {
+			this.InstanceIds[i] = randStringTypes(r)
+		}
 	}
 	if r.Intn(10) != 0 {
-		v4 := randStringTypes(r)
-		this.VolumeId = &v4
+		v4 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v4 *= -1
+		}
+		this.MaxResults = &v4
+	}
+	if r.Intn(10) != 0 {
+		v5 := randStringTypes(r)
+		this.NextToken = &v5
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 7)
+	}
+	return this
+}
+
+func NewPopulatedDescribeInstancesOutput(r randyTypes, easy bool) *DescribeInstancesOutput {
+	this := &DescribeInstancesOutput{}
+	if r.Intn(10) != 0 {
+		v6 := randStringTypes(r)
+		this.NextToken = &v6
+	}
+	if r.Intn(10) != 0 {
+		v7 := r.Intn(5)
+		this.Reservations = make([]*Reservation, v7)
+		for i := 0; i < v7; i++ {
+			this.Reservations[i] = NewPopulatedReservation(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
+	}
+	return this
+}
+
+func NewPopulatedDescribeRouteTablesInput(r randyTypes, easy bool) *DescribeRouteTablesInput {
+	this := &DescribeRouteTablesInput{}
+	if r.Intn(10) != 0 {
+		v8 := bool(bool(r.Intn(2) == 0))
+		this.DryRun = &v8
+	}
+	if r.Intn(10) != 0 {
+		v9 := r.Intn(5)
+		this.Filters = make([]*Filter, v9)
+		for i := 0; i < v9; i++ {
+			this.Filters[i] = NewPopulatedFilter(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v10 := r.Intn(10)
+		this.RouteTableIds = make([]string, v10)
+		for i := 0; i < v10; i++ {
+			this.RouteTableIds[i] = randStringTypes(r)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
+	}
+	return this
+}
+
+func NewPopulatedDescribeRouteTablesOutput(r randyTypes, easy bool) *DescribeRouteTablesOutput {
+	this := &DescribeRouteTablesOutput{}
+	if r.Intn(10) != 0 {
+		v11 := r.Intn(5)
+		this.RouteTables = make([]*RouteTable, v11)
+		for i := 0; i < v11; i++ {
+			this.RouteTables[i] = NewPopulatedRouteTable(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
+	}
+	return this
+}
+
+func NewPopulatedDescribeSecurityGroupsInput(r randyTypes, easy bool) *DescribeSecurityGroupsInput {
+	this := &DescribeSecurityGroupsInput{}
+	if r.Intn(10) != 0 {
+		v12 := bool(bool(r.Intn(2) == 0))
+		this.DryRun = &v12
+	}
+	if r.Intn(10) != 0 {
+		v13 := r.Intn(5)
+		this.Filters = make([]*Filter, v13)
+		for i := 0; i < v13; i++ {
+			this.Filters[i] = NewPopulatedFilter(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v14 := r.Intn(10)
+		this.GroupIds = make([]string, v14)
+		for i := 0; i < v14; i++ {
+			this.GroupIds[i] = randStringTypes(r)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v15 := r.Intn(10)
+		this.GroupNames = make([]string, v15)
+		for i := 0; i < v15; i++ {
+			this.GroupNames[i] = randStringTypes(r)
+		}
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
@@ -6338,15 +11645,154 @@ func NewPopulatedEbsInstanceBlockDevice(r randyTypes, easy bool) *EbsInstanceBlo
 	return this
 }
 
+func NewPopulatedDescribeSecurityGroupsOutput(r randyTypes, easy bool) *DescribeSecurityGroupsOutput {
+	this := &DescribeSecurityGroupsOutput{}
+	if r.Intn(10) != 0 {
+		v16 := r.Intn(5)
+		this.SecurityGroups = make([]*SecurityGroup, v16)
+		for i := 0; i < v16; i++ {
+			this.SecurityGroups[i] = NewPopulatedSecurityGroup(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
+	}
+	return this
+}
+
+func NewPopulatedDescribeSubnetsInput(r randyTypes, easy bool) *DescribeSubnetsInput {
+	this := &DescribeSubnetsInput{}
+	if r.Intn(10) != 0 {
+		v17 := bool(bool(r.Intn(2) == 0))
+		this.DryRun = &v17
+	}
+	if r.Intn(10) != 0 {
+		v18 := r.Intn(5)
+		this.Filters = make([]*Filter, v18)
+		for i := 0; i < v18; i++ {
+			this.Filters[i] = NewPopulatedFilter(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v19 := r.Intn(10)
+		this.SubnetIds = make([]string, v19)
+		for i := 0; i < v19; i++ {
+			this.SubnetIds[i] = randStringTypes(r)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
+	}
+	return this
+}
+
+func NewPopulatedDescribeSubnetsOutput(r randyTypes, easy bool) *DescribeSubnetsOutput {
+	this := &DescribeSubnetsOutput{}
+	if r.Intn(10) != 0 {
+		v20 := r.Intn(5)
+		this.Subnets = make([]*Subnet, v20)
+		for i := 0; i < v20; i++ {
+			this.Subnets[i] = NewPopulatedSubnet(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
+	}
+	return this
+}
+
+func NewPopulatedDescribeVpcsInput(r randyTypes, easy bool) *DescribeVpcsInput {
+	this := &DescribeVpcsInput{}
+	if r.Intn(10) != 0 {
+		v21 := bool(bool(r.Intn(2) == 0))
+		this.DryRun = &v21
+	}
+	if r.Intn(10) != 0 {
+		v22 := r.Intn(5)
+		this.Filters = make([]*Filter, v22)
+		for i := 0; i < v22; i++ {
+			this.Filters[i] = NewPopulatedFilter(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v23 := r.Intn(10)
+		this.VpcIds = make([]string, v23)
+		for i := 0; i < v23; i++ {
+			this.VpcIds[i] = randStringTypes(r)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
+	}
+	return this
+}
+
+func NewPopulatedDescribeVpcsOutput(r randyTypes, easy bool) *DescribeVpcsOutput {
+	this := &DescribeVpcsOutput{}
+	if r.Intn(10) != 0 {
+		v24 := r.Intn(5)
+		this.Vpcs = make([]*Vpc, v24)
+		for i := 0; i < v24; i++ {
+			this.Vpcs[i] = NewPopulatedVpc(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
+	}
+	return this
+}
+
+func NewPopulatedEbsInstanceBlockDevice(r randyTypes, easy bool) *EbsInstanceBlockDevice {
+	this := &EbsInstanceBlockDevice{}
+	if r.Intn(10) != 0 {
+		this.AttachTime = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v25 := bool(bool(r.Intn(2) == 0))
+		this.DeleteOnTermination = &v25
+	}
+	if r.Intn(10) != 0 {
+		v26 := randStringTypes(r)
+		this.Status = &v26
+	}
+	if r.Intn(10) != 0 {
+		v27 := randStringTypes(r)
+		this.VolumeId = &v27
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
+	}
+	return this
+}
+
+func NewPopulatedFilter(r randyTypes, easy bool) *Filter {
+	this := &Filter{}
+	if r.Intn(10) != 0 {
+		v28 := randStringTypes(r)
+		this.Name = &v28
+	}
+	if r.Intn(10) != 0 {
+		v29 := r.Intn(10)
+		this.Values = make([]string, v29)
+		for i := 0; i < v29; i++ {
+			this.Values[i] = randStringTypes(r)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
+	}
+	return this
+}
+
 func NewPopulatedGroupIdentifier(r randyTypes, easy bool) *GroupIdentifier {
 	this := &GroupIdentifier{}
 	if r.Intn(10) != 0 {
-		v5 := randStringTypes(r)
-		this.GroupId = &v5
+		v30 := randStringTypes(r)
+		this.GroupId = &v30
 	}
 	if r.Intn(10) != 0 {
-		v6 := randStringTypes(r)
-		this.GroupName = &v6
+		v31 := randStringTypes(r)
+		this.GroupName = &v31
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6357,12 +11803,12 @@ func NewPopulatedGroupIdentifier(r randyTypes, easy bool) *GroupIdentifier {
 func NewPopulatedIamInstanceProfile(r randyTypes, easy bool) *IamInstanceProfile {
 	this := &IamInstanceProfile{}
 	if r.Intn(10) != 0 {
-		v7 := randStringTypes(r)
-		this.Arn = &v7
+		v32 := randStringTypes(r)
+		this.Arn = &v32
 	}
 	if r.Intn(10) != 0 {
-		v8 := randStringTypes(r)
-		this.Id = &v8
+		v33 := randStringTypes(r)
+		this.Id = &v33
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6373,76 +11819,72 @@ func NewPopulatedIamInstanceProfile(r randyTypes, easy bool) *IamInstanceProfile
 func NewPopulatedInstance(r randyTypes, easy bool) *Instance {
 	this := &Instance{}
 	if r.Intn(10) != 0 {
-		v9 := int64(r.Int63())
+		v34 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v9 *= -1
+			v34 *= -1
 		}
-		this.AmiLaunchIndex = &v9
+		this.AmiLaunchIndex = &v34
 	}
 	if r.Intn(10) != 0 {
-		v10 := randStringTypes(r)
-		this.Architecture = &v10
+		v35 := randStringTypes(r)
+		this.Architecture = &v35
 	}
 	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.BlockDeviceMappings = make([]*InstanceBlockDeviceMapping, v11)
-		for i := 0; i < v11; i++ {
+		v36 := r.Intn(5)
+		this.BlockDeviceMappings = make([]*InstanceBlockDeviceMapping, v36)
+		for i := 0; i < v36; i++ {
 			this.BlockDeviceMappings[i] = NewPopulatedInstanceBlockDeviceMapping(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v12 := randStringTypes(r)
-		this.ClientToken = &v12
+		v37 := randStringTypes(r)
+		this.ClientToken = &v37
 	}
 	if r.Intn(10) != 0 {
-		v13 := bool(bool(r.Intn(2) == 0))
-		this.EbsOptimized = &v13
+		v38 := bool(bool(r.Intn(2) == 0))
+		this.EbsOptimized = &v38
 	}
 	if r.Intn(10) != 0 {
-		v14 := randStringTypes(r)
-		this.Hypervisor = &v14
+		v39 := randStringTypes(r)
+		this.Hypervisor = &v39
 	}
 	if r.Intn(10) != 0 {
 		this.IamInstanceProfile = NewPopulatedIamInstanceProfile(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v15 := randStringTypes(r)
-		this.ImageId = &v15
+		v40 := randStringTypes(r)
+		this.ImageId = &v40
 	}
 	if r.Intn(10) != 0 {
-		v16 := randStringTypes(r)
-		this.InstanceId = &v16
+		v41 := randStringTypes(r)
+		this.InstanceId = &v41
 	}
 	if r.Intn(10) != 0 {
-		v17 := randStringTypes(r)
-		this.InstanceLifecycle = &v17
+		v42 := randStringTypes(r)
+		this.InstanceLifecycle = &v42
 	}
 	if r.Intn(10) != 0 {
-		v18 := randStringTypes(r)
-		this.InstanceType = &v18
+		v43 := randStringTypes(r)
+		this.InstanceType = &v43
 	}
 	if r.Intn(10) != 0 {
-		v19 := randStringTypes(r)
-		this.KernelId = &v19
+		v44 := randStringTypes(r)
+		this.KernelId = &v44
 	}
 	if r.Intn(10) != 0 {
-		v20 := randStringTypes(r)
-		this.KeyName = &v20
+		v45 := randStringTypes(r)
+		this.KeyName = &v45
 	}
 	if r.Intn(10) != 0 {
-		v21 := int64(r.Int63())
-		if r.Intn(2) == 0 {
-			v21 *= -1
-		}
-		this.LaunchTime = &v21
+		this.LaunchTime = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Monitoring = NewPopulatedMonitoring(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v22 := r.Intn(5)
-		this.NetworkInterfaces = make([]*InstanceNetworkInterface, v22)
-		for i := 0; i < v22; i++ {
+		v46 := r.Intn(5)
+		this.NetworkInterfaces = make([]*InstanceNetworkInterface, v46)
+		for i := 0; i < v46; i++ {
 			this.NetworkInterfaces[i] = NewPopulatedInstanceNetworkInterface(r, easy)
 		}
 	}
@@ -6450,62 +11892,62 @@ func NewPopulatedInstance(r randyTypes, easy bool) *Instance {
 		this.Placement = NewPopulatedPlacement(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v23 := randStringTypes(r)
-		this.Platform = &v23
+		v47 := randStringTypes(r)
+		this.Platform = &v47
 	}
 	if r.Intn(10) != 0 {
-		v24 := randStringTypes(r)
-		this.PrivateDnsName = &v24
+		v48 := randStringTypes(r)
+		this.PrivateDnsName = &v48
 	}
 	if r.Intn(10) != 0 {
-		v25 := randStringTypes(r)
-		this.PrivateIpAddress = &v25
+		v49 := randStringTypes(r)
+		this.PrivateIpAddress = &v49
 	}
 	if r.Intn(10) != 0 {
-		v26 := r.Intn(5)
-		this.ProductCodes = make([]*ProductCode, v26)
-		for i := 0; i < v26; i++ {
+		v50 := r.Intn(5)
+		this.ProductCodes = make([]*ProductCode, v50)
+		for i := 0; i < v50; i++ {
 			this.ProductCodes[i] = NewPopulatedProductCode(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v27 := randStringTypes(r)
-		this.PublicDnsName = &v27
+		v51 := randStringTypes(r)
+		this.PublicDnsName = &v51
 	}
 	if r.Intn(10) != 0 {
-		v28 := randStringTypes(r)
-		this.PublicIpAddress = &v28
+		v52 := randStringTypes(r)
+		this.PublicIpAddress = &v52
 	}
 	if r.Intn(10) != 0 {
-		v29 := randStringTypes(r)
-		this.RamdiskId = &v29
+		v53 := randStringTypes(r)
+		this.RamdiskId = &v53
 	}
 	if r.Intn(10) != 0 {
-		v30 := randStringTypes(r)
-		this.RootDeviceName = &v30
+		v54 := randStringTypes(r)
+		this.RootDeviceName = &v54
 	}
 	if r.Intn(10) != 0 {
-		v31 := randStringTypes(r)
-		this.RootDeviceType = &v31
+		v55 := randStringTypes(r)
+		this.RootDeviceType = &v55
 	}
 	if r.Intn(10) != 0 {
-		v32 := r.Intn(5)
-		this.SecurityGroups = make([]*GroupIdentifier, v32)
-		for i := 0; i < v32; i++ {
+		v56 := r.Intn(5)
+		this.SecurityGroups = make([]*GroupIdentifier, v56)
+		for i := 0; i < v56; i++ {
 			this.SecurityGroups[i] = NewPopulatedGroupIdentifier(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v33 := bool(bool(r.Intn(2) == 0))
-		this.SourceDestCheck = &v33
+		v57 := bool(bool(r.Intn(2) == 0))
+		this.SourceDestCheck = &v57
 	}
 	if r.Intn(10) != 0 {
-		v34 := randStringTypes(r)
-		this.SpotInstanceRequestId = &v34
+		v58 := randStringTypes(r)
+		this.SpotInstanceRequestId = &v58
 	}
 	if r.Intn(10) != 0 {
-		v35 := randStringTypes(r)
-		this.SriovNetSupport = &v35
+		v59 := randStringTypes(r)
+		this.SriovNetSupport = &v59
 	}
 	if r.Intn(10) != 0 {
 		this.State = NewPopulatedInstanceState(r, easy)
@@ -6514,27 +11956,27 @@ func NewPopulatedInstance(r randyTypes, easy bool) *Instance {
 		this.StateReason = NewPopulatedStateReason(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v36 := randStringTypes(r)
-		this.StateTransitionReason = &v36
+		v60 := randStringTypes(r)
+		this.StateTransitionReason = &v60
 	}
 	if r.Intn(10) != 0 {
-		v37 := randStringTypes(r)
-		this.SubnetId = &v37
+		v61 := randStringTypes(r)
+		this.SubnetId = &v61
 	}
 	if r.Intn(10) != 0 {
-		v38 := r.Intn(5)
-		this.Tags = make([]*Tag, v38)
-		for i := 0; i < v38; i++ {
+		v62 := r.Intn(5)
+		this.Tags = make([]*Tag, v62)
+		for i := 0; i < v62; i++ {
 			this.Tags[i] = NewPopulatedTag(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v39 := randStringTypes(r)
-		this.VirtualizationType = &v39
+		v63 := randStringTypes(r)
+		this.VirtualizationType = &v63
 	}
 	if r.Intn(10) != 0 {
-		v40 := randStringTypes(r)
-		this.VpcId = &v40
+		v64 := randStringTypes(r)
+		this.VpcId = &v64
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 39)
@@ -6545,8 +11987,8 @@ func NewPopulatedInstance(r randyTypes, easy bool) *Instance {
 func NewPopulatedInstanceBlockDeviceMapping(r randyTypes, easy bool) *InstanceBlockDeviceMapping {
 	this := &InstanceBlockDeviceMapping{}
 	if r.Intn(10) != 0 {
-		v41 := randStringTypes(r)
-		this.DeviceName = &v41
+		v65 := randStringTypes(r)
+		this.DeviceName = &v65
 	}
 	if r.Intn(10) != 0 {
 		this.Ebs = NewPopulatedEbsInstanceBlockDevice(r, easy)
@@ -6566,58 +12008,58 @@ func NewPopulatedInstanceNetworkInterface(r randyTypes, easy bool) *InstanceNetw
 		this.Attachment = NewPopulatedInstanceNetworkInterfaceAttachment(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v42 := randStringTypes(r)
-		this.Description = &v42
+		v66 := randStringTypes(r)
+		this.Description = &v66
 	}
 	if r.Intn(10) != 0 {
-		v43 := r.Intn(5)
-		this.Groups = make([]*GroupIdentifier, v43)
-		for i := 0; i < v43; i++ {
+		v67 := r.Intn(5)
+		this.Groups = make([]*GroupIdentifier, v67)
+		for i := 0; i < v67; i++ {
 			this.Groups[i] = NewPopulatedGroupIdentifier(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v44 := randStringTypes(r)
-		this.MacAddress = &v44
+		v68 := randStringTypes(r)
+		this.MacAddress = &v68
 	}
 	if r.Intn(10) != 0 {
-		v45 := randStringTypes(r)
-		this.NetworkInterfaceId = &v45
+		v69 := randStringTypes(r)
+		this.NetworkInterfaceId = &v69
 	}
 	if r.Intn(10) != 0 {
-		v46 := randStringTypes(r)
-		this.OwnerId = &v46
+		v70 := randStringTypes(r)
+		this.OwnerId = &v70
 	}
 	if r.Intn(10) != 0 {
-		v47 := randStringTypes(r)
-		this.PrivateDnsName = &v47
+		v71 := randStringTypes(r)
+		this.PrivateDnsName = &v71
 	}
 	if r.Intn(10) != 0 {
-		v48 := randStringTypes(r)
-		this.PrivateIpAddress = &v48
+		v72 := randStringTypes(r)
+		this.PrivateIpAddress = &v72
 	}
 	if r.Intn(10) != 0 {
-		v49 := r.Intn(5)
-		this.PrivateIpAddresses = make([]*InstancePrivateIpAddress, v49)
-		for i := 0; i < v49; i++ {
+		v73 := r.Intn(5)
+		this.PrivateIpAddresses = make([]*InstancePrivateIpAddress, v73)
+		for i := 0; i < v73; i++ {
 			this.PrivateIpAddresses[i] = NewPopulatedInstancePrivateIpAddress(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v50 := bool(bool(r.Intn(2) == 0))
-		this.SourceDestCheck = &v50
+		v74 := bool(bool(r.Intn(2) == 0))
+		this.SourceDestCheck = &v74
 	}
 	if r.Intn(10) != 0 {
-		v51 := randStringTypes(r)
-		this.Status = &v51
+		v75 := randStringTypes(r)
+		this.Status = &v75
 	}
 	if r.Intn(10) != 0 {
-		v52 := randStringTypes(r)
-		this.SubnetId = &v52
+		v76 := randStringTypes(r)
+		this.SubnetId = &v76
 	}
 	if r.Intn(10) != 0 {
-		v53 := randStringTypes(r)
-		this.VpcId = &v53
+		v77 := randStringTypes(r)
+		this.VpcId = &v77
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 16)
@@ -6628,16 +12070,16 @@ func NewPopulatedInstanceNetworkInterface(r randyTypes, easy bool) *InstanceNetw
 func NewPopulatedInstanceNetworkInterfaceAssociation(r randyTypes, easy bool) *InstanceNetworkInterfaceAssociation {
 	this := &InstanceNetworkInterfaceAssociation{}
 	if r.Intn(10) != 0 {
-		v54 := randStringTypes(r)
-		this.IpOwnerId = &v54
+		v78 := randStringTypes(r)
+		this.IpOwnerId = &v78
 	}
 	if r.Intn(10) != 0 {
-		v55 := randStringTypes(r)
-		this.PublicDnsName = &v55
+		v79 := randStringTypes(r)
+		this.PublicDnsName = &v79
 	}
 	if r.Intn(10) != 0 {
-		v56 := randStringTypes(r)
-		this.PublicIp = &v56
+		v80 := randStringTypes(r)
+		this.PublicIp = &v80
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
@@ -6648,30 +12090,26 @@ func NewPopulatedInstanceNetworkInterfaceAssociation(r randyTypes, easy bool) *I
 func NewPopulatedInstanceNetworkInterfaceAttachment(r randyTypes, easy bool) *InstanceNetworkInterfaceAttachment {
 	this := &InstanceNetworkInterfaceAttachment{}
 	if r.Intn(10) != 0 {
-		v57 := int64(r.Int63())
+		this.AttachTime = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v81 := randStringTypes(r)
+		this.AttachmentId = &v81
+	}
+	if r.Intn(10) != 0 {
+		v82 := bool(bool(r.Intn(2) == 0))
+		this.DeleteOnTermination = &v82
+	}
+	if r.Intn(10) != 0 {
+		v83 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v57 *= -1
+			v83 *= -1
 		}
-		this.AttachTime = &v57
+		this.DeviceIndex = &v83
 	}
 	if r.Intn(10) != 0 {
-		v58 := randStringTypes(r)
-		this.AttachmentId = &v58
-	}
-	if r.Intn(10) != 0 {
-		v59 := bool(bool(r.Intn(2) == 0))
-		this.DeleteOnTermination = &v59
-	}
-	if r.Intn(10) != 0 {
-		v60 := int64(r.Int63())
-		if r.Intn(2) == 0 {
-			v60 *= -1
-		}
-		this.DeviceIndex = &v60
-	}
-	if r.Intn(10) != 0 {
-		v61 := randStringTypes(r)
-		this.Status = &v61
+		v84 := randStringTypes(r)
+		this.Status = &v84
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 7)
@@ -6685,16 +12123,16 @@ func NewPopulatedInstancePrivateIpAddress(r randyTypes, easy bool) *InstancePriv
 		this.Association = NewPopulatedInstanceNetworkInterfaceAssociation(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v62 := bool(bool(r.Intn(2) == 0))
-		this.Primary = &v62
+		v85 := bool(bool(r.Intn(2) == 0))
+		this.Primary = &v85
 	}
 	if r.Intn(10) != 0 {
-		v63 := randStringTypes(r)
-		this.PrivateDnsName = &v63
+		v86 := randStringTypes(r)
+		this.PrivateDnsName = &v86
 	}
 	if r.Intn(10) != 0 {
-		v64 := randStringTypes(r)
-		this.PrivateIpAddress = &v64
+		v87 := randStringTypes(r)
+		this.PrivateIpAddress = &v87
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
@@ -6705,15 +12143,15 @@ func NewPopulatedInstancePrivateIpAddress(r randyTypes, easy bool) *InstancePriv
 func NewPopulatedInstanceState(r randyTypes, easy bool) *InstanceState {
 	this := &InstanceState{}
 	if r.Intn(10) != 0 {
-		v65 := int64(r.Int63())
+		v88 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v65 *= -1
+			v88 *= -1
 		}
-		this.Code = &v65
+		this.Code = &v88
 	}
 	if r.Intn(10) != 0 {
-		v66 := randStringTypes(r)
-		this.Name = &v66
+		v89 := randStringTypes(r)
+		this.Name = &v89
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6724,41 +12162,41 @@ func NewPopulatedInstanceState(r randyTypes, easy bool) *InstanceState {
 func NewPopulatedIpPermission(r randyTypes, easy bool) *IpPermission {
 	this := &IpPermission{}
 	if r.Intn(10) != 0 {
-		v67 := int64(r.Int63())
+		v90 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v67 *= -1
+			v90 *= -1
 		}
-		this.FromPort = &v67
+		this.FromPort = &v90
 	}
 	if r.Intn(10) != 0 {
-		v68 := randStringTypes(r)
-		this.IpProtocol = &v68
+		v91 := randStringTypes(r)
+		this.IpProtocol = &v91
 	}
 	if r.Intn(10) != 0 {
-		v69 := r.Intn(5)
-		this.IpRanges = make([]*IpRange, v69)
-		for i := 0; i < v69; i++ {
+		v92 := r.Intn(5)
+		this.IpRanges = make([]*IpRange, v92)
+		for i := 0; i < v92; i++ {
 			this.IpRanges[i] = NewPopulatedIpRange(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v70 := r.Intn(5)
-		this.PrefixListIds = make([]*PrefixListId, v70)
-		for i := 0; i < v70; i++ {
+		v93 := r.Intn(5)
+		this.PrefixListIds = make([]*PrefixListId, v93)
+		for i := 0; i < v93; i++ {
 			this.PrefixListIds[i] = NewPopulatedPrefixListId(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v71 := int64(r.Int63())
+		v94 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v71 *= -1
+			v94 *= -1
 		}
-		this.ToPort = &v71
+		this.ToPort = &v94
 	}
 	if r.Intn(10) != 0 {
-		v72 := r.Intn(5)
-		this.UserIdGroupPairs = make([]*UserIdGroupPair, v72)
-		for i := 0; i < v72; i++ {
+		v95 := r.Intn(5)
+		this.UserIdGroupPairs = make([]*UserIdGroupPair, v95)
+		for i := 0; i < v95; i++ {
 			this.UserIdGroupPairs[i] = NewPopulatedUserIdGroupPair(r, easy)
 		}
 	}
@@ -6771,8 +12209,8 @@ func NewPopulatedIpPermission(r randyTypes, easy bool) *IpPermission {
 func NewPopulatedIpRange(r randyTypes, easy bool) *IpRange {
 	this := &IpRange{}
 	if r.Intn(10) != 0 {
-		v73 := randStringTypes(r)
-		this.CidrIp = &v73
+		v96 := randStringTypes(r)
+		this.CidrIp = &v96
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
@@ -6783,8 +12221,8 @@ func NewPopulatedIpRange(r randyTypes, easy bool) *IpRange {
 func NewPopulatedMonitoring(r randyTypes, easy bool) *Monitoring {
 	this := &Monitoring{}
 	if r.Intn(10) != 0 {
-		v74 := randStringTypes(r)
-		this.State = &v74
+		v97 := randStringTypes(r)
+		this.State = &v97
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
@@ -6795,24 +12233,24 @@ func NewPopulatedMonitoring(r randyTypes, easy bool) *Monitoring {
 func NewPopulatedPlacement(r randyTypes, easy bool) *Placement {
 	this := &Placement{}
 	if r.Intn(10) != 0 {
-		v75 := randStringTypes(r)
-		this.Affinity = &v75
+		v98 := randStringTypes(r)
+		this.Affinity = &v98
 	}
 	if r.Intn(10) != 0 {
-		v76 := randStringTypes(r)
-		this.AvailabilityZone = &v76
+		v99 := randStringTypes(r)
+		this.AvailabilityZone = &v99
 	}
 	if r.Intn(10) != 0 {
-		v77 := randStringTypes(r)
-		this.GroupName = &v77
+		v100 := randStringTypes(r)
+		this.GroupName = &v100
 	}
 	if r.Intn(10) != 0 {
-		v78 := randStringTypes(r)
-		this.HostId = &v78
+		v101 := randStringTypes(r)
+		this.HostId = &v101
 	}
 	if r.Intn(10) != 0 {
-		v79 := randStringTypes(r)
-		this.Tenancy = &v79
+		v102 := randStringTypes(r)
+		this.Tenancy = &v102
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 7)
@@ -6823,8 +12261,8 @@ func NewPopulatedPlacement(r randyTypes, easy bool) *Placement {
 func NewPopulatedPrefixListId(r randyTypes, easy bool) *PrefixListId {
 	this := &PrefixListId{}
 	if r.Intn(10) != 0 {
-		v80 := randStringTypes(r)
-		this.PrefixListId = &v80
+		v103 := randStringTypes(r)
+		this.PrefixListId = &v103
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
@@ -6835,12 +12273,12 @@ func NewPopulatedPrefixListId(r randyTypes, easy bool) *PrefixListId {
 func NewPopulatedProductCode(r randyTypes, easy bool) *ProductCode {
 	this := &ProductCode{}
 	if r.Intn(10) != 0 {
-		v81 := randStringTypes(r)
-		this.ProductCodeId = &v81
+		v104 := randStringTypes(r)
+		this.ProductCodeId = &v104
 	}
 	if r.Intn(10) != 0 {
-		v82 := randStringTypes(r)
-		this.ProductCodeType = &v82
+		v105 := randStringTypes(r)
+		this.ProductCodeType = &v105
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6848,48 +12286,210 @@ func NewPopulatedProductCode(r randyTypes, easy bool) *ProductCode {
 	return this
 }
 
-func NewPopulatedSecurityGroup(r randyTypes, easy bool) *SecurityGroup {
-	this := &SecurityGroup{}
+func NewPopulatedPropagatingVgw(r randyTypes, easy bool) *PropagatingVgw {
+	this := &PropagatingVgw{}
 	if r.Intn(10) != 0 {
-		v83 := randStringTypes(r)
-		this.Description = &v83
+		v106 := randStringTypes(r)
+		this.GatewayId = &v106
 	}
-	if r.Intn(10) != 0 {
-		v84 := randStringTypes(r)
-		this.GroupId = &v84
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
 	}
+	return this
+}
+
+func NewPopulatedReservation(r randyTypes, easy bool) *Reservation {
+	this := &Reservation{}
 	if r.Intn(10) != 0 {
-		v85 := randStringTypes(r)
-		this.GroupName = &v85
-	}
-	if r.Intn(10) != 0 {
-		v86 := r.Intn(5)
-		this.IpPermissions = make([]*IpPermission, v86)
-		for i := 0; i < v86; i++ {
-			this.IpPermissions[i] = NewPopulatedIpPermission(r, easy)
+		v107 := r.Intn(5)
+		this.Groups = make([]*GroupIdentifier, v107)
+		for i := 0; i < v107; i++ {
+			this.Groups[i] = NewPopulatedGroupIdentifier(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v87 := r.Intn(5)
-		this.IpPermissionsEgress = make([]*IpPermission, v87)
-		for i := 0; i < v87; i++ {
-			this.IpPermissionsEgress[i] = NewPopulatedIpPermission(r, easy)
+		v108 := r.Intn(5)
+		this.Instances = make([]*Instance, v108)
+		for i := 0; i < v108; i++ {
+			this.Instances[i] = NewPopulatedInstance(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v88 := randStringTypes(r)
-		this.OwnerId = &v88
+		v109 := randStringTypes(r)
+		this.OwnerId = &v109
 	}
 	if r.Intn(10) != 0 {
-		v89 := r.Intn(5)
-		this.Tags = make([]*Tag, v89)
-		for i := 0; i < v89; i++ {
+		v110 := randStringTypes(r)
+		this.RequesterId = &v110
+	}
+	if r.Intn(10) != 0 {
+		v111 := randStringTypes(r)
+		this.ReservationId = &v111
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 7)
+	}
+	return this
+}
+
+func NewPopulatedRoute(r randyTypes, easy bool) *Route {
+	this := &Route{}
+	if r.Intn(10) != 0 {
+		v112 := randStringTypes(r)
+		this.DestinationCidrBlock = &v112
+	}
+	if r.Intn(10) != 0 {
+		v113 := randStringTypes(r)
+		this.DestinationPrefixListId = &v113
+	}
+	if r.Intn(10) != 0 {
+		v114 := randStringTypes(r)
+		this.GatewayId = &v114
+	}
+	if r.Intn(10) != 0 {
+		v115 := randStringTypes(r)
+		this.InstanceId = &v115
+	}
+	if r.Intn(10) != 0 {
+		v116 := randStringTypes(r)
+		this.InstanceOwnerId = &v116
+	}
+	if r.Intn(10) != 0 {
+		v117 := randStringTypes(r)
+		this.NatGatewayId = &v117
+	}
+	if r.Intn(10) != 0 {
+		v118 := randStringTypes(r)
+		this.NetworkInterfaceId = &v118
+	}
+	if r.Intn(10) != 0 {
+		v119 := randStringTypes(r)
+		this.Origin = &v119
+	}
+	if r.Intn(10) != 0 {
+		v120 := randStringTypes(r)
+		this.State = &v120
+	}
+	if r.Intn(10) != 0 {
+		v121 := randStringTypes(r)
+		this.VpcPeeringConnectionId = &v121
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 12)
+	}
+	return this
+}
+
+func NewPopulatedRouteTable(r randyTypes, easy bool) *RouteTable {
+	this := &RouteTable{}
+	if r.Intn(10) != 0 {
+		v122 := r.Intn(5)
+		this.Associations = make([]*RouteTableAssociation, v122)
+		for i := 0; i < v122; i++ {
+			this.Associations[i] = NewPopulatedRouteTableAssociation(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v123 := r.Intn(5)
+		this.PropagatingVgws = make([]*PropagatingVgw, v123)
+		for i := 0; i < v123; i++ {
+			this.PropagatingVgws[i] = NewPopulatedPropagatingVgw(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v124 := randStringTypes(r)
+		this.RouteTableId = &v124
+	}
+	if r.Intn(10) != 0 {
+		v125 := r.Intn(5)
+		this.Routes = make([]*Route, v125)
+		for i := 0; i < v125; i++ {
+			this.Routes[i] = NewPopulatedRoute(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v126 := r.Intn(5)
+		this.Tags = make([]*Tag, v126)
+		for i := 0; i < v126; i++ {
 			this.Tags[i] = NewPopulatedTag(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v90 := randStringTypes(r)
-		this.VpcId = &v90
+		v127 := randStringTypes(r)
+		this.VpcId = &v127
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 8)
+	}
+	return this
+}
+
+func NewPopulatedRouteTableAssociation(r randyTypes, easy bool) *RouteTableAssociation {
+	this := &RouteTableAssociation{}
+	if r.Intn(10) != 0 {
+		v128 := bool(bool(r.Intn(2) == 0))
+		this.Main = &v128
+	}
+	if r.Intn(10) != 0 {
+		v129 := randStringTypes(r)
+		this.RouteTableAssociationId = &v129
+	}
+	if r.Intn(10) != 0 {
+		v130 := randStringTypes(r)
+		this.RouteTableId = &v130
+	}
+	if r.Intn(10) != 0 {
+		v131 := randStringTypes(r)
+		this.SubnetId = &v131
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
+	}
+	return this
+}
+
+func NewPopulatedSecurityGroup(r randyTypes, easy bool) *SecurityGroup {
+	this := &SecurityGroup{}
+	if r.Intn(10) != 0 {
+		v132 := randStringTypes(r)
+		this.Description = &v132
+	}
+	if r.Intn(10) != 0 {
+		v133 := randStringTypes(r)
+		this.GroupId = &v133
+	}
+	if r.Intn(10) != 0 {
+		v134 := randStringTypes(r)
+		this.GroupName = &v134
+	}
+	if r.Intn(10) != 0 {
+		v135 := r.Intn(5)
+		this.IpPermissions = make([]*IpPermission, v135)
+		for i := 0; i < v135; i++ {
+			this.IpPermissions[i] = NewPopulatedIpPermission(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v136 := r.Intn(5)
+		this.IpPermissionsEgress = make([]*IpPermission, v136)
+		for i := 0; i < v136; i++ {
+			this.IpPermissionsEgress[i] = NewPopulatedIpPermission(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v137 := randStringTypes(r)
+		this.OwnerId = &v137
+	}
+	if r.Intn(10) != 0 {
+		v138 := r.Intn(5)
+		this.Tags = make([]*Tag, v138)
+		for i := 0; i < v138; i++ {
+			this.Tags[i] = NewPopulatedTag(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v139 := randStringTypes(r)
+		this.VpcId = &v139
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 10)
@@ -6900,12 +12500,12 @@ func NewPopulatedSecurityGroup(r randyTypes, easy bool) *SecurityGroup {
 func NewPopulatedStateReason(r randyTypes, easy bool) *StateReason {
 	this := &StateReason{}
 	if r.Intn(10) != 0 {
-		v91 := randStringTypes(r)
-		this.Code = &v91
+		v140 := randStringTypes(r)
+		this.Code = &v140
 	}
 	if r.Intn(10) != 0 {
-		v92 := randStringTypes(r)
-		this.Message = &v92
+		v141 := randStringTypes(r)
+		this.Message = &v141
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6916,46 +12516,46 @@ func NewPopulatedStateReason(r randyTypes, easy bool) *StateReason {
 func NewPopulatedSubnet(r randyTypes, easy bool) *Subnet {
 	this := &Subnet{}
 	if r.Intn(10) != 0 {
-		v93 := randStringTypes(r)
-		this.AvailabilityZone = &v93
+		v142 := randStringTypes(r)
+		this.AvailabilityZone = &v142
 	}
 	if r.Intn(10) != 0 {
-		v94 := int64(r.Int63())
+		v143 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v94 *= -1
+			v143 *= -1
 		}
-		this.AvailableIpAddressCount = &v94
+		this.AvailableIpAddressCount = &v143
 	}
 	if r.Intn(10) != 0 {
-		v95 := randStringTypes(r)
-		this.CidrBlock = &v95
+		v144 := randStringTypes(r)
+		this.CidrBlock = &v144
 	}
 	if r.Intn(10) != 0 {
-		v96 := bool(bool(r.Intn(2) == 0))
-		this.DefaultForAz = &v96
+		v145 := bool(bool(r.Intn(2) == 0))
+		this.DefaultForAz = &v145
 	}
 	if r.Intn(10) != 0 {
-		v97 := bool(bool(r.Intn(2) == 0))
-		this.MapPublicIpOnLaunch = &v97
+		v146 := bool(bool(r.Intn(2) == 0))
+		this.MapPublicIpOnLaunch = &v146
 	}
 	if r.Intn(10) != 0 {
-		v98 := randStringTypes(r)
-		this.State = &v98
+		v147 := randStringTypes(r)
+		this.State = &v147
 	}
 	if r.Intn(10) != 0 {
-		v99 := randStringTypes(r)
-		this.SubnetId = &v99
+		v148 := randStringTypes(r)
+		this.SubnetId = &v148
 	}
 	if r.Intn(10) != 0 {
-		v100 := r.Intn(5)
-		this.Tags = make([]*Tag, v100)
-		for i := 0; i < v100; i++ {
+		v149 := r.Intn(5)
+		this.Tags = make([]*Tag, v149)
+		for i := 0; i < v149; i++ {
 			this.Tags[i] = NewPopulatedTag(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v101 := randStringTypes(r)
-		this.VpcId = &v101
+		v150 := randStringTypes(r)
+		this.VpcId = &v150
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 11)
@@ -6966,12 +12566,12 @@ func NewPopulatedSubnet(r randyTypes, easy bool) *Subnet {
 func NewPopulatedTag(r randyTypes, easy bool) *Tag {
 	this := &Tag{}
 	if r.Intn(10) != 0 {
-		v102 := randStringTypes(r)
-		this.Key = &v102
+		v151 := randStringTypes(r)
+		this.Key = &v151
 	}
 	if r.Intn(10) != 0 {
-		v103 := randStringTypes(r)
-		this.Value = &v103
+		v152 := randStringTypes(r)
+		this.Value = &v152
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -6982,28 +12582,28 @@ func NewPopulatedTag(r randyTypes, easy bool) *Tag {
 func NewPopulatedUserIdGroupPair(r randyTypes, easy bool) *UserIdGroupPair {
 	this := &UserIdGroupPair{}
 	if r.Intn(10) != 0 {
-		v104 := randStringTypes(r)
-		this.GroupId = &v104
+		v153 := randStringTypes(r)
+		this.GroupId = &v153
 	}
 	if r.Intn(10) != 0 {
-		v105 := randStringTypes(r)
-		this.GroupName = &v105
+		v154 := randStringTypes(r)
+		this.GroupName = &v154
 	}
 	if r.Intn(10) != 0 {
-		v106 := randStringTypes(r)
-		this.PeeringStatus = &v106
+		v155 := randStringTypes(r)
+		this.PeeringStatus = &v155
 	}
 	if r.Intn(10) != 0 {
-		v107 := randStringTypes(r)
-		this.UserId = &v107
+		v156 := randStringTypes(r)
+		this.UserId = &v156
 	}
 	if r.Intn(10) != 0 {
-		v108 := randStringTypes(r)
-		this.VpcId = &v108
+		v157 := randStringTypes(r)
+		this.VpcId = &v157
 	}
 	if r.Intn(10) != 0 {
-		v109 := randStringTypes(r)
-		this.VpcPeeringConnectionId = &v109
+		v158 := randStringTypes(r)
+		this.VpcPeeringConnectionId = &v158
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 8)
@@ -7014,35 +12614,35 @@ func NewPopulatedUserIdGroupPair(r randyTypes, easy bool) *UserIdGroupPair {
 func NewPopulatedVpc(r randyTypes, easy bool) *Vpc {
 	this := &Vpc{}
 	if r.Intn(10) != 0 {
-		v110 := randStringTypes(r)
-		this.CidrBlock = &v110
+		v159 := randStringTypes(r)
+		this.CidrBlock = &v159
 	}
 	if r.Intn(10) != 0 {
-		v111 := randStringTypes(r)
-		this.DhcpOptionsId = &v111
+		v160 := randStringTypes(r)
+		this.DhcpOptionsId = &v160
 	}
 	if r.Intn(10) != 0 {
-		v112 := randStringTypes(r)
-		this.InstanceTenancy = &v112
+		v161 := randStringTypes(r)
+		this.InstanceTenancy = &v161
 	}
 	if r.Intn(10) != 0 {
-		v113 := bool(bool(r.Intn(2) == 0))
-		this.IsDefault = &v113
+		v162 := bool(bool(r.Intn(2) == 0))
+		this.IsDefault = &v162
 	}
 	if r.Intn(10) != 0 {
-		v114 := randStringTypes(r)
-		this.State = &v114
+		v163 := randStringTypes(r)
+		this.State = &v163
 	}
 	if r.Intn(10) != 0 {
-		v115 := r.Intn(5)
-		this.Tags = make([]*Tag, v115)
-		for i := 0; i < v115; i++ {
+		v164 := r.Intn(5)
+		this.Tags = make([]*Tag, v164)
+		for i := 0; i < v164; i++ {
 			this.Tags[i] = NewPopulatedTag(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v116 := randStringTypes(r)
-		this.VpcId = &v116
+		v165 := randStringTypes(r)
+		this.VpcId = &v165
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 9)
@@ -7069,9 +12669,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v117 := r.Intn(100)
-	tmps := make([]rune, v117)
-	for i := 0; i < v117; i++ {
+	v166 := r.Intn(100)
+	tmps := make([]rune, v166)
+	for i := 0; i < v166; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -7093,11 +12693,11 @@ func randFieldTypes(data []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateTypes(data, uint64(key))
-		v118 := r.Int63()
+		v167 := r.Int63()
 		if r.Intn(2) == 0 {
-			v118 *= -1
+			v167 *= -1
 		}
-		data = encodeVarintPopulateTypes(data, uint64(v118))
+		data = encodeVarintPopulateTypes(data, uint64(v167))
 	case 1:
 		data = encodeVarintPopulateTypes(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -7121,4 +12721,8511 @@ func encodeVarintPopulateTypes(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *DescribeInstancesInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		n += 2
+	}
+	if len(m.Filters) > 0 {
+		for _, e := range m.Filters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.InstanceIds) > 0 {
+		for _, s := range m.InstanceIds {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MaxResults != nil {
+		n += 1 + sozTypes(uint64(*m.MaxResults))
+	}
+	if m.NextToken != nil {
+		l = len(*m.NextToken)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeInstancesOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.NextToken != nil {
+		l = len(*m.NextToken)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Reservations) > 0 {
+		for _, e := range m.Reservations {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeRouteTablesInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		n += 2
+	}
+	if len(m.Filters) > 0 {
+		for _, e := range m.Filters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.RouteTableIds) > 0 {
+		for _, s := range m.RouteTableIds {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeRouteTablesOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.RouteTables) > 0 {
+		for _, e := range m.RouteTables {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeSecurityGroupsInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		n += 2
+	}
+	if len(m.Filters) > 0 {
+		for _, e := range m.Filters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.GroupIds) > 0 {
+		for _, s := range m.GroupIds {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.GroupNames) > 0 {
+		for _, s := range m.GroupNames {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeSecurityGroupsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.SecurityGroups) > 0 {
+		for _, e := range m.SecurityGroups {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeSubnetsInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		n += 2
+	}
+	if len(m.Filters) > 0 {
+		for _, e := range m.Filters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.SubnetIds) > 0 {
+		for _, s := range m.SubnetIds {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeSubnetsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Subnets) > 0 {
+		for _, e := range m.Subnets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeVpcsInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.DryRun != nil {
+		n += 2
+	}
+	if len(m.Filters) > 0 {
+		for _, e := range m.Filters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.VpcIds) > 0 {
+		for _, s := range m.VpcIds {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeVpcsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Vpcs) > 0 {
+		for _, e := range m.Vpcs {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *EbsInstanceBlockDevice) Size() (n int) {
+	var l int
+	_ = l
+	if m.AttachTime != nil {
+		l = m.AttachTime.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DeleteOnTermination != nil {
+		n += 2
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VolumeId != nil {
+		l = len(*m.VolumeId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Filter) Size() (n int) {
+	var l int
+	_ = l
+	if m.Name != nil {
+		l = len(*m.Name)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *GroupIdentifier) Size() (n int) {
+	var l int
+	_ = l
+	if m.GroupId != nil {
+		l = len(*m.GroupId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.GroupName != nil {
+		l = len(*m.GroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *IamInstanceProfile) Size() (n int) {
+	var l int
+	_ = l
+	if m.Arn != nil {
+		l = len(*m.Arn)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Id != nil {
+		l = len(*m.Id)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Instance) Size() (n int) {
+	var l int
+	_ = l
+	if m.AmiLaunchIndex != nil {
+		n += 1 + sozTypes(uint64(*m.AmiLaunchIndex))
+	}
+	if m.Architecture != nil {
+		l = len(*m.Architecture)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.BlockDeviceMappings) > 0 {
+		for _, e := range m.BlockDeviceMappings {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.ClientToken != nil {
+		l = len(*m.ClientToken)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EbsOptimized != nil {
+		n += 2
+	}
+	if m.Hypervisor != nil {
+		l = len(*m.Hypervisor)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IamInstanceProfile != nil {
+		l = m.IamInstanceProfile.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ImageId != nil {
+		l = len(*m.ImageId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceId != nil {
+		l = len(*m.InstanceId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceLifecycle != nil {
+		l = len(*m.InstanceLifecycle)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceType != nil {
+		l = len(*m.InstanceType)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.KernelId != nil {
+		l = len(*m.KernelId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.KeyName != nil {
+		l = len(*m.KeyName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.LaunchTime != nil {
+		l = m.LaunchTime.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Monitoring != nil {
+		l = m.Monitoring.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.NetworkInterfaces) > 0 {
+		for _, e := range m.NetworkInterfaces {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.Placement != nil {
+		l = m.Placement.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Platform != nil {
+		l = len(*m.Platform)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.PrivateDnsName != nil {
+		l = len(*m.PrivateDnsName)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.PrivateIpAddress != nil {
+		l = len(*m.PrivateIpAddress)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.ProductCodes) > 0 {
+		for _, e := range m.ProductCodes {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.PublicDnsName != nil {
+		l = len(*m.PublicDnsName)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.PublicIpAddress != nil {
+		l = len(*m.PublicIpAddress)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.RamdiskId != nil {
+		l = len(*m.RamdiskId)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.RootDeviceName != nil {
+		l = len(*m.RootDeviceName)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.RootDeviceType != nil {
+		l = len(*m.RootDeviceType)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.SecurityGroups) > 0 {
+		for _, e := range m.SecurityGroups {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.SourceDestCheck != nil {
+		n += 3
+	}
+	if m.SpotInstanceRequestId != nil {
+		l = len(*m.SpotInstanceRequestId)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SriovNetSupport != nil {
+		l = len(*m.SriovNetSupport)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.State != nil {
+		l = m.State.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.StateReason != nil {
+		l = m.StateReason.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.StateTransitionReason != nil {
+		l = len(*m.StateTransitionReason)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetId != nil {
+		l = len(*m.SubnetId)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for _, e := range m.Tags {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VirtualizationType != nil {
+		l = len(*m.VirtualizationType)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *InstanceBlockDeviceMapping) Size() (n int) {
+	var l int
+	_ = l
+	if m.DeviceName != nil {
+		l = len(*m.DeviceName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Ebs != nil {
+		l = m.Ebs.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *InstanceNetworkInterface) Size() (n int) {
+	var l int
+	_ = l
+	if m.Association != nil {
+		l = m.Association.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Attachment != nil {
+		l = m.Attachment.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Description != nil {
+		l = len(*m.Description)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Groups) > 0 {
+		for _, e := range m.Groups {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MacAddress != nil {
+		l = len(*m.MacAddress)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.NetworkInterfaceId != nil {
+		l = len(*m.NetworkInterfaceId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.OwnerId != nil {
+		l = len(*m.OwnerId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PrivateDnsName != nil {
+		l = len(*m.PrivateDnsName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PrivateIpAddress != nil {
+		l = len(*m.PrivateIpAddress)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.PrivateIpAddresses) > 0 {
+		for _, e := range m.PrivateIpAddresses {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.SourceDestCheck != nil {
+		n += 2
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetId != nil {
+		l = len(*m.SubnetId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *InstanceNetworkInterfaceAssociation) Size() (n int) {
+	var l int
+	_ = l
+	if m.IpOwnerId != nil {
+		l = len(*m.IpOwnerId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PublicDnsName != nil {
+		l = len(*m.PublicDnsName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PublicIp != nil {
+		l = len(*m.PublicIp)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *InstanceNetworkInterfaceAttachment) Size() (n int) {
+	var l int
+	_ = l
+	if m.AttachTime != nil {
+		l = m.AttachTime.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AttachmentId != nil {
+		l = len(*m.AttachmentId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DeleteOnTermination != nil {
+		n += 2
+	}
+	if m.DeviceIndex != nil {
+		n += 1 + sozTypes(uint64(*m.DeviceIndex))
+	}
+	if m.Status != nil {
+		l = len(*m.Status)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *InstancePrivateIpAddress) Size() (n int) {
+	var l int
+	_ = l
+	if m.Association != nil {
+		l = m.Association.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Primary != nil {
+		n += 2
+	}
+	if m.PrivateDnsName != nil {
+		l = len(*m.PrivateDnsName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PrivateIpAddress != nil {
+		l = len(*m.PrivateIpAddress)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *InstanceState) Size() (n int) {
+	var l int
+	_ = l
+	if m.Code != nil {
+		n += 1 + sozTypes(uint64(*m.Code))
+	}
+	if m.Name != nil {
+		l = len(*m.Name)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *IpPermission) Size() (n int) {
+	var l int
+	_ = l
+	if m.FromPort != nil {
+		n += 1 + sozTypes(uint64(*m.FromPort))
+	}
+	if m.IpProtocol != nil {
+		l = len(*m.IpProtocol)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.IpRanges) > 0 {
+		for _, e := range m.IpRanges {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.PrefixListIds) > 0 {
+		for _, e := range m.PrefixListIds {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.ToPort != nil {
+		n += 1 + sozTypes(uint64(*m.ToPort))
+	}
+	if len(m.UserIdGroupPairs) > 0 {
+		for _, e := range m.UserIdGroupPairs {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *IpRange) Size() (n int) {
+	var l int
+	_ = l
+	if m.CidrIp != nil {
+		l = len(*m.CidrIp)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Monitoring) Size() (n int) {
+	var l int
+	_ = l
+	if m.State != nil {
+		l = len(*m.State)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Placement) Size() (n int) {
+	var l int
+	_ = l
+	if m.Affinity != nil {
+		l = len(*m.Affinity)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AvailabilityZone != nil {
+		l = len(*m.AvailabilityZone)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.GroupName != nil {
+		l = len(*m.GroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HostId != nil {
+		l = len(*m.HostId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Tenancy != nil {
+		l = len(*m.Tenancy)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *PrefixListId) Size() (n int) {
+	var l int
+	_ = l
+	if m.PrefixListId != nil {
+		l = len(*m.PrefixListId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ProductCode) Size() (n int) {
+	var l int
+	_ = l
+	if m.ProductCodeId != nil {
+		l = len(*m.ProductCodeId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ProductCodeType != nil {
+		l = len(*m.ProductCodeType)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *PropagatingVgw) Size() (n int) {
+	var l int
+	_ = l
+	if m.GatewayId != nil {
+		l = len(*m.GatewayId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Reservation) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Groups) > 0 {
+		for _, e := range m.Groups {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Instances) > 0 {
+		for _, e := range m.Instances {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.OwnerId != nil {
+		l = len(*m.OwnerId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RequesterId != nil {
+		l = len(*m.RequesterId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ReservationId != nil {
+		l = len(*m.ReservationId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Route) Size() (n int) {
+	var l int
+	_ = l
+	if m.DestinationCidrBlock != nil {
+		l = len(*m.DestinationCidrBlock)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DestinationPrefixListId != nil {
+		l = len(*m.DestinationPrefixListId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.GatewayId != nil {
+		l = len(*m.GatewayId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceId != nil {
+		l = len(*m.InstanceId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceOwnerId != nil {
+		l = len(*m.InstanceOwnerId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.NatGatewayId != nil {
+		l = len(*m.NatGatewayId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.NetworkInterfaceId != nil {
+		l = len(*m.NetworkInterfaceId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Origin != nil {
+		l = len(*m.Origin)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.State != nil {
+		l = len(*m.State)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcPeeringConnectionId != nil {
+		l = len(*m.VpcPeeringConnectionId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RouteTable) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Associations) > 0 {
+		for _, e := range m.Associations {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.PropagatingVgws) > 0 {
+		for _, e := range m.PropagatingVgws {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.RouteTableId != nil {
+		l = len(*m.RouteTableId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Routes) > 0 {
+		for _, e := range m.Routes {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Tags) > 0 {
+		for _, e := range m.Tags {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *RouteTableAssociation) Size() (n int) {
+	var l int
+	_ = l
+	if m.Main != nil {
+		n += 2
+	}
+	if m.RouteTableAssociationId != nil {
+		l = len(*m.RouteTableAssociationId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RouteTableId != nil {
+		l = len(*m.RouteTableId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetId != nil {
+		l = len(*m.SubnetId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *SecurityGroup) Size() (n int) {
+	var l int
+	_ = l
+	if m.Description != nil {
+		l = len(*m.Description)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.GroupId != nil {
+		l = len(*m.GroupId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.GroupName != nil {
+		l = len(*m.GroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.IpPermissions) > 0 {
+		for _, e := range m.IpPermissions {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.IpPermissionsEgress) > 0 {
+		for _, e := range m.IpPermissionsEgress {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.OwnerId != nil {
+		l = len(*m.OwnerId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for _, e := range m.Tags {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *StateReason) Size() (n int) {
+	var l int
+	_ = l
+	if m.Code != nil {
+		l = len(*m.Code)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Message != nil {
+		l = len(*m.Message)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Subnet) Size() (n int) {
+	var l int
+	_ = l
+	if m.AvailabilityZone != nil {
+		l = len(*m.AvailabilityZone)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AvailableIpAddressCount != nil {
+		n += 1 + sozTypes(uint64(*m.AvailableIpAddressCount))
+	}
+	if m.CidrBlock != nil {
+		l = len(*m.CidrBlock)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DefaultForAz != nil {
+		n += 2
+	}
+	if m.MapPublicIpOnLaunch != nil {
+		n += 2
+	}
+	if m.State != nil {
+		l = len(*m.State)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SubnetId != nil {
+		l = len(*m.SubnetId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for _, e := range m.Tags {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Tag) Size() (n int) {
+	var l int
+	_ = l
+	if m.Key != nil {
+		l = len(*m.Key)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Value != nil {
+		l = len(*m.Value)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *UserIdGroupPair) Size() (n int) {
+	var l int
+	_ = l
+	if m.GroupId != nil {
+		l = len(*m.GroupId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.GroupName != nil {
+		l = len(*m.GroupName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.PeeringStatus != nil {
+		l = len(*m.PeeringStatus)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.UserId != nil {
+		l = len(*m.UserId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcPeeringConnectionId != nil {
+		l = len(*m.VpcPeeringConnectionId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Vpc) Size() (n int) {
+	var l int
+	_ = l
+	if m.CidrBlock != nil {
+		l = len(*m.CidrBlock)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DhcpOptionsId != nil {
+		l = len(*m.DhcpOptionsId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InstanceTenancy != nil {
+		l = len(*m.InstanceTenancy)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IsDefault != nil {
+		n += 2
+	}
+	if m.State != nil {
+		l = len(*m.State)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for _, e := range m.Tags {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.VpcId != nil {
+		l = len(*m.VpcId)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func sovTypes(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozTypes(x uint64) (n int) {
+	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *DescribeInstancesInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeInstancesInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeInstancesInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DryRun", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DryRun = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filters = append(m.Filters, &Filter{})
+			if err := m.Filters[len(m.Filters)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceIds", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InstanceIds = append(m.InstanceIds, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxResults", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MaxResults = &v2
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NextToken = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeInstancesOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeInstancesOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeInstancesOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NextToken = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Reservations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Reservations = append(m.Reservations, &Reservation{})
+			if err := m.Reservations[len(m.Reservations)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeRouteTablesInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeRouteTablesInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeRouteTablesInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DryRun", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DryRun = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filters = append(m.Filters, &Filter{})
+			if err := m.Filters[len(m.Filters)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTableIds", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteTableIds = append(m.RouteTableIds, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeRouteTablesOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeRouteTablesOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeRouteTablesOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTables", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteTables = append(m.RouteTables, &RouteTable{})
+			if err := m.RouteTables[len(m.RouteTables)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeSecurityGroupsInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeSecurityGroupsInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeSecurityGroupsInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DryRun", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DryRun = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filters = append(m.Filters, &Filter{})
+			if err := m.Filters[len(m.Filters)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupIds", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GroupIds = append(m.GroupIds, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GroupNames = append(m.GroupNames, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeSecurityGroupsOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeSecurityGroupsOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeSecurityGroupsOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityGroups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SecurityGroups = append(m.SecurityGroups, &SecurityGroup{})
+			if err := m.SecurityGroups[len(m.SecurityGroups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeSubnetsInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeSubnetsInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeSubnetsInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DryRun", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DryRun = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filters = append(m.Filters, &Filter{})
+			if err := m.Filters[len(m.Filters)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetIds", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubnetIds = append(m.SubnetIds, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeSubnetsOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeSubnetsOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeSubnetsOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Subnets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Subnets = append(m.Subnets, &Subnet{})
+			if err := m.Subnets[len(m.Subnets)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeVpcsInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeVpcsInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeVpcsInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DryRun", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DryRun = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filters = append(m.Filters, &Filter{})
+			if err := m.Filters[len(m.Filters)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcIds", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VpcIds = append(m.VpcIds, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeVpcsOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeVpcsOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeVpcsOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vpcs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vpcs = append(m.Vpcs, &Vpc{})
+			if err := m.Vpcs[len(m.Vpcs)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EbsInstanceBlockDevice) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EbsInstanceBlockDevice: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EbsInstanceBlockDevice: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttachTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AttachTime == nil {
+				m.AttachTime = &opsee_types.Timestamp{}
+			}
+			if err := m.AttachTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeleteOnTermination", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DeleteOnTermination = &b
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VolumeId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Filter) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Filter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Filter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Name = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GroupIdentifier) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GroupIdentifier: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GroupIdentifier: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupId = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupName = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IamInstanceProfile) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IamInstanceProfile: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IamInstanceProfile: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Arn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Arn = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Id = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Instance) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Instance: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Instance: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AmiLaunchIndex", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.AmiLaunchIndex = &v2
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Architecture", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Architecture = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockDeviceMappings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockDeviceMappings = append(m.BlockDeviceMappings, &InstanceBlockDeviceMapping{})
+			if err := m.BlockDeviceMappings[len(m.BlockDeviceMappings)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ClientToken = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EbsOptimized", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.EbsOptimized = &b
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hypervisor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Hypervisor = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IamInstanceProfile", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IamInstanceProfile == nil {
+				m.IamInstanceProfile = &IamInstanceProfile{}
+			}
+			if err := m.IamInstanceProfile.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ImageId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ImageId = &s
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceId = &s
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceLifecycle", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceLifecycle = &s
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceType = &s
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KernelId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.KernelId = &s
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KeyName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.KeyName = &s
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LaunchTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LaunchTime == nil {
+				m.LaunchTime = &opsee_types.Timestamp{}
+			}
+			if err := m.LaunchTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Monitoring", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Monitoring == nil {
+				m.Monitoring = &Monitoring{}
+			}
+			if err := m.Monitoring.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkInterfaces", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NetworkInterfaces = append(m.NetworkInterfaces, &InstanceNetworkInterface{})
+			if err := m.NetworkInterfaces[len(m.NetworkInterfaces)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Placement", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Placement == nil {
+				m.Placement = &Placement{}
+			}
+			if err := m.Placement.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Platform", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Platform = &s
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateDnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrivateDnsName = &s
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateIpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrivateIpAddress = &s
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProductCodes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProductCodes = append(m.ProductCodes, &ProductCode{})
+			if err := m.ProductCodes[len(m.ProductCodes)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicDnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PublicDnsName = &s
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicIpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PublicIpAddress = &s
+			iNdEx = postIndex
+		case 25:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RamdiskId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RamdiskId = &s
+			iNdEx = postIndex
+		case 26:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RootDeviceName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RootDeviceName = &s
+			iNdEx = postIndex
+		case 27:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RootDeviceType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RootDeviceType = &s
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityGroups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SecurityGroups = append(m.SecurityGroups, &GroupIdentifier{})
+			if err := m.SecurityGroups[len(m.SecurityGroups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SourceDestCheck", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.SourceDestCheck = &b
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SpotInstanceRequestId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SpotInstanceRequestId = &s
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SriovNetSupport", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SriovNetSupport = &s
+			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.State == nil {
+				m.State = &InstanceState{}
+			}
+			if err := m.State.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateReason", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.StateReason == nil {
+				m.StateReason = &StateReason{}
+			}
+			if err := m.StateReason.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 34:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateTransitionReason", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StateTransitionReason = &s
+			iNdEx = postIndex
+		case 35:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetId = &s
+			iNdEx = postIndex
+		case 36:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, &Tag{})
+			if err := m.Tags[len(m.Tags)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VirtualizationType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VirtualizationType = &s
+			iNdEx = postIndex
+		case 38:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InstanceBlockDeviceMapping) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InstanceBlockDeviceMapping: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InstanceBlockDeviceMapping: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeviceName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DeviceName = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ebs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ebs == nil {
+				m.Ebs = &EbsInstanceBlockDevice{}
+			}
+			if err := m.Ebs.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InstanceNetworkInterface) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InstanceNetworkInterface: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InstanceNetworkInterface: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Association", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Association == nil {
+				m.Association = &InstanceNetworkInterfaceAssociation{}
+			}
+			if err := m.Association.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Attachment", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Attachment == nil {
+				m.Attachment = &InstanceNetworkInterfaceAttachment{}
+			}
+			if err := m.Attachment.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Description = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Groups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Groups = append(m.Groups, &GroupIdentifier{})
+			if err := m.Groups[len(m.Groups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MacAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.MacAddress = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkInterfaceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NetworkInterfaceId = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OwnerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.OwnerId = &s
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateDnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrivateDnsName = &s
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateIpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrivateIpAddress = &s
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateIpAddresses", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrivateIpAddresses = append(m.PrivateIpAddresses, &InstancePrivateIpAddress{})
+			if err := m.PrivateIpAddresses[len(m.PrivateIpAddresses)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SourceDestCheck", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.SourceDestCheck = &b
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetId = &s
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InstanceNetworkInterfaceAssociation) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InstanceNetworkInterfaceAssociation: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InstanceNetworkInterfaceAssociation: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpOwnerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.IpOwnerId = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicDnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PublicDnsName = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PublicIp = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InstanceNetworkInterfaceAttachment) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InstanceNetworkInterfaceAttachment: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InstanceNetworkInterfaceAttachment: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttachTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AttachTime == nil {
+				m.AttachTime = &opsee_types.Timestamp{}
+			}
+			if err := m.AttachTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttachmentId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AttachmentId = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeleteOnTermination", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DeleteOnTermination = &b
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeviceIndex", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.DeviceIndex = &v2
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Status = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InstancePrivateIpAddress) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InstancePrivateIpAddress: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InstancePrivateIpAddress: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Association", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Association == nil {
+				m.Association = &InstanceNetworkInterfaceAssociation{}
+			}
+			if err := m.Association.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Primary", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Primary = &b
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateDnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrivateDnsName = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateIpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrivateIpAddress = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InstanceState) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InstanceState: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InstanceState: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Code = &v2
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Name = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IpPermission) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IpPermission: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IpPermission: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FromPort", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.FromPort = &v2
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpProtocol", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.IpProtocol = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpRanges", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IpRanges = append(m.IpRanges, &IpRange{})
+			if err := m.IpRanges[len(m.IpRanges)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrefixListIds", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrefixListIds = append(m.PrefixListIds, &PrefixListId{})
+			if err := m.PrefixListIds[len(m.PrefixListIds)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ToPort", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.ToPort = &v2
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdGroupPairs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserIdGroupPairs = append(m.UserIdGroupPairs, &UserIdGroupPair{})
+			if err := m.UserIdGroupPairs[len(m.UserIdGroupPairs)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IpRange) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IpRange: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IpRange: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CidrIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.CidrIp = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Monitoring) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Monitoring: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Monitoring: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.State = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Placement) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Placement: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Placement: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Affinity", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Affinity = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityZone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AvailabilityZone = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupName = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HostId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.HostId = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tenancy", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Tenancy = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PrefixListId) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PrefixListId: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PrefixListId: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrefixListId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PrefixListId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProductCode) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProductCode: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProductCode: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProductCodeId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ProductCodeId = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProductCodeType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ProductCodeType = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PropagatingVgw) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PropagatingVgw: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PropagatingVgw: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GatewayId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GatewayId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Reservation) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Reservation: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Reservation: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Groups", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Groups = append(m.Groups, &GroupIdentifier{})
+			if err := m.Groups[len(m.Groups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Instances", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Instances = append(m.Instances, &Instance{})
+			if err := m.Instances[len(m.Instances)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OwnerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.OwnerId = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RequesterId = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReservationId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ReservationId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Route) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Route: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Route: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DestinationCidrBlock", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DestinationCidrBlock = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DestinationPrefixListId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DestinationPrefixListId = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GatewayId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GatewayId = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceId = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceOwnerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceOwnerId = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NatGatewayId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NatGatewayId = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkInterfaceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NetworkInterfaceId = &s
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Origin", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Origin = &s
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.State = &s
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcPeeringConnectionId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcPeeringConnectionId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RouteTable) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RouteTable: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RouteTable: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Associations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Associations = append(m.Associations, &RouteTableAssociation{})
+			if err := m.Associations[len(m.Associations)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PropagatingVgws", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PropagatingVgws = append(m.PropagatingVgws, &PropagatingVgw{})
+			if err := m.PropagatingVgws[len(m.PropagatingVgws)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTableId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RouteTableId = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Routes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Routes = append(m.Routes, &Route{})
+			if err := m.Routes[len(m.Routes)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, &Tag{})
+			if err := m.Tags[len(m.Tags)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RouteTableAssociation) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RouteTableAssociation: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RouteTableAssociation: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Main", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Main = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTableAssociationId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RouteTableAssociationId = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTableId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.RouteTableId = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SecurityGroup) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SecurityGroup: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SecurityGroup: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Description = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupId = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupName = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpPermissions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IpPermissions = append(m.IpPermissions, &IpPermission{})
+			if err := m.IpPermissions[len(m.IpPermissions)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpPermissionsEgress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IpPermissionsEgress = append(m.IpPermissionsEgress, &IpPermission{})
+			if err := m.IpPermissionsEgress[len(m.IpPermissionsEgress)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OwnerId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.OwnerId = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, &Tag{})
+			if err := m.Tags[len(m.Tags)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *StateReason) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: StateReason: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: StateReason: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Code = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Message = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Subnet) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Subnet: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Subnet: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityZone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AvailabilityZone = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailableIpAddressCount", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.AvailableIpAddressCount = &v2
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CidrBlock", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.CidrBlock = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultForAz", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.DefaultForAz = &b
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MapPublicIpOnLaunch", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.MapPublicIpOnLaunch = &b
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.State = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.SubnetId = &s
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, &Tag{})
+			if err := m.Tags[len(m.Tags)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Tag) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Tag: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Tag: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Key = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Value = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UserIdGroupPair) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UserIdGroupPair: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UserIdGroupPair: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupId = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.GroupName = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeeringStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.PeeringStatus = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.UserId = &s
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcPeeringConnectionId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcPeeringConnectionId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Vpc) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Vpc: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Vpc: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CidrBlock", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.CidrBlock = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DhcpOptionsId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.DhcpOptionsId = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstanceTenancy", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.InstanceTenancy = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsDefault", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.IsDefault = &b
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.State = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, &Tag{})
+			if err := m.Tags[len(m.Tags)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.VpcId = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipTypes(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthTypes
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipTypes(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorTypes = []byte{
+	// 2626 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xb4, 0x58, 0x4d, 0x6f, 0x24, 0x47,
+	0xf9, 0xd7, 0xbc, 0xcf, 0xd4, 0xcc, 0xf8, 0xa5, 0xbc, 0xf6, 0x76, 0x9c, 0xcd, 0x66, 0xb7, 0xf3,
+	0xf2, 0xdf, 0x3f, 0x4a, 0xbc, 0xc1, 0x0a, 0x09, 0x90, 0x08, 0xc9, 0xb1, 0xb3, 0xd9, 0x61, 0x5f,
+	0x6c, 0x7a, 0x9d, 0x05, 0x05, 0x71, 0x68, 0xf7, 0x94, 0xc7, 0x25, 0xcf, 0x74, 0x37, 0xfd, 0x62,
+	0xaf, 0x57, 0xe2, 0xc8, 0x81, 0x4f, 0xc0, 0x7d, 0x51, 0xa4, 0xdc, 0xb8, 0x21, 0x8e, 0x70, 0xe3,
+	0x88, 0x40, 0x5c, 0x11, 0x20, 0x71, 0xe3, 0x03, 0x70, 0xe4, 0xa9, 0xa7, 0xaa, 0xba, 0xab, 0x7b,
+	0x7a, 0x76, 0x4d, 0xb4, 0x1c, 0x46, 0x9a, 0xe7, 0xa9, 0xa7, 0xaa, 0x9f, 0xf7, 0xe7, 0x57, 0x45,
+	0xfa, 0xc9, 0x45, 0xc8, 0xe2, 0xad, 0x30, 0x0a, 0x92, 0x80, 0x0e, 0x83, 0x30, 0x66, 0x6c, 0xcb,
+	0x3d, 0x8f, 0xb7, 0x98, 0xb7, 0xbd, 0xf9, 0xee, 0x84, 0x27, 0x27, 0xe9, 0xd1, 0x96, 0x17, 0xcc,
+	0x6e, 0x4f, 0x82, 0x49, 0x70, 0x1b, 0xa5, 0x8e, 0xd2, 0x63, 0xa4, 0x90, 0xc0, 0x7f, 0x72, 0xf7,
+	0xe6, 0x7b, 0x86, 0x38, 0x1e, 0x94, 0xcb, 0x23, 0x29, 0x37, 0xc8, 0x4f, 0xc8, 0x1d, 0xdf, 0xbd,
+	0xd4, 0x0e, 0xd4, 0xf0, 0x76, 0xc2, 0x67, 0x2c, 0x4e, 0xdc, 0x59, 0x28, 0xf7, 0xda, 0xbf, 0xaf,
+	0x91, 0x8d, 0x3d, 0x16, 0x7b, 0x11, 0x3f, 0x62, 0x23, 0x1f, 0x56, 0x7c, 0x8f, 0xc5, 0x23, 0x3f,
+	0x4c, 0x13, 0xba, 0x41, 0xda, 0x7b, 0xd1, 0x85, 0x93, 0xfa, 0x56, 0xfd, 0x46, 0xed, 0x56, 0xd7,
+	0x69, 0x8f, 0x91, 0xa2, 0xb7, 0x49, 0xe7, 0x0e, 0x9f, 0x26, 0x2c, 0x8a, 0xad, 0xc6, 0x8d, 0xc6,
+	0xad, 0xfe, 0xf6, 0xfa, 0x56, 0xc1, 0xe0, 0x2d, 0xb9, 0xea, 0x74, 0x8e, 0xa5, 0x14, 0xbd, 0x41,
+	0xfa, 0xfa, 0xe8, 0xd1, 0x38, 0xb6, 0x9a, 0xb0, 0xa9, 0xe7, 0xf4, 0x79, 0xce, 0xa2, 0xd7, 0x09,
+	0x79, 0xe0, 0x3e, 0x71, 0x58, 0x9c, 0x4e, 0x93, 0xd8, 0x6a, 0xc1, 0xe7, 0xa8, 0x43, 0x66, 0x19,
+	0x87, 0x5e, 0x23, 0xbd, 0x87, 0xec, 0x49, 0x72, 0x18, 0x9c, 0x32, 0xdf, 0x6a, 0xc3, 0x72, 0xcf,
+	0xe9, 0xf9, 0x9a, 0x61, 0x9f, 0x93, 0xab, 0x73, 0x26, 0xec, 0xa7, 0x89, 0xb0, 0xa1, 0xb0, 0xb1,
+	0x5e, 0xda, 0x48, 0xbf, 0x47, 0x06, 0xf0, 0x05, 0x16, 0x9d, 0xb9, 0x09, 0x0f, 0x7c, 0x6d, 0xce,
+	0x66, 0xc9, 0x1c, 0x43, 0xc4, 0x19, 0x44, 0x86, 0xbc, 0xfd, 0x8b, 0x1a, 0xb1, 0xf4, 0x97, 0x9d,
+	0x20, 0x4d, 0xd8, 0xa1, 0x7b, 0x34, 0x7d, 0xe9, 0xee, 0x7b, 0x93, 0x0c, 0xf3, 0xc3, 0x73, 0x07,
+	0x0e, 0x23, 0x93, 0x69, 0xff, 0x88, 0xbc, 0x52, 0xa1, 0x8a, 0x72, 0xc3, 0x47, 0xa4, 0x6f, 0x30,
+	0x41, 0x21, 0xf1, 0xdd, 0x57, 0xca, 0x76, 0x66, 0x12, 0x4e, 0x3f, 0x3f, 0x3b, 0xb6, 0x9f, 0xd5,
+	0xc8, 0xab, 0xfa, 0xe8, 0x47, 0xcc, 0x4b, 0x23, 0x9e, 0x5c, 0x7c, 0x06, 0x02, 0xe1, 0xcb, 0x36,
+	0x74, 0x93, 0x74, 0xf1, 0xdc, 0xdc, 0xc6, 0xee, 0x44, 0xd1, 0x22, 0x43, 0x70, 0xed, 0xa1, 0x0b,
+	0xf9, 0x0b, 0x19, 0x22, 0x56, 0xc9, 0x24, 0xe3, 0xd8, 0x63, 0x72, 0xad, 0x5a, 0x47, 0xe5, 0x81,
+	0x3d, 0xb2, 0x54, 0xe4, 0x2b, 0x27, 0x5c, 0x2b, 0xe9, 0x54, 0x10, 0x72, 0x96, 0xe2, 0xc2, 0x1e,
+	0xfb, 0x67, 0xe4, 0x4a, 0xf6, 0x95, 0xf4, 0xc8, 0x67, 0xc9, 0xcb, 0x76, 0x01, 0xe4, 0xab, 0x3c,
+	0x38, 0xf7, 0x41, 0x2f, 0xd6, 0x0c, 0xfb, 0x2e, 0x59, 0x2f, 0x7d, 0x5e, 0x59, 0x07, 0xdf, 0x51,
+	0x0c, 0x65, 0x56, 0xf9, 0x3b, 0x72, 0xd5, 0xe9, 0xc8, 0xb3, 0x62, 0x3b, 0x21, 0xab, 0xfa, 0xa4,
+	0xc7, 0xa1, 0xf7, 0xb2, 0xad, 0x80, 0x83, 0xe0, 0xd4, 0xdc, 0x84, 0xf6, 0x19, 0x52, 0xf6, 0xc7,
+	0x84, 0x9a, 0x5f, 0x55, 0xca, 0xbf, 0x4d, 0x9a, 0x82, 0x52, 0x9a, 0xd3, 0xd2, 0xd9, 0xb0, 0xe4,
+	0x34, 0x61, 0x7f, 0x6c, 0xff, 0x06, 0x5a, 0xd5, 0xa7, 0x47, 0xb1, 0x2e, 0xf1, 0x4f, 0xa6, 0x81,
+	0x77, 0xba, 0xc7, 0xce, 0xb8, 0xc7, 0xe8, 0x07, 0x84, 0xec, 0x24, 0x89, 0xeb, 0x9d, 0x1c, 0x42,
+	0x7b, 0x43, 0xed, 0xfb, 0xdb, 0x1b, 0xea, 0x20, 0xd9, 0x99, 0x0f, 0x75, 0xdf, 0x73, 0x88, 0x9b,
+	0x49, 0xd2, 0xf7, 0xc8, 0xda, 0x1e, 0x9b, 0xb2, 0x84, 0xed, 0xfb, 0x87, 0x2c, 0x9a, 0x71, 0x1f,
+	0x0b, 0x1b, 0xac, 0x14, 0xe6, 0xaf, 0x8d, 0xe7, 0x97, 0x84, 0x69, 0x8f, 0x12, 0x37, 0x49, 0x85,
+	0x69, 0xa2, 0x9b, 0xb4, 0x63, 0xa4, 0x44, 0xee, 0x3e, 0x0e, 0xa6, 0xe9, 0x0c, 0x6a, 0x11, 0xfb,
+	0x17, 0xe4, 0xee, 0x99, 0xa2, 0xed, 0xf7, 0x49, 0x5b, 0x7a, 0x88, 0x52, 0xd2, 0x14, 0xe9, 0xaa,
+	0x3a, 0x51, 0xd3, 0x87, 0xff, 0xe8, 0x2c, 0x77, 0x9a, 0x32, 0xe9, 0x5c, 0xe1, 0x2c, 0xa4, 0xec,
+	0x11, 0x59, 0x56, 0xd5, 0xc0, 0xfc, 0x84, 0x1f, 0x73, 0xd8, 0x6e, 0x91, 0x8e, 0x62, 0xa9, 0x13,
+	0x3a, 0xaa, 0x3e, 0x44, 0xde, 0x64, 0xe5, 0x81, 0xea, 0x43, 0xde, 0x64, 0xd5, 0x61, 0x7f, 0x40,
+	0xe8, 0xc8, 0x9d, 0x69, 0xc7, 0x1d, 0x44, 0x01, 0x04, 0x8a, 0xd1, 0x15, 0xd2, 0xd8, 0x89, 0x74,
+	0x57, 0x6c, 0xb8, 0x91, 0x4f, 0x97, 0x48, 0x1d, 0x8e, 0x96, 0xdb, 0xeb, 0x7c, 0x6c, 0x3f, 0x1b,
+	0x92, 0xae, 0xde, 0x05, 0x61, 0x5a, 0xda, 0x99, 0xf1, 0xfb, 0x6e, 0xea, 0x7b, 0x27, 0x23, 0x7f,
+	0xcc, 0x9e, 0xe0, 0x4e, 0xea, 0x2c, 0xb9, 0x05, 0x2e, 0xb5, 0xc9, 0x60, 0x27, 0xf2, 0x4e, 0x78,
+	0xc2, 0xbc, 0x24, 0x8d, 0xb4, 0x36, 0x03, 0xd7, 0xe0, 0xd1, 0x1f, 0x93, 0x35, 0x23, 0x7c, 0x0f,
+	0xdc, 0x30, 0xe4, 0xfe, 0x44, 0x66, 0x4b, 0x7f, 0xfb, 0xff, 0x4b, 0x19, 0x50, 0x11, 0x70, 0xb5,
+	0xc3, 0x59, 0x3b, 0x9a, 0x3f, 0x45, 0x8c, 0x9b, 0xdd, 0x29, 0x07, 0xa7, 0xc9, 0xae, 0x2f, 0xa3,
+	0xd1, 0xf7, 0x72, 0x96, 0x50, 0x11, 0x12, 0x69, 0x3f, 0x84, 0x61, 0xc8, 0x9f, 0xb2, 0x31, 0x4e,
+	0x94, 0xae, 0x33, 0x60, 0x06, 0x4f, 0x34, 0x9c, 0xbb, 0x90, 0x39, 0xd1, 0x19, 0x8f, 0x83, 0xc8,
+	0xea, 0xe0, 0x21, 0xe4, 0x24, 0xe3, 0xd0, 0x1f, 0x54, 0xf9, 0xd4, 0xea, 0x62, 0xea, 0xdd, 0x2c,
+	0x5b, 0x30, 0x27, 0xe8, 0x50, 0x3e, 0x1f, 0x10, 0x08, 0xef, 0x68, 0xe6, 0x4e, 0x44, 0x0a, 0xf5,
+	0x64, 0x78, 0xb9, 0x24, 0x85, 0x32, 0xf9, 0x04, 0xb5, 0x88, 0x54, 0x26, 0x1f, 0xa0, 0xf4, 0x1d,
+	0xb2, 0xaa, 0xd7, 0xef, 0xf3, 0x63, 0xe6, 0x5d, 0x78, 0xa0, 0x4b, 0x1f, 0xc5, 0x56, 0x79, 0x79,
+	0x41, 0x98, 0xaf, 0xa5, 0x0f, 0xc1, 0x20, 0x6b, 0x20, 0x23, 0xc4, 0x0d, 0x9e, 0xc8, 0xe7, 0x7b,
+	0x2c, 0xf2, 0xd9, 0x14, 0xbe, 0x37, 0x94, 0xf9, 0x7c, 0xaa, 0x68, 0xa1, 0xe7, 0x3d, 0x76, 0x81,
+	0xa9, 0xb6, 0x24, 0xf5, 0x3c, 0x95, 0xa4, 0xa8, 0x43, 0x99, 0x0a, 0x58, 0x87, 0xcb, 0xcf, 0xaf,
+	0xc3, 0x69, 0x26, 0x49, 0xbf, 0x03, 0xf3, 0x3f, 0xf0, 0x79, 0x12, 0x44, 0x10, 0x41, 0x6b, 0x05,
+	0xf7, 0x95, 0xc7, 0x53, 0x2e, 0x00, 0xd0, 0x20, 0xfb, 0x4f, 0x3f, 0x27, 0xab, 0x0f, 0x59, 0x72,
+	0x1e, 0x44, 0xa7, 0x23, 0x1f, 0x4a, 0xec, 0xd8, 0x85, 0xe1, 0x6f, 0xad, 0x62, 0x22, 0xfd, 0xdf,
+	0x82, 0x44, 0x2a, 0xcb, 0x3b, 0xab, 0x7e, 0xf9, 0x04, 0xb0, 0xa4, 0x77, 0x30, 0x85, 0x7f, 0x33,
+	0x48, 0x1a, 0x8b, 0xa2, 0x42, 0x56, 0xe9, 0xb8, 0x6c, 0xdd, 0xe9, 0x85, 0xfa, 0xaf, 0xf0, 0x1b,
+	0xf0, 0x93, 0xe3, 0x20, 0x9a, 0x59, 0x6b, 0xd2, 0x6f, 0xa1, 0xa2, 0x45, 0x05, 0x1d, 0x44, 0x1c,
+	0xc0, 0x03, 0xdb, 0xf3, 0x63, 0x74, 0xdf, 0x15, 0x94, 0x58, 0x0a, 0x0b, 0x5c, 0xfa, 0x0d, 0xb2,
+	0xa2, 0xe4, 0x46, 0xe1, 0xce, 0x78, 0x0c, 0x90, 0x23, 0xb6, 0xd6, 0x51, 0x72, 0x25, 0x2c, 0xf1,
+	0x05, 0x84, 0x81, 0xf4, 0x19, 0xa7, 0x5e, 0xb2, 0x1b, 0x8c, 0xc1, 0xf2, 0x8d, 0x4a, 0x08, 0x63,
+	0x88, 0x38, 0x83, 0xd0, 0x90, 0x17, 0xe0, 0xe2, 0x20, 0x3d, 0x9a, 0x72, 0x4f, 0xab, 0x74, 0x15,
+	0x3f, 0x34, 0x0c, 0x4d, 0x26, 0xbd, 0x45, 0x96, 0xa5, 0x54, 0xae, 0x90, 0x85, 0x72, 0xcb, 0x61,
+	0x91, 0x2d, 0x1a, 0x91, 0xe3, 0xce, 0xc6, 0x3c, 0x3e, 0x85, 0xc4, 0x79, 0x45, 0x36, 0xa2, 0x48,
+	0x33, 0x84, 0x07, 0x9c, 0x20, 0x48, 0x64, 0xc1, 0xe2, 0xe7, 0x36, 0xa5, 0x07, 0xa2, 0x02, 0xb7,
+	0x28, 0x87, 0x39, 0xfa, 0x6a, 0x59, 0x0e, 0xb3, 0xf4, 0xce, 0xdc, 0x54, 0xbf, 0x86, 0xf6, 0x5f,
+	0x2f, 0xd9, 0x5f, 0x6a, 0xa4, 0xe5, 0xb9, 0x2e, 0xec, 0x7b, 0x14, 0xa4, 0x91, 0xc7, 0x60, 0x3c,
+	0x25, 0xbb, 0x27, 0xcc, 0x3b, 0xb5, 0x5e, 0xc3, 0x9e, 0xb0, 0x1c, 0x17, 0xd9, 0xf4, 0x7d, 0xb2,
+	0xfe, 0x28, 0x0c, 0x12, 0x9d, 0x4a, 0x0e, 0xfb, 0x29, 0xf4, 0x6a, 0x18, 0xce, 0xd6, 0x75, 0x54,
+	0x70, 0x3d, 0xae, 0x5a, 0xc4, 0xf3, 0x23, 0x1e, 0x9c, 0x41, 0xe6, 0x3d, 0x4a, 0xc3, 0x30, 0x88,
+	0x12, 0xeb, 0x75, 0xe9, 0xbf, 0xb8, 0xc8, 0xa6, 0xdb, 0xa4, 0x25, 0xe6, 0x0b, 0xb3, 0x6e, 0x60,
+	0xce, 0x5d, 0x5b, 0x90, 0xc2, 0x28, 0xe3, 0xb4, 0xc4, 0xf0, 0x61, 0xf4, 0x63, 0xd2, 0x97, 0x34,
+	0x73, 0x63, 0x98, 0x5e, 0x37, 0x71, 0x67, 0x39, 0x05, 0x0c, 0x09, 0xa7, 0x1f, 0xe7, 0x04, 0x5a,
+	0x24, 0xc8, 0xc3, 0xc8, 0xf5, 0x63, 0x8e, 0x28, 0x57, 0x9e, 0x63, 0x2b, 0x8b, 0xaa, 0x16, 0x45,
+	0x9e, 0x6b, 0xa0, 0x62, 0xbd, 0x21, 0xf3, 0x5c, 0xe3, 0x14, 0x31, 0xd0, 0x0f, 0x5d, 0x68, 0xe7,
+	0x6f, 0x56, 0x0e, 0x74, 0x58, 0x72, 0x9a, 0x09, 0xac, 0xd3, 0x2d, 0x42, 0x1f, 0xf3, 0x28, 0x49,
+	0xdd, 0x29, 0x7f, 0x8a, 0xd3, 0x15, 0x23, 0xfd, 0x16, 0x9e, 0x46, 0xcf, 0xe6, 0x56, 0xe8, 0x15,
+	0xd2, 0x42, 0x58, 0x61, 0xbd, 0x8d, 0x22, 0x2d, 0x44, 0x15, 0x76, 0x4a, 0x36, 0x17, 0x4f, 0x08,
+	0xd1, 0x39, 0x8d, 0x6c, 0x93, 0xb3, 0x8e, 0x8c, 0xf3, 0x4c, 0xfb, 0x90, 0x34, 0x60, 0x14, 0xe0,
+	0x90, 0xea, 0x6f, 0xbf, 0x55, 0x52, 0xb5, 0x1a, 0x6d, 0x38, 0x0d, 0x18, 0x14, 0xf6, 0x57, 0x2d,
+	0x62, 0x2d, 0x6a, 0x28, 0xf4, 0x90, 0xf4, 0x77, 0xe2, 0x38, 0xf0, 0xb8, 0xc4, 0x13, 0x12, 0x90,
+	0x6c, 0x5f, 0xb2, 0x1d, 0x19, 0x3b, 0x9d, 0xbe, 0x9b, 0x13, 0x30, 0x72, 0x14, 0xca, 0xc1, 0xa6,
+	0x24, 0x55, 0xfe, 0xe6, 0x65, 0x0f, 0xcd, 0x36, 0x6a, 0x00, 0x84, 0xed, 0x0a, 0x66, 0xa5, 0x44,
+	0x64, 0x21, 0x2a, 0x2a, 0x31, 0x4d, 0x7f, 0x9c, 0xb3, 0xa0, 0x11, 0xb6, 0x55, 0x69, 0xb5, 0x2e,
+	0x55, 0x5a, 0xed, 0x89, 0x2c, 0x29, 0xbc, 0xd2, 0x79, 0xba, 0x5b, 0xc8, 0x3b, 0x1b, 0x5c, 0xe9,
+	0x34, 0x47, 0x04, 0xbf, 0xac, 0x23, 0x44, 0x56, 0xce, 0x59, 0xea, 0xcf, 0xad, 0x88, 0xa1, 0xb3,
+	0x7f, 0xee, 0xb3, 0x08, 0x84, 0xba, 0x72, 0xe8, 0x04, 0x92, 0xac, 0x68, 0xab, 0xbd, 0x4b, 0xb7,
+	0x55, 0xb2, 0xa0, 0xad, 0xfe, 0x90, 0xd0, 0xb2, 0x2c, 0x34, 0xd7, 0xfe, 0x73, 0xc7, 0x4a, 0x79,
+	0x83, 0x43, 0xc3, 0xb9, 0x23, 0xaa, 0x3a, 0xcd, 0xa0, 0xba, 0xd3, 0xe4, 0x48, 0x73, 0x58, 0x46,
+	0x9a, 0x59, 0xe5, 0x2d, 0x95, 0x2a, 0x2f, 0xab, 0x90, 0x65, 0xb3, 0x42, 0x7e, 0x5e, 0x23, 0x6f,
+	0x5c, 0x22, 0xd9, 0x44, 0xef, 0x1e, 0x85, 0xda, 0xc9, 0xea, 0xb2, 0xcc, 0x35, 0x63, 0x7e, 0x52,
+	0x34, 0xaa, 0x26, 0x85, 0x98, 0x7f, 0x6a, 0x24, 0xa8, 0x6c, 0xea, 0xea, 0x11, 0x61, 0xff, 0xab,
+	0x46, 0xec, 0x17, 0xe7, 0xe7, 0xd7, 0x06, 0xf3, 0x02, 0x78, 0x66, 0xa7, 0x64, 0x38, 0x76, 0xe0,
+	0x1a, 0xbc, 0x45, 0x80, 0xbf, 0xb9, 0x18, 0xf0, 0x63, 0x85, 0x88, 0xb2, 0x97, 0x98, 0x57, 0xbe,
+	0x4d, 0xf4, 0xc7, 0x39, 0xcb, 0x08, 0x54, 0xdb, 0x0c, 0x94, 0xfd, 0xd7, 0x5a, 0xde, 0x21, 0xca,
+	0xb9, 0xf1, 0x3f, 0xea, 0x10, 0x50, 0x24, 0xf0, 0xa5, 0x99, 0x1b, 0x5d, 0xa8, 0x3b, 0x4c, 0x27,
+	0x94, 0x64, 0x45, 0x91, 0x34, 0x2f, 0x5d, 0x24, 0xad, 0xea, 0x22, 0xb1, 0x3f, 0x24, 0xc3, 0xc2,
+	0x3c, 0x12, 0xd7, 0x1b, 0x81, 0x2a, 0xd4, 0xc5, 0xa0, 0xe9, 0xc1, 0xff, 0xec, 0xca, 0xd3, 0xc8,
+	0xaf, 0x3c, 0xf6, 0x97, 0x75, 0x40, 0xa0, 0xe1, 0x81, 0xf0, 0x72, 0x1c, 0x73, 0x39, 0x4d, 0xee,
+	0x44, 0xc1, 0xec, 0x40, 0x0c, 0x46, 0xb9, 0xb9, 0x7b, 0xac, 0x68, 0xc4, 0xbe, 0xe1, 0x81, 0x78,
+	0xac, 0xf2, 0x82, 0xa9, 0x3a, 0x86, 0xf0, 0x8c, 0x03, 0x13, 0xb3, 0x3b, 0x0a, 0x1d, 0xd7, 0x9f,
+	0x30, 0x7d, 0x81, 0xd8, 0x28, 0xbb, 0x51, 0x2e, 0x3b, 0x5d, 0xae, 0xe4, 0xe8, 0x0e, 0xe4, 0x72,
+	0xc4, 0x8e, 0xf9, 0x93, 0xfb, 0x3c, 0xc6, 0xab, 0xb6, 0xec, 0x6d, 0xaf, 0xce, 0xc1, 0xa6, 0x5c,
+	0x06, 0x12, 0xdd, 0xdc, 0x21, 0xa2, 0x7e, 0x18, 0xa0, 0xc2, 0x6d, 0x54, 0xb8, 0x9d, 0x20, 0x45,
+	0xbf, 0x4f, 0x56, 0x3e, 0x8f, 0x45, 0xc1, 0x60, 0x63, 0x3c, 0x70, 0x39, 0xdc, 0x9a, 0x3b, 0x95,
+	0x9d, 0xb3, 0x24, 0xe6, 0xac, 0xa4, 0xa5, 0x7d, 0xf6, 0x4d, 0xb8, 0x10, 0x48, 0x95, 0xc5, 0xe7,
+	0x76, 0xf9, 0x38, 0x82, 0xaa, 0x92, 0x85, 0xd9, 0xf6, 0x90, 0xb2, 0x6d, 0x13, 0x39, 0x8b, 0xfa,
+	0x97, 0xe8, 0x41, 0x0a, 0x49, 0x7c, 0x60, 0xff, 0xaa, 0x66, 0x80, 0x59, 0xe1, 0xeb, 0x9d, 0xe3,
+	0x63, 0x0e, 0x7b, 0x2e, 0x94, 0x58, 0xd7, 0x55, 0xb4, 0x88, 0xfe, 0xce, 0x99, 0xcb, 0xa7, 0xee,
+	0x11, 0x9f, 0x02, 0xfd, 0x45, 0xe0, 0xeb, 0xc0, 0xad, 0xb8, 0x25, 0x7e, 0xf1, 0xca, 0xd9, 0x2c,
+	0x5d, 0x39, 0x85, 0xbe, 0x77, 0x03, 0x04, 0x46, 0x32, 0x7b, 0xda, 0x27, 0x48, 0x89, 0x0c, 0x3d,
+	0x64, 0x3e, 0xa4, 0xcc, 0x85, 0xaa, 0x96, 0x4e, 0x22, 0x49, 0x7b, 0x5b, 0x20, 0xd9, 0xdc, 0xc3,
+	0xa2, 0x9c, 0x4d, 0x5a, 0xe9, 0x3a, 0x30, 0xa3, 0x60, 0xff, 0x84, 0xf4, 0x0d, 0x68, 0x8b, 0x2d,
+	0x2a, 0x27, 0xb3, 0x3d, 0xc3, 0xd0, 0x64, 0x22, 0x98, 0xcd, 0x19, 0x88, 0x39, 0x1a, 0x0a, 0xcc,
+	0x16, 0xd9, 0xf6, 0x96, 0x28, 0x9a, 0x20, 0x74, 0x27, 0x50, 0x5d, 0xfe, 0xe4, 0xf1, 0xe4, 0x1c,
+	0x8d, 0x06, 0x97, 0x9e, 0xbb, 0x17, 0x79, 0x8b, 0x9c, 0x68, 0x86, 0xa8, 0xf8, 0xbe, 0xf1, 0x5a,
+	0x68, 0xcc, 0xce, 0xfa, 0x7f, 0x35, 0x3b, 0xbf, 0x05, 0x8d, 0x58, 0x3f, 0x64, 0xaa, 0x27, 0x97,
+	0xab, 0x0b, 0x5a, 0x03, 0x74, 0x68, 0x2d, 0x69, 0x8e, 0xc8, 0x66, 0x71, 0x44, 0xde, 0x10, 0x7a,
+	0x21, 0x18, 0xc5, 0x55, 0x75, 0x25, 0x8e, 0x72, 0x16, 0x3e, 0x32, 0xe6, 0x9a, 0x8f, 0xc6, 0x2a,
+	0x3a, 0xc3, 0xc8, 0x64, 0xda, 0xbf, 0x6c, 0x90, 0x16, 0x3e, 0x13, 0x42, 0xd5, 0x89, 0x97, 0xb0,
+	0x44, 0x75, 0x49, 0x91, 0x9a, 0x88, 0x90, 0x94, 0x4f, 0xae, 0x8c, 0x2b, 0xd6, 0xe8, 0xb7, 0xf1,
+	0x9d, 0x56, 0xf3, 0x0b, 0xc1, 0x95, 0x01, 0xb8, 0x3a, 0xae, 0x5e, 0x2e, 0xba, 0xbd, 0x59, 0x72,
+	0x7b, 0xe9, 0x76, 0xdc, 0x9a, 0xbb, 0x1d, 0x43, 0xc0, 0xf5, 0xba, 0xf6, 0x8f, 0xb4, 0x6e, 0x99,
+	0x17, 0xd9, 0x22, 0xe7, 0x1e, 0xba, 0x49, 0xfe, 0x29, 0x09, 0x47, 0x06, 0xbe, 0xc1, 0x5b, 0x00,
+	0x5c, 0xba, 0x0b, 0x81, 0x0b, 0x54, 0xc2, 0x7e, 0xc4, 0x27, 0xdc, 0x57, 0xb0, 0xa4, 0x1d, 0x20,
+	0x95, 0xd7, 0x2a, 0x31, 0x6a, 0x15, 0x52, 0x66, 0x03, 0x26, 0xf8, 0x01, 0x63, 0xa2, 0x9e, 0x77,
+	0x03, 0xdf, 0x67, 0x9e, 0x0a, 0x88, 0xbc, 0xce, 0x6f, 0x9c, 0x55, 0xae, 0xda, 0xbf, 0xae, 0x13,
+	0x92, 0x3f, 0xe0, 0xd2, 0xbb, 0x30, 0x0b, 0xf3, 0xb9, 0xa0, 0xf3, 0xef, 0xcd, 0x85, 0x2f, 0xbe,
+	0xe6, 0x44, 0x19, 0x18, 0x13, 0x25, 0xa6, 0x9f, 0x61, 0xb5, 0x18, 0x35, 0xa0, 0x33, 0xf2, 0xb5,
+	0xf9, 0x3b, 0xa6, 0x21, 0x85, 0xc5, 0x64, 0xee, 0x12, 0xbe, 0x35, 0x9f, 0xb1, 0x55, 0x18, 0x07,
+	0xe6, 0x2b, 0x36, 0x7d, 0x87, 0xb4, 0x51, 0x46, 0x37, 0xe4, 0x2b, 0x55, 0x0a, 0x3b, 0x6d, 0xdc,
+	0x13, 0x67, 0xf7, 0x8c, 0xf6, 0x0b, 0xee, 0x19, 0x19, 0x2a, 0xea, 0x98, 0xa8, 0xe8, 0xcb, 0x1a,
+	0x59, 0xaf, 0x74, 0x80, 0x18, 0x59, 0x0f, 0x5c, 0xae, 0x5f, 0x41, 0x9b, 0x33, 0xf8, 0x2f, 0x72,
+	0xb7, 0x52, 0x38, 0xcf, 0xdd, 0xa8, 0x7a, 0xf9, 0x52, 0x76, 0x9b, 0x98, 0xae, 0x55, 0xc4, 0x74,
+	0xf6, 0x9f, 0xeb, 0x64, 0x58, 0xb8, 0xe4, 0x96, 0x41, 0x7b, 0x7d, 0x1e, 0xb4, 0x1b, 0x0f, 0x85,
+	0x8d, 0xe7, 0x3c, 0x14, 0xce, 0x75, 0x6d, 0x98, 0x8b, 0xe6, 0x5c, 0x5e, 0x34, 0x17, 0x4d, 0x19,
+	0x67, 0xc8, 0xcd, 0x1d, 0xf4, 0x01, 0x59, 0x2b, 0x1c, 0xf1, 0xe9, 0x44, 0x5d, 0x00, 0x5e, 0x78,
+	0xd0, 0x1a, 0x9f, 0xdf, 0x67, 0xf6, 0xb4, 0x4e, 0x19, 0xf6, 0xcb, 0xe8, 0x77, 0x2f, 0x1b, 0xfd,
+	0x9e, 0x19, 0xfd, 0x8f, 0x0a, 0x77, 0xe6, 0x02, 0x72, 0xe9, 0x29, 0xe4, 0x02, 0x9f, 0x7e, 0x00,
+	0x2a, 0xb8, 0x13, 0x3d, 0x1f, 0x3a, 0x33, 0x49, 0xda, 0x7f, 0xaa, 0x03, 0xe4, 0xc3, 0xf8, 0x54,
+	0x4e, 0xcc, 0xfa, 0x82, 0x89, 0x09, 0x39, 0xa4, 0x64, 0xa7, 0x39, 0x8a, 0xda, 0x0d, 0x52, 0x75,
+	0x99, 0xa3, 0xce, 0x55, 0xb7, 0x7a, 0x59, 0x44, 0x2d, 0x6f, 0xb1, 0x2a, 0x6a, 0x5e, 0xd6, 0x57,
+	0x21, 0xc3, 0xf6, 0xd8, 0xb1, 0x9b, 0x4e, 0x93, 0x3b, 0x41, 0xb4, 0xf3, 0x14, 0x33, 0xa8, 0xeb,
+	0x0c, 0xc6, 0x06, 0x4f, 0x00, 0x5f, 0xb8, 0x12, 0x6b, 0x68, 0xbe, 0xef, 0xcb, 0x67, 0x3a, 0xf5,
+	0xf2, 0xb9, 0x36, 0x9b, 0x5f, 0xca, 0xfb, 0x53, 0xc7, 0xec, 0x4f, 0x66, 0xa6, 0x76, 0x17, 0xdc,
+	0xfb, 0x7b, 0x97, 0x8d, 0x08, 0x31, 0x23, 0xf2, 0x2e, 0x69, 0x80, 0x88, 0x78, 0x95, 0xbe, 0xc7,
+	0x34, 0x32, 0x69, 0x9c, 0xb2, 0x0b, 0x14, 0x17, 0x4f, 0xe2, 0x2a, 0x0a, 0x2d, 0x7c, 0x1f, 0xb7,
+	0xff, 0x52, 0x23, 0xcb, 0x25, 0x04, 0xf5, 0x75, 0xdf, 0xc7, 0x11, 0x37, 0xc8, 0x9e, 0x5a, 0x78,
+	0xdb, 0x1f, 0x86, 0x26, 0x53, 0x34, 0x72, 0xf9, 0x41, 0x0d, 0x69, 0x24, 0x5e, 0xcb, 0xcd, 0x69,
+	0x1b, 0xe6, 0x3c, 0xa7, 0x91, 0x77, 0x9e, 0xdb, 0xc8, 0xff, 0x59, 0x23, 0x0d, 0xd8, 0x58, 0x0c,
+	0x79, 0xbd, 0x1c, 0x72, 0xd0, 0x78, 0xef, 0xc4, 0x0b, 0xf7, 0xb1, 0xdc, 0xe3, 0xac, 0xcc, 0x87,
+	0x63, 0x93, 0x69, 0x0e, 0x3e, 0x0d, 0xba, 0x9a, 0xc5, 0xc1, 0xa7, 0xd8, 0x78, 0xf5, 0x8b, 0x55,
+	0x12, 0xa9, 0xfc, 0xe9, 0x71, 0xcd, 0xc8, 0x53, 0xa1, 0x6d, 0xa6, 0x82, 0x0e, 0x77, 0xe7, 0xb2,
+	0xe1, 0xee, 0x1a, 0xfe, 0xf9, 0xe4, 0xe6, 0xbf, 0xff, 0x7e, 0xbd, 0xf6, 0xd5, 0x3f, 0xae, 0xd7,
+	0x7e, 0x0b, 0xbf, 0x3f, 0xc0, 0xef, 0x8f, 0xf0, 0xfb, 0x1b, 0xfc, 0x7e, 0xf7, 0xec, 0xf5, 0xda,
+	0x17, 0x0d, 0x38, 0xe2, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xec, 0x05, 0xfe, 0x44, 0x55, 0x1f,
+	0x00, 0x00,
 }

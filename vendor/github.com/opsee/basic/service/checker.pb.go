@@ -3,38 +3,38 @@
 // DO NOT EDIT!
 
 /*
-Package service is a generated protocol buffer package.
+	Package service is a generated protocol buffer package.
 
-It is generated from these files:
-	checker.proto
-	keelhaul.proto
-	spanx.proto
-	vape.proto
+	It is generated from these files:
+		checker.proto
+		keelhaul.proto
+		spanx.proto
+		vape.proto
 
-It has these top-level messages:
-	CheckResourceResponse
-	ResourceResponse
-	CheckResourceRequest
-	ResultsResource
-	TestCheckRequest
-	TestCheckResponse
-	ListBastionStatesRequest
-	ListBastionStatesResponse
-	ScanVpcsRequest
-	ScanVpcsResponse
-	LaunchStackRequest
-	LaunchStackResponse
-	AuthenticateBastionRequest
-	AuthenticateBastionResponse
-	PutRoleRequest
-	PutRoleResponse
-	GetCredentialsRequest
-	GetCredentialsResponse
-	GetUserRequest
-	GetUserResponse
-	ListUsersRequest
-	ListUsersResponse
-	ListCustomersResponse
+	It has these top-level messages:
+		CheckResourceResponse
+		ResourceResponse
+		CheckResourceRequest
+		ResultsResource
+		TestCheckRequest
+		TestCheckResponse
+		ListBastionStatesRequest
+		ListBastionStatesResponse
+		ScanVpcsRequest
+		ScanVpcsResponse
+		LaunchStackRequest
+		LaunchStackResponse
+		AuthenticateBastionRequest
+		AuthenticateBastionResponse
+		PutRoleRequest
+		PutRoleResponse
+		GetCredentialsRequest
+		GetCredentialsResponse
+		GetUserRequest
+		GetUserResponse
+		ListUsersRequest
+		ListUsersResponse
+		ListCustomersResponse
 */
 package service
 
@@ -54,10 +54,16 @@ import (
 	grpc "google.golang.org/grpc"
 )
 
+import io "io"
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
 
 type CheckResourceResponse struct {
 	Id    string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -65,9 +71,10 @@ type CheckResourceResponse struct {
 	Error string       `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
 }
 
-func (m *CheckResourceResponse) Reset()         { *m = CheckResourceResponse{} }
-func (m *CheckResourceResponse) String() string { return proto.CompactTextString(m) }
-func (*CheckResourceResponse) ProtoMessage()    {}
+func (m *CheckResourceResponse) Reset()                    { *m = CheckResourceResponse{} }
+func (m *CheckResourceResponse) String() string            { return proto.CompactTextString(m) }
+func (*CheckResourceResponse) ProtoMessage()               {}
+func (*CheckResourceResponse) Descriptor() ([]byte, []int) { return fileDescriptorChecker, []int{0} }
 
 func (m *CheckResourceResponse) GetCheck() *opsee.Check {
 	if m != nil {
@@ -80,9 +87,10 @@ type ResourceResponse struct {
 	Responses []*CheckResourceResponse `protobuf:"bytes,1,rep,name=responses" json:"responses,omitempty"`
 }
 
-func (m *ResourceResponse) Reset()         { *m = ResourceResponse{} }
-func (m *ResourceResponse) String() string { return proto.CompactTextString(m) }
-func (*ResourceResponse) ProtoMessage()    {}
+func (m *ResourceResponse) Reset()                    { *m = ResourceResponse{} }
+func (m *ResourceResponse) String() string            { return proto.CompactTextString(m) }
+func (*ResourceResponse) ProtoMessage()               {}
+func (*ResourceResponse) Descriptor() ([]byte, []int) { return fileDescriptorChecker, []int{1} }
 
 func (m *ResourceResponse) GetResponses() []*CheckResourceResponse {
 	if m != nil {
@@ -95,9 +103,10 @@ type CheckResourceRequest struct {
 	Checks []*opsee.Check `protobuf:"bytes,1,rep,name=checks" json:"checks,omitempty"`
 }
 
-func (m *CheckResourceRequest) Reset()         { *m = CheckResourceRequest{} }
-func (m *CheckResourceRequest) String() string { return proto.CompactTextString(m) }
-func (*CheckResourceRequest) ProtoMessage()    {}
+func (m *CheckResourceRequest) Reset()                    { *m = CheckResourceRequest{} }
+func (m *CheckResourceRequest) String() string            { return proto.CompactTextString(m) }
+func (*CheckResourceRequest) ProtoMessage()               {}
+func (*CheckResourceRequest) Descriptor() ([]byte, []int) { return fileDescriptorChecker, []int{2} }
 
 func (m *CheckResourceRequest) GetChecks() []*opsee.Check {
 	if m != nil {
@@ -110,9 +119,10 @@ type ResultsResource struct {
 	Results []*opsee.CheckResult `protobuf:"bytes,1,rep,name=results" json:"results,omitempty"`
 }
 
-func (m *ResultsResource) Reset()         { *m = ResultsResource{} }
-func (m *ResultsResource) String() string { return proto.CompactTextString(m) }
-func (*ResultsResource) ProtoMessage()    {}
+func (m *ResultsResource) Reset()                    { *m = ResultsResource{} }
+func (m *ResultsResource) String() string            { return proto.CompactTextString(m) }
+func (*ResultsResource) ProtoMessage()               {}
+func (*ResultsResource) Descriptor() ([]byte, []int) { return fileDescriptorChecker, []int{3} }
 
 func (m *ResultsResource) GetResults() []*opsee.CheckResult {
 	if m != nil {
@@ -122,14 +132,15 @@ func (m *ResultsResource) GetResults() []*opsee.CheckResult {
 }
 
 type TestCheckRequest struct {
-	MaxHosts int32                   `protobuf:"varint,1,opt,name=max_hosts,proto3" json:"max_hosts,omitempty"`
+	MaxHosts int32                   `protobuf:"varint,1,opt,name=max_hosts,json=maxHosts,proto3" json:"max_hosts,omitempty"`
 	Deadline *opsee_types1.Timestamp `protobuf:"bytes,2,opt,name=deadline" json:"deadline,omitempty"`
 	Check    *opsee.Check            `protobuf:"bytes,3,opt,name=check" json:"check,omitempty"`
 }
 
-func (m *TestCheckRequest) Reset()         { *m = TestCheckRequest{} }
-func (m *TestCheckRequest) String() string { return proto.CompactTextString(m) }
-func (*TestCheckRequest) ProtoMessage()    {}
+func (m *TestCheckRequest) Reset()                    { *m = TestCheckRequest{} }
+func (m *TestCheckRequest) String() string            { return proto.CompactTextString(m) }
+func (*TestCheckRequest) ProtoMessage()               {}
+func (*TestCheckRequest) Descriptor() ([]byte, []int) { return fileDescriptorChecker, []int{4} }
 
 func (m *TestCheckRequest) GetDeadline() *opsee_types1.Timestamp {
 	if m != nil {
@@ -150,9 +161,10 @@ type TestCheckResponse struct {
 	Error     string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 }
 
-func (m *TestCheckResponse) Reset()         { *m = TestCheckResponse{} }
-func (m *TestCheckResponse) String() string { return proto.CompactTextString(m) }
-func (*TestCheckResponse) ProtoMessage()    {}
+func (m *TestCheckResponse) Reset()                    { *m = TestCheckResponse{} }
+func (m *TestCheckResponse) String() string            { return proto.CompactTextString(m) }
+func (*TestCheckResponse) ProtoMessage()               {}
+func (*TestCheckResponse) Descriptor() ([]byte, []int) { return fileDescriptorChecker, []int{5} }
 
 func (m *TestCheckResponse) GetResponses() []*opsee.CheckResponse {
 	if m != nil {
@@ -868,6 +880,242 @@ var _Checker_serviceDesc = grpc.ServiceDesc{
 	Streams: []grpc.StreamDesc{},
 }
 
+func (m *CheckResourceResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *CheckResourceResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintChecker(data, i, uint64(len(m.Id)))
+		i += copy(data[i:], m.Id)
+	}
+	if m.Check != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintChecker(data, i, uint64(m.Check.Size()))
+		n1, err := m.Check.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if len(m.Error) > 0 {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintChecker(data, i, uint64(len(m.Error)))
+		i += copy(data[i:], m.Error)
+	}
+	return i, nil
+}
+
+func (m *ResourceResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ResourceResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Responses) > 0 {
+		for _, msg := range m.Responses {
+			data[i] = 0xa
+			i++
+			i = encodeVarintChecker(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *CheckResourceRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *CheckResourceRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Checks) > 0 {
+		for _, msg := range m.Checks {
+			data[i] = 0xa
+			i++
+			i = encodeVarintChecker(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *ResultsResource) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ResultsResource) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Results) > 0 {
+		for _, msg := range m.Results {
+			data[i] = 0xa
+			i++
+			i = encodeVarintChecker(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *TestCheckRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *TestCheckRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.MaxHosts != 0 {
+		data[i] = 0x8
+		i++
+		i = encodeVarintChecker(data, i, uint64(m.MaxHosts))
+	}
+	if m.Deadline != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintChecker(data, i, uint64(m.Deadline.Size()))
+		n2, err := m.Deadline.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if m.Check != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintChecker(data, i, uint64(m.Check.Size()))
+		n3, err := m.Check.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	return i, nil
+}
+
+func (m *TestCheckResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *TestCheckResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Responses) > 0 {
+		for _, msg := range m.Responses {
+			data[i] = 0xa
+			i++
+			i = encodeVarintChecker(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Error) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintChecker(data, i, uint64(len(m.Error)))
+		i += copy(data[i:], m.Error)
+	}
+	return i, nil
+}
+
+func encodeFixed64Checker(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Checker(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintChecker(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
 func NewPopulatedCheckResourceResponse(r randyChecker, easy bool) *CheckResourceResponse {
 	this := &CheckResourceResponse{}
 	this.Id = randStringChecker(r)
@@ -1025,4 +1273,872 @@ func encodeVarintPopulateChecker(data []byte, v uint64) []byte {
 	}
 	data = append(data, uint8(v))
 	return data
+}
+func (m *CheckResourceResponse) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovChecker(uint64(l))
+	}
+	if m.Check != nil {
+		l = m.Check.Size()
+		n += 1 + l + sovChecker(uint64(l))
+	}
+	l = len(m.Error)
+	if l > 0 {
+		n += 1 + l + sovChecker(uint64(l))
+	}
+	return n
+}
+
+func (m *ResourceResponse) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Responses) > 0 {
+		for _, e := range m.Responses {
+			l = e.Size()
+			n += 1 + l + sovChecker(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CheckResourceRequest) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Checks) > 0 {
+		for _, e := range m.Checks {
+			l = e.Size()
+			n += 1 + l + sovChecker(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ResultsResource) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Results) > 0 {
+		for _, e := range m.Results {
+			l = e.Size()
+			n += 1 + l + sovChecker(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *TestCheckRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.MaxHosts != 0 {
+		n += 1 + sovChecker(uint64(m.MaxHosts))
+	}
+	if m.Deadline != nil {
+		l = m.Deadline.Size()
+		n += 1 + l + sovChecker(uint64(l))
+	}
+	if m.Check != nil {
+		l = m.Check.Size()
+		n += 1 + l + sovChecker(uint64(l))
+	}
+	return n
+}
+
+func (m *TestCheckResponse) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Responses) > 0 {
+		for _, e := range m.Responses {
+			l = e.Size()
+			n += 1 + l + sovChecker(uint64(l))
+		}
+	}
+	l = len(m.Error)
+	if l > 0 {
+		n += 1 + l + sovChecker(uint64(l))
+	}
+	return n
+}
+
+func sovChecker(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozChecker(x uint64) (n int) {
+	return sovChecker(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *CheckResourceResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckResourceResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckResourceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Check", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Check == nil {
+				m.Check = &opsee.Check{}
+			}
+			if err := m.Check.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Error = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipChecker(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthChecker
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ResourceResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ResourceResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ResourceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Responses", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Responses = append(m.Responses, &CheckResourceResponse{})
+			if err := m.Responses[len(m.Responses)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipChecker(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthChecker
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CheckResourceRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckResourceRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckResourceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Checks", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Checks = append(m.Checks, &opsee.Check{})
+			if err := m.Checks[len(m.Checks)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipChecker(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthChecker
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ResultsResource) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ResultsResource: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ResultsResource: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Results", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Results = append(m.Results, &opsee.CheckResult{})
+			if err := m.Results[len(m.Results)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipChecker(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthChecker
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TestCheckRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TestCheckRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TestCheckRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxHosts", wireType)
+			}
+			m.MaxHosts = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.MaxHosts |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Deadline", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Deadline == nil {
+				m.Deadline = &opsee_types1.Timestamp{}
+			}
+			if err := m.Deadline.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Check", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Check == nil {
+				m.Check = &opsee.Check{}
+			}
+			if err := m.Check.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipChecker(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthChecker
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TestCheckResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TestCheckResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TestCheckResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Responses", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Responses = append(m.Responses, &opsee.CheckResponse{})
+			if err := m.Responses[len(m.Responses)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthChecker
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Error = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipChecker(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthChecker
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipChecker(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowChecker
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowChecker
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthChecker
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowChecker
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipChecker(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthChecker = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowChecker   = fmt.Errorf("proto: integer overflow")
+)
+
+var fileDescriptorChecker = []byte{
+	// 493 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xa4, 0x53, 0xb1, 0x6e, 0x13, 0x41,
+	0x10, 0xe5, 0x6c, 0x1c, 0xc7, 0x13, 0x02, 0x61, 0x65, 0xc0, 0x32, 0x10, 0x60, 0x05, 0x92, 0x85,
+	0x90, 0x0f, 0x19, 0x0a, 0x14, 0x21, 0x81, 0x62, 0x10, 0x54, 0x14, 0xa7, 0xd0, 0x20, 0x21, 0xb4,
+	0xbe, 0x1b, 0xf0, 0x09, 0x9f, 0xf7, 0xd8, 0xdd, 0x8b, 0x48, 0xc7, 0x6f, 0xd0, 0x52, 0x20, 0x3e,
+	0x81, 0x92, 0x92, 0x92, 0x4f, 0x00, 0x3a, 0xfe, 0x80, 0x92, 0xc9, 0xee, 0x1e, 0x89, 0xef, 0x28,
+	0x88, 0x5c, 0xac, 0xbc, 0x3b, 0x33, 0xef, 0xbd, 0x99, 0x37, 0x3e, 0x58, 0x8f, 0xa7, 0x18, 0xbf,
+	0x46, 0x35, 0xcc, 0x95, 0x34, 0x92, 0xb5, 0x64, 0xae, 0x11, 0xfb, 0xb7, 0x5f, 0xa5, 0x66, 0x5a,
+	0x4c, 0x86, 0xb1, 0xcc, 0x42, 0x1b, 0x09, 0x6d, 0x7a, 0x52, 0xbc, 0x74, 0x4f, 0xfb, 0x0a, 0xcd,
+	0x5e, 0x8e, 0x3a, 0x14, 0xf3, 0x3d, 0x07, 0xee, 0x6f, 0x1d, 0x01, 0x65, 0xd2, 0x0c, 0xb5, 0x11,
+	0x59, 0xee, 0xb1, 0x37, 0xff, 0x0b, 0x6b, 0xaf, 0x1e, 0x71, 0xbd, 0x86, 0x98, 0x08, 0x9d, 0xc6,
+	0xa1, 0xa6, 0x89, 0x32, 0x11, 0xda, 0xb9, 0xb4, 0xab, 0xe5, 0x02, 0xce, 0x8c, 0xf7, 0xdf, 0x11,
+	0x6a, 0x59, 0xa8, 0x18, 0xe9, 0x37, 0x97, 0x73, 0x8d, 0xec, 0x24, 0x34, 0xd2, 0xa4, 0x17, 0x5c,
+	0x0e, 0x06, 0x9d, 0x88, 0x6e, 0x8c, 0x43, 0xcb, 0x02, 0x7b, 0x0d, 0x0a, 0xad, 0x8d, 0x4e, 0x0c,
+	0x9d, 0xa2, 0x03, 0xbb, 0x14, 0xeb, 0x42, 0x0b, 0x95, 0x92, 0xaa, 0xd7, 0xb4, 0x30, 0xf7, 0xe0,
+	0x4f, 0x60, 0xa3, 0xc6, 0xbe, 0x05, 0x1d, 0xe5, 0xef, 0x9a, 0x44, 0x9a, 0xc4, 0x78, 0x61, 0x81,
+	0xb1, 0x02, 0x88, 0x0e, 0xca, 0xf9, 0x5d, 0xe8, 0x56, 0x6a, 0xde, 0x14, 0xe4, 0x18, 0xbb, 0x0a,
+	0x2b, 0x6e, 0x34, 0x4f, 0xb8, 0xd8, 0xa2, 0xcf, 0xf1, 0x7b, 0x70, 0x8a, 0x80, 0xc5, 0xcc, 0xe8,
+	0x12, 0xcf, 0x6e, 0x40, 0x5b, 0xb9, 0x90, 0x47, 0xb2, 0x4a, 0x2b, 0x94, 0x8a, 0xca, 0x12, 0xfe,
+	0x3e, 0x80, 0x8d, 0x1d, 0xd2, 0xf3, 0x49, 0xa7, 0x7d, 0x05, 0x3a, 0x99, 0x78, 0xfb, 0x62, 0x2a,
+	0xb5, 0x25, 0x09, 0x06, 0xad, 0xed, 0xe3, 0xef, 0x3e, 0x5e, 0x0c, 0xa2, 0x55, 0x0a, 0x3f, 0xde,
+	0x8f, 0xb2, 0x3b, 0xb0, 0x9a, 0xa0, 0x48, 0x66, 0xe9, 0x1c, 0xbd, 0x87, 0x67, 0xbd, 0x8c, 0xdd,
+	0xfb, 0x70, 0xa7, 0xdc, 0x7b, 0x89, 0x2c, 0xab, 0xd9, 0xa0, 0xb4, 0xbe, 0x59, 0xb7, 0xde, 0x17,
+	0xbb, 0x02, 0xfe, 0x1c, 0x4e, 0x1f, 0x6a, 0xcd, 0x7b, 0x3d, 0xaa, 0x7b, 0xdd, 0xad, 0x0c, 0x58,
+	0xf5, 0xf8, 0x60, 0x93, 0x8d, 0x43, 0x9b, 0x1c, 0xfd, 0x6a, 0x40, 0x7b, 0xec, 0xbe, 0x0a, 0x76,
+	0x1f, 0x3a, 0x7f, 0xa5, 0xd8, 0x39, 0xcf, 0x57, 0xf5, 0xa5, 0xdf, 0xab, 0x27, 0x9c, 0x04, 0x3f,
+	0xc6, 0x1e, 0xc2, 0xda, 0x58, 0xa1, 0x30, 0xe8, 0x38, 0xce, 0xff, 0x7b, 0xff, 0x8e, 0xa7, 0x14,
+	0xa8, 0xfe, 0x2f, 0x88, 0xe6, 0x11, 0xac, 0x47, 0x68, 0x54, 0x8a, 0xbb, 0x4b, 0x12, 0x51, 0x3f,
+	0x4f, 0xf3, 0x64, 0xe9, 0x7e, 0x88, 0xe6, 0x01, 0xce, 0x70, 0x49, 0x9a, 0xed, 0x6b, 0xbf, 0x7f,
+	0x6c, 0x06, 0x9f, 0x7e, 0x6e, 0x06, 0x9f, 0xe9, 0x7c, 0xa5, 0xf3, 0x8d, 0xce, 0x77, 0x3a, 0x5f,
+	0x3e, 0x5c, 0x0a, 0x9e, 0xb5, 0x35, 0xaa, 0xdd, 0x34, 0xc6, 0xc9, 0x8a, 0xfd, 0x8c, 0x6f, 0xfd,
+	0x09, 0x00, 0x00, 0xff, 0xff, 0x46, 0xd8, 0xf1, 0xd9, 0xae, 0x04, 0x00, 0x00,
 }
