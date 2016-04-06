@@ -1,4 +1,4 @@
-package resolver
+package aws
 
 import (
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
@@ -13,7 +13,7 @@ import (
 // Can copy between structs of different type, but will only copy fields which
 // are assignable, and exist in both structs. Fields which are not assignable,
 // or do not exist in both structs are ignored.
-func copyAWS(dst, src interface{}) {
+func CopyInto(dst, src interface{}) {
 	dstval := reflect.ValueOf(dst)
 	if !dstval.IsValid() {
 		panic("Copy dst cannot be nil")
@@ -89,7 +89,7 @@ func rcopy(dst, src reflect.Value, root bool) {
 			dst.SetMapIndex(k, v2)
 		}
 	default:
-		
+
 		if src.Type().AssignableTo(dst.Type()) {
 			dst.Set(src)
 		} else {
