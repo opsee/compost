@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/opsee/basic/schema"
+	opsee_aws "github.com/opsee/basic/schema/aws"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	log "github.com/sirupsen/logrus"
@@ -46,19 +47,13 @@ func (c *Client) getInstancesEc2(ctx context.Context, user *schema.User, region,
 		input.InstanceIds = []*string{aws.String(instanceId)}
 	}
 
-	log.Infof("%#v\n", input)
-	req, out := ec2.New(sess).DescribeInstancesRequest(input)
-	output := &opsee_aws_ec2.DescribeInstancesOutput{}
-	// req.Data = output
-
-	err = req.Send()
+	out, err := ec2.New(sess).DescribeInstances(input)
 	if err != nil {
 		return nil, err
 	}
 
-	// log.Infof("%#v\n", out)
-	copyAWS(output, out)
-	log.Infof("%#v\n", output)
+	output := &opsee_aws_ec2.DescribeInstancesOutput{}
+	opsee_aws.CopyInto(output, out)
 
 	instances := make([]*opsee_aws_ec2.Instance, 0)
 	for _, res := range output.Reservations {
@@ -87,14 +82,13 @@ func (c *Client) getInstancesRds(ctx context.Context, user *schema.User, region,
 		input.DBInstanceIdentifier = aws.String(instanceId)
 	}
 
-	req, _ := rds.New(sess).DescribeDBInstancesRequest(input)
-	output := &opsee_aws_rds.DescribeDBInstancesOutput{}
-	req.Data = output
-
-	err = req.Send()
+	out, err := rds.New(sess).DescribeDBInstances(input)
 	if err != nil {
 		return nil, err
 	}
+
+	output := &opsee_aws_rds.DescribeDBInstancesOutput{}
+	opsee_aws.CopyInto(output, out)
 
 	return output.DBInstances, nil
 }
