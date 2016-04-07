@@ -8,6 +8,7 @@ import (
 	"github.com/graphql-go/graphql"
 	"github.com/opsee/basic/schema"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
+	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
 	"time"
@@ -20,6 +21,7 @@ var (
 	errMissingRegion               = errors.New("missing region id")
 	errMissingVpc                  = errors.New("missing vpc id")
 	errMissingInstanceType         = errors.New("missing instance type - must be one of (ec2, rds)")
+	errMissingGroupType            = errors.New("missing group type - must be one of (security, elb, autoscaling)")
 	errDecodeInstances             = errors.New("error decoding instances")
 	errUnknownInstanceMetricType   = errors.New("no metrics for that instance type")
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
@@ -222,6 +224,7 @@ func (c *Composter) queryVpc() *graphql.Field {
 			Name:        "VPC",
 			Description: "An AWS VPC",
 			Fields: graphql.Fields{
+				"groups":    c.queryGroups(),
 				"instances": c.queryInstances(),
 			},
 		}),
@@ -250,6 +253,58 @@ func (c *Composter) queryVpc() *graphql.Field {
 			queryContext.VpcId = vpc
 
 			return struct{}{}, nil
+		},
+	}
+}
+
+func (c *Composter) queryGroups() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(graphql.NewUnion(graphql.UnionConfig{
+			Name:        "Group",
+			Description: "A group target",
+			Types: []*graphql.Object{
+				opsee_aws_ec2.GraphQLSecurityGroupType,
+				opsee_aws_elb.GraphQLLoadBalancerDescriptionType,
+			},
+			ResolveType: func(value interface{}, info graphql.ResolveInfo) *graphql.Object {
+				switch value.(type) {
+				case *opsee_aws_ec2.SecurityGroup:
+					return opsee_aws_ec2.GraphQLSecurityGroupType
+				case *opsee_aws_elb.LoadBalancerDescription:
+					return opsee_aws_elb.GraphQLLoadBalancerDescriptionType
+				}
+				return nil
+			},
+		})),
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Description: "An optional group identifier",
+				Type:        graphql.String,
+			},
+			"type": &graphql.ArgumentConfig{
+				Description: "A group type (security, elb, autoscaling)",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
+			if !ok {
+				return nil, errDecodeQueryContext
+			}
+
+			groupId, _ := p.Args["id"].(string)
+			groupType, _ := p.Args["type"].(string)
+
+			if groupType == "" {
+				return nil, errMissingGroupType
+			}
+
+			return c.resolver.GetGroups(p.Context, user, queryContext.Region, queryContext.VpcId, groupType, groupId)
 		},
 	}
 }

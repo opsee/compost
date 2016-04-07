@@ -141,6 +141,12 @@
 			"revisionTime": "2016-03-17T16:54:49-07:00"
 		},
 		{
+			"checksumSHA1": "34andPgujGDQ8daa/vd5NdOIFS8=",
+			"path": "github.com/aws/aws-sdk-go/service/elb",
+			"revision": "4da0bec8953a0a540f391930a946917b12a95671",
+			"revisionTime": "2016-03-17T16:54:49-07:00"
+		},
+		{
 			"checksumSHA1": "bTZeXq8nNTpuFmjTPfpG0of3rRA=",
 			"path": "github.com/aws/aws-sdk-go/service/rds",
 			"revision": "4da0bec8953a0a540f391930a946917b12a95671",
