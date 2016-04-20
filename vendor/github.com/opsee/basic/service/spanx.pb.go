@@ -26,6 +26,32 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+type EnhancedCombatModeRequest struct {
+	User   *opsee1.User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
+	Region string       `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
+}
+
+func (m *EnhancedCombatModeRequest) Reset()                    { *m = EnhancedCombatModeRequest{} }
+func (m *EnhancedCombatModeRequest) String() string            { return proto.CompactTextString(m) }
+func (*EnhancedCombatModeRequest) ProtoMessage()               {}
+func (*EnhancedCombatModeRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{0} }
+
+func (m *EnhancedCombatModeRequest) GetUser() *opsee1.User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+type EnhancedCombatModeResponse struct {
+	StackUrl string `protobuf:"bytes,1,opt,name=stack_url,json=stackUrl,proto3" json:"stack_url,omitempty"`
+}
+
+func (m *EnhancedCombatModeResponse) Reset()                    { *m = EnhancedCombatModeResponse{} }
+func (m *EnhancedCombatModeResponse) String() string            { return proto.CompactTextString(m) }
+func (*EnhancedCombatModeResponse) ProtoMessage()               {}
+func (*EnhancedCombatModeResponse) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{1} }
+
 type PutRoleRequest struct {
 	User        *opsee1.User                 `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
 	Credentials *opsee_aws_credentials.Value `protobuf:"bytes,2,opt,name=credentials" json:"credentials,omitempty"`
@@ -34,7 +60,7 @@ type PutRoleRequest struct {
 func (m *PutRoleRequest) Reset()                    { *m = PutRoleRequest{} }
 func (m *PutRoleRequest) String() string            { return proto.CompactTextString(m) }
 func (*PutRoleRequest) ProtoMessage()               {}
-func (*PutRoleRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{0} }
+func (*PutRoleRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{2} }
 
 func (m *PutRoleRequest) GetUser() *opsee1.User {
 	if m != nil {
@@ -57,7 +83,7 @@ type PutRoleResponse struct {
 func (m *PutRoleResponse) Reset()                    { *m = PutRoleResponse{} }
 func (m *PutRoleResponse) String() string            { return proto.CompactTextString(m) }
 func (*PutRoleResponse) ProtoMessage()               {}
-func (*PutRoleResponse) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{1} }
+func (*PutRoleResponse) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{3} }
 
 func (m *PutRoleResponse) GetCredentials() *opsee_aws_credentials.Value {
 	if m != nil {
@@ -73,7 +99,7 @@ type GetCredentialsRequest struct {
 func (m *GetCredentialsRequest) Reset()                    { *m = GetCredentialsRequest{} }
 func (m *GetCredentialsRequest) String() string            { return proto.CompactTextString(m) }
 func (*GetCredentialsRequest) ProtoMessage()               {}
-func (*GetCredentialsRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{2} }
+func (*GetCredentialsRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{4} }
 
 func (m *GetCredentialsRequest) GetUser() *opsee1.User {
 	if m != nil {
@@ -89,7 +115,7 @@ type GetCredentialsResponse struct {
 func (m *GetCredentialsResponse) Reset()                    { *m = GetCredentialsResponse{} }
 func (m *GetCredentialsResponse) String() string            { return proto.CompactTextString(m) }
 func (*GetCredentialsResponse) ProtoMessage()               {}
-func (*GetCredentialsResponse) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{3} }
+func (*GetCredentialsResponse) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{5} }
 
 func (m *GetCredentialsResponse) GetCredentials() *opsee_aws_credentials.Value {
 	if m != nil {
@@ -99,10 +125,75 @@ func (m *GetCredentialsResponse) GetCredentials() *opsee_aws_credentials.Value {
 }
 
 func init() {
+	proto.RegisterType((*EnhancedCombatModeRequest)(nil), "opsee.EnhancedCombatModeRequest")
+	proto.RegisterType((*EnhancedCombatModeResponse)(nil), "opsee.EnhancedCombatModeResponse")
 	proto.RegisterType((*PutRoleRequest)(nil), "opsee.PutRoleRequest")
 	proto.RegisterType((*PutRoleResponse)(nil), "opsee.PutRoleResponse")
 	proto.RegisterType((*GetCredentialsRequest)(nil), "opsee.GetCredentialsRequest")
 	proto.RegisterType((*GetCredentialsResponse)(nil), "opsee.GetCredentialsResponse")
+}
+func (this *EnhancedCombatModeRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*EnhancedCombatModeRequest)
+	if !ok {
+		that2, ok := that.(EnhancedCombatModeRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.User.Equal(that1.User) {
+		return false
+	}
+	if this.Region != that1.Region {
+		return false
+	}
+	return true
+}
+func (this *EnhancedCombatModeResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*EnhancedCombatModeResponse)
+	if !ok {
+		that2, ok := that.(EnhancedCombatModeResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.StackUrl != that1.StackUrl {
+		return false
+	}
+	return true
 }
 func (this *PutRoleRequest) Equal(that interface{}) bool {
 	if that == nil {
@@ -228,6 +319,18 @@ func (this *GetCredentialsResponse) Equal(that interface{}) bool {
 	return true
 }
 
+type EnhancedCombatModeRequestGetter interface {
+	GetEnhancedCombatModeRequest() *EnhancedCombatModeRequest
+}
+
+var GraphQLEnhancedCombatModeRequestType *github_com_graphql_go_graphql.Object
+
+type EnhancedCombatModeResponseGetter interface {
+	GetEnhancedCombatModeResponse() *EnhancedCombatModeResponse
+}
+
+var GraphQLEnhancedCombatModeResponseType *github_com_graphql_go_graphql.Object
+
 type PutRoleRequestGetter interface {
 	GetPutRoleRequest() *PutRoleRequest
 }
@@ -253,6 +356,85 @@ type GetCredentialsResponseGetter interface {
 var GraphQLGetCredentialsResponseType *github_com_graphql_go_graphql.Object
 
 func init() {
+	GraphQLEnhancedCombatModeRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceEnhancedCombatModeRequest",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"user": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*EnhancedCombatModeRequest)
+						if ok {
+							if obj.User == nil {
+								return nil, nil
+							}
+							return obj.GetUser(), nil
+						}
+						inter, ok := p.Source.(EnhancedCombatModeRequestGetter)
+						if ok {
+							face := inter.GetEnhancedCombatModeRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.User == nil {
+								return nil, nil
+							}
+							return face.GetUser(), nil
+						}
+						return nil, fmt.Errorf("field user not resolved")
+					},
+				},
+				"region": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*EnhancedCombatModeRequest)
+						if ok {
+							return obj.Region, nil
+						}
+						inter, ok := p.Source.(EnhancedCombatModeRequestGetter)
+						if ok {
+							face := inter.GetEnhancedCombatModeRequest()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Region, nil
+						}
+						return nil, fmt.Errorf("field region not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLEnhancedCombatModeResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceEnhancedCombatModeResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"stack_url": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*EnhancedCombatModeResponse)
+						if ok {
+							return obj.StackUrl, nil
+						}
+						inter, ok := p.Source.(EnhancedCombatModeResponseGetter)
+						if ok {
+							face := inter.GetEnhancedCombatModeResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.StackUrl, nil
+						}
+						return nil, fmt.Errorf("field stack_url not resolved")
+					},
+				},
+			}
+		}),
+	})
 	GraphQLPutRoleRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "servicePutRoleRequest",
 		Description: "",
@@ -419,6 +601,7 @@ var _ grpc.ClientConn
 // Client API for Spanx service
 
 type SpanxClient interface {
+	EnhancedCombatMode(ctx context.Context, in *EnhancedCombatModeRequest, opts ...grpc.CallOption) (*EnhancedCombatModeResponse, error)
 	PutRole(ctx context.Context, in *PutRoleRequest, opts ...grpc.CallOption) (*PutRoleResponse, error)
 	GetCredentials(ctx context.Context, in *GetCredentialsRequest, opts ...grpc.CallOption) (*GetCredentialsResponse, error)
 }
@@ -429,6 +612,15 @@ type spanxClient struct {
 
 func NewSpanxClient(cc *grpc.ClientConn) SpanxClient {
 	return &spanxClient{cc}
+}
+
+func (c *spanxClient) EnhancedCombatMode(ctx context.Context, in *EnhancedCombatModeRequest, opts ...grpc.CallOption) (*EnhancedCombatModeResponse, error) {
+	out := new(EnhancedCombatModeResponse)
+	err := grpc.Invoke(ctx, "/opsee.Spanx/EnhancedCombatMode", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *spanxClient) PutRole(ctx context.Context, in *PutRoleRequest, opts ...grpc.CallOption) (*PutRoleResponse, error) {
@@ -452,12 +644,25 @@ func (c *spanxClient) GetCredentials(ctx context.Context, in *GetCredentialsRequ
 // Server API for Spanx service
 
 type SpanxServer interface {
+	EnhancedCombatMode(context.Context, *EnhancedCombatModeRequest) (*EnhancedCombatModeResponse, error)
 	PutRole(context.Context, *PutRoleRequest) (*PutRoleResponse, error)
 	GetCredentials(context.Context, *GetCredentialsRequest) (*GetCredentialsResponse, error)
 }
 
 func RegisterSpanxServer(s *grpc.Server, srv SpanxServer) {
 	s.RegisterService(&_Spanx_serviceDesc, srv)
+}
+
+func _Spanx_EnhancedCombatMode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(EnhancedCombatModeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(SpanxServer).EnhancedCombatMode(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func _Spanx_PutRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
@@ -489,6 +694,10 @@ var _Spanx_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*SpanxServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "EnhancedCombatMode",
+			Handler:    _Spanx_EnhancedCombatMode_Handler,
+		},
+		{
 			MethodName: "PutRole",
 			Handler:    _Spanx_PutRole_Handler,
 		},
@@ -498,6 +707,64 @@ var _Spanx_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams: []grpc.StreamDesc{},
+}
+
+func (m *EnhancedCombatModeRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *EnhancedCombatModeRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.User != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintSpanx(data, i, uint64(m.User.Size()))
+		n1, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if len(m.Region) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintSpanx(data, i, uint64(len(m.Region)))
+		i += copy(data[i:], m.Region)
+	}
+	return i, nil
+}
+
+func (m *EnhancedCombatModeResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *EnhancedCombatModeResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.StackUrl) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintSpanx(data, i, uint64(len(m.StackUrl)))
+		i += copy(data[i:], m.StackUrl)
+	}
+	return i, nil
 }
 
 func (m *PutRoleRequest) Marshal() (data []byte, err error) {
@@ -519,21 +786,21 @@ func (m *PutRoleRequest) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintSpanx(data, i, uint64(m.User.Size()))
-		n1, err := m.User.MarshalTo(data[i:])
+		n2, err := m.User.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n1
+		i += n2
 	}
 	if m.Credentials != nil {
 		data[i] = 0x12
 		i++
 		i = encodeVarintSpanx(data, i, uint64(m.Credentials.Size()))
-		n2, err := m.Credentials.MarshalTo(data[i:])
+		n3, err := m.Credentials.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n3
 	}
 	return i, nil
 }
@@ -557,11 +824,11 @@ func (m *PutRoleResponse) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintSpanx(data, i, uint64(m.Credentials.Size()))
-		n3, err := m.Credentials.MarshalTo(data[i:])
+		n4, err := m.Credentials.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -585,11 +852,11 @@ func (m *GetCredentialsRequest) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintSpanx(data, i, uint64(m.User.Size()))
-		n4, err := m.User.MarshalTo(data[i:])
+		n5, err := m.User.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -613,11 +880,11 @@ func (m *GetCredentialsResponse) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintSpanx(data, i, uint64(m.Credentials.Size()))
-		n5, err := m.Credentials.MarshalTo(data[i:])
+		n6, err := m.Credentials.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n6
 	}
 	return i, nil
 }
@@ -649,6 +916,25 @@ func encodeVarintSpanx(data []byte, offset int, v uint64) int {
 	data[offset] = uint8(v)
 	return offset + 1
 }
+func NewPopulatedEnhancedCombatModeRequest(r randySpanx, easy bool) *EnhancedCombatModeRequest {
+	this := &EnhancedCombatModeRequest{}
+	if r.Intn(10) != 0 {
+		this.User = opsee1.NewPopulatedUser(r, easy)
+	}
+	this.Region = randStringSpanx(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedEnhancedCombatModeResponse(r randySpanx, easy bool) *EnhancedCombatModeResponse {
+	this := &EnhancedCombatModeResponse{}
+	this.StackUrl = randStringSpanx(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedPutRoleRequest(r randySpanx, easy bool) *PutRoleRequest {
 	this := &PutRoleRequest{}
 	if r.Intn(10) != 0 {
@@ -764,6 +1050,30 @@ func encodeVarintPopulateSpanx(data []byte, v uint64) []byte {
 	data = append(data, uint8(v))
 	return data
 }
+func (m *EnhancedCombatModeRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovSpanx(uint64(l))
+	}
+	l = len(m.Region)
+	if l > 0 {
+		n += 1 + l + sovSpanx(uint64(l))
+	}
+	return n
+}
+
+func (m *EnhancedCombatModeResponse) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.StackUrl)
+	if l > 0 {
+		n += 1 + l + sovSpanx(uint64(l))
+	}
+	return n
+}
+
 func (m *PutRoleRequest) Size() (n int) {
 	var l int
 	_ = l
@@ -820,6 +1130,197 @@ func sovSpanx(x uint64) (n int) {
 }
 func sozSpanx(x uint64) (n int) {
 	return sovSpanx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *EnhancedCombatModeRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSpanx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnhancedCombatModeRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnhancedCombatModeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSpanx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSpanx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee1.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Region", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSpanx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSpanx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Region = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSpanx(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSpanx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EnhancedCombatModeResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSpanx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnhancedCombatModeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnhancedCombatModeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StackUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSpanx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSpanx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StackUrl = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSpanx(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSpanx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *PutRoleRequest) Unmarshal(data []byte) error {
 	l := len(data)
@@ -1292,7 +1793,7 @@ var (
 )
 
 var fileDescriptorSpanx = []byte{
-	// 331 bytes of a gzipped FileDescriptorProto
+	// 422 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x2e, 0x2e, 0x48, 0xcc,
 	0xab, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0xcd, 0x2f, 0x28, 0x4e, 0x4d, 0x95, 0x32,
 	0x48, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0x07, 0x8b, 0xe8, 0x83, 0xa5,
@@ -1300,18 +1801,24 @@ var fileDescriptorSpanx = []byte{
 	0x65, 0x41, 0x6a, 0xb1, 0x7e, 0x49, 0x66, 0x6e, 0x6a, 0x71, 0x49, 0x62, 0x6e, 0x01, 0x54, 0xaf,
 	0x25, 0x86, 0xde, 0xa4, 0xc4, 0xe2, 0xcc, 0x64, 0xfd, 0xe2, 0xe4, 0x8c, 0xd4, 0xdc, 0x44, 0xfd,
 	0xc4, 0xf2, 0x62, 0xfd, 0xe4, 0xa2, 0xd4, 0x94, 0xd4, 0xbc, 0x92, 0xcc, 0xc4, 0x9c, 0x62, 0x88,
-	0x21, 0x50, 0xad, 0x1a, 0xf8, 0xb5, 0x96, 0x16, 0xa7, 0x16, 0x41, 0x54, 0x2a, 0x15, 0x72, 0xf1,
-	0x05, 0x94, 0x96, 0x04, 0xe5, 0xe7, 0xa4, 0x06, 0xa5, 0x16, 0x96, 0x02, 0xed, 0x17, 0x92, 0xe7,
-	0x62, 0x01, 0xc9, 0x4b, 0x30, 0x2a, 0x30, 0x6a, 0x70, 0x1b, 0x71, 0xeb, 0x41, 0xbc, 0x13, 0x0a,
-	0x14, 0x0a, 0x02, 0x4b, 0x08, 0xd9, 0x71, 0x71, 0x23, 0xd9, 0x2b, 0xc1, 0x04, 0x56, 0x27, 0x03,
-	0x55, 0x07, 0x74, 0x95, 0x1e, 0x92, 0xac, 0x5e, 0x58, 0x62, 0x4e, 0x69, 0x6a, 0x10, 0xb2, 0x06,
-	0xa5, 0x40, 0x2e, 0x7e, 0xb8, 0x95, 0xc5, 0x05, 0xf9, 0x79, 0xc5, 0xa9, 0xe8, 0x46, 0x32, 0x92,
-	0x6a, 0xa4, 0x05, 0x97, 0xa8, 0x7b, 0x6a, 0x89, 0x33, 0x42, 0x84, 0x58, 0xcf, 0x28, 0x45, 0x70,
-	0x89, 0xa1, 0xeb, 0xa4, 0x8e, 0x9b, 0x8c, 0xa6, 0x30, 0x72, 0xb1, 0x06, 0x83, 0xd2, 0x90, 0x90,
-	0x15, 0x17, 0x3b, 0xd4, 0xc3, 0x42, 0xa2, 0x50, 0xfd, 0xa8, 0x61, 0x2e, 0x25, 0x86, 0x2e, 0x0c,
-	0x71, 0x83, 0x12, 0x83, 0x90, 0x3f, 0x17, 0x1f, 0xaa, 0xfb, 0x84, 0x60, 0x4e, 0xc0, 0xea, 0x61,
-	0x29, 0x59, 0x1c, 0xb2, 0x30, 0x03, 0x9d, 0x54, 0x7f, 0x3c, 0x94, 0x63, 0x5c, 0xf1, 0x48, 0x8e,
-	0x71, 0x07, 0x10, 0x9f, 0x00, 0xe2, 0x0b, 0x40, 0xfc, 0x00, 0x88, 0x0f, 0x2c, 0x92, 0x67, 0x8c,
-	0x62, 0x07, 0x86, 0x49, 0x59, 0x66, 0x72, 0x6a, 0x12, 0x1b, 0x38, 0x79, 0x18, 0x03, 0x02, 0x00,
-	0x00, 0xff, 0xff, 0xf8, 0x6d, 0x25, 0xe4, 0x07, 0x03, 0x00, 0x00,
+	0x21, 0x50, 0xad, 0x1a, 0xf8, 0xb5, 0x96, 0x16, 0xa7, 0x16, 0x41, 0x54, 0x2a, 0x85, 0x70, 0x49,
+	0xba, 0xe6, 0x65, 0x24, 0xe6, 0x25, 0xa7, 0xa6, 0x38, 0xe7, 0xe7, 0x26, 0x25, 0x96, 0xf8, 0xe6,
+	0xa7, 0xa4, 0x06, 0xa5, 0x16, 0x96, 0x02, 0x9d, 0x22, 0x24, 0xcf, 0xc5, 0x02, 0x52, 0x2a, 0xc1,
+	0xa8, 0xc0, 0xa8, 0xc1, 0x6d, 0xc4, 0xad, 0x07, 0xf1, 0x59, 0x28, 0x50, 0x28, 0x08, 0x2c, 0x21,
+	0x24, 0xc6, 0xc5, 0x56, 0x94, 0x9a, 0x9e, 0x99, 0x9f, 0x27, 0xc1, 0x04, 0x54, 0xc2, 0x19, 0x04,
+	0xe5, 0x29, 0x59, 0x72, 0x49, 0x61, 0x33, 0xb5, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0x55, 0x48, 0x9a,
+	0x8b, 0x13, 0xe8, 0xcf, 0xe4, 0xec, 0xf8, 0xd2, 0xa2, 0x1c, 0xb0, 0xd9, 0x9c, 0x41, 0x1c, 0x60,
+	0x81, 0xd0, 0xa2, 0x1c, 0xa5, 0x42, 0x2e, 0xbe, 0x80, 0xd2, 0x92, 0xa0, 0xfc, 0x1c, 0xe2, 0x5d,
+	0x61, 0xc7, 0xc5, 0x8d, 0x14, 0x10, 0x60, 0xa7, 0x70, 0x1b, 0xc9, 0x40, 0xd5, 0x01, 0x83, 0x49,
+	0x0f, 0x49, 0x56, 0x2f, 0x2c, 0x31, 0xa7, 0x34, 0x35, 0x08, 0x59, 0x83, 0x52, 0x20, 0x17, 0x3f,
+	0xdc, 0x4a, 0xa8, 0x13, 0xd1, 0x8c, 0x64, 0x24, 0xd5, 0x48, 0x0b, 0x2e, 0x51, 0xf7, 0xd4, 0x12,
+	0x67, 0x84, 0x08, 0xb1, 0x9e, 0x51, 0x8a, 0xe0, 0x12, 0x43, 0xd7, 0x49, 0x1d, 0x37, 0x19, 0x7d,
+	0x64, 0xe4, 0x62, 0x0d, 0x06, 0x25, 0x6a, 0xa1, 0x68, 0x2e, 0x21, 0xcc, 0xe8, 0x11, 0x52, 0x80,
+	0x1a, 0x85, 0x33, 0x3d, 0x48, 0x29, 0xe2, 0x51, 0x01, 0x71, 0xa4, 0x12, 0x83, 0x90, 0x15, 0x17,
+	0x3b, 0x34, 0x34, 0x85, 0x44, 0xa1, 0xea, 0x51, 0x23, 0x54, 0x4a, 0x0c, 0x5d, 0x18, 0xae, 0xd7,
+	0x9f, 0x8b, 0x0f, 0xd5, 0xf3, 0x42, 0x30, 0xff, 0x61, 0x0d, 0x4d, 0x29, 0x59, 0x1c, 0xb2, 0x30,
+	0x03, 0x9d, 0x54, 0x7f, 0x3c, 0x94, 0x63, 0x5c, 0xf1, 0x48, 0x8e, 0x71, 0x07, 0x10, 0x9f, 0x00,
+	0xe2, 0x0b, 0x40, 0xfc, 0x00, 0x88, 0x0f, 0x2c, 0x92, 0x67, 0x8c, 0x62, 0x07, 0x06, 0x78, 0x59,
+	0x66, 0x72, 0x6a, 0x12, 0x1b, 0x38, 0x33, 0x18, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xc9, 0xf0,
+	0xf4, 0x57, 0xf5, 0x03, 0x00, 0x00,
 }

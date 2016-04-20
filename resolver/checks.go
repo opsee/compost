@@ -1,6 +1,11 @@
 package resolver
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"github.com/gogo/protobuf/jsonpb"
+	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
@@ -83,4 +88,81 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 	}
 
 	return checks, nil
+}
+
+func (c *Client) UpsertChecks(ctx context.Context, user *schema.User, checksInput []interface{}) ([]*schema.Check, error) {
+	notifs := make([]*hugs.NotificationRequest, 0, len(checksInput))
+	checksResponse := make([]*schema.Check, len(checksInput))
+
+	for i, checkInput := range checksInput {
+		check, ok := checkInput.(map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf("error decoding check input")
+		}
+
+		notifList, _ := check["notifications"].([]interface{})
+		delete(check, "notifications")
+
+		checkJson, err := json.Marshal(check)
+		if err != nil {
+			return nil, err
+		}
+
+		checkProto := &schema.Check{}
+		err = jsonpb.Unmarshal(bytes.NewBuffer(checkJson), checkProto)
+		if err != nil {
+			return nil, err
+		}
+
+		var checkResponse *schema.Check
+
+		if checkProto.Id == "" {
+			checkResponse, err = c.Bartnet.CreateCheck(user, checkProto)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			checkResponse, err = c.Bartnet.UpdateCheck(user, checkProto)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if notifList != nil {
+			notif := &hugs.NotificationRequest{
+				CheckId: checkResponse.Id,
+			}
+
+			for _, n := range notifList {
+				nl, _ := n.(map[string]interface{})
+				t, _ := nl["type"].(string)
+				v, _ := nl["value"].(string)
+
+				if t != "" && v != "" {
+					// due to our crappy backend, we send a bulk request to hugs of all notifications...
+					notif.Notifications = append(notif.Notifications, &hugs.Notification{
+						Type:  t,
+						Value: v,
+					})
+
+					// ... then we add each notification to the check object
+					checkResponse.Notifications = append(checkResponse.Notifications, &schema.Notification{
+						Type:  t,
+						Value: v,
+					})
+				}
+			}
+
+			notifs = append(notifs, notif)
+		}
+
+		err = c.Hugs.CreateNotificationsMulti(user, notifs)
+		if err != nil {
+			return nil, err
+		}
+
+		checksResponse[i] = checkResponse
+	}
+
+	return checksResponse, nil
 }

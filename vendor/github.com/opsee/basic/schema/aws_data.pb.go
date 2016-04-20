@@ -19,6 +19,7 @@
 		Instance
 		Target
 		Check
+		Notification
 		Assertion
 		Header
 		HttpCheck
@@ -938,12 +939,6 @@ type InstanceGetter interface {
 var GraphQLInstanceType *github_com_graphql_go_graphql.Object
 var GraphQLInstanceResourceUnion *github_com_graphql_go_graphql.Union
 
-func (g *Instance_Instance) GetInstance() *opsee_aws_ec2.Instance {
-	return g.Instance
-}
-func (g *Instance_DbInstance) GetDBInstance() *opsee_aws_rds.DBInstance {
-	return g.DbInstance
-}
 func (g *Group_SecurityGroup) GetSecurityGroup() *opsee_aws_ec2.SecurityGroup {
 	return g.SecurityGroup
 }
@@ -952,6 +947,12 @@ func (g *Group_LoadBalancer) GetLoadBalancerDescription() *opsee_aws_elb.LoadBal
 }
 func (g *Group_AutoscalingGroup) GetGroup() *opsee_aws_autoscaling.Group {
 	return g.AutoscalingGroup
+}
+func (g *Instance_Instance) GetInstance() *opsee_aws_ec2.Instance {
+	return g.Instance
+}
+func (g *Instance_DbInstance) GetDBInstance() *opsee_aws_rds.DBInstance {
+	return g.DbInstance
 }
 
 func init() {

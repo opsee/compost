@@ -28,6 +28,8 @@
 		LaunchStackResponse
 		AuthenticateBastionRequest
 		AuthenticateBastionResponse
+		EnhancedCombatModeRequest
+		EnhancedCombatModeResponse
 		PutRoleRequest
 		PutRoleResponse
 		GetCredentialsRequest

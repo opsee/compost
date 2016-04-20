@@ -36,6 +36,7 @@ message Check {
 		HttpCheck http_check = 101;
 		CloudWatchCheck cloudwatch_check = 102;
 	}
+	repeated Notification notifications = 9;
 }
 
 message Notification {

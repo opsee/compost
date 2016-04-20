@@ -18,9 +18,33 @@ func init() {
 
 // these exist because bartnet and beavis expect {typeurl: "blah", value: "blach"} in their json API
 func (check *Check) MarshalCrappyJSON() ([]byte, error) {
-	anySpec, err := opsee_types.UnmarshalAny(check.CheckSpec)
-	if err != nil {
-		return nil, err
+	var (
+		anySpec interface{}
+		typeUrl string
+		err     error
+	)
+
+	// if no checkspec, copy over "Spec"
+	if check.CheckSpec == nil {
+		if check.Spec == nil {
+			return nil, fmt.Errorf("check is missing Spec and CheckSpec")
+		}
+
+		switch t := check.Spec.(type) {
+		case *Check_HttpCheck:
+			anySpec = t.HttpCheck
+			typeUrl = "HttpCheck"
+		case *Check_CloudwatchCheck:
+			anySpec = t.CloudwatchCheck
+			typeUrl = "CloudWatchCheck"
+		}
+	} else {
+		anySpec, err = opsee_types.UnmarshalAny(check.CheckSpec)
+		if err != nil {
+			return nil, err
+		}
+
+		typeUrl = check.CheckSpec.TypeUrl
 	}
 
 	jsonSpec, err := json.Marshal(anySpec)
@@ -42,7 +66,7 @@ func (check *Check) MarshalCrappyJSON() ([]byte, error) {
 		`{"name": "%s", "interval": 30, "target": %s, "check_spec": {"type_url": "%s", "value": %s}, "assertions": %s}`,
 		check.Name,
 		jsonTarget,
-		check.CheckSpec.TypeUrl,
+		typeUrl,
 		jsonSpec,
 		jsonAssertions,
 	)

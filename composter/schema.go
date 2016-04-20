@@ -25,6 +25,7 @@ var (
 	errDecodeInstances             = errors.New("error decoding instances")
 	errUnknownInstanceMetricType   = errors.New("no metrics for that instance type")
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
+	errDecodeCheckInput            = errors.New("error decoding checks input")
 
 	InstanceType   *graphql.Object
 	DbInstanceType *graphql.Object
@@ -754,31 +755,33 @@ func (c *Composter) mutation() *graphql.Object {
 	mutation := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Mutation",
 		Fields: graphql.Fields{
-			"updateChecks": c.updateChecks(),
-			// "createChecks": c.createChecks(),
+			"checks": c.upsertChecks(),
 		},
 	})
 
 	return mutation
 }
 
-func (c *Composter) updateChecks() *graphql.Field {
+func (c *Composter) upsertChecks() *graphql.Field {
 	return &graphql.Field{
-		Type: CheckType,
+		Type: graphql.NewList(CheckType),
 		Args: graphql.FieldConfigArgument{
 			"checks": &graphql.ArgumentConfig{
-				Description: "A list of checks to update",
+				Description: "A list of checks to create",
 				Type:        graphql.NewList(CheckInputType),
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			_, ok := p.Context.Value(userKey).(*schema.User)
+			user, ok := p.Context.Value(userKey).(*schema.User)
 			if !ok {
 				return nil, errDecodeUser
 			}
 
-			fmt.Printf("HEY %#v\n", p.Args)
-			return nil, nil
+			checksInput, ok := p.Args["checks"].([]interface{})
+			if !ok {
+				return nil, errDecodeCheckInput
+			}
+			return c.resolver.UpsertChecks(p.Context, user, checksInput)
 		},
 	}
 }
