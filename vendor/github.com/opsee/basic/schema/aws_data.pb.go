@@ -19,6 +19,7 @@
 		Instance
 		Target
 		Check
+		Notification
 		Assertion
 		Header
 		HttpCheck

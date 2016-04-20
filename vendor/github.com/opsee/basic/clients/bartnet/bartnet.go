@@ -6,17 +6,20 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/gogo/protobuf/proto"
-	"github.com/opsee/basic/schema"
-	"github.com/opsee/basic/service"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/gogo/protobuf/proto"
+	"github.com/opsee/basic/schema"
+	"github.com/opsee/basic/service"
 )
 
 type Client interface {
+	GetCheck(user *schema.User, id string) (*schema.Check, error)
 	ListChecks(user *schema.User) ([]*schema.Check, error)
-	CreateCheck(user *schema.User, check *schema.Check) (map[string]interface{}, error)
+	CreateCheck(user *schema.User, check *schema.Check) (*schema.Check, error)
+	UpdateCheck(user *schema.User, check *schema.Check) (*schema.Check, error)
 }
 
 type client struct {
@@ -30,6 +33,26 @@ func New(endpoint string) Client {
 		client:   &http.Client{},
 		endpoint: endpoint,
 	}
+}
+
+// GetCheck gets a check + assertions, without the results
+func (c *client) GetCheck(user *schema.User, id string) (*schema.Check, error) {
+	if id == "" {
+		return nil, fmt.Errorf("can't get check without an id")
+	}
+
+	body, err := c.do(user, "GET", "application/x-protobuf", fmt.Sprintf("/gql/checks/%s", id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	check := &schema.Check{}
+	err = proto.Unmarshal(body, check)
+	if err != nil {
+		return nil, err
+	}
+
+	return check, nil
 }
 
 // ListChecks lists the checks + assertions for a user's customer account, without the results
@@ -48,25 +71,54 @@ func (c *client) ListChecks(user *schema.User) ([]*schema.Check, error) {
 	return checks.Checks, nil
 }
 
-func (c *client) CreateCheck(user *schema.User, check *schema.Check) (map[string]interface{}, error) {
-	jsondata, err := marshalCheck(check)
+func (c *client) CreateCheck(user *schema.User, check *schema.Check) (*schema.Check, error) {
+	jsondata, err := check.MarshalCrappyJSON()
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := c.do(user, "POST", "application/json", "/checks", bytes.NewBuffer(jsondata))
+	resp, err := c.do(user, "POST", "application/x-protobuf", "/checks", bytes.NewBuffer(jsondata))
 
 	if err != nil {
 		return nil, err
 	}
 
-	checkResp := make(map[string]interface{})
-	err = json.Unmarshal(resp, &checkResp)
+	checkResponse := &service.CheckResourceRequest{}
+	err = proto.Unmarshal(resp, checkResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	return checkResp, nil
+	if len(checkResponse.Checks) < 1 {
+		return nil, fmt.Errorf("no checks returned")
+	}
+
+	return checkResponse.Checks[0], nil
+}
+
+func (c *client) UpdateCheck(user *schema.User, check *schema.Check) (*schema.Check, error) {
+	if check.Id == "" {
+		return nil, fmt.Errorf("can't update check without an id")
+	}
+
+	jsondata, err := check.MarshalCrappyJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.do(user, "PUT", "application/x-protobuf", fmt.Sprintf("/checks/%s", check.Id), bytes.NewBuffer(jsondata))
+
+	if err != nil {
+		return nil, err
+	}
+
+	checkResponse := &schema.Check{}
+	err = proto.Unmarshal(resp, checkResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return checkResponse, nil
 }
 
 func (c *client) do(user *schema.User, method, accept, path string, body io.Reader) ([]byte, error) {
@@ -81,7 +133,7 @@ func (c *client) do(user *schema.User, method, accept, path string, body io.Read
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString(toke)))
-	req.Header.Set("Content-Type", accept)
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", accept)
 
 	resp, err := c.client.Do(req)
@@ -95,41 +147,4 @@ func (c *client) do(user *schema.User, method, accept, path string, body io.Read
 	}
 
 	return ioutil.ReadAll(resp.Body)
-}
-
-func marshalCheck(check *schema.Check) ([]byte, error) {
-	httpCheckInt, err := schema.UnmarshalAny(check.CheckSpec)
-	if err != nil {
-		return nil, err
-	}
-
-	httpCheck, ok := httpCheckInt.(*schema.HttpCheck)
-	if !ok {
-		fmt.Errorf("couldn't unmarshal httpcheck")
-	}
-
-	jsonHttpCheck, err := json.Marshal(httpCheck)
-	if err != nil {
-		return nil, err
-	}
-
-	jsonTarget, err := json.Marshal(check.Target)
-	if err != nil {
-		return nil, err
-	}
-
-	jsonAssertions, err := json.Marshal(check.Assertions)
-	if err != nil {
-		return nil, err
-	}
-
-	jsonString := fmt.Sprintf(
-		`{"name": "%s", "interval": 30, "target": %s, "check_spec": {"type_url": "HttpCheck", "value": %s}, "assertions": %s}`,
-		check.Name,
-		jsonTarget,
-		jsonHttpCheck,
-		jsonAssertions,
-	)
-
-	return []byte(jsonString), nil
 }

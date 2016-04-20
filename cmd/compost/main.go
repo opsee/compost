@@ -27,6 +27,7 @@ func main() {
 		Vape:       "vape.in.opsee.com:443",
 		Keelhaul:   "keelhaul.in.opsee.com:443",
 		Bezos:      "opsee.local:9104",
+		Hugs:       "https://hugs.in.opsee.com",
 	})
 
 	if err != nil {

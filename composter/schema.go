@@ -25,11 +25,20 @@ var (
 	errDecodeInstances             = errors.New("error decoding instances")
 	errUnknownInstanceMetricType   = errors.New("no metrics for that instance type")
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
+	errDecodeCheckInput            = errors.New("error decoding checks input")
+
+	InstanceType   *graphql.Object
+	DbInstanceType *graphql.Object
+	CheckType      *graphql.Object
+	CheckInputType *graphql.InputObject
 )
 
 func (c *Composter) mustSchema() {
+	c.initTypes()
+
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query: c.query(),
+		Query:    c.query(),
+		Mutation: c.mutation(),
 	})
 
 	if err != nil {
@@ -46,6 +55,189 @@ func (c *Composter) mustSchema() {
 
 	c.Schema = schema
 	c.AdminSchema = adminSchema
+}
+
+func (c *Composter) initTypes() {
+	metrics := c.queryMetrics()
+
+	if InstanceType == nil {
+		InstanceType = graphql.NewObject(graphql.ObjectConfig{
+			Name: opsee_aws_ec2.GraphQLInstanceType.Name(),
+			Fields: graphql.Fields{
+				"metrics": metrics,
+			},
+		})
+		addFields(InstanceType, opsee_aws_ec2.GraphQLInstanceType.Fields())
+	}
+
+	if DbInstanceType == nil {
+		DbInstanceType = graphql.NewObject(graphql.ObjectConfig{
+			Name: opsee_aws_rds.GraphQLDBInstanceType.Name(),
+			Fields: graphql.Fields{
+				"metrics": metrics,
+			},
+		})
+		addFields(DbInstanceType, opsee_aws_rds.GraphQLDBInstanceType.Fields())
+	}
+
+	if CheckType == nil {
+		CheckType = graphql.NewObject(graphql.ObjectConfig{
+			Name: schema.GraphQLCheckType.Name(),
+			Fields: graphql.Fields{
+				"notifications": &graphql.Field{
+					Type: graphql.NewList(schema.GraphQLNotificationType),
+				},
+			},
+		})
+		addFields(CheckType, schema.GraphQLCheckType.Fields())
+	}
+
+	if CheckInputType == nil {
+		CheckInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "Check",
+			Description: "An Opsee Check",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"name": &graphql.InputObjectFieldConfig{
+					Type:        graphql.NewNonNull(graphql.String),
+					Description: "The check name",
+				},
+				"http_check": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewInputObject(graphql.InputObjectConfig{
+						Name:        "HTTP check",
+						Description: "checks ur http",
+						Fields: graphql.InputObjectConfigFieldMap{
+							"path": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "The path to check",
+							},
+							"protocol": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "The protocol to check",
+							},
+							"port": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.Int),
+								Description: "The port to check",
+							},
+							"verb": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "The verb to check",
+							},
+							"headers": &graphql.InputObjectFieldConfig{
+								Type: graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
+									Name:        "Header",
+									Description: "HTTP Header",
+									Fields: graphql.InputObjectConfigFieldMap{
+										"name": &graphql.InputObjectFieldConfig{
+											Type:        graphql.NewNonNull(graphql.String),
+											Description: "Header name",
+										},
+										"values": &graphql.InputObjectFieldConfig{
+											Type:        graphql.NewList(graphql.String),
+											Description: "Header values",
+										},
+									},
+								})),
+								Description: "Headers to send",
+							},
+							"body": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "A request body to send",
+							},
+						},
+					}),
+					Description: "An HTTP check",
+				},
+				"cloudwatch_check": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewInputObject(graphql.InputObjectConfig{
+						Name:        "Cloudwatch check",
+						Description: "checks ur cloudwatch metrics",
+						Fields: graphql.InputObjectConfigFieldMap{
+							"metrics": &graphql.InputObjectFieldConfig{
+								Type: graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
+									Name:        "Cloudwatch metric",
+									Description: "A cloudwatch metric source",
+									Fields: graphql.InputObjectConfigFieldMap{
+										"namespace": &graphql.InputObjectFieldConfig{
+											Type:        graphql.NewNonNull(graphql.String),
+											Description: "The cloudwatch metric namespace",
+										},
+										"name": &graphql.InputObjectFieldConfig{
+											Type:        graphql.NewNonNull(graphql.String),
+											Description: "The cloudwatch metric name",
+										},
+									},
+								})),
+							},
+						},
+					}),
+					Description: "A cloudwatch check",
+				},
+				"target": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.NewInputObject(graphql.InputObjectConfig{
+						Name:        "AWS target",
+						Description: "An AWS resource to target",
+						Fields: graphql.InputObjectConfigFieldMap{
+							"name": &graphql.InputObjectFieldConfig{
+								Type:        graphql.String,
+								Description: "The target name",
+							},
+							"type": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "The target type",
+							},
+							"id": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "The target id",
+							},
+						},
+					})),
+					Description: "A check target",
+				},
+				"assertions": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
+						Name:        "Check Assertion",
+						Description: "An assertion to apply to a check target",
+						Fields: graphql.InputObjectConfigFieldMap{
+							"key": &graphql.InputObjectFieldConfig{
+								Type:        graphql.String,
+								Description: "[TODO]",
+							},
+							"value": &graphql.InputObjectFieldConfig{
+								Type:        graphql.String,
+								Description: "[TODO]",
+							},
+							"relationship": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "[TODO]",
+							},
+							"operand": &graphql.InputObjectFieldConfig{
+								Type:        graphql.String,
+								Description: "[TODO]",
+							},
+						},
+					}))),
+					Description: "Check assertions",
+				},
+				"notifications": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
+						Name:        "Check Notification",
+						Description: "A notification endpoint for failing / passing checks",
+						Fields: graphql.InputObjectConfigFieldMap{
+							"type": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "A notification type, such as slack_bot, email",
+							},
+							"value": &graphql.InputObjectFieldConfig{
+								Type:        graphql.NewNonNull(graphql.String),
+								Description: "A notification value, such as an email address or slack channel",
+							},
+						},
+					}))),
+					Description: "Check notifications",
+				},
+			},
+		})
+	}
 }
 
 func (c *Composter) query() *graphql.Object {
@@ -168,7 +360,7 @@ func (c *Composter) adminQuery() *graphql.Object {
 
 func (c *Composter) queryChecks() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(schema.GraphQLCheckType),
+		Type: graphql.NewList(CheckType),
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			user, ok := p.Context.Value(userKey).(*schema.User)
 			if !ok {
@@ -310,54 +502,20 @@ func (c *Composter) queryGroups() *graphql.Field {
 }
 
 func (c *Composter) queryInstances() *graphql.Field {
-	metrics := c.queryMetrics()
-
-	instanceType := graphql.NewObject(graphql.ObjectConfig{
-		Name: opsee_aws_ec2.GraphQLInstanceType.Name(),
-		Fields: graphql.Fields{
-			"metrics": metrics,
-		},
-	})
-	instanceFields := opsee_aws_ec2.GraphQLInstanceType.Fields()
-	for fname, f := range instanceFields {
-		instanceType.AddFieldConfig(fname, &graphql.Field{
-			Name:        f.Name,
-			Description: f.Description,
-			Type:        f.Type,
-			Resolve:     f.Resolve,
-		})
-	}
-
-	dbInstanceType := graphql.NewObject(graphql.ObjectConfig{
-		Name: opsee_aws_rds.GraphQLDBInstanceType.Name(),
-		Fields: graphql.Fields{
-			"metrics": metrics,
-		},
-	})
-	dbInstanceFields := opsee_aws_rds.GraphQLDBInstanceType.Fields()
-	for fname, f := range dbInstanceFields {
-		dbInstanceType.AddFieldConfig(fname, &graphql.Field{
-			Name:        f.Name,
-			Description: f.Description,
-			Type:        f.Type,
-			Resolve:     f.Resolve,
-		})
-	}
-
 	return &graphql.Field{
 		Type: graphql.NewList(graphql.NewUnion(graphql.UnionConfig{
 			Name:        "Instance",
 			Description: "An instance target",
 			Types: []*graphql.Object{
-				instanceType,
-				dbInstanceType,
+				InstanceType,
+				DbInstanceType,
 			},
 			ResolveType: func(value interface{}, info graphql.ResolveInfo) *graphql.Object {
 				switch value.(type) {
 				case *opsee_aws_ec2.Instance:
-					return instanceType
+					return InstanceType
 				case *opsee_aws_rds.DBInstance:
-					return dbInstanceType
+					return DbInstanceType
 				}
 				return nil
 			},
@@ -590,5 +748,51 @@ func (c *Composter) queryMetricName(metricName string) *graphql.Field {
 
 			return c.resolver.GetMetricStatistics(p.Context, user, queryContext.Region, input)
 		},
+	}
+}
+
+func (c *Composter) mutation() *graphql.Object {
+	mutation := graphql.NewObject(graphql.ObjectConfig{
+		Name: "Mutation",
+		Fields: graphql.Fields{
+			"checks": c.upsertChecks(),
+		},
+	})
+
+	return mutation
+}
+
+func (c *Composter) upsertChecks() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(CheckType),
+		Args: graphql.FieldConfigArgument{
+			"checks": &graphql.ArgumentConfig{
+				Description: "A list of checks to create",
+				Type:        graphql.NewList(CheckInputType),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			checksInput, ok := p.Args["checks"].([]interface{})
+			if !ok {
+				return nil, errDecodeCheckInput
+			}
+			return c.resolver.UpsertChecks(p.Context, user, checksInput)
+		},
+	}
+}
+
+func addFields(obj *graphql.Object, fields graphql.FieldDefinitionMap) {
+	for fname, f := range fields {
+		obj.AddFieldConfig(fname, &graphql.Field{
+			Name:        f.Name,
+			Description: f.Description,
+			Type:        f.Type,
+			Resolve:     f.Resolve,
+		})
 	}
 }
