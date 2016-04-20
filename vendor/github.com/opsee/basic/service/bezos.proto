@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/basic/schema/aws/cloudwatch/types.proto";
+import "github.com/opsee/basic/schema/aws/ec2/types.proto";
+import "github.com/opsee/basic/schema/aws/elb/types.proto";
+import "github.com/opsee/basic/schema/aws/autoscaling/types.proto";
+import "github.com/opsee/basic/schema/aws/rds/types.proto";
+import "github.com/opsee/basic/schema/user.proto";
+
+package opsee;
+
+option go_package = "service";
+option (opseeproto.graphql) = true;
+
+message BezosRequest {
+  User user = 1;
+  string Region = 2;
+  string VpcId = 3;
+  opsee.types.Timestamp MaxAge = 4;
+
+  oneof input {
+    aws.cloudwatch.ListMetricsInput cloudwatch_ListMetricsInput = 101;
+    aws.cloudwatch.GetMetricStatisticsInput cloudwatch_GetMetricStatisticsInput = 102;
+
+    aws.ec2.DescribeInstancesInput ec2_DescribeInstancesInput = 201;
+    aws.ec2.DescribeSecurityGroupsInput ec2_DescribeSecurityGroupsInput = 202;
+    aws.ec2.DescribeSubnetsInput ec2_DescribeSubnetsInput = 203;
+    aws.ec2.DescribeVpcsInput ec2_DescribeVpcsInput = 204;
+    aws.ec2.DescribeRouteTablesInput ec2_DescribeRouteTablesInput = 205;
+
+    aws.elb.DescribeLoadBalancersInput elb_DescribeLoadBalancersInput = 301;
+
+    aws.autoscaling.DescribeAutoScalingGroupsInput autoscaling_DescribeAutoScalingGroupsInput = 401;
+
+    aws.rds.DescribeDBInstancesInput rds_DescribeDBInstancesInput = 501;
+  }
+}
+
+service Bezos {
+  rpc CloudwatchListMetrics(BezosRequest) returns (aws.cloudwatch.ListMetricsOutput) {}
+  rpc CloudwatchGetMetricStatistics(BezosRequest) returns (aws.cloudwatch.GetMetricStatisticsOutput) {}
+
+  rpc EC2DescribeInstances(BezosRequest) returns (aws.ec2.DescribeInstancesOutput) {}
+  rpc EC2DescribeSecurityGroups(BezosRequest) returns (aws.ec2.DescribeSecurityGroupsOutput) {}
+  rpc EC2DescribeSubnets(BezosRequest) returns (aws.ec2.DescribeSubnetsOutput) {}
+  rpc EC2DescribeVpcs(BezosRequest) returns (aws.ec2.DescribeVpcsOutput) {}
+  rpc EC2DescribeRouteTables(BezosRequest) returns (aws.ec2.DescribeRouteTablesOutput) {}
+
+  rpc ELBDescribeLoadBalancers(BezosRequest) returns (aws.elb.DescribeLoadBalancersOutput) {}
+
+  rpc AutoScalingDescribeAutoScalingGroups(BezosRequest) returns (aws.autoscaling.DescribeAutoScalingGroupsOutput) {}
+
+  rpc RDSDescribeDBInstances(BezosRequest) returns (aws.rds.DescribeDBInstancesOutput) {}
+}

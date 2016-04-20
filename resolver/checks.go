@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"github.com/opsee/basic/schema"
+	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
@@ -37,7 +38,7 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		for _, result := range results {
 			for _, res := range result.Responses {
 				if res.Reply == nil {
-					any, err := schema.UnmarshalAny(res.Response)
+					any, err := opsee_types.UnmarshalAny(res.Response)
 					if err != nil {
 						log.WithError(err).Error("couldn't list results from beavis")
 						return nil, err
@@ -62,7 +63,7 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		for _, check := range checks {
 			check.Results = checkMap[check.Id]
 			if check.Spec == nil {
-				any, err := schema.UnmarshalAny(check.CheckSpec)
+				any, err := opsee_types.UnmarshalAny(check.CheckSpec)
 				if err != nil {
 					log.WithError(err).Error("couldn't list checks from bartnet")
 					return nil, err

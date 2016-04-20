@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 import "github.com/opsee/protobuf/opseeproto/types/any.proto";
+import "github.com/opsee/protobuf/opseeproto/types/errors.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 
@@ -35,6 +36,11 @@ message Check {
 		HttpCheck http_check = 101;
 		CloudWatchCheck cloudwatch_check = 102;
 	}
+}
+
+message Notification {
+	string type = 1;
+	string value = 2;
 }
 
 message Assertion {
@@ -75,6 +81,7 @@ message CloudWatchResponse {
 	// The AWS CloudWatch metric namespace, e.g. AWS/RDS
 	string namespace = 1;
 	repeated Metric metrics = 2;
+	repeated opsee.types.Error errors = 3; // code field corresponds to MetricName
 }
 
 message Tag {
@@ -84,7 +91,7 @@ message Tag {
 
 message Metric {
 	string name = 1;
-	double value = 2;
+	double value = 2 [(opseeproto.required) = true];
 	repeated Tag tags = 3;
 	opsee.types.Timestamp timestamp = 4;
 	string unit = 5;	  // kbps, percent, ...

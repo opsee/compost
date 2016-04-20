@@ -10,7 +10,7 @@ import math "math"
 import _ "github.com/opsee/protobuf/opseeproto"
 import _ "github.com/opsee/protobuf/opseeproto/types"
 import opsee_aws_credentials "github.com/opsee/basic/schema/aws/credentials"
-import opsee2 "github.com/opsee/basic/schema"
+import opsee1 "github.com/opsee/basic/schema"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
 
@@ -27,7 +27,7 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 type PutRoleRequest struct {
-	User        *opsee2.User                 `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
+	User        *opsee1.User                 `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
 	Credentials *opsee_aws_credentials.Value `protobuf:"bytes,2,opt,name=credentials" json:"credentials,omitempty"`
 }
 
@@ -36,7 +36,7 @@ func (m *PutRoleRequest) String() string            { return proto.CompactTextSt
 func (*PutRoleRequest) ProtoMessage()               {}
 func (*PutRoleRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{0} }
 
-func (m *PutRoleRequest) GetUser() *opsee2.User {
+func (m *PutRoleRequest) GetUser() *opsee1.User {
 	if m != nil {
 		return m.User
 	}
@@ -67,7 +67,7 @@ func (m *PutRoleResponse) GetCredentials() *opsee_aws_credentials.Value {
 }
 
 type GetCredentialsRequest struct {
-	User *opsee2.User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
+	User *opsee1.User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
 }
 
 func (m *GetCredentialsRequest) Reset()                    { *m = GetCredentialsRequest{} }
@@ -75,7 +75,7 @@ func (m *GetCredentialsRequest) String() string            { return proto.Compac
 func (*GetCredentialsRequest) ProtoMessage()               {}
 func (*GetCredentialsRequest) Descriptor() ([]byte, []int) { return fileDescriptorSpanx, []int{2} }
 
-func (m *GetCredentialsRequest) GetUser() *opsee2.User {
+func (m *GetCredentialsRequest) GetUser() *opsee1.User {
 	if m != nil {
 		return m.User
 	}
@@ -259,7 +259,7 @@ func init() {
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
 				"user": &github_com_graphql_go_graphql.Field{
-					Type:        opsee2.GraphQLUserType,
+					Type:        opsee1.GraphQLUserType,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*PutRoleRequest)
@@ -350,7 +350,7 @@ func init() {
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
 				"user": &github_com_graphql_go_graphql.Field{
-					Type:        opsee2.GraphQLUserType,
+					Type:        opsee1.GraphQLUserType,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*GetCredentialsRequest)
@@ -652,7 +652,7 @@ func encodeVarintSpanx(data []byte, offset int, v uint64) int {
 func NewPopulatedPutRoleRequest(r randySpanx, easy bool) *PutRoleRequest {
 	this := &PutRoleRequest{}
 	if r.Intn(10) != 0 {
-		this.User = opsee2.NewPopulatedUser(r, easy)
+		this.User = opsee1.NewPopulatedUser(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Credentials = opsee_aws_credentials.NewPopulatedValue(r, easy)
@@ -675,7 +675,7 @@ func NewPopulatedPutRoleResponse(r randySpanx, easy bool) *PutRoleResponse {
 func NewPopulatedGetCredentialsRequest(r randySpanx, easy bool) *GetCredentialsRequest {
 	this := &GetCredentialsRequest{}
 	if r.Intn(10) != 0 {
-		this.User = opsee2.NewPopulatedUser(r, easy)
+		this.User = opsee1.NewPopulatedUser(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -877,7 +877,7 @@ func (m *PutRoleRequest) Unmarshal(data []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.User == nil {
-				m.User = &opsee2.User{}
+				m.User = &opsee1.User{}
 			}
 			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
@@ -1076,7 +1076,7 @@ func (m *GetCredentialsRequest) Unmarshal(data []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.User == nil {
-				m.User = &opsee2.User{}
+				m.User = &opsee1.User{}
 			}
 			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
