@@ -173,7 +173,7 @@ func (c *Composter) initTypes() {
 					Description: "A cloudwatch check",
 				},
 				"target": &graphql.InputObjectFieldConfig{
-					Type: graphql.NewInputObject(graphql.InputObjectConfig{
+					Type: graphql.NewNonNull(graphql.NewInputObject(graphql.InputObjectConfig{
 						Name:        "AWS target",
 						Description: "An AWS resource to target",
 						Fields: graphql.InputObjectConfigFieldMap{
@@ -190,11 +190,11 @@ func (c *Composter) initTypes() {
 								Description: "The target id",
 							},
 						},
-					}),
+					})),
 					Description: "A check target",
 				},
 				"assertions": &graphql.InputObjectFieldConfig{
-					Type: graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
+					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
 						Name:        "Check Assertion",
 						Description: "An assertion to apply to a check target",
 						Fields: graphql.InputObjectConfigFieldMap{
@@ -215,11 +215,11 @@ func (c *Composter) initTypes() {
 								Description: "[TODO]",
 							},
 						},
-					})),
+					}))),
 					Description: "Check assertions",
 				},
 				"notifications": &graphql.InputObjectFieldConfig{
-					Type: graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
+					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
 						Name:        "Check Notification",
 						Description: "A notification endpoint for failing / passing checks",
 						Fields: graphql.InputObjectConfigFieldMap{
@@ -232,7 +232,7 @@ func (c *Composter) initTypes() {
 								Description: "A notification value, such as an email address or slack channel",
 							},
 						},
-					})),
+					}))),
 					Description: "Check notifications",
 				},
 			},
