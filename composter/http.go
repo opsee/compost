@@ -7,11 +7,11 @@ import (
 	"github.com/opsee/basic/schema"
 	"github.com/opsee/basic/tp"
 	"github.com/opsee/vaper"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"net/http"
 	"strings"
 	"time"
-	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -31,8 +31,14 @@ func (s *Composter) initHTTP() {
 	)
 
 	// graph q l
-	router.Handle("POST", "/graphql", s.decoders(schema.User{}, GraphQLRequest{}), s.graphQL())
-	router.Handle("POST", "/admin/graphql", s.decoders(schema.User{}, GraphQLRequest{}), s.adminGraphQL())
+	router.Handle("POST", "/graphql", []tp.DecodeFunc{
+		tp.AuthorizationDecodeFunc(userKey, schema.User{}),
+		tp.RequestDecodeFunc(requestKey, GraphQLRequest{}),
+	}, s.graphQL())
+	router.Handle("POST", "/admin/graphql", []tp.DecodeFunc{
+		s.authorizationDecodeFunc(),
+		tp.RequestDecodeFunc(requestKey, GraphQLRequest{}),
+	}, s.adminGraphQL())
 
 	// fileserver for static things
 	router.Handler("GET", "/static/*stuff", http.StripPrefix("/static/", http.FileServer(http.Dir("/static"))))
@@ -41,13 +47,6 @@ func (s *Composter) initHTTP() {
 	router.Timeout(5 * time.Minute)
 
 	s.router = router
-}
-
-func (s *Composter) decoders(userType interface{}, requestType interface{}) []tp.DecodeFunc {
-	return []tp.DecodeFunc{
-		s.authorizationDecodeFunc(),
-		tp.RequestDecodeFunc(requestKey, requestType),
-	}
 }
 
 func (s *Composter) authorizationDecodeFunc() tp.DecodeFunc {

@@ -46,7 +46,8 @@ func (c *Composter) mustSchema() {
 	}
 
 	adminSchema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query: c.adminQuery(),
+		Query:    c.adminQuery(),
+		Mutation: c.mutation(),
 	})
 
 	if err != nil {
