@@ -104,7 +104,7 @@ func (c *Composter) initTypes() {
 				},
 				"http_check": &graphql.InputObjectFieldConfig{
 					Type: graphql.NewInputObject(graphql.InputObjectConfig{
-						Name:        "HTTP check",
+						Name:        "HTTPCheck",
 						Description: "checks ur http",
 						Fields: graphql.InputObjectConfigFieldMap{
 							"path": &graphql.InputObjectFieldConfig{
@@ -150,12 +150,12 @@ func (c *Composter) initTypes() {
 				},
 				"cloudwatch_check": &graphql.InputObjectFieldConfig{
 					Type: graphql.NewInputObject(graphql.InputObjectConfig{
-						Name:        "Cloudwatch check",
+						Name:        "CloudwatchCheck",
 						Description: "checks ur cloudwatch metrics",
 						Fields: graphql.InputObjectConfigFieldMap{
 							"metrics": &graphql.InputObjectFieldConfig{
 								Type: graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
-									Name:        "Cloudwatch metric",
+									Name:        "Metric",
 									Description: "A cloudwatch metric source",
 									Fields: graphql.InputObjectConfigFieldMap{
 										"namespace": &graphql.InputObjectFieldConfig{
@@ -175,7 +175,7 @@ func (c *Composter) initTypes() {
 				},
 				"target": &graphql.InputObjectFieldConfig{
 					Type: graphql.NewNonNull(graphql.NewInputObject(graphql.InputObjectConfig{
-						Name:        "AWS target",
+						Name:        "Target",
 						Description: "An AWS resource to target",
 						Fields: graphql.InputObjectConfigFieldMap{
 							"name": &graphql.InputObjectFieldConfig{
@@ -196,7 +196,7 @@ func (c *Composter) initTypes() {
 				},
 				"assertions": &graphql.InputObjectFieldConfig{
 					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
-						Name:        "Check Assertion",
+						Name:        "Assertion",
 						Description: "An assertion to apply to a check target",
 						Fields: graphql.InputObjectConfigFieldMap{
 							"key": &graphql.InputObjectFieldConfig{
@@ -221,7 +221,7 @@ func (c *Composter) initTypes() {
 				},
 				"notifications": &graphql.InputObjectFieldConfig{
 					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
-						Name:        "Check Notification",
+						Name:        "Notification",
 						Description: "A notification endpoint for failing / passing checks",
 						Fields: graphql.InputObjectConfigFieldMap{
 							"type": &graphql.InputObjectFieldConfig{
