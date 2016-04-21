@@ -7,7 +7,14 @@ import (
 	// log "github.com/sirupsen/logrus"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	"golang.org/x/net/context"
+	"sort"
 )
+
+type metricList []*schema.Metric
+
+func (l metricList) Len() int           { return len(l) }
+func (l metricList) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
+func (l metricList) Less(i, j int) bool { return l[i].Timestamp.Millis() < l[j].Timestamp.Millis() }
 
 func (c *Client) GetMetricStatistics(ctx context.Context, user *schema.User, region string, input *cloudwatch.GetMetricStatisticsInput) (*schema.CloudWatchResponse, error) {
 	sess, err := c.awsSession(ctx, user, region)
@@ -39,6 +46,8 @@ func (c *Client) GetMetricStatistics(ctx context.Context, user *schema.User, reg
 			Statistic: statistic,
 		}
 	}
+
+	sort.Sort(metricList(metrics))
 
 	return &schema.CloudWatchResponse{
 		Namespace: aws.StringValue(input.Namespace),
