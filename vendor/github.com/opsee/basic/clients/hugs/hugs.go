@@ -14,13 +14,19 @@ import (
 // a proper service client. until hugs is fixed, i'm doing this to get launched
 // also... why aren't notifications just part of checks???
 type Client interface {
+	ListNotifications(user *schema.User) ([]*Notification, error)
 	CreateNotifications(user *schema.User, noteReq *NotificationRequest) error
 	CreateNotificationsMulti(user *schema.User, noteReq []*NotificationRequest) error
 }
 
 type Notification struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
+	CheckId string `json:"check_id"`
+	Type    string `json:"type"`
+	Value   string `json:"value"`
+}
+
+type NotificationResponse struct {
+	Notifications []*Notification `json:"notifications"`
 }
 
 type NotificationRequest struct {
@@ -38,6 +44,39 @@ func New(endpoint string) *hugsClient {
 		client:   &http.Client{},
 		endpoint: endpoint,
 	}
+}
+
+func (c *hugsClient) ListNotifications(user *schema.User) ([]*Notification, error) {
+	toke, err := json.Marshal(user)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", c.endpoint+"/notifications", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString(toke)))
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("hugs responded with error status: %s", resp.Status)
+	}
+
+	var notifications *NotificationResponse
+	err = json.NewDecoder(resp.Body).Decode(&notifications)
+	if err != nil {
+		return nil, err
+	}
+
+	return notifications.Notifications, nil
 }
 
 func (c *hugsClient) CreateNotifications(user *schema.User, noteReq *NotificationRequest) error {

@@ -38,5 +38,7 @@ func TestResolveChecks(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("%#v\n", checks)
+	for _, check := range checks {
+		fmt.Printf("%#v\n", check.Notifications)
+	}
 }

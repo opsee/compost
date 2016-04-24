@@ -18,8 +18,10 @@ import (
 func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.Check, error) {
 	var (
 		resultChan = make(chan []*schema.CheckResult)
+		notifChan  = make(chan []*hugs.Notification)
 		errChan    = make(chan error)
 		checkMap   = make(map[string][]*schema.CheckResult)
+		notifMap   = make(map[string][]*schema.Notification)
 	)
 
 	go func() {
@@ -30,6 +32,16 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		}
 
 		resultChan <- results
+	}()
+
+	go func() {
+		notifs, err := c.Hugs.ListNotifications(user)
+		if err != nil {
+			errChan <- err
+			return
+		}
+
+		notifChan <- notifs
 	}()
 
 	checks, err := c.Bartnet.ListChecks(user)
@@ -91,8 +103,17 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 			}
 		}
 
+	case notifs := <-notifChan:
+		for _, notif := range notifs {
+			notifMap[notif.CheckId] = append(notifMap[notif.CheckId], &schema.Notification{Type: notif.Type, Value: notif.Value})
+		}
+
+		for _, check := range checks {
+			check.Notifications = notifMap[check.Id]
+		}
+
 	case err = <-errChan:
-		log.WithError(err).Error("couldn't list results from beavis, we're returning checks anyhow")
+		log.WithError(err).Error("error composting checks")
 	}
 
 	return checks, nil
