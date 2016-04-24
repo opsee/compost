@@ -14,6 +14,7 @@
 
 	It has these top-level messages:
 		BezosRequest
+		BezosResponse
 		CheckResourceResponse
 		ResourceResponse
 		CheckResourceRequest
@@ -75,9 +76,9 @@ const _ = proto.GoGoProtoPackageIsVersion1
 
 type BezosRequest struct {
 	User   *opsee1.User           `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
-	Region string                 `protobuf:"bytes,2,opt,name=Region,json=region,proto3" json:"Region,omitempty"`
-	VpcId  string                 `protobuf:"bytes,3,opt,name=VpcId,json=vpcId,proto3" json:"VpcId,omitempty"`
-	MaxAge *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=MaxAge,json=maxAge" json:"MaxAge,omitempty"`
+	Region string                 `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
+	VpcId  string                 `protobuf:"bytes,3,opt,name=vpc_id,json=vpcId,proto3" json:"vpc_id,omitempty"`
+	MaxAge *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=max_age,json=maxAge" json:"max_age,omitempty"`
 	// Types that are valid to be assigned to Input:
 	//	*BezosRequest_Cloudwatch_ListMetricsInput
 	//	*BezosRequest_Cloudwatch_GetMetricStatisticsInput
@@ -463,8 +464,389 @@ func _BezosRequest_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+type BezosResponse struct {
+	LastModified *opsee_types.Timestamp `protobuf:"bytes,1,opt,name=last_modified,json=lastModified" json:"last_modified,omitempty"`
+	// Types that are valid to be assigned to Output:
+	//	*BezosResponse_Cloudwatch_ListMetricsOutput
+	//	*BezosResponse_Cloudwatch_GetMetricStatisticsOutput
+	//	*BezosResponse_Ec2_DescribeInstancesOutput
+	//	*BezosResponse_Ec2_DescribeSecurityGroupsOutput
+	//	*BezosResponse_Ec2_DescribeSubnetsOutput
+	//	*BezosResponse_Ec2_DescribeVpcsOutput
+	//	*BezosResponse_Ec2_DescribeRouteTablesOutput
+	//	*BezosResponse_Elb_DescribeLoadBalancersOutput
+	//	*BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput
+	//	*BezosResponse_Rds_DescribeDBInstancesOutput
+	Output isBezosResponse_Output `protobuf_oneof:"output"`
+}
+
+func (m *BezosResponse) Reset()                    { *m = BezosResponse{} }
+func (m *BezosResponse) String() string            { return proto.CompactTextString(m) }
+func (*BezosResponse) ProtoMessage()               {}
+func (*BezosResponse) Descriptor() ([]byte, []int) { return fileDescriptorBezos, []int{1} }
+
+type isBezosResponse_Output interface {
+	isBezosResponse_Output()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type BezosResponse_Cloudwatch_ListMetricsOutput struct {
+	Cloudwatch_ListMetricsOutput *opsee_aws_cloudwatch.ListMetricsOutput `protobuf:"bytes,101,opt,name=cloudwatch_ListMetricsOutput,json=cloudwatchListMetricsOutput,oneof"`
+}
+type BezosResponse_Cloudwatch_GetMetricStatisticsOutput struct {
+	Cloudwatch_GetMetricStatisticsOutput *opsee_aws_cloudwatch.GetMetricStatisticsOutput `protobuf:"bytes,102,opt,name=cloudwatch_GetMetricStatisticsOutput,json=cloudwatchGetMetricStatisticsOutput,oneof"`
+}
+type BezosResponse_Ec2_DescribeInstancesOutput struct {
+	Ec2_DescribeInstancesOutput *opsee_aws_ec2.DescribeInstancesOutput `protobuf:"bytes,201,opt,name=ec2_DescribeInstancesOutput,json=ec2DescribeInstancesOutput,oneof"`
+}
+type BezosResponse_Ec2_DescribeSecurityGroupsOutput struct {
+	Ec2_DescribeSecurityGroupsOutput *opsee_aws_ec2.DescribeSecurityGroupsOutput `protobuf:"bytes,202,opt,name=ec2_DescribeSecurityGroupsOutput,json=ec2DescribeSecurityGroupsOutput,oneof"`
+}
+type BezosResponse_Ec2_DescribeSubnetsOutput struct {
+	Ec2_DescribeSubnetsOutput *opsee_aws_ec2.DescribeSubnetsOutput `protobuf:"bytes,203,opt,name=ec2_DescribeSubnetsOutput,json=ec2DescribeSubnetsOutput,oneof"`
+}
+type BezosResponse_Ec2_DescribeVpcsOutput struct {
+	Ec2_DescribeVpcsOutput *opsee_aws_ec2.DescribeVpcsOutput `protobuf:"bytes,204,opt,name=ec2_DescribeVpcsOutput,json=ec2DescribeVpcsOutput,oneof"`
+}
+type BezosResponse_Ec2_DescribeRouteTablesOutput struct {
+	Ec2_DescribeRouteTablesOutput *opsee_aws_ec2.DescribeRouteTablesOutput `protobuf:"bytes,205,opt,name=ec2_DescribeRouteTablesOutput,json=ec2DescribeRouteTablesOutput,oneof"`
+}
+type BezosResponse_Elb_DescribeLoadBalancersOutput struct {
+	Elb_DescribeLoadBalancersOutput *opsee_aws_elb.DescribeLoadBalancersOutput `protobuf:"bytes,301,opt,name=elb_DescribeLoadBalancersOutput,json=elbDescribeLoadBalancersOutput,oneof"`
+}
+type BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput struct {
+	Autoscaling_DescribeAutoScalingGroupsOutput *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput `protobuf:"bytes,401,opt,name=autoscaling_DescribeAutoScalingGroupsOutput,json=autoscalingDescribeAutoScalingGroupsOutput,oneof"`
+}
+type BezosResponse_Rds_DescribeDBInstancesOutput struct {
+	Rds_DescribeDBInstancesOutput *opsee_aws_rds.DescribeDBInstancesOutput `protobuf:"bytes,501,opt,name=rds_DescribeDBInstancesOutput,json=rdsDescribeDBInstancesOutput,oneof"`
+}
+
+func (*BezosResponse_Cloudwatch_ListMetricsOutput) isBezosResponse_Output()                {}
+func (*BezosResponse_Cloudwatch_GetMetricStatisticsOutput) isBezosResponse_Output()        {}
+func (*BezosResponse_Ec2_DescribeInstancesOutput) isBezosResponse_Output()                 {}
+func (*BezosResponse_Ec2_DescribeSecurityGroupsOutput) isBezosResponse_Output()            {}
+func (*BezosResponse_Ec2_DescribeSubnetsOutput) isBezosResponse_Output()                   {}
+func (*BezosResponse_Ec2_DescribeVpcsOutput) isBezosResponse_Output()                      {}
+func (*BezosResponse_Ec2_DescribeRouteTablesOutput) isBezosResponse_Output()               {}
+func (*BezosResponse_Elb_DescribeLoadBalancersOutput) isBezosResponse_Output()             {}
+func (*BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) isBezosResponse_Output() {}
+func (*BezosResponse_Rds_DescribeDBInstancesOutput) isBezosResponse_Output()               {}
+
+func (m *BezosResponse) GetOutput() isBezosResponse_Output {
+	if m != nil {
+		return m.Output
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetLastModified() *opsee_types.Timestamp {
+	if m != nil {
+		return m.LastModified
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetCloudwatch_ListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Cloudwatch_ListMetricsOutput); ok {
+		return x.Cloudwatch_ListMetricsOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetCloudwatch_GetMetricStatisticsOutput() *opsee_aws_cloudwatch.GetMetricStatisticsOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Cloudwatch_GetMetricStatisticsOutput); ok {
+		return x.Cloudwatch_GetMetricStatisticsOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetEc2_DescribeInstancesOutput() *opsee_aws_ec2.DescribeInstancesOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Ec2_DescribeInstancesOutput); ok {
+		return x.Ec2_DescribeInstancesOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetEc2_DescribeSecurityGroupsOutput() *opsee_aws_ec2.DescribeSecurityGroupsOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Ec2_DescribeSecurityGroupsOutput); ok {
+		return x.Ec2_DescribeSecurityGroupsOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetEc2_DescribeSubnetsOutput() *opsee_aws_ec2.DescribeSubnetsOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Ec2_DescribeSubnetsOutput); ok {
+		return x.Ec2_DescribeSubnetsOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetEc2_DescribeVpcsOutput() *opsee_aws_ec2.DescribeVpcsOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Ec2_DescribeVpcsOutput); ok {
+		return x.Ec2_DescribeVpcsOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetEc2_DescribeRouteTablesOutput() *opsee_aws_ec2.DescribeRouteTablesOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Ec2_DescribeRouteTablesOutput); ok {
+		return x.Ec2_DescribeRouteTablesOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetElb_DescribeLoadBalancersOutput() *opsee_aws_elb.DescribeLoadBalancersOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Elb_DescribeLoadBalancersOutput); ok {
+		return x.Elb_DescribeLoadBalancersOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetAutoscaling_DescribeAutoScalingGroupsOutput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput); ok {
+		return x.Autoscaling_DescribeAutoScalingGroupsOutput
+	}
+	return nil
+}
+
+func (m *BezosResponse) GetRds_DescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
+	if x, ok := m.GetOutput().(*BezosResponse_Rds_DescribeDBInstancesOutput); ok {
+		return x.Rds_DescribeDBInstancesOutput
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*BezosResponse) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _BezosResponse_OneofMarshaler, _BezosResponse_OneofUnmarshaler, _BezosResponse_OneofSizer, []interface{}{
+		(*BezosResponse_Cloudwatch_ListMetricsOutput)(nil),
+		(*BezosResponse_Cloudwatch_GetMetricStatisticsOutput)(nil),
+		(*BezosResponse_Ec2_DescribeInstancesOutput)(nil),
+		(*BezosResponse_Ec2_DescribeSecurityGroupsOutput)(nil),
+		(*BezosResponse_Ec2_DescribeSubnetsOutput)(nil),
+		(*BezosResponse_Ec2_DescribeVpcsOutput)(nil),
+		(*BezosResponse_Ec2_DescribeRouteTablesOutput)(nil),
+		(*BezosResponse_Elb_DescribeLoadBalancersOutput)(nil),
+		(*BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput)(nil),
+		(*BezosResponse_Rds_DescribeDBInstancesOutput)(nil),
+	}
+}
+
+func _BezosResponse_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*BezosResponse)
+	// output
+	switch x := m.Output.(type) {
+	case *BezosResponse_Cloudwatch_ListMetricsOutput:
+		_ = b.EncodeVarint(101<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Cloudwatch_ListMetricsOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Cloudwatch_GetMetricStatisticsOutput:
+		_ = b.EncodeVarint(102<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Cloudwatch_GetMetricStatisticsOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Ec2_DescribeInstancesOutput:
+		_ = b.EncodeVarint(201<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Ec2_DescribeInstancesOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Ec2_DescribeSecurityGroupsOutput:
+		_ = b.EncodeVarint(202<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Ec2_DescribeSecurityGroupsOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Ec2_DescribeSubnetsOutput:
+		_ = b.EncodeVarint(203<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Ec2_DescribeSubnetsOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Ec2_DescribeVpcsOutput:
+		_ = b.EncodeVarint(204<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Ec2_DescribeVpcsOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Ec2_DescribeRouteTablesOutput:
+		_ = b.EncodeVarint(205<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Ec2_DescribeRouteTablesOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Elb_DescribeLoadBalancersOutput:
+		_ = b.EncodeVarint(301<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Elb_DescribeLoadBalancersOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput:
+		_ = b.EncodeVarint(401<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Autoscaling_DescribeAutoScalingGroupsOutput); err != nil {
+			return err
+		}
+	case *BezosResponse_Rds_DescribeDBInstancesOutput:
+		_ = b.EncodeVarint(501<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Rds_DescribeDBInstancesOutput); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("BezosResponse.Output has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _BezosResponse_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*BezosResponse)
+	switch tag {
+	case 101: // output.cloudwatch_ListMetricsOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_cloudwatch.ListMetricsOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Cloudwatch_ListMetricsOutput{msg}
+		return true, err
+	case 102: // output.cloudwatch_GetMetricStatisticsOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_cloudwatch.GetMetricStatisticsOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Cloudwatch_GetMetricStatisticsOutput{msg}
+		return true, err
+	case 201: // output.ec2_DescribeInstancesOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_ec2.DescribeInstancesOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Ec2_DescribeInstancesOutput{msg}
+		return true, err
+	case 202: // output.ec2_DescribeSecurityGroupsOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_ec2.DescribeSecurityGroupsOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Ec2_DescribeSecurityGroupsOutput{msg}
+		return true, err
+	case 203: // output.ec2_DescribeSubnetsOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_ec2.DescribeSubnetsOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Ec2_DescribeSubnetsOutput{msg}
+		return true, err
+	case 204: // output.ec2_DescribeVpcsOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_ec2.DescribeVpcsOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Ec2_DescribeVpcsOutput{msg}
+		return true, err
+	case 205: // output.ec2_DescribeRouteTablesOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_ec2.DescribeRouteTablesOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Ec2_DescribeRouteTablesOutput{msg}
+		return true, err
+	case 301: // output.elb_DescribeLoadBalancersOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_elb.DescribeLoadBalancersOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Elb_DescribeLoadBalancersOutput{msg}
+		return true, err
+	case 401: // output.autoscaling_DescribeAutoScalingGroupsOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput{msg}
+		return true, err
+	case 501: // output.rds_DescribeDBInstancesOutput
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(opsee_aws_rds.DescribeDBInstancesOutput)
+		err := b.DecodeMessage(msg)
+		m.Output = &BezosResponse_Rds_DescribeDBInstancesOutput{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _BezosResponse_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*BezosResponse)
+	// output
+	switch x := m.Output.(type) {
+	case *BezosResponse_Cloudwatch_ListMetricsOutput:
+		s := proto.Size(x.Cloudwatch_ListMetricsOutput)
+		n += proto.SizeVarint(101<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Cloudwatch_GetMetricStatisticsOutput:
+		s := proto.Size(x.Cloudwatch_GetMetricStatisticsOutput)
+		n += proto.SizeVarint(102<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Ec2_DescribeInstancesOutput:
+		s := proto.Size(x.Ec2_DescribeInstancesOutput)
+		n += proto.SizeVarint(201<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Ec2_DescribeSecurityGroupsOutput:
+		s := proto.Size(x.Ec2_DescribeSecurityGroupsOutput)
+		n += proto.SizeVarint(202<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Ec2_DescribeSubnetsOutput:
+		s := proto.Size(x.Ec2_DescribeSubnetsOutput)
+		n += proto.SizeVarint(203<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Ec2_DescribeVpcsOutput:
+		s := proto.Size(x.Ec2_DescribeVpcsOutput)
+		n += proto.SizeVarint(204<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Ec2_DescribeRouteTablesOutput:
+		s := proto.Size(x.Ec2_DescribeRouteTablesOutput)
+		n += proto.SizeVarint(205<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Elb_DescribeLoadBalancersOutput:
+		s := proto.Size(x.Elb_DescribeLoadBalancersOutput)
+		n += proto.SizeVarint(301<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput:
+		s := proto.Size(x.Autoscaling_DescribeAutoScalingGroupsOutput)
+		n += proto.SizeVarint(401<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BezosResponse_Rds_DescribeDBInstancesOutput:
+		s := proto.Size(x.Rds_DescribeDBInstancesOutput)
+		n += proto.SizeVarint(501<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 func init() {
 	proto.RegisterType((*BezosRequest)(nil), "opsee.BezosRequest")
+	proto.RegisterType((*BezosResponse)(nil), "opsee.BezosResponse")
 }
 func (this *BezosRequest) Equal(that interface{}) bool {
 	if that == nil {
@@ -814,6 +1196,345 @@ func (this *BezosRequest_Rds_DescribeDBInstancesInput) Equal(that interface{}) b
 	}
 	return true
 }
+func (this *BezosResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse)
+	if !ok {
+		that2, ok := that.(BezosResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.LastModified.Equal(that1.LastModified) {
+		return false
+	}
+	if that1.Output == nil {
+		if this.Output != nil {
+			return false
+		}
+	} else if this.Output == nil {
+		return false
+	} else if !this.Output.Equal(that1.Output) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Cloudwatch_ListMetricsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Cloudwatch_ListMetricsOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Cloudwatch_ListMetricsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Cloudwatch_ListMetricsOutput.Equal(that1.Cloudwatch_ListMetricsOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Cloudwatch_GetMetricStatisticsOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Cloudwatch_GetMetricStatisticsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Cloudwatch_GetMetricStatisticsOutput.Equal(that1.Cloudwatch_GetMetricStatisticsOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Ec2_DescribeInstancesOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Ec2_DescribeInstancesOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Ec2_DescribeInstancesOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Ec2_DescribeInstancesOutput.Equal(that1.Ec2_DescribeInstancesOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Ec2_DescribeSecurityGroupsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Ec2_DescribeSecurityGroupsOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Ec2_DescribeSecurityGroupsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Ec2_DescribeSecurityGroupsOutput.Equal(that1.Ec2_DescribeSecurityGroupsOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Ec2_DescribeSubnetsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Ec2_DescribeSubnetsOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Ec2_DescribeSubnetsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Ec2_DescribeSubnetsOutput.Equal(that1.Ec2_DescribeSubnetsOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Ec2_DescribeVpcsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Ec2_DescribeVpcsOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Ec2_DescribeVpcsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Ec2_DescribeVpcsOutput.Equal(that1.Ec2_DescribeVpcsOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Ec2_DescribeRouteTablesOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Ec2_DescribeRouteTablesOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Ec2_DescribeRouteTablesOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Ec2_DescribeRouteTablesOutput.Equal(that1.Ec2_DescribeRouteTablesOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Elb_DescribeLoadBalancersOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Elb_DescribeLoadBalancersOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Elb_DescribeLoadBalancersOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Elb_DescribeLoadBalancersOutput.Equal(that1.Elb_DescribeLoadBalancersOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Autoscaling_DescribeAutoScalingGroupsOutput.Equal(that1.Autoscaling_DescribeAutoScalingGroupsOutput) {
+		return false
+	}
+	return true
+}
+func (this *BezosResponse_Rds_DescribeDBInstancesOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*BezosResponse_Rds_DescribeDBInstancesOutput)
+	if !ok {
+		that2, ok := that.(BezosResponse_Rds_DescribeDBInstancesOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Rds_DescribeDBInstancesOutput.Equal(that1.Rds_DescribeDBInstancesOutput) {
+		return false
+	}
+	return true
+}
 
 type BezosRequestGetter interface {
 	GetBezosRequest() *BezosRequest
@@ -821,6 +1542,13 @@ type BezosRequestGetter interface {
 
 var GraphQLBezosRequestType *github_com_graphql_go_graphql.Object
 var GraphQLBezosRequestInputUnion *github_com_graphql_go_graphql.Union
+
+type BezosResponseGetter interface {
+	GetBezosResponse() *BezosResponse
+}
+
+var GraphQLBezosResponseType *github_com_graphql_go_graphql.Object
+var GraphQLBezosResponseOutputUnion *github_com_graphql_go_graphql.Union
 
 func (g *BezosRequest_Cloudwatch_ListMetricsInput) GetListMetricsInput() *opsee_aws_cloudwatch.ListMetricsInput {
 	return g.Cloudwatch_ListMetricsInput
@@ -851,6 +1579,36 @@ func (g *BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput) GetDescribeAut
 }
 func (g *BezosRequest_Rds_DescribeDBInstancesInput) GetDescribeDBInstancesInput() *opsee_aws_rds.DescribeDBInstancesInput {
 	return g.Rds_DescribeDBInstancesInput
+}
+func (g *BezosResponse_Cloudwatch_ListMetricsOutput) GetListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
+	return g.Cloudwatch_ListMetricsOutput
+}
+func (g *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) GetGetMetricStatisticsOutput() *opsee_aws_cloudwatch.GetMetricStatisticsOutput {
+	return g.Cloudwatch_GetMetricStatisticsOutput
+}
+func (g *BezosResponse_Ec2_DescribeInstancesOutput) GetDescribeInstancesOutput() *opsee_aws_ec2.DescribeInstancesOutput {
+	return g.Ec2_DescribeInstancesOutput
+}
+func (g *BezosResponse_Ec2_DescribeSecurityGroupsOutput) GetDescribeSecurityGroupsOutput() *opsee_aws_ec2.DescribeSecurityGroupsOutput {
+	return g.Ec2_DescribeSecurityGroupsOutput
+}
+func (g *BezosResponse_Ec2_DescribeSubnetsOutput) GetDescribeSubnetsOutput() *opsee_aws_ec2.DescribeSubnetsOutput {
+	return g.Ec2_DescribeSubnetsOutput
+}
+func (g *BezosResponse_Ec2_DescribeVpcsOutput) GetDescribeVpcsOutput() *opsee_aws_ec2.DescribeVpcsOutput {
+	return g.Ec2_DescribeVpcsOutput
+}
+func (g *BezosResponse_Ec2_DescribeRouteTablesOutput) GetDescribeRouteTablesOutput() *opsee_aws_ec2.DescribeRouteTablesOutput {
+	return g.Ec2_DescribeRouteTablesOutput
+}
+func (g *BezosResponse_Elb_DescribeLoadBalancersOutput) GetDescribeLoadBalancersOutput() *opsee_aws_elb.DescribeLoadBalancersOutput {
+	return g.Elb_DescribeLoadBalancersOutput
+}
+func (g *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) GetDescribeAutoScalingGroupsOutput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput {
+	return g.Autoscaling_DescribeAutoScalingGroupsOutput
+}
+func (g *BezosResponse_Rds_DescribeDBInstancesOutput) GetDescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
+	return g.Rds_DescribeDBInstancesOutput
 }
 
 func init() {
@@ -884,7 +1642,7 @@ func init() {
 						return nil, fmt.Errorf("field user not resolved")
 					},
 				},
-				"Region": &github_com_graphql_go_graphql.Field{
+				"region": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
@@ -900,10 +1658,10 @@ func init() {
 							}
 							return face.Region, nil
 						}
-						return nil, fmt.Errorf("field Region not resolved")
+						return nil, fmt.Errorf("field region not resolved")
 					},
 				},
-				"VpcId": &github_com_graphql_go_graphql.Field{
+				"vpc_id": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
@@ -919,10 +1677,10 @@ func init() {
 							}
 							return face.VpcId, nil
 						}
-						return nil, fmt.Errorf("field VpcId not resolved")
+						return nil, fmt.Errorf("field vpc_id not resolved")
 					},
 				},
-				"MaxAge": &github_com_graphql_go_graphql.Field{
+				"max_age": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
@@ -944,7 +1702,7 @@ func init() {
 							}
 							return face.GetMaxAge(), nil
 						}
-						return nil, fmt.Errorf("field MaxAge not resolved")
+						return nil, fmt.Errorf("field max_age not resolved")
 					},
 				},
 				"input": &github_com_graphql_go_graphql.Field{
@@ -956,6 +1714,50 @@ func init() {
 							return nil, fmt.Errorf("field input not resolved")
 						}
 						return obj.GetInput(), nil
+					},
+				},
+			}
+		}),
+	})
+	GraphQLBezosResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceBezosResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"last_modified": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*BezosResponse)
+						if ok {
+							if obj.LastModified == nil {
+								return nil, nil
+							}
+							return obj.GetLastModified(), nil
+						}
+						inter, ok := p.Source.(BezosResponseGetter)
+						if ok {
+							face := inter.GetBezosResponse()
+							if face == nil {
+								return nil, nil
+							}
+							if face.LastModified == nil {
+								return nil, nil
+							}
+							return face.GetLastModified(), nil
+						}
+						return nil, fmt.Errorf("field last_modified not resolved")
+					},
+				},
+				"output": &github_com_graphql_go_graphql.Field{
+					Type:        GraphQLBezosResponseOutputUnion,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*BezosResponse)
+						if !ok {
+							return nil, fmt.Errorf("field output not resolved")
+						}
+						return obj.GetOutput(), nil
 					},
 				},
 			}
@@ -1002,6 +1804,47 @@ func init() {
 			return nil
 		},
 	})
+	GraphQLBezosResponseOutputUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
+		Name:        "BezosResponseOutput",
+		Description: "",
+		Types: []*github_com_graphql_go_graphql.Object{
+			opsee_aws_cloudwatch.GraphQLListMetricsOutputType,
+			opsee_aws_cloudwatch.GraphQLGetMetricStatisticsOutputType,
+			opsee_aws_ec2.GraphQLDescribeInstancesOutputType,
+			opsee_aws_ec2.GraphQLDescribeSecurityGroupsOutputType,
+			opsee_aws_ec2.GraphQLDescribeSubnetsOutputType,
+			opsee_aws_ec2.GraphQLDescribeVpcsOutputType,
+			opsee_aws_ec2.GraphQLDescribeRouteTablesOutputType,
+			opsee_aws_elb.GraphQLDescribeLoadBalancersOutputType,
+			opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsOutputType,
+			opsee_aws_rds.GraphQLDescribeDBInstancesOutputType,
+		},
+		ResolveType: func(value interface{}, info github_com_graphql_go_graphql.ResolveInfo) *github_com_graphql_go_graphql.Object {
+			switch value.(type) {
+			case *BezosResponse_Cloudwatch_ListMetricsOutput:
+				return opsee_aws_cloudwatch.GraphQLListMetricsOutputType
+			case *BezosResponse_Cloudwatch_GetMetricStatisticsOutput:
+				return opsee_aws_cloudwatch.GraphQLGetMetricStatisticsOutputType
+			case *BezosResponse_Ec2_DescribeInstancesOutput:
+				return opsee_aws_ec2.GraphQLDescribeInstancesOutputType
+			case *BezosResponse_Ec2_DescribeSecurityGroupsOutput:
+				return opsee_aws_ec2.GraphQLDescribeSecurityGroupsOutputType
+			case *BezosResponse_Ec2_DescribeSubnetsOutput:
+				return opsee_aws_ec2.GraphQLDescribeSubnetsOutputType
+			case *BezosResponse_Ec2_DescribeVpcsOutput:
+				return opsee_aws_ec2.GraphQLDescribeVpcsOutputType
+			case *BezosResponse_Ec2_DescribeRouteTablesOutput:
+				return opsee_aws_ec2.GraphQLDescribeRouteTablesOutputType
+			case *BezosResponse_Elb_DescribeLoadBalancersOutput:
+				return opsee_aws_elb.GraphQLDescribeLoadBalancersOutputType
+			case *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput:
+				return opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsOutputType
+			case *BezosResponse_Rds_DescribeDBInstancesOutput:
+				return opsee_aws_rds.GraphQLDescribeDBInstancesOutputType
+			}
+			return nil
+		},
+	})
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1011,16 +1854,7 @@ var _ grpc.ClientConn
 // Client API for Bezos service
 
 type BezosClient interface {
-	CloudwatchListMetrics(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_cloudwatch.ListMetricsOutput, error)
-	CloudwatchGetMetricStatistics(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_cloudwatch.GetMetricStatisticsOutput, error)
-	EC2DescribeInstances(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeInstancesOutput, error)
-	EC2DescribeSecurityGroups(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeSecurityGroupsOutput, error)
-	EC2DescribeSubnets(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeSubnetsOutput, error)
-	EC2DescribeVpcs(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeVpcsOutput, error)
-	EC2DescribeRouteTables(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeRouteTablesOutput, error)
-	ELBDescribeLoadBalancers(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_elb.DescribeLoadBalancersOutput, error)
-	AutoScalingDescribeAutoScalingGroups(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput, error)
-	RDSDescribeDBInstances(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_rds.DescribeDBInstancesOutput, error)
+	Get(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*BezosResponse, error)
 }
 
 type bezosClient struct {
@@ -1031,90 +1865,9 @@ func NewBezosClient(cc *grpc.ClientConn) BezosClient {
 	return &bezosClient{cc}
 }
 
-func (c *bezosClient) CloudwatchListMetrics(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_cloudwatch.ListMetricsOutput, error) {
-	out := new(opsee_aws_cloudwatch.ListMetricsOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/CloudwatchListMetrics", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) CloudwatchGetMetricStatistics(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_cloudwatch.GetMetricStatisticsOutput, error) {
-	out := new(opsee_aws_cloudwatch.GetMetricStatisticsOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/CloudwatchGetMetricStatistics", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) EC2DescribeInstances(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeInstancesOutput, error) {
-	out := new(opsee_aws_ec2.DescribeInstancesOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/EC2DescribeInstances", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) EC2DescribeSecurityGroups(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeSecurityGroupsOutput, error) {
-	out := new(opsee_aws_ec2.DescribeSecurityGroupsOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/EC2DescribeSecurityGroups", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) EC2DescribeSubnets(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeSubnetsOutput, error) {
-	out := new(opsee_aws_ec2.DescribeSubnetsOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/EC2DescribeSubnets", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) EC2DescribeVpcs(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeVpcsOutput, error) {
-	out := new(opsee_aws_ec2.DescribeVpcsOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/EC2DescribeVpcs", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) EC2DescribeRouteTables(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_ec2.DescribeRouteTablesOutput, error) {
-	out := new(opsee_aws_ec2.DescribeRouteTablesOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/EC2DescribeRouteTables", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) ELBDescribeLoadBalancers(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_elb.DescribeLoadBalancersOutput, error) {
-	out := new(opsee_aws_elb.DescribeLoadBalancersOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/ELBDescribeLoadBalancers", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) AutoScalingDescribeAutoScalingGroups(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput, error) {
-	out := new(opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/AutoScalingDescribeAutoScalingGroups", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bezosClient) RDSDescribeDBInstances(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*opsee_aws_rds.DescribeDBInstancesOutput, error) {
-	out := new(opsee_aws_rds.DescribeDBInstancesOutput)
-	err := grpc.Invoke(ctx, "/opsee.Bezos/RDSDescribeDBInstances", in, out, c.cc, opts...)
+func (c *bezosClient) Get(ctx context.Context, in *BezosRequest, opts ...grpc.CallOption) (*BezosResponse, error) {
+	out := new(BezosResponse)
+	err := grpc.Invoke(ctx, "/opsee.Bezos/Get", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1124,136 +1877,19 @@ func (c *bezosClient) RDSDescribeDBInstances(ctx context.Context, in *BezosReque
 // Server API for Bezos service
 
 type BezosServer interface {
-	CloudwatchListMetrics(context.Context, *BezosRequest) (*opsee_aws_cloudwatch.ListMetricsOutput, error)
-	CloudwatchGetMetricStatistics(context.Context, *BezosRequest) (*opsee_aws_cloudwatch.GetMetricStatisticsOutput, error)
-	EC2DescribeInstances(context.Context, *BezosRequest) (*opsee_aws_ec2.DescribeInstancesOutput, error)
-	EC2DescribeSecurityGroups(context.Context, *BezosRequest) (*opsee_aws_ec2.DescribeSecurityGroupsOutput, error)
-	EC2DescribeSubnets(context.Context, *BezosRequest) (*opsee_aws_ec2.DescribeSubnetsOutput, error)
-	EC2DescribeVpcs(context.Context, *BezosRequest) (*opsee_aws_ec2.DescribeVpcsOutput, error)
-	EC2DescribeRouteTables(context.Context, *BezosRequest) (*opsee_aws_ec2.DescribeRouteTablesOutput, error)
-	ELBDescribeLoadBalancers(context.Context, *BezosRequest) (*opsee_aws_elb.DescribeLoadBalancersOutput, error)
-	AutoScalingDescribeAutoScalingGroups(context.Context, *BezosRequest) (*opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput, error)
-	RDSDescribeDBInstances(context.Context, *BezosRequest) (*opsee_aws_rds.DescribeDBInstancesOutput, error)
+	Get(context.Context, *BezosRequest) (*BezosResponse, error)
 }
 
 func RegisterBezosServer(s *grpc.Server, srv BezosServer) {
 	s.RegisterService(&_Bezos_serviceDesc, srv)
 }
 
-func _Bezos_CloudwatchListMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Bezos_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
 	in := new(BezosRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(BezosServer).CloudwatchListMetrics(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_CloudwatchGetMetricStatistics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).CloudwatchGetMetricStatistics(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_EC2DescribeInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).EC2DescribeInstances(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_EC2DescribeSecurityGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).EC2DescribeSecurityGroups(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_EC2DescribeSubnets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).EC2DescribeSubnets(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_EC2DescribeVpcs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).EC2DescribeVpcs(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_EC2DescribeRouteTables_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).EC2DescribeRouteTables(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_ELBDescribeLoadBalancers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).ELBDescribeLoadBalancers(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_AutoScalingDescribeAutoScalingGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).AutoScalingDescribeAutoScalingGroups(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Bezos_RDSDescribeDBInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(BezosRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(BezosServer).RDSDescribeDBInstances(ctx, in)
+	out, err := srv.(BezosServer).Get(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -1265,44 +1901,8 @@ var _Bezos_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*BezosServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CloudwatchListMetrics",
-			Handler:    _Bezos_CloudwatchListMetrics_Handler,
-		},
-		{
-			MethodName: "CloudwatchGetMetricStatistics",
-			Handler:    _Bezos_CloudwatchGetMetricStatistics_Handler,
-		},
-		{
-			MethodName: "EC2DescribeInstances",
-			Handler:    _Bezos_EC2DescribeInstances_Handler,
-		},
-		{
-			MethodName: "EC2DescribeSecurityGroups",
-			Handler:    _Bezos_EC2DescribeSecurityGroups_Handler,
-		},
-		{
-			MethodName: "EC2DescribeSubnets",
-			Handler:    _Bezos_EC2DescribeSubnets_Handler,
-		},
-		{
-			MethodName: "EC2DescribeVpcs",
-			Handler:    _Bezos_EC2DescribeVpcs_Handler,
-		},
-		{
-			MethodName: "EC2DescribeRouteTables",
-			Handler:    _Bezos_EC2DescribeRouteTables_Handler,
-		},
-		{
-			MethodName: "ELBDescribeLoadBalancers",
-			Handler:    _Bezos_ELBDescribeLoadBalancers_Handler,
-		},
-		{
-			MethodName: "AutoScalingDescribeAutoScalingGroups",
-			Handler:    _Bezos_AutoScalingDescribeAutoScalingGroups_Handler,
-		},
-		{
-			MethodName: "RDSDescribeDBInstances",
-			Handler:    _Bezos_RDSDescribeDBInstances_Handler,
+			MethodName: "Get",
+			Handler:    _Bezos_Get_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{},
@@ -1525,6 +2125,201 @@ func (m *BezosRequest_Rds_DescribeDBInstancesInput) MarshalTo(data []byte) (int,
 	}
 	return i, nil
 }
+func (m *BezosResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *BezosResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.LastModified != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.LastModified.Size()))
+		n14, err := m.LastModified.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
+	}
+	if m.Output != nil {
+		nn15, err := m.Output.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn15
+	}
+	return i, nil
+}
+
+func (m *BezosResponse_Cloudwatch_ListMetricsOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Cloudwatch_ListMetricsOutput != nil {
+		data[i] = 0xaa
+		i++
+		data[i] = 0x6
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Cloudwatch_ListMetricsOutput.Size()))
+		n16, err := m.Cloudwatch_ListMetricsOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
+	}
+	return i, nil
+}
+func (m *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Cloudwatch_GetMetricStatisticsOutput != nil {
+		data[i] = 0xb2
+		i++
+		data[i] = 0x6
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Cloudwatch_GetMetricStatisticsOutput.Size()))
+		n17, err := m.Cloudwatch_GetMetricStatisticsOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
+	}
+	return i, nil
+}
+func (m *BezosResponse_Ec2_DescribeInstancesOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Ec2_DescribeInstancesOutput != nil {
+		data[i] = 0xca
+		i++
+		data[i] = 0xc
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Ec2_DescribeInstancesOutput.Size()))
+		n18, err := m.Ec2_DescribeInstancesOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
+	}
+	return i, nil
+}
+func (m *BezosResponse_Ec2_DescribeSecurityGroupsOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Ec2_DescribeSecurityGroupsOutput != nil {
+		data[i] = 0xd2
+		i++
+		data[i] = 0xc
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Ec2_DescribeSecurityGroupsOutput.Size()))
+		n19, err := m.Ec2_DescribeSecurityGroupsOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	return i, nil
+}
+func (m *BezosResponse_Ec2_DescribeSubnetsOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Ec2_DescribeSubnetsOutput != nil {
+		data[i] = 0xda
+		i++
+		data[i] = 0xc
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Ec2_DescribeSubnetsOutput.Size()))
+		n20, err := m.Ec2_DescribeSubnetsOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
+	}
+	return i, nil
+}
+func (m *BezosResponse_Ec2_DescribeVpcsOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Ec2_DescribeVpcsOutput != nil {
+		data[i] = 0xe2
+		i++
+		data[i] = 0xc
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Ec2_DescribeVpcsOutput.Size()))
+		n21, err := m.Ec2_DescribeVpcsOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
+	}
+	return i, nil
+}
+func (m *BezosResponse_Ec2_DescribeRouteTablesOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Ec2_DescribeRouteTablesOutput != nil {
+		data[i] = 0xea
+		i++
+		data[i] = 0xc
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Ec2_DescribeRouteTablesOutput.Size()))
+		n22, err := m.Ec2_DescribeRouteTablesOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n22
+	}
+	return i, nil
+}
+func (m *BezosResponse_Elb_DescribeLoadBalancersOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Elb_DescribeLoadBalancersOutput != nil {
+		data[i] = 0xea
+		i++
+		data[i] = 0x12
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Elb_DescribeLoadBalancersOutput.Size()))
+		n23, err := m.Elb_DescribeLoadBalancersOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n23
+	}
+	return i, nil
+}
+func (m *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Autoscaling_DescribeAutoScalingGroupsOutput != nil {
+		data[i] = 0x8a
+		i++
+		data[i] = 0x19
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Autoscaling_DescribeAutoScalingGroupsOutput.Size()))
+		n24, err := m.Autoscaling_DescribeAutoScalingGroupsOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n24
+	}
+	return i, nil
+}
+func (m *BezosResponse_Rds_DescribeDBInstancesOutput) MarshalTo(data []byte) (int, error) {
+	i := 0
+	if m.Rds_DescribeDBInstancesOutput != nil {
+		data[i] = 0xaa
+		i++
+		data[i] = 0x1f
+		i++
+		i = encodeVarintBezos(data, i, uint64(m.Rds_DescribeDBInstancesOutput.Size()))
+		n25, err := m.Rds_DescribeDBInstancesOutput.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n25
+	}
+	return i, nil
+}
 func encodeFixed64Bezos(data []byte, offset int, v uint64) int {
 	data[offset] = uint8(v)
 	data[offset+1] = uint8(v >> 8)
@@ -1638,6 +2433,89 @@ func NewPopulatedBezosRequest_Autoscaling_DescribeAutoScalingGroupsInput(r randy
 func NewPopulatedBezosRequest_Rds_DescribeDBInstancesInput(r randyBezos, easy bool) *BezosRequest_Rds_DescribeDBInstancesInput {
 	this := &BezosRequest_Rds_DescribeDBInstancesInput{}
 	this.Rds_DescribeDBInstancesInput = opsee_aws_rds.NewPopulatedDescribeDBInstancesInput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse(r randyBezos, easy bool) *BezosResponse {
+	this := &BezosResponse{}
+	if r.Intn(10) != 0 {
+		this.LastModified = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	oneofNumber_Output := []int32{101, 102, 201, 202, 203, 204, 205, 301, 401, 501}[r.Intn(10)]
+	switch oneofNumber_Output {
+	case 101:
+		this.Output = NewPopulatedBezosResponse_Cloudwatch_ListMetricsOutput(r, easy)
+	case 102:
+		this.Output = NewPopulatedBezosResponse_Cloudwatch_GetMetricStatisticsOutput(r, easy)
+	case 201:
+		this.Output = NewPopulatedBezosResponse_Ec2_DescribeInstancesOutput(r, easy)
+	case 202:
+		this.Output = NewPopulatedBezosResponse_Ec2_DescribeSecurityGroupsOutput(r, easy)
+	case 203:
+		this.Output = NewPopulatedBezosResponse_Ec2_DescribeSubnetsOutput(r, easy)
+	case 204:
+		this.Output = NewPopulatedBezosResponse_Ec2_DescribeVpcsOutput(r, easy)
+	case 205:
+		this.Output = NewPopulatedBezosResponse_Ec2_DescribeRouteTablesOutput(r, easy)
+	case 301:
+		this.Output = NewPopulatedBezosResponse_Elb_DescribeLoadBalancersOutput(r, easy)
+	case 401:
+		this.Output = NewPopulatedBezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput(r, easy)
+	case 501:
+		this.Output = NewPopulatedBezosResponse_Rds_DescribeDBInstancesOutput(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedBezosResponse_Cloudwatch_ListMetricsOutput(r randyBezos, easy bool) *BezosResponse_Cloudwatch_ListMetricsOutput {
+	this := &BezosResponse_Cloudwatch_ListMetricsOutput{}
+	this.Cloudwatch_ListMetricsOutput = opsee_aws_cloudwatch.NewPopulatedListMetricsOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Cloudwatch_GetMetricStatisticsOutput(r randyBezos, easy bool) *BezosResponse_Cloudwatch_GetMetricStatisticsOutput {
+	this := &BezosResponse_Cloudwatch_GetMetricStatisticsOutput{}
+	this.Cloudwatch_GetMetricStatisticsOutput = opsee_aws_cloudwatch.NewPopulatedGetMetricStatisticsOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Ec2_DescribeInstancesOutput(r randyBezos, easy bool) *BezosResponse_Ec2_DescribeInstancesOutput {
+	this := &BezosResponse_Ec2_DescribeInstancesOutput{}
+	this.Ec2_DescribeInstancesOutput = opsee_aws_ec2.NewPopulatedDescribeInstancesOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Ec2_DescribeSecurityGroupsOutput(r randyBezos, easy bool) *BezosResponse_Ec2_DescribeSecurityGroupsOutput {
+	this := &BezosResponse_Ec2_DescribeSecurityGroupsOutput{}
+	this.Ec2_DescribeSecurityGroupsOutput = opsee_aws_ec2.NewPopulatedDescribeSecurityGroupsOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Ec2_DescribeSubnetsOutput(r randyBezos, easy bool) *BezosResponse_Ec2_DescribeSubnetsOutput {
+	this := &BezosResponse_Ec2_DescribeSubnetsOutput{}
+	this.Ec2_DescribeSubnetsOutput = opsee_aws_ec2.NewPopulatedDescribeSubnetsOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Ec2_DescribeVpcsOutput(r randyBezos, easy bool) *BezosResponse_Ec2_DescribeVpcsOutput {
+	this := &BezosResponse_Ec2_DescribeVpcsOutput{}
+	this.Ec2_DescribeVpcsOutput = opsee_aws_ec2.NewPopulatedDescribeVpcsOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Ec2_DescribeRouteTablesOutput(r randyBezos, easy bool) *BezosResponse_Ec2_DescribeRouteTablesOutput {
+	this := &BezosResponse_Ec2_DescribeRouteTablesOutput{}
+	this.Ec2_DescribeRouteTablesOutput = opsee_aws_ec2.NewPopulatedDescribeRouteTablesOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Elb_DescribeLoadBalancersOutput(r randyBezos, easy bool) *BezosResponse_Elb_DescribeLoadBalancersOutput {
+	this := &BezosResponse_Elb_DescribeLoadBalancersOutput{}
+	this.Elb_DescribeLoadBalancersOutput = opsee_aws_elb.NewPopulatedDescribeLoadBalancersOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput(r randyBezos, easy bool) *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput {
+	this := &BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput{}
+	this.Autoscaling_DescribeAutoScalingGroupsOutput = opsee_aws_autoscaling.NewPopulatedDescribeAutoScalingGroupsOutput(r, easy)
+	return this
+}
+func NewPopulatedBezosResponse_Rds_DescribeDBInstancesOutput(r randyBezos, easy bool) *BezosResponse_Rds_DescribeDBInstancesOutput {
+	this := &BezosResponse_Rds_DescribeDBInstancesOutput{}
+	this.Rds_DescribeDBInstancesOutput = opsee_aws_rds.NewPopulatedDescribeDBInstancesOutput(r, easy)
 	return this
 }
 
@@ -1824,6 +2702,109 @@ func (m *BezosRequest_Rds_DescribeDBInstancesInput) Size() (n int) {
 	_ = l
 	if m.Rds_DescribeDBInstancesInput != nil {
 		l = m.Rds_DescribeDBInstancesInput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.LastModified != nil {
+		l = m.LastModified.Size()
+		n += 1 + l + sovBezos(uint64(l))
+	}
+	if m.Output != nil {
+		n += m.Output.Size()
+	}
+	return n
+}
+
+func (m *BezosResponse_Cloudwatch_ListMetricsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Cloudwatch_ListMetricsOutput != nil {
+		l = m.Cloudwatch_ListMetricsOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Cloudwatch_GetMetricStatisticsOutput != nil {
+		l = m.Cloudwatch_GetMetricStatisticsOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Ec2_DescribeInstancesOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Ec2_DescribeInstancesOutput != nil {
+		l = m.Ec2_DescribeInstancesOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Ec2_DescribeSecurityGroupsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Ec2_DescribeSecurityGroupsOutput != nil {
+		l = m.Ec2_DescribeSecurityGroupsOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Ec2_DescribeSubnetsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Ec2_DescribeSubnetsOutput != nil {
+		l = m.Ec2_DescribeSubnetsOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Ec2_DescribeVpcsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Ec2_DescribeVpcsOutput != nil {
+		l = m.Ec2_DescribeVpcsOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Ec2_DescribeRouteTablesOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Ec2_DescribeRouteTablesOutput != nil {
+		l = m.Ec2_DescribeRouteTablesOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Elb_DescribeLoadBalancersOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Elb_DescribeLoadBalancersOutput != nil {
+		l = m.Elb_DescribeLoadBalancersOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Autoscaling_DescribeAutoScalingGroupsOutput != nil {
+		l = m.Autoscaling_DescribeAutoScalingGroupsOutput.Size()
+		n += 2 + l + sovBezos(uint64(l))
+	}
+	return n
+}
+func (m *BezosResponse_Rds_DescribeDBInstancesOutput) Size() (n int) {
+	var l int
+	_ = l
+	if m.Rds_DescribeDBInstancesOutput != nil {
+		l = m.Rds_DescribeDBInstancesOutput.Size()
 		n += 2 + l + sovBezos(uint64(l))
 	}
 	return n
@@ -2336,6 +3317,409 @@ func (m *BezosRequest) Unmarshal(data []byte) error {
 	}
 	return nil
 }
+func (m *BezosResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBezos
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BezosResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BezosResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastModified", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastModified == nil {
+				m.LastModified = &opsee_types.Timestamp{}
+			}
+			if err := m.LastModified.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 101:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cloudwatch_ListMetricsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_cloudwatch.ListMetricsOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Cloudwatch_ListMetricsOutput{v}
+			iNdEx = postIndex
+		case 102:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cloudwatch_GetMetricStatisticsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_cloudwatch.GetMetricStatisticsOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Cloudwatch_GetMetricStatisticsOutput{v}
+			iNdEx = postIndex
+		case 201:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ec2_DescribeInstancesOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_ec2.DescribeInstancesOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Ec2_DescribeInstancesOutput{v}
+			iNdEx = postIndex
+		case 202:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ec2_DescribeSecurityGroupsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_ec2.DescribeSecurityGroupsOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Ec2_DescribeSecurityGroupsOutput{v}
+			iNdEx = postIndex
+		case 203:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ec2_DescribeSubnetsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_ec2.DescribeSubnetsOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Ec2_DescribeSubnetsOutput{v}
+			iNdEx = postIndex
+		case 204:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ec2_DescribeVpcsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_ec2.DescribeVpcsOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Ec2_DescribeVpcsOutput{v}
+			iNdEx = postIndex
+		case 205:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ec2_DescribeRouteTablesOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_ec2.DescribeRouteTablesOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Ec2_DescribeRouteTablesOutput{v}
+			iNdEx = postIndex
+		case 301:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Elb_DescribeLoadBalancersOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_elb.DescribeLoadBalancersOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Elb_DescribeLoadBalancersOutput{v}
+			iNdEx = postIndex
+		case 401:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Autoscaling_DescribeAutoScalingGroupsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput{v}
+			iNdEx = postIndex
+		case 501:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rds_DescribeDBInstancesOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBezos
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBezos
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &opsee_aws_rds.DescribeDBInstancesOutput{}
+			if err := v.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Output = &BezosResponse_Rds_DescribeDBInstancesOutput{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBezos(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBezos
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipBezos(data []byte) (n int, err error) {
 	l := len(data)
 	iNdEx := 0
@@ -2442,56 +3826,63 @@ var (
 )
 
 var fileDescriptorBezos = []byte{
-	// 814 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x94, 0x96, 0x4d, 0x4f, 0xdb, 0x4a,
-	0x14, 0x86, 0x09, 0x90, 0xa0, 0x3b, 0x5c, 0xe9, 0x4a, 0x73, 0x81, 0x9a, 0x50, 0x02, 0xe5, 0x1b,
-	0x2a, 0xd9, 0x2d, 0x55, 0xab, 0xb6, 0x3b, 0x02, 0x88, 0xa2, 0x82, 0xaa, 0x3a, 0xd0, 0x2f, 0xa9,
-	0x42, 0xb6, 0x33, 0x04, 0x4b, 0x49, 0xec, 0x7a, 0xc6, 0x50, 0xba, 0xeb, 0x3f, 0x68, 0x57, 0xdd,
-	0x77, 0xd5, 0x0d, 0xfb, 0x2e, 0xbb, 0xec, 0xa7, 0xd4, 0x9f, 0xd0, 0xf6, 0x3f, 0x54, 0xea, 0xb2,
-	0xc7, 0x33, 0xc6, 0x99, 0x84, 0x71, 0x12, 0x16, 0x96, 0xec, 0x39, 0xef, 0x79, 0x1f, 0x67, 0xc6,
-	0xe7, 0x55, 0xd0, 0xa0, 0x4d, 0x5e, 0x78, 0x54, 0xf7, 0x03, 0x8f, 0x79, 0x38, 0xeb, 0xf9, 0x94,
-	0x90, 0xfc, 0x95, 0x8a, 0xcb, 0x0e, 0x42, 0x5b, 0x77, 0xbc, 0x9a, 0xc1, 0x57, 0x0c, 0x5e, 0xb6,
-	0xc3, 0x7d, 0xf1, 0xc8, 0x9f, 0xc4, 0xad, 0x68, 0xcc, 0xdf, 0xee, 0xaa, 0x83, 0x1d, 0xfb, 0x84,
-	0x1a, 0xcc, 0xad, 0x11, 0xca, 0xac, 0x9a, 0x1f, 0xf7, 0xde, 0x3c, 0xd3, 0x6b, 0x5b, 0xd4, 0x75,
-	0x0c, 0xea, 0x1c, 0x90, 0x9a, 0x65, 0x58, 0x47, 0xd4, 0x70, 0xaa, 0x5e, 0x58, 0x3e, 0xb2, 0x98,
-	0x73, 0x20, 0x3c, 0xe2, 0xce, 0xab, 0x9d, 0x3b, 0x89, 0xb3, 0x7c, 0xee, 0x96, 0xaa, 0xdd, 0xd4,
-	0x72, 0xab, 0x73, 0x8b, 0x15, 0x32, 0x8f, 0x3a, 0x56, 0xd5, 0xad, 0x57, 0xce, 0x4b, 0x0b, 0xca,
-	0xb4, 0xa9, 0x65, 0xa1, 0x7d, 0x4b, 0x48, 0x49, 0x20, 0x94, 0x53, 0xaf, 0x10, 0xfa, 0xb7, 0x18,
-	0x1d, 0x9e, 0x49, 0x9e, 0x85, 0xb0, 0xa3, 0x78, 0x02, 0xf5, 0x47, 0x65, 0x2d, 0x33, 0x99, 0x59,
-	0x18, 0x5c, 0x1e, 0xd4, 0xc5, 0x01, 0xed, 0xc2, 0x92, 0xc9, 0x0b, 0x78, 0x04, 0xe5, 0x4c, 0x52,
-	0x71, 0xbd, 0xba, 0xd6, 0x0b, 0x92, 0x7f, 0xcc, 0x5c, 0xc0, 0x9f, 0xf0, 0x10, 0xca, 0x3e, 0xf0,
-	0x9d, 0xcd, 0xb2, 0xd6, 0xc7, 0x97, 0xb3, 0x87, 0xd1, 0x03, 0xd6, 0x51, 0x6e, 0xdb, 0x7a, 0xbe,
-	0x52, 0x21, 0x5a, 0x3f, 0x37, 0x1c, 0x89, 0x0d, 0xc5, 0xdb, 0xee, 0x9c, 0x9e, 0xa2, 0x99, 0xab,
-	0x71, 0x15, 0x76, 0xd1, 0x58, 0xe3, 0x9c, 0xf6, 0xb6, 0x5c, 0xca, 0xb6, 0x09, 0x0b, 0x5c, 0x87,
-	0x6e, 0xd6, 0xfd, 0x90, 0x69, 0x84, 0x9b, 0xcc, 0xc5, 0x26, 0xf0, 0xd3, 0xf5, 0x86, 0x5a, 0x6f,
-	0x55, 0xdf, 0xe9, 0x31, 0xf3, 0x8d, 0x72, 0x6b, 0x15, 0xbf, 0xcc, 0xa0, 0x69, 0x89, 0xb5, 0x41,
-	0xe2, 0x72, 0x89, 0x59, 0x0c, 0xb4, 0x09, 0x73, 0x9f, 0x33, 0x75, 0x35, 0x33, 0xad, 0x0b, 0xd8,
-	0x53, 0x0d, 0x59, 0x9a, 0x0a, 0x57, 0x50, 0x1e, 0x3e, 0xae, 0xbd, 0x35, 0x42, 0x9d, 0xc0, 0xb5,
-	0xc9, 0x66, 0x1d, 0x76, 0xa3, 0xee, 0x90, 0x98, 0xfc, 0x49, 0x1c, 0xc2, 0xac, 0x84, 0x06, 0xb5,
-	0xae, 0x56, 0x03, 0x71, 0x14, 0xaa, 0xea, 0x22, 0x3e, 0x44, 0x13, 0x32, 0xa8, 0x44, 0x9c, 0x30,
-	0x70, 0xd9, 0xf1, 0x46, 0xe0, 0x85, 0x7e, 0x4c, 0xfb, 0x2c, 0x68, 0x4b, 0x29, 0x34, 0x45, 0x0b,
-	0x20, 0x0b, 0x12, 0x52, 0xa1, 0xc0, 0x16, 0xd2, 0x9a, 0xb8, 0xa1, 0x5d, 0x27, 0x2c, 0x06, 0x7e,
-	0x11, 0xc0, 0xe9, 0x34, 0xa0, 0xa4, 0x05, 0xd2, 0x05, 0x99, 0x24, 0x95, 0xf0, 0x23, 0x34, 0x2c,
-	0x23, 0xe0, 0x23, 0x8c, 0xfd, 0xbf, 0x0a, 0xff, 0xc9, 0x14, 0xff, 0x44, 0x08, 0xe6, 0x43, 0x92,
-	0x79, 0xb2, 0x8e, 0x6b, 0xe8, 0xa2, 0xec, 0x6c, 0x7a, 0x21, 0x23, 0x3b, 0x96, 0x5d, 0x3d, 0x3d,
-	0x9f, 0x6f, 0x02, 0x30, 0x9f, 0x02, 0x68, 0xd5, 0x03, 0x67, 0x4c, 0xe2, 0xb4, 0x96, 0x31, 0x45,
-	0x05, 0x88, 0x8d, 0x04, 0xb7, 0xe5, 0x59, 0xe5, 0xa2, 0x55, 0x8d, 0x0e, 0x31, 0x88, 0x81, 0x27,
-	0xbd, 0x1c, 0xb8, 0x28, 0x03, 0xab, 0xb6, 0x9e, 0xde, 0x01, 0xc8, 0x71, 0x50, 0xa4, 0x0b, 0xf0,
-	0x9b, 0x0c, 0x5a, 0x92, 0x92, 0x27, 0xa1, 0xaf, 0xc0, 0x5a, 0x49, 0xac, 0xc9, 0x1f, 0xc9, 0xeb,
-	0x3e, 0xfe, 0x06, 0xd7, 0xa5, 0x37, 0x90, 0xba, 0xf5, 0xf6, 0xdd, 0xf0, 0x36, 0x8b, 0x92, 0xba,
-	0xbd, 0x38, 0xda, 0x7d, 0xc8, 0xb5, 0xe4, 0x85, 0xd6, 0x8a, 0x2d, 0xd3, 0xf1, 0xbb, 0xef, 0xcc,
-	0xee, 0x83, 0x5e, 0x4f, 0xd3, 0x47, 0xbb, 0x0f, 0xf5, 0xb4, 0x72, 0x71, 0x00, 0x65, 0xdd, 0xe8,
-	0x66, 0xf9, 0x04, 0xee, 0x78, 0x24, 0xe2, 0x87, 0x68, 0x78, 0x55, 0x95, 0x1f, 0xf8, 0xff, 0x98,
-	0x29, 0x27, 0x67, 0x7e, 0xbe, 0x63, 0x2a, 0xdd, 0x0b, 0x19, 0x00, 0xa6, 0x7a, 0x60, 0xec, 0xc7,
-	0x57, 0xdb, 0x85, 0x83, 0x1a, 0x60, 0x74, 0x1d, 0x41, 0x09, 0x68, 0x17, 0x0d, 0xad, 0xaf, 0x9e,
-	0xcd, 0x04, 0xb5, 0xff, 0x5c, 0xa7, 0x9c, 0x49, 0x6c, 0xf7, 0xd0, 0xa8, 0x64, 0xdb, 0x3c, 0xf7,
-	0x6a, 0xef, 0xcb, 0x5d, 0xa5, 0x4a, 0x02, 0xb8, 0x8f, 0xb0, 0x0c, 0x10, 0xe3, 0xae, 0x76, 0x9e,
-	0x69, 0x1f, 0x1f, 0x89, 0xe5, 0x5d, 0xf4, 0x9f, 0x64, 0x19, 0x0d, 0xb9, 0xda, 0xef, 0x52, 0x9b,
-	0xb8, 0x48, 0xcc, 0x1e, 0xa3, 0x11, 0xc9, 0x4c, 0x9a, 0x64, 0xb5, 0xe7, 0x42, 0xe7, 0x84, 0x48,
-	0xac, 0x9f, 0x22, 0x6d, 0x7d, 0xab, 0xa8, 0x9c, 0x58, 0xb5, 0xf9, 0x52, 0x37, 0x69, 0x90, 0xd8,
-	0x87, 0x68, 0x46, 0x9a, 0xb7, 0xd4, 0x11, 0x54, 0xa3, 0x6e, 0x9c, 0x77, 0xec, 0xe5, 0x0d, 0x33,
-	0xd7, 0x4a, 0x8a, 0xe1, 0xeb, 0xbc, 0x61, 0x29, 0x43, 0x7d, 0x6a, 0x5d, 0x9c, 0xfd, 0xf3, 0xb3,
-	0x90, 0x79, 0xf7, 0xab, 0x90, 0x79, 0x0f, 0xd7, 0x47, 0xb8, 0xbe, 0xc3, 0xf5, 0x03, 0xae, 0x0f,
-	0x6f, 0x27, 0x32, 0x4f, 0x06, 0xe0, 0x3f, 0xcb, 0xa1, 0xeb, 0x10, 0x3b, 0xc7, 0xff, 0xf0, 0x5c,
-	0xfb, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x4b, 0x3d, 0x04, 0x16, 0xac, 0x0a, 0x00, 0x00,
+	// 923 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x94, 0x96, 0x4d, 0x4f, 0xe3, 0x46,
+	0x18, 0xc7, 0x31, 0x21, 0xa1, 0x0c, 0x70, 0x99, 0x02, 0x0d, 0x01, 0x12, 0x1a, 0xde, 0x42, 0x90,
+	0xec, 0x36, 0x55, 0xab, 0xb6, 0x9c, 0x88, 0x90, 0x28, 0x12, 0xa8, 0x52, 0xa0, 0x55, 0xd5, 0x1e,
+	0x22, 0xbf, 0x0c, 0xc1, 0x95, 0x13, 0xbb, 0x9e, 0x31, 0x94, 0xde, 0x2a, 0xf5, 0x0b, 0xb4, 0x97,
+	0x4a, 0x3d, 0xf6, 0xd4, 0x4b, 0xef, 0x3d, 0xf6, 0xd8, 0x57, 0x69, 0x3f, 0xc2, 0xee, 0x7e, 0x80,
+	0xbd, 0xad, 0xb4, 0xc7, 0x1d, 0x7b, 0x1e, 0x9c, 0x49, 0xf0, 0x24, 0xe1, 0x60, 0x29, 0x9e, 0xe7,
+	0xff, 0x3c, 0xbf, 0xc1, 0x93, 0xfc, 0x30, 0x9a, 0xb7, 0xc8, 0x77, 0x3e, 0xd5, 0x83, 0xd0, 0x67,
+	0x3e, 0xce, 0xfb, 0x01, 0x25, 0xa4, 0xf4, 0x4e, 0xc7, 0x65, 0xd7, 0x91, 0xa5, 0xdb, 0x7e, 0xd7,
+	0x48, 0x56, 0x8c, 0xa4, 0x6c, 0x45, 0x57, 0xe2, 0x36, 0xb9, 0x13, 0x1f, 0x45, 0x63, 0xe9, 0xe3,
+	0x89, 0x3a, 0xd8, 0x5d, 0x40, 0xa8, 0xc1, 0xdc, 0x2e, 0xa1, 0xcc, 0xec, 0x06, 0xd0, 0xfb, 0xe1,
+	0x83, 0x5e, 0xcb, 0xa4, 0xae, 0x6d, 0x50, 0xfb, 0x9a, 0x74, 0x4d, 0xc3, 0xbc, 0xa5, 0x86, 0xed,
+	0xf9, 0x91, 0x73, 0x6b, 0x32, 0xfb, 0x5a, 0xcc, 0x80, 0xce, 0x77, 0xc7, 0x77, 0x12, 0xbb, 0xf1,
+	0xe8, 0x16, 0xcf, 0x1a, 0x68, 0xf9, 0x68, 0x7c, 0x8b, 0x19, 0x31, 0x9f, 0xda, 0xa6, 0xe7, 0xf6,
+	0x3a, 0x8f, 0xa5, 0x85, 0x0e, 0x1d, 0x68, 0xa9, 0x8d, 0x6e, 0x89, 0x28, 0x09, 0x45, 0xb2, 0xfa,
+	0x13, 0x42, 0x0b, 0xcd, 0xf8, 0xf0, 0x5a, 0xe4, 0x9b, 0x88, 0x3f, 0x51, 0x5c, 0x41, 0x33, 0x71,
+	0xb9, 0xa8, 0x6d, 0x6a, 0xb5, 0xf9, 0xc6, 0xbc, 0x2e, 0x0e, 0xe8, 0x33, 0xbe, 0xd4, 0x4a, 0x0a,
+	0x78, 0x05, 0x15, 0x42, 0xd2, 0x71, 0xfd, 0x5e, 0x71, 0x9a, 0x47, 0xe6, 0x5a, 0x70, 0x87, 0x97,
+	0x51, 0xe1, 0x26, 0xb0, 0xdb, 0xae, 0x53, 0xcc, 0x25, 0xeb, 0x79, 0x7e, 0x77, 0xea, 0x60, 0x03,
+	0xcd, 0x76, 0xcd, 0x6f, 0xdb, 0x66, 0x87, 0x14, 0x67, 0x92, 0x91, 0x2b, 0x30, 0x52, 0xec, 0xf7,
+	0xf2, 0xfe, 0x1c, 0x5b, 0x05, 0x1e, 0x3b, 0xea, 0x10, 0xec, 0xa2, 0xb5, 0xfe, 0x49, 0xb5, 0xcf,
+	0x5c, 0xca, 0xce, 0x09, 0x0b, 0x5d, 0x9b, 0x9e, 0xf6, 0x82, 0x88, 0x15, 0x49, 0x32, 0x64, 0x17,
+	0x86, 0xf0, 0x3f, 0x5e, 0xef, 0xa7, 0xf5, 0xe1, 0xf4, 0x27, 0x53, 0xad, 0x52, 0xbf, 0x3c, 0x5c,
+	0xc5, 0xdf, 0x6b, 0x68, 0x4b, 0x62, 0x9d, 0x10, 0x28, 0x5f, 0x30, 0x93, 0xf1, 0x6c, 0xca, 0xbc,
+	0x4a, 0x98, 0x7a, 0x36, 0x53, 0xd5, 0xc5, 0xd9, 0xd5, 0x7e, 0x4c, 0x95, 0xc2, 0x1d, 0x54, 0xe2,
+	0x5f, 0xaf, 0xf6, 0x31, 0xa1, 0x76, 0xe8, 0x5a, 0xe4, 0xb4, 0xc7, 0x9f, 0x46, 0xcf, 0x26, 0x40,
+	0xfe, 0x5b, 0x1c, 0xc3, 0x8e, 0x84, 0xe6, 0x69, 0x3d, 0x3b, 0xcd, 0x89, 0xab, 0xbc, 0x9a, 0x5d,
+	0xc4, 0x37, 0xa8, 0x22, 0x83, 0x2e, 0x88, 0x1d, 0x85, 0x2e, 0xbb, 0x3b, 0x09, 0xfd, 0x28, 0x00,
+	0xda, 0x3f, 0x82, 0x56, 0x57, 0xd0, 0x32, 0x5a, 0x38, 0xb2, 0x2c, 0x21, 0x33, 0x12, 0xd8, 0x44,
+	0xc5, 0x01, 0x6e, 0x64, 0xf5, 0x08, 0x03, 0xe0, 0xbf, 0x02, 0xb8, 0xa5, 0x02, 0x4a, 0x59, 0x4e,
+	0x7a, 0x4b, 0x26, 0x49, 0x25, 0xfc, 0x05, 0x5a, 0x96, 0x11, 0x9f, 0x07, 0xf7, 0x07, 0xf7, 0x9f,
+	0x98, 0xbf, 0xa9, 0x98, 0x9f, 0x06, 0xf9, 0xf0, 0x25, 0x69, 0x78, 0xba, 0x8e, 0xbb, 0x68, 0x5d,
+	0x9e, 0xdc, 0xf2, 0x23, 0x46, 0x2e, 0x4d, 0xcb, 0xbb, 0x3f, 0x9f, 0xff, 0x05, 0x60, 0x4f, 0x01,
+	0x18, 0xce, 0x73, 0xce, 0x9a, 0xc4, 0x19, 0x2e, 0x63, 0x8a, 0xca, 0x5c, 0x1c, 0x29, 0xee, 0xcc,
+	0x37, 0x9d, 0xa6, 0xe9, 0xc5, 0x87, 0x18, 0x02, 0xf0, 0xf7, 0xe9, 0x04, 0xb8, 0x2f, 0x03, 0x3d,
+	0x4b, 0x57, 0x77, 0x70, 0xe4, 0x06, 0x4f, 0xa8, 0x03, 0xf8, 0x67, 0x0d, 0xd5, 0x25, 0xf7, 0xa4,
+	0xf4, 0x23, 0xbe, 0x76, 0x21, 0xd6, 0xe4, 0x2f, 0xc9, 0x8f, 0xb9, 0x64, 0x07, 0xef, 0x4b, 0x3b,
+	0x90, 0xba, 0xf5, 0xd1, 0xdd, 0x7c, 0x37, 0xfb, 0x52, 0x7a, 0x74, 0x38, 0x7e, 0xfa, 0xdc, 0x6c,
+	0xe9, 0x86, 0x8e, 0x9b, 0x43, 0xbf, 0x8e, 0x97, 0xb9, 0x07, 0x4f, 0x9f, 0xe7, 0x75, 0x55, 0x3e,
+	0x7e, 0xfa, 0xbc, 0xae, 0x2a, 0x37, 0x67, 0x51, 0xde, 0x8d, 0x3f, 0x54, 0x5f, 0xcc, 0xa1, 0x45,
+	0x90, 0x22, 0x0d, 0xfc, 0x1e, 0x25, 0xf8, 0x10, 0x2d, 0x7a, 0x26, 0x65, 0xed, 0xae, 0xef, 0xb8,
+	0x57, 0x2e, 0x71, 0x40, 0x8f, 0x2a, 0x97, 0x2d, 0xc4, 0xe1, 0x73, 0xc8, 0x62, 0x0f, 0xad, 0x67,
+	0x1b, 0xed, 0xd3, 0x88, 0xf5, 0x95, 0xb6, 0x37, 0x56, 0x69, 0x22, 0x1e, 0xff, 0x15, 0x99, 0x4e,
+	0x13, 0x65, 0xfc, 0x83, 0x86, 0xb6, 0x47, 0x4b, 0x0d, 0xb0, 0xc2, 0x6a, 0xc6, 0xc4, 0x56, 0x4b,
+	0xf1, 0x5b, 0x23, 0xb5, 0x06, 0xdb, 0xf8, 0x1a, 0xad, 0x65, 0x7a, 0x0d, 0xe0, 0x20, 0xb6, 0xdd,
+	0x71, 0x62, 0x4b, 0xa1, 0xa5, 0x2c, 0xb3, 0x01, 0xeb, 0x0e, 0x6d, 0xaa, 0xd5, 0x06, 0x40, 0x70,
+	0xdb, 0xc1, 0x44, 0x6e, 0x4b, 0xa9, 0x15, 0xa5, 0xdc, 0x00, 0xed, 0xa0, 0xd5, 0x0c, 0xbb, 0x01,
+	0x13, 0xf4, 0xb6, 0x3d, 0x5a, 0x6f, 0x29, 0xac, 0xf8, 0xd0, 0x6f, 0x40, 0xf9, 0x0a, 0xad, 0x0c,
+	0x0b, 0x0e, 0x10, 0x60, 0xb8, 0xb7, 0x47, 0x18, 0x2e, 0x9d, 0xbf, 0x3c, 0xa4, 0x38, 0x18, 0x1e,
+	0xa0, 0x0d, 0x85, 0xe3, 0x80, 0x01, 0x92, 0xab, 0x8d, 0x97, 0x5c, 0x8a, 0x5a, 0xcf, 0xb6, 0x1c,
+	0x10, 0xe3, 0x7f, 0x45, 0x2a, 0xcd, 0x01, 0x13, 0x3c, 0x57, 0x9f, 0xc4, 0x73, 0x29, 0xb5, 0xac,
+	0x12, 0x1d, 0x70, 0x7f, 0xd1, 0xd0, 0xc1, 0x44, 0xa6, 0x83, 0x4d, 0x80, 0xea, 0x3e, 0x78, 0xac,
+	0xea, 0xd2, 0x0d, 0xd5, 0x27, 0x71, 0x5d, 0xff, 0x18, 0x14, 0xb2, 0x83, 0xdd, 0x80, 0xed, 0x6a,
+	0xe3, 0x6d, 0xd7, 0x3f, 0x86, 0x6c, 0xdd, 0x89, 0x7a, 0xf3, 0x0d, 0x54, 0xf0, 0x93, 0x4f, 0x8d,
+	0x43, 0x94, 0x4f, 0x7c, 0x87, 0x1b, 0x28, 0xc7, 0x7f, 0xd2, 0xf8, 0x4d, 0x60, 0xc8, 0x6f, 0x86,
+	0xa5, 0xa5, 0xc1, 0x45, 0x61, 0xc6, 0xea, 0x54, 0x73, 0xe7, 0xd5, 0xb3, 0xb2, 0xf6, 0xdb, 0xf3,
+	0xb2, 0xf6, 0x07, 0xbf, 0xfe, 0xe2, 0xd7, 0x13, 0x7e, 0x3d, 0xe5, 0xd7, 0x9f, 0xbf, 0x56, 0xb4,
+	0x2f, 0x67, 0xf9, 0x3b, 0xe3, 0x8d, 0x6b, 0x13, 0xab, 0x90, 0xbc, 0x70, 0xbe, 0xf7, 0x3a, 0x00,
+	0x00, 0xff, 0xff, 0xec, 0xb1, 0x4d, 0x07, 0x2c, 0x0c, 0x00, 0x00,
 }

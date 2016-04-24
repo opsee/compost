@@ -43,6 +43,10 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		for _, result := range results {
 			for _, res := range result.Responses {
 				if res.Reply == nil {
+					if res.Response == nil {
+						continue
+					}
+
 					any, err := opsee_types.UnmarshalAny(res.Response)
 					if err != nil {
 						log.WithError(err).Error("couldn't list results from beavis")
@@ -68,6 +72,10 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		for _, check := range checks {
 			check.Results = checkMap[check.Id]
 			if check.Spec == nil {
+				if check.CheckSpec == nil {
+					continue
+				}
+
 				any, err := opsee_types.UnmarshalAny(check.CheckSpec)
 				if err != nil {
 					log.WithError(err).Error("couldn't list checks from bartnet")

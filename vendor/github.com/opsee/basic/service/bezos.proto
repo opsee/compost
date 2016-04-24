@@ -16,9 +16,9 @@ option (opseeproto.graphql) = true;
 
 message BezosRequest {
   User user = 1;
-  string Region = 2;
-  string VpcId = 3;
-  opsee.types.Timestamp MaxAge = 4;
+  string region = 2;
+  string vpc_id = 3;
+  opsee.types.Timestamp max_age = 4;
 
   oneof input {
     aws.cloudwatch.ListMetricsInput cloudwatch_ListMetricsInput = 101;
@@ -38,19 +38,27 @@ message BezosRequest {
   }
 }
 
+message BezosResponse {
+  opsee.types.Timestamp last_modified = 1;
+
+  oneof output {
+    aws.cloudwatch.ListMetricsOutput cloudwatch_ListMetricsOutput = 101;
+    aws.cloudwatch.GetMetricStatisticsOutput cloudwatch_GetMetricStatisticsOutput = 102;
+
+    aws.ec2.DescribeInstancesOutput ec2_DescribeInstancesOutput = 201;
+    aws.ec2.DescribeSecurityGroupsOutput ec2_DescribeSecurityGroupsOutput = 202;
+    aws.ec2.DescribeSubnetsOutput ec2_DescribeSubnetsOutput = 203;
+    aws.ec2.DescribeVpcsOutput ec2_DescribeVpcsOutput = 204;
+    aws.ec2.DescribeRouteTablesOutput ec2_DescribeRouteTablesOutput = 205;
+
+    aws.elb.DescribeLoadBalancersOutput elb_DescribeLoadBalancersOutput = 301;
+
+    aws.autoscaling.DescribeAutoScalingGroupsOutput autoscaling_DescribeAutoScalingGroupsOutput = 401;
+
+    aws.rds.DescribeDBInstancesOutput rds_DescribeDBInstancesOutput = 501;
+  }
+}
+
 service Bezos {
-  rpc CloudwatchListMetrics(BezosRequest) returns (aws.cloudwatch.ListMetricsOutput) {}
-  rpc CloudwatchGetMetricStatistics(BezosRequest) returns (aws.cloudwatch.GetMetricStatisticsOutput) {}
-
-  rpc EC2DescribeInstances(BezosRequest) returns (aws.ec2.DescribeInstancesOutput) {}
-  rpc EC2DescribeSecurityGroups(BezosRequest) returns (aws.ec2.DescribeSecurityGroupsOutput) {}
-  rpc EC2DescribeSubnets(BezosRequest) returns (aws.ec2.DescribeSubnetsOutput) {}
-  rpc EC2DescribeVpcs(BezosRequest) returns (aws.ec2.DescribeVpcsOutput) {}
-  rpc EC2DescribeRouteTables(BezosRequest) returns (aws.ec2.DescribeRouteTablesOutput) {}
-
-  rpc ELBDescribeLoadBalancers(BezosRequest) returns (aws.elb.DescribeLoadBalancersOutput) {}
-
-  rpc AutoScalingDescribeAutoScalingGroups(BezosRequest) returns (aws.autoscaling.DescribeAutoScalingGroupsOutput) {}
-
-  rpc RDSDescribeDBInstances(BezosRequest) returns (aws.rds.DescribeDBInstancesOutput) {}
+  rpc Get(BezosRequest) returns (BezosResponse) {}
 }
