@@ -10,38 +10,46 @@ import (
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
+	"sync"
 )
+
+type checkCompostResponse struct {
+	response interface{}
+}
 
 // ListChecks fetches Checks from Bartnet and CheckResults from Beavis
 // concurrently, then zips them together. If the request to Beavis fails,
 // then checks are returned without results.
 func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.Check, error) {
 	var (
-		resultChan = make(chan []*schema.CheckResult)
-		notifChan  = make(chan []*hugs.Notification)
-		errChan    = make(chan error)
-		checkMap   = make(map[string][]*schema.CheckResult)
-		notifMap   = make(map[string][]*schema.Notification)
+		responseChan = make(chan *checkCompostResponse)
+		checkMap     = make(map[string][]*schema.CheckResult)
+		notifMap     = make(map[string][]*schema.Notification)
+		wg           sync.WaitGroup
 	)
 
+	wg.Add(1)
 	go func() {
 		results, err := c.Beavis.ListResults(user)
 		if err != nil {
-			errChan <- err
-			return
+			responseChan <- &checkCompostResponse{err}
+		} else {
+			responseChan <- &checkCompostResponse{results}
 		}
 
-		resultChan <- results
+		wg.Done()
 	}()
 
+	wg.Add(1)
 	go func() {
 		notifs, err := c.Hugs.ListNotifications(user)
 		if err != nil {
-			errChan <- err
-			return
+			responseChan <- &checkCompostResponse{err}
+		} else {
+			responseChan <- &checkCompostResponse{notifs}
 		}
 
-		notifChan <- notifs
+		wg.Done()
 	}()
 
 	checks, err := c.Bartnet.ListChecks(user)
@@ -50,70 +58,75 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		return nil, err
 	}
 
-	select {
-	case results := <-resultChan:
-		for _, result := range results {
-			for _, res := range result.Responses {
-				if res.Reply == nil {
-					if res.Response == nil {
+	wg.Wait()
+	close(responseChan)
+
+	for resp := range responseChan {
+		switch t := resp.response.(type) {
+		case []*schema.CheckResult:
+			for _, result := range t {
+				for _, res := range result.Responses {
+					if res.Reply == nil {
+						if res.Response == nil {
+							continue
+						}
+
+						any, err := opsee_types.UnmarshalAny(res.Response)
+						if err != nil {
+							log.WithError(err).Error("couldn't list results from beavis")
+							return nil, err
+						}
+
+						switch reply := any.(type) {
+						case *schema.HttpResponse:
+							res.Reply = &schema.CheckResponse_HttpResponse{reply}
+						case *schema.CloudWatchResponse:
+							res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
+						}
+					}
+				}
+
+				if _, ok := checkMap[result.CheckId]; !ok {
+					checkMap[result.CheckId] = []*schema.CheckResult{result}
+				} else {
+					checkMap[result.CheckId] = append(checkMap[result.CheckId], result)
+				}
+			}
+
+			for _, check := range checks {
+				check.Results = checkMap[check.Id]
+				if check.Spec == nil {
+					if check.CheckSpec == nil {
 						continue
 					}
 
-					any, err := opsee_types.UnmarshalAny(res.Response)
+					any, err := opsee_types.UnmarshalAny(check.CheckSpec)
 					if err != nil {
-						log.WithError(err).Error("couldn't list results from beavis")
+						log.WithError(err).Error("couldn't list checks from bartnet")
 						return nil, err
 					}
 
-					switch reply := any.(type) {
-					case *schema.HttpResponse:
-						res.Reply = &schema.CheckResponse_HttpResponse{reply}
-					case *schema.CloudWatchResponse:
-						res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
+					switch spec := any.(type) {
+					case *schema.HttpCheck:
+						check.Spec = &schema.Check_HttpCheck{spec}
+					case *schema.CloudWatchCheck:
+						check.Spec = &schema.Check_CloudwatchCheck{spec}
 					}
 				}
 			}
 
-			if _, ok := checkMap[result.CheckId]; !ok {
-				checkMap[result.CheckId] = []*schema.CheckResult{result}
-			} else {
-				checkMap[result.CheckId] = append(checkMap[result.CheckId], result)
+		case []*hugs.Notification:
+			for _, notif := range t {
+				notifMap[notif.CheckId] = append(notifMap[notif.CheckId], &schema.Notification{Type: notif.Type, Value: notif.Value})
 			}
-		}
 
-		for _, check := range checks {
-			check.Results = checkMap[check.Id]
-			if check.Spec == nil {
-				if check.CheckSpec == nil {
-					continue
-				}
-
-				any, err := opsee_types.UnmarshalAny(check.CheckSpec)
-				if err != nil {
-					log.WithError(err).Error("couldn't list checks from bartnet")
-					return nil, err
-				}
-
-				switch spec := any.(type) {
-				case *schema.HttpCheck:
-					check.Spec = &schema.Check_HttpCheck{spec}
-				case *schema.CloudWatchCheck:
-					check.Spec = &schema.Check_CloudwatchCheck{spec}
-				}
+			for _, check := range checks {
+				check.Notifications = notifMap[check.Id]
 			}
-		}
 
-	case notifs := <-notifChan:
-		for _, notif := range notifs {
-			notifMap[notif.CheckId] = append(notifMap[notif.CheckId], &schema.Notification{Type: notif.Type, Value: notif.Value})
+		case error:
+			log.WithError(err).Error("error composting checks")
 		}
-
-		for _, check := range checks {
-			check.Notifications = notifMap[check.Id]
-		}
-
-	case err = <-errChan:
-		log.WithError(err).Error("error composting checks")
 	}
 
 	return checks, nil
