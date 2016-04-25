@@ -4,13 +4,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/graphql-go/graphql"
 	"github.com/opsee/basic/schema"
+	opsee_aws_autoscaling "github.com/opsee/basic/schema/aws/autoscaling"
+	opsee_aws_cloudwatch "github.com/opsee/basic/schema/aws/cloudwatch"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
 	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
+	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	"time"
 	// log "github.com/sirupsen/logrus"
 )
@@ -458,6 +460,7 @@ func (c *Composter) queryGroups() *graphql.Field {
 			Types: []*graphql.Object{
 				opsee_aws_ec2.GraphQLSecurityGroupType,
 				opsee_aws_elb.GraphQLLoadBalancerDescriptionType,
+				opsee_aws_autoscaling.GraphQLGroupType,
 			},
 			ResolveType: func(value interface{}, info graphql.ResolveInfo) *graphql.Object {
 				switch value.(type) {
@@ -465,6 +468,8 @@ func (c *Composter) queryGroups() *graphql.Field {
 					return opsee_aws_ec2.GraphQLSecurityGroupType
 				case *opsee_aws_elb.LoadBalancerDescription:
 					return opsee_aws_elb.GraphQLLoadBalancerDescriptionType
+				case *opsee_aws_autoscaling.Group:
+					return opsee_aws_autoscaling.GraphQLGroupType
 				}
 				return nil
 			},
@@ -707,15 +712,20 @@ func (c *Composter) queryMetrics() *graphql.Field {
 				period    = 60
 				endTime   = time.Now().UTC().Add(time.Duration(-1) * time.Minute) // 1 minute lag.  otherwise we won't get stats
 				startTime = endTime.Add(time.Duration(-1*interval) * time.Second)
+				startTs   = &opsee_types.Timestamp{}
+				endTs     = &opsee_types.Timestamp{}
 			)
 
-			return &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(startTime),
-				EndTime:    aws.Time(endTime),
+			startTs.Scan(startTime)
+			endTs.Scan(endTime)
+
+			return &opsee_aws_cloudwatch.GetMetricStatisticsInput{
+				StartTime:  startTs,
+				EndTime:    endTs,
 				Period:     aws.Int64(int64(period)),
 				Namespace:  aws.String(namespace),
-				Statistics: []*string{aws.String("Average")},
-				Dimensions: []*cloudwatch.Dimension{
+				Statistics: []string{"Average"},
+				Dimensions: []*opsee_aws_cloudwatch.Dimension{
 					{
 						Name:  aws.String(dimensionName),
 						Value: aws.String(instanceId),
@@ -740,7 +750,7 @@ func (c *Composter) queryMetricName(metricName string) *graphql.Field {
 				return nil, errDecodeQueryContext
 			}
 
-			input, ok := p.Source.(*cloudwatch.GetMetricStatisticsInput)
+			input, ok := p.Source.(*opsee_aws_cloudwatch.GetMetricStatisticsInput)
 			if !ok {
 				return nil, errDecodeMetricStatisticsInput
 			}

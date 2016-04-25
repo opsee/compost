@@ -29,7 +29,7 @@ type Client struct {
 	Vape     opsee.VapeClient
 	Keelhaul opsee.KeelhaulClient
 	Hugs     hugs.Client
-	// Bezos    opsee.BezosClient
+	Bezos    opsee.BezosClient
 }
 
 func NewClient(config ClientConfig) (*Client, error) {
@@ -48,10 +48,10 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, err
 	}
 
-	// bezosConn, err := grpcConn(config.Bezos, config.SkipVerify)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	bezosConn, err := grpcConn(config.Bezos, config.SkipVerify)
+	if err != nil {
+		return nil, err
+	}
 
 	return &Client{
 		Bartnet:  bartnet.New(config.Bartnet),
@@ -60,7 +60,7 @@ func NewClient(config ClientConfig) (*Client, error) {
 		Vape:     opsee.NewVapeClient(vapeConn),
 		Keelhaul: opsee.NewKeelhaulClient(keelhaulConn),
 		Hugs:     hugs.New(config.Hugs),
-		// Bezos:    opsee.NewBezosClient(bezosConn),
+		Bezos:    opsee.NewBezosClient(bezosConn),
 	}, nil
 }
 

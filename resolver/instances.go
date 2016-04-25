@@ -3,12 +3,10 @@ package resolver
 import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/opsee/basic/schema"
-	opsee_aws "github.com/opsee/basic/schema/aws"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
+	opsee "github.com/opsee/basic/service"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
@@ -29,31 +27,28 @@ func (c *Client) GetInstances(ctx context.Context, user *schema.User, region, vp
 }
 
 func (c *Client) getInstancesEc2(ctx context.Context, user *schema.User, region, vpc, instanceId string) ([]*opsee_aws_ec2.Instance, error) {
-	sess, err := c.awsSession(ctx, user, region)
-	if err != nil {
-		return nil, err
-	}
-
-	input := &ec2.DescribeInstancesInput{
-		Filters: []*ec2.Filter{
+	input := &opsee_aws_ec2.DescribeInstancesInput{
+		Filters: []*opsee_aws_ec2.Filter{
 			{
 				Name:   aws.String("vpc-id"),
-				Values: []*string{aws.String(vpc)},
+				Values: []string{vpc},
 			},
 		},
 	}
 
 	if instanceId != "" {
-		input.InstanceIds = []*string{aws.String(instanceId)}
+		input.InstanceIds = []string{instanceId}
 	}
 
-	out, err := ec2.New(sess).DescribeInstances(input)
+	resp, err := c.Bezos.Get(ctx, &opsee.BezosRequest{User: user, Region: region, VpcId: vpc, Input: &opsee.BezosRequest_Ec2_DescribeInstancesInput{input}})
 	if err != nil {
 		return nil, err
 	}
 
-	output := &opsee_aws_ec2.DescribeInstancesOutput{}
-	opsee_aws.CopyInto(output, out)
+	output := resp.GetEc2_DescribeInstancesOutput()
+	if output == nil {
+		return nil, fmt.Errorf("error decoding aws response")
+	}
 
 	instances := make([]*opsee_aws_ec2.Instance, 0)
 	for _, res := range output.Reservations {
@@ -70,25 +65,22 @@ func (c *Client) getInstancesEc2(ctx context.Context, user *schema.User, region,
 }
 
 func (c *Client) getInstancesRds(ctx context.Context, user *schema.User, region, vpc, instanceId string) ([]*opsee_aws_rds.DBInstance, error) {
-	sess, err := c.awsSession(ctx, user, region)
-	if err != nil {
-		return nil, err
-	}
-
 	// filter is not supported
-	input := &rds.DescribeDBInstancesInput{}
+	input := &opsee_aws_rds.DescribeDBInstancesInput{}
 
 	if instanceId != "" {
 		input.DBInstanceIdentifier = aws.String(instanceId)
 	}
 
-	out, err := rds.New(sess).DescribeDBInstances(input)
+	resp, err := c.Bezos.Get(ctx, &opsee.BezosRequest{User: user, Region: region, VpcId: vpc, Input: &opsee.BezosRequest_Rds_DescribeDBInstancesInput{input}})
 	if err != nil {
 		return nil, err
 	}
 
-	output := &opsee_aws_rds.DescribeDBInstancesOutput{}
-	opsee_aws.CopyInto(output, out)
+	output := resp.GetRds_DescribeDBInstancesOutput()
+	if output == nil {
+		return nil, fmt.Errorf("error decoding aws response")
+	}
 
 	return output.DBInstances, nil
 }
