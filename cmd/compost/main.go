@@ -26,7 +26,7 @@ func main() {
 		Spanx:      "spanx.in.opsee.com:8443",
 		Vape:       "vape.in.opsee.com:443",
 		Keelhaul:   "keelhaul.in.opsee.com:443",
-		Bezos:      "opsee.local:9104",
+		Bezos:      "bezosphere.in.opsee.com:8443",
 		Hugs:       "https://hugs.in.opsee.com",
 	})
 
