@@ -33,7 +33,7 @@ func TestResolveChecks(t *testing.T) {
 		Verified:   true,
 	}
 
-	checks, err := resolver.ListChecks(context.Background(), user)
+	checks, err := resolver.ListChecks(context.Background(), user, "")
 	if err != nil {
 		t.Fatal(err)
 	}

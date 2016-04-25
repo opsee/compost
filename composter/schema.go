@@ -364,13 +364,21 @@ func (c *Composter) adminQuery() *graphql.Object {
 func (c *Composter) queryChecks() *graphql.Field {
 	return &graphql.Field{
 		Type: graphql.NewList(CheckType),
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Description: "A single check Id",
+				Type:        graphql.String,
+			},
+		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			user, ok := p.Context.Value(userKey).(*schema.User)
 			if !ok {
 				return nil, errDecodeUser
 			}
 
-			return c.resolver.ListChecks(p.Context, user)
+			id, _ := p.Args["id"].(string)
+
+			return c.resolver.ListChecks(p.Context, user, id)
 		},
 	}
 }

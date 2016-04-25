@@ -1550,36 +1550,6 @@ type BezosResponseGetter interface {
 var GraphQLBezosResponseType *github_com_graphql_go_graphql.Object
 var GraphQLBezosResponseOutputUnion *github_com_graphql_go_graphql.Union
 
-func (g *BezosResponse_Cloudwatch_ListMetricsOutput) GetListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
-	return g.Cloudwatch_ListMetricsOutput
-}
-func (g *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) GetGetMetricStatisticsOutput() *opsee_aws_cloudwatch.GetMetricStatisticsOutput {
-	return g.Cloudwatch_GetMetricStatisticsOutput
-}
-func (g *BezosResponse_Ec2_DescribeInstancesOutput) GetDescribeInstancesOutput() *opsee_aws_ec2.DescribeInstancesOutput {
-	return g.Ec2_DescribeInstancesOutput
-}
-func (g *BezosResponse_Ec2_DescribeSecurityGroupsOutput) GetDescribeSecurityGroupsOutput() *opsee_aws_ec2.DescribeSecurityGroupsOutput {
-	return g.Ec2_DescribeSecurityGroupsOutput
-}
-func (g *BezosResponse_Ec2_DescribeSubnetsOutput) GetDescribeSubnetsOutput() *opsee_aws_ec2.DescribeSubnetsOutput {
-	return g.Ec2_DescribeSubnetsOutput
-}
-func (g *BezosResponse_Ec2_DescribeVpcsOutput) GetDescribeVpcsOutput() *opsee_aws_ec2.DescribeVpcsOutput {
-	return g.Ec2_DescribeVpcsOutput
-}
-func (g *BezosResponse_Ec2_DescribeRouteTablesOutput) GetDescribeRouteTablesOutput() *opsee_aws_ec2.DescribeRouteTablesOutput {
-	return g.Ec2_DescribeRouteTablesOutput
-}
-func (g *BezosResponse_Elb_DescribeLoadBalancersOutput) GetDescribeLoadBalancersOutput() *opsee_aws_elb.DescribeLoadBalancersOutput {
-	return g.Elb_DescribeLoadBalancersOutput
-}
-func (g *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) GetDescribeAutoScalingGroupsOutput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput {
-	return g.Autoscaling_DescribeAutoScalingGroupsOutput
-}
-func (g *BezosResponse_Rds_DescribeDBInstancesOutput) GetDescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
-	return g.Rds_DescribeDBInstancesOutput
-}
 func (g *BezosRequest_Cloudwatch_ListMetricsInput) GetListMetricsInput() *opsee_aws_cloudwatch.ListMetricsInput {
 	return g.Cloudwatch_ListMetricsInput
 }
@@ -1609,6 +1579,36 @@ func (g *BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput) GetDescribeAut
 }
 func (g *BezosRequest_Rds_DescribeDBInstancesInput) GetDescribeDBInstancesInput() *opsee_aws_rds.DescribeDBInstancesInput {
 	return g.Rds_DescribeDBInstancesInput
+}
+func (g *BezosResponse_Cloudwatch_ListMetricsOutput) GetListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
+	return g.Cloudwatch_ListMetricsOutput
+}
+func (g *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) GetGetMetricStatisticsOutput() *opsee_aws_cloudwatch.GetMetricStatisticsOutput {
+	return g.Cloudwatch_GetMetricStatisticsOutput
+}
+func (g *BezosResponse_Ec2_DescribeInstancesOutput) GetDescribeInstancesOutput() *opsee_aws_ec2.DescribeInstancesOutput {
+	return g.Ec2_DescribeInstancesOutput
+}
+func (g *BezosResponse_Ec2_DescribeSecurityGroupsOutput) GetDescribeSecurityGroupsOutput() *opsee_aws_ec2.DescribeSecurityGroupsOutput {
+	return g.Ec2_DescribeSecurityGroupsOutput
+}
+func (g *BezosResponse_Ec2_DescribeSubnetsOutput) GetDescribeSubnetsOutput() *opsee_aws_ec2.DescribeSubnetsOutput {
+	return g.Ec2_DescribeSubnetsOutput
+}
+func (g *BezosResponse_Ec2_DescribeVpcsOutput) GetDescribeVpcsOutput() *opsee_aws_ec2.DescribeVpcsOutput {
+	return g.Ec2_DescribeVpcsOutput
+}
+func (g *BezosResponse_Ec2_DescribeRouteTablesOutput) GetDescribeRouteTablesOutput() *opsee_aws_ec2.DescribeRouteTablesOutput {
+	return g.Ec2_DescribeRouteTablesOutput
+}
+func (g *BezosResponse_Elb_DescribeLoadBalancersOutput) GetDescribeLoadBalancersOutput() *opsee_aws_elb.DescribeLoadBalancersOutput {
+	return g.Elb_DescribeLoadBalancersOutput
+}
+func (g *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) GetDescribeAutoScalingGroupsOutput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput {
+	return g.Autoscaling_DescribeAutoScalingGroupsOutput
+}
+func (g *BezosResponse_Rds_DescribeDBInstancesOutput) GetDescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
+	return g.Rds_DescribeDBInstancesOutput
 }
 
 func init() {

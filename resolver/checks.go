@@ -20,7 +20,7 @@ type checkCompostResponse struct {
 // ListChecks fetches Checks from Bartnet and CheckResults from Beavis
 // concurrently, then zips them together. If the request to Beavis fails,
 // then checks are returned without results.
-func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.Check, error) {
+func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId string) ([]*schema.Check, error) {
 	var (
 		responseChan = make(chan *checkCompostResponse, 2)
 		checkMap     = make(map[string][]*schema.CheckResult)
@@ -30,7 +30,17 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 
 	wg.Add(1)
 	go func() {
-		results, err := c.Beavis.ListResults(user)
+		var (
+			results []*schema.CheckResult
+			err     error
+		)
+
+		if checkId != "" {
+			results, err = c.Beavis.ListResultsCheck(user, checkId)
+		} else {
+			results, err = c.Beavis.ListResults(user)
+		}
+
 		if err != nil {
 			responseChan <- &checkCompostResponse{err}
 		} else {
@@ -42,7 +52,17 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 
 	wg.Add(1)
 	go func() {
-		notifs, err := c.Hugs.ListNotifications(user)
+		var (
+			notifs []*hugs.Notification
+			err    error
+		)
+
+		if checkId != "" {
+			notifs, err = c.Hugs.ListNotificationsCheck(user, checkId)
+		} else {
+			notifs, err = c.Hugs.ListNotifications(user)
+		}
+
 		if err != nil {
 			responseChan <- &checkCompostResponse{err}
 		} else {
@@ -52,10 +72,25 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.C
 		wg.Done()
 	}()
 
-	checks, err := c.Bartnet.ListChecks(user)
-	if err != nil {
-		log.WithError(err).Error("couldn't list checks from bartnet")
-		return nil, err
+	var (
+		checks []*schema.Check
+		err    error
+	)
+
+	if checkId != "" {
+		check, err := c.Bartnet.GetCheck(user, checkId)
+		if err != nil {
+			log.WithError(err).Error("couldn't list checks from bartnet")
+			return nil, err
+		}
+
+		checks = append(checks, check)
+	} else {
+		checks, err = c.Bartnet.ListChecks(user)
+		if err != nil {
+			log.WithError(err).Error("couldn't list checks from bartnet")
+			return nil, err
+		}
 	}
 
 	wg.Wait()
