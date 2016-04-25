@@ -16,6 +16,8 @@ import (
 
 type Client interface {
 	ListResults(user *schema.User) ([]*schema.CheckResult, error)
+	ListResultsCheck(user *schema.User, checkId string) ([]*schema.CheckResult, error)
+	ListResultsTarget(user *schema.User, targetId string) ([]*schema.CheckResult, error)
 }
 
 type client struct {
@@ -31,9 +33,23 @@ func New(endpoint string) Client {
 	}
 }
 
-// ListChecks lists the checks + assertions for a user's customer account, without the results
+// ListResults lists all results for an account
 func (c *client) ListResults(user *schema.User) ([]*schema.CheckResult, error) {
-	body, err := c.do(user, "GET", "/gql/results?q="+url.QueryEscape(fmt.Sprintf("customer_id = \"%s\" and type = \"result\"", user.CustomerId)), nil)
+	return c.listResults(user, fmt.Sprintf("customer_id = \"%s\" and type = \"result\"", user.CustomerId))
+}
+
+// ListResults lists all results for an account
+func (c *client) ListResultsCheck(user *schema.User, checkId string) ([]*schema.CheckResult, error) {
+	return c.listResults(user, fmt.Sprintf("customer_id = \"%s\" and type = \"result\" and service = \"%s\"", user.CustomerId, checkId))
+}
+
+// ListResults lists all results for an account
+func (c *client) ListResultsTarget(user *schema.User, targetId string) ([]*schema.CheckResult, error) {
+	return c.listResults(user, fmt.Sprintf("customer_id = \"%s\" and type = \"result\" and host = \"%s\"", user.CustomerId, targetId))
+}
+
+func (c *client) listResults(user *schema.User, query string) ([]*schema.CheckResult, error) {
+	body, err := c.do(user, "GET", "/gql/results?q="+url.QueryEscape(query), nil)
 	if err != nil {
 		return nil, err
 	}

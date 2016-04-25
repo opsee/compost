@@ -15,6 +15,7 @@ import (
 // also... why aren't notifications just part of checks???
 type Client interface {
 	ListNotifications(user *schema.User) ([]*Notification, error)
+	ListNotificationsCheck(user *schema.User, checkId string) ([]*Notification, error)
 	CreateNotifications(user *schema.User, noteReq *NotificationRequest) error
 	CreateNotificationsMulti(user *schema.User, noteReq []*NotificationRequest) error
 }
@@ -47,12 +48,20 @@ func New(endpoint string) *hugsClient {
 }
 
 func (c *hugsClient) ListNotifications(user *schema.User) ([]*Notification, error) {
+	return c.listNotifications(user, "/notifications")
+}
+
+func (c *hugsClient) ListNotificationsCheck(user *schema.User, checkId string) ([]*Notification, error) {
+	return c.listNotifications(user, fmt.Sprintf("/notifications/%s", checkId))
+}
+
+func (c *hugsClient) listNotifications(user *schema.User, path string) ([]*Notification, error) {
 	toke, err := json.Marshal(user)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", c.endpoint+"/notifications", nil)
+	req, err := http.NewRequest("GET", c.endpoint+path, nil)
 	if err != nil {
 		return nil, err
 	}
