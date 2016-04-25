@@ -195,3 +195,22 @@ func (c *Client) UpsertChecks(ctx context.Context, user *schema.User, checksInpu
 
 	return checksResponse, nil
 }
+
+func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInput []interface{}) ([]string, error) {
+	deleted := make([]string, 0, len(checksInput))
+	for _, ci := range checksInput {
+		id, ok := ci.(string)
+		if !ok {
+			return nil, fmt.Errorf("unable to decode check id")
+		}
+
+		err := c.Bartnet.DeleteCheck(user, id)
+		if err != nil {
+			continue
+		}
+
+		deleted = append(deleted, id)
+	}
+
+	return deleted, nil
+}

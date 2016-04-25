@@ -1550,36 +1550,6 @@ type BezosResponseGetter interface {
 var GraphQLBezosResponseType *github_com_graphql_go_graphql.Object
 var GraphQLBezosResponseOutputUnion *github_com_graphql_go_graphql.Union
 
-func (g *BezosRequest_Cloudwatch_ListMetricsInput) GetListMetricsInput() *opsee_aws_cloudwatch.ListMetricsInput {
-	return g.Cloudwatch_ListMetricsInput
-}
-func (g *BezosRequest_Cloudwatch_GetMetricStatisticsInput) GetGetMetricStatisticsInput() *opsee_aws_cloudwatch.GetMetricStatisticsInput {
-	return g.Cloudwatch_GetMetricStatisticsInput
-}
-func (g *BezosRequest_Ec2_DescribeInstancesInput) GetDescribeInstancesInput() *opsee_aws_ec2.DescribeInstancesInput {
-	return g.Ec2_DescribeInstancesInput
-}
-func (g *BezosRequest_Ec2_DescribeSecurityGroupsInput) GetDescribeSecurityGroupsInput() *opsee_aws_ec2.DescribeSecurityGroupsInput {
-	return g.Ec2_DescribeSecurityGroupsInput
-}
-func (g *BezosRequest_Ec2_DescribeSubnetsInput) GetDescribeSubnetsInput() *opsee_aws_ec2.DescribeSubnetsInput {
-	return g.Ec2_DescribeSubnetsInput
-}
-func (g *BezosRequest_Ec2_DescribeVpcsInput) GetDescribeVpcsInput() *opsee_aws_ec2.DescribeVpcsInput {
-	return g.Ec2_DescribeVpcsInput
-}
-func (g *BezosRequest_Ec2_DescribeRouteTablesInput) GetDescribeRouteTablesInput() *opsee_aws_ec2.DescribeRouteTablesInput {
-	return g.Ec2_DescribeRouteTablesInput
-}
-func (g *BezosRequest_Elb_DescribeLoadBalancersInput) GetDescribeLoadBalancersInput() *opsee_aws_elb.DescribeLoadBalancersInput {
-	return g.Elb_DescribeLoadBalancersInput
-}
-func (g *BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput) GetDescribeAutoScalingGroupsInput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsInput {
-	return g.Autoscaling_DescribeAutoScalingGroupsInput
-}
-func (g *BezosRequest_Rds_DescribeDBInstancesInput) GetDescribeDBInstancesInput() *opsee_aws_rds.DescribeDBInstancesInput {
-	return g.Rds_DescribeDBInstancesInput
-}
 func (g *BezosResponse_Cloudwatch_ListMetricsOutput) GetListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
 	return g.Cloudwatch_ListMetricsOutput
 }
@@ -1609,6 +1579,36 @@ func (g *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) GetDescribeA
 }
 func (g *BezosResponse_Rds_DescribeDBInstancesOutput) GetDescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
 	return g.Rds_DescribeDBInstancesOutput
+}
+func (g *BezosRequest_Cloudwatch_ListMetricsInput) GetListMetricsInput() *opsee_aws_cloudwatch.ListMetricsInput {
+	return g.Cloudwatch_ListMetricsInput
+}
+func (g *BezosRequest_Cloudwatch_GetMetricStatisticsInput) GetGetMetricStatisticsInput() *opsee_aws_cloudwatch.GetMetricStatisticsInput {
+	return g.Cloudwatch_GetMetricStatisticsInput
+}
+func (g *BezosRequest_Ec2_DescribeInstancesInput) GetDescribeInstancesInput() *opsee_aws_ec2.DescribeInstancesInput {
+	return g.Ec2_DescribeInstancesInput
+}
+func (g *BezosRequest_Ec2_DescribeSecurityGroupsInput) GetDescribeSecurityGroupsInput() *opsee_aws_ec2.DescribeSecurityGroupsInput {
+	return g.Ec2_DescribeSecurityGroupsInput
+}
+func (g *BezosRequest_Ec2_DescribeSubnetsInput) GetDescribeSubnetsInput() *opsee_aws_ec2.DescribeSubnetsInput {
+	return g.Ec2_DescribeSubnetsInput
+}
+func (g *BezosRequest_Ec2_DescribeVpcsInput) GetDescribeVpcsInput() *opsee_aws_ec2.DescribeVpcsInput {
+	return g.Ec2_DescribeVpcsInput
+}
+func (g *BezosRequest_Ec2_DescribeRouteTablesInput) GetDescribeRouteTablesInput() *opsee_aws_ec2.DescribeRouteTablesInput {
+	return g.Ec2_DescribeRouteTablesInput
+}
+func (g *BezosRequest_Elb_DescribeLoadBalancersInput) GetDescribeLoadBalancersInput() *opsee_aws_elb.DescribeLoadBalancersInput {
+	return g.Elb_DescribeLoadBalancersInput
+}
+func (g *BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput) GetDescribeAutoScalingGroupsInput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsInput {
+	return g.Autoscaling_DescribeAutoScalingGroupsInput
+}
+func (g *BezosRequest_Rds_DescribeDBInstancesInput) GetDescribeDBInstancesInput() *opsee_aws_rds.DescribeDBInstancesInput {
+	return g.Rds_DescribeDBInstancesInput
 }
 
 func init() {

@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	"io"
 	"reflect"
@@ -44,6 +45,11 @@ func rcopy(dst, src reflect.Value, root bool) {
 				timestamp := &opsee_types.Timestamp{}
 				timestamp.Scan(*tt)
 				dst.Set(reflect.ValueOf(timestamp))
+			}
+		} else if tt, ok := src.Interface().(*opsee_types.Timestamp); ok {
+			if tt != nil && dst.CanSet() {
+				t, _ := tt.Value()
+				dst.Set(reflect.ValueOf(aws.Time(t.(time.Time))))
 			}
 		} else if dst.Kind() != reflect.Ptr {
 			if dst.CanSet() && !src.IsNil() {
@@ -93,6 +99,9 @@ func rcopy(dst, src reflect.Value, root bool) {
 			dst.SetMapIndex(k, v2)
 		}
 	default:
+		if dst.Kind() == reflect.Ptr && src.CanAddr() {
+			src = src.Addr()
+		}
 
 		if src.Type().AssignableTo(dst.Type()) {
 			dst.Set(src)

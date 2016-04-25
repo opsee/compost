@@ -20,6 +20,7 @@ type Client interface {
 	ListChecks(user *schema.User) ([]*schema.Check, error)
 	CreateCheck(user *schema.User, check *schema.Check) (*schema.Check, error)
 	UpdateCheck(user *schema.User, check *schema.Check) (*schema.Check, error)
+	DeleteCheck(user *schema.User, id string) error
 }
 
 type client struct {
@@ -119,6 +120,19 @@ func (c *client) UpdateCheck(user *schema.User, check *schema.Check) (*schema.Ch
 	}
 
 	return checkResponse, nil
+}
+
+func (c *client) DeleteCheck(user *schema.User, id string) error {
+	if id == "" {
+		return fmt.Errorf("can't delete a check without id")
+	}
+
+	_, err := c.do(user, "DELETE", "application/json", fmt.Sprintf("/checks/%s", id), nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *client) do(user *schema.User, method, accept, path string, body io.Reader) ([]byte, error) {

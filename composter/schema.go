@@ -766,7 +766,8 @@ func (c *Composter) mutation() *graphql.Object {
 	mutation := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Mutation",
 		Fields: graphql.Fields{
-			"checks": c.upsertChecks(),
+			"checks":       c.upsertChecks(),
+			"deleteChecks": c.deleteChecks(),
 		},
 	})
 
@@ -793,6 +794,31 @@ func (c *Composter) upsertChecks() *graphql.Field {
 				return nil, errDecodeCheckInput
 			}
 			return c.resolver.UpsertChecks(p.Context, user, checksInput)
+		},
+	}
+}
+
+func (c *Composter) deleteChecks() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(graphql.String),
+		Args: graphql.FieldConfigArgument{
+			"ids": &graphql.ArgumentConfig{
+				Description: "A list of check ids to delete",
+				Type:        graphql.NewList(graphql.String),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			checksInput, ok := p.Args["ids"].([]interface{})
+			if !ok {
+				return nil, errDecodeCheckInput
+			}
+
+			return c.resolver.DeleteChecks(p.Context, user, checksInput)
 		},
 	}
 }
