@@ -22,7 +22,7 @@ type checkCompostResponse struct {
 // then checks are returned without results.
 func (c *Client) ListChecks(ctx context.Context, user *schema.User) ([]*schema.Check, error) {
 	var (
-		responseChan = make(chan *checkCompostResponse)
+		responseChan = make(chan *checkCompostResponse, 2)
 		checkMap     = make(map[string][]*schema.CheckResult)
 		notifMap     = make(map[string][]*schema.Notification)
 		wg           sync.WaitGroup
