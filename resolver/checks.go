@@ -12,7 +12,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"sync"
-	"time"
 )
 
 type checkCompostResponse struct {
@@ -264,7 +263,6 @@ func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInpu
 }
 
 func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput map[string]interface{}) (*opsee.TestCheckResponse, error) {
-	delete(checkInput, "notifications")
 	checkJson, err := json.Marshal(checkInput)
 	if err != nil {
 		return nil, err
@@ -276,5 +274,30 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 		return nil, err
 	}
 
-	return c.Bartnet.TestCheck(user, checkProto, time.Now().UTC().Add(30*time.Second), 3)
+	checkReponse, err := c.Bartnet.TestCheck(user, checkProto)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, res := range checkReponse.Responses {
+		if res.Reply == nil {
+			if res.Response == nil {
+				continue
+			}
+
+			any, err := opsee_types.UnmarshalAny(res.Response)
+			if err != nil {
+				return nil, err
+			}
+
+			switch reply := any.(type) {
+			case *schema.HttpResponse:
+				res.Reply = &schema.CheckResponse_HttpResponse{reply}
+			case *schema.CloudWatchResponse:
+				res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
+			}
+		}
+	}
+
+	return checkReponse, nil
 }
