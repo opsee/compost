@@ -25,14 +25,24 @@ var (
 	errMissingInstanceType         = errors.New("missing instance type - must be one of (ec2, rds)")
 	errMissingGroupType            = errors.New("missing group type - must be one of (security, elb, autoscaling)")
 	errDecodeInstances             = errors.New("error decoding instances")
+	errDecodeInstanceIds           = errors.New("error decoding instance ids")
 	errUnknownInstanceMetricType   = errors.New("no metrics for that instance type")
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
 	errDecodeCheckInput            = errors.New("error decoding checks input")
+	errUnknownAction               = errors.New("unknown action")
 
 	InstanceType   *graphql.Object
 	DbInstanceType *graphql.Object
 	CheckType      *graphql.Object
 	CheckInputType *graphql.InputObject
+)
+
+type instanceAction int
+
+const (
+	instanceReboot instanceAction = iota
+	instanceStart
+	instanceStop
 )
 
 func (c *Composter) mustSchema() {
@@ -427,8 +437,11 @@ func (c *Composter) queryVpc() *graphql.Field {
 			Name:        "VPC",
 			Description: "An AWS VPC",
 			Fields: graphql.Fields{
-				"groups":    c.queryGroups(),
-				"instances": c.queryInstances(),
+				"groups":          c.queryGroups(),
+				"instances":       c.queryInstances(),
+				"rebootInstances": c.instanceAction(instanceReboot),
+				"startInstances":  c.instanceAction(instanceStart),
+				"stopInstances":   c.instanceAction(instanceStop),
 			},
 		}),
 		Args: graphql.FieldConfigArgument{
@@ -563,6 +576,63 @@ func (c *Composter) queryInstances() *graphql.Field {
 			}
 
 			return c.resolver.GetInstances(p.Context, user, queryContext.Region, queryContext.VpcId, instanceType, instanceId)
+		},
+	}
+}
+
+func (c *Composter) instanceAction(action instanceAction) *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(graphql.String),
+		Args: graphql.FieldConfigArgument{
+			"ids": &graphql.ArgumentConfig{
+				Description: "A list of instance ids",
+				Type:        graphql.NewNonNull(graphql.NewList(graphql.String)),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
+			if !ok {
+				return nil, errDecodeQueryContext
+			}
+
+			var ids []string
+			idArgs, ok := p.Args["ids"].([]interface{})
+			if !ok {
+				return nil, errDecodeInstanceIds
+			}
+
+			for _, id := range idArgs {
+				idstr, ok := id.(string)
+				if !ok {
+					return nil, errDecodeInstanceIds
+				}
+
+				ids = append(ids, idstr)
+			}
+
+			var err error
+
+			switch action {
+			case instanceReboot:
+				err = c.resolver.RebootInstances(p.Context, user, queryContext.Region, ids)
+			case instanceStart:
+				err = c.resolver.StartInstances(p.Context, user, queryContext.Region, ids)
+			case instanceStop:
+				err = c.resolver.StopInstances(p.Context, user, queryContext.Region, ids)
+			default:
+				err = errUnknownAction
+			}
+
+			if err != nil {
+				return nil, err
+			}
+
+			return ids, nil
 		},
 	}
 }
