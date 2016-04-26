@@ -128,39 +128,37 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 				}
 			}
 
-			for _, check := range checks {
-				check.Results = checkMap[check.Id]
-				if check.Spec == nil {
-					if check.CheckSpec == nil {
-						continue
-					}
-
-					any, err := opsee_types.UnmarshalAny(check.CheckSpec)
-					if err != nil {
-						log.WithError(err).Error("couldn't list checks from bartnet")
-						return nil, err
-					}
-
-					switch spec := any.(type) {
-					case *schema.HttpCheck:
-						check.Spec = &schema.Check_HttpCheck{spec}
-					case *schema.CloudWatchCheck:
-						check.Spec = &schema.Check_CloudwatchCheck{spec}
-					}
-				}
-			}
-
 		case []*hugs.Notification:
 			for _, notif := range t {
 				notifMap[notif.CheckId] = append(notifMap[notif.CheckId], &schema.Notification{Type: notif.Type, Value: notif.Value})
 			}
 
-			for _, check := range checks {
-				check.Notifications = notifMap[check.Id]
+		case error:
+			log.WithError(t).Error("error composting checks")
+		}
+	}
+
+	for _, check := range checks {
+		check.Results = checkMap[check.Id]
+		check.Notifications = notifMap[check.Id]
+
+		if check.Spec == nil {
+			if check.CheckSpec == nil {
+				continue
 			}
 
-		case error:
-			log.WithError(err).Error("error composting checks")
+			any, err := opsee_types.UnmarshalAny(check.CheckSpec)
+			if err != nil {
+				log.WithError(err).Error("couldn't list checks from bartnet")
+				return nil, err
+			}
+
+			switch spec := any.(type) {
+			case *schema.HttpCheck:
+				check.Spec = &schema.Check_HttpCheck{spec}
+			case *schema.CloudWatchCheck:
+				check.Spec = &schema.Check_CloudwatchCheck{spec}
+			}
 		}
 	}
 
