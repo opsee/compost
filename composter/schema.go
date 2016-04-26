@@ -846,6 +846,7 @@ func (c *Composter) mutation() *graphql.Object {
 		Fields: graphql.Fields{
 			"checks":       c.upsertChecks(),
 			"deleteChecks": c.deleteChecks(),
+			"testCheck":    c.testCheck(),
 		},
 	})
 
@@ -897,6 +898,31 @@ func (c *Composter) deleteChecks() *graphql.Field {
 			}
 
 			return c.resolver.DeleteChecks(p.Context, user, checksInput)
+		},
+	}
+}
+
+func (c *Composter) testCheck() *graphql.Field {
+	return &graphql.Field{
+		Type: opsee.GraphQLTestCheckResponseType,
+		Args: graphql.FieldConfigArgument{
+			"check": &graphql.ArgumentConfig{
+				Description: "A test check",
+				Type:        CheckInputType,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			checkInput, ok := p.Args["check"].(map[string]interface{})
+			if !ok {
+				return nil, errDecodeCheckInput
+			}
+
+			return c.resolver.TestCheck(p.Context, user, checkInput)
 		},
 	}
 }

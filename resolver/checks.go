@@ -7,10 +7,12 @@ import (
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
+	opsee "github.com/opsee/basic/service"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"sync"
+	"time"
 )
 
 type checkCompostResponse struct {
@@ -259,4 +261,20 @@ func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInpu
 	}
 
 	return deleted, nil
+}
+
+func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput map[string]interface{}) (*opsee.TestCheckResponse, error) {
+	delete(checkInput, "notifications")
+	checkJson, err := json.Marshal(checkInput)
+	if err != nil {
+		return nil, err
+	}
+
+	checkProto := &schema.Check{}
+	err = jsonpb.Unmarshal(bytes.NewBuffer(checkJson), checkProto)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Bartnet.TestCheck(user, checkProto, time.Now().UTC().Add(30*time.Second), 3)
 }
