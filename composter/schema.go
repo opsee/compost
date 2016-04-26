@@ -153,7 +153,7 @@ func (c *Composter) initTypes() {
 								Description: "Headers to send",
 							},
 							"body": &graphql.InputObjectFieldConfig{
-								Type:        graphql.NewNonNull(graphql.String),
+								Type:        graphql.String,
 								Description: "A request body to send",
 							},
 						},
