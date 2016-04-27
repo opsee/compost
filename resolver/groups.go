@@ -81,6 +81,10 @@ func (c *Client) getGroupsAutoscaling(ctx context.Context, user *schema.User, re
 	// filter is not supported
 	input := &opsee_aws_autoscaling.DescribeAutoScalingGroupsInput{}
 
+	if groupId != "" {
+		input.AutoScalingGroupNames = []string{groupId}
+	}
+
 	resp, err := c.Bezos.Get(ctx, &opsee.BezosRequest{User: user, Region: region, VpcId: vpc, Input: &opsee.BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput{input}})
 	if err != nil {
 		return nil, err
