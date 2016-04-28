@@ -12,7 +12,6 @@ option (opseeproto.graphql) = true;
 
 message EnhancedCombatModeRequest {
 	User user = 1;
-	string region = 2;
 }
 
 message EnhancedCombatModeResponse {

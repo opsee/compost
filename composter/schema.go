@@ -257,8 +257,9 @@ func (c *Composter) query() *graphql.Object {
 	query := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"checks": c.queryChecks(),
-			"region": c.queryRegion(),
+			"checks":  c.queryChecks(),
+			"region":  c.queryRegion(),
+			"hasRole": c.queryHasRole(),
 		},
 	})
 
@@ -369,6 +370,20 @@ func (c *Composter) adminQuery() *graphql.Object {
 	})
 
 	return query
+}
+
+func (c *Composter) queryHasRole() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.Boolean,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			return c.resolver.HasRole(p.Context, user)
+		},
+	}
 }
 
 func (c *Composter) queryChecks() *graphql.Field {
@@ -844,13 +859,54 @@ func (c *Composter) mutation() *graphql.Object {
 	mutation := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Mutation",
 		Fields: graphql.Fields{
-			"checks":       c.upsertChecks(),
-			"deleteChecks": c.deleteChecks(),
-			"testCheck":    c.testCheck(),
+			"checks":                    c.upsertChecks(),
+			"deleteChecks":              c.deleteChecks(),
+			"testCheck":                 c.testCheck(),
+			"makeLaunchRoleUrlTemplate": c.makeLaunchRoleUrlTemplate(),
+			"scanRegion":                c.scanRegion(),
 		},
 	})
 
 	return mutation
+}
+
+func (c *Composter) scanRegion() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLRegionType,
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Description: "A region name to scan (us-west-2 etc.)",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			region, _ := p.Args["id"].(string)
+			if region == "" {
+				return nil, errMissingRegion
+			}
+
+			return c.resolver.ScanRegion(p.Context, user, region)
+		},
+	}
+}
+
+func (c *Composter) makeLaunchRoleUrlTemplate() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.String,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			return c.resolver.LaunchRoleUrlTemplate(p.Context, user)
+		},
+	}
 }
 
 func (c *Composter) upsertChecks() *graphql.Field {

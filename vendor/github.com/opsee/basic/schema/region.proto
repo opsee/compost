@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/basic/schema/aws/autoscaling/types.proto";
+import "github.com/opsee/basic/schema/aws/ec2/types.proto";
+import "github.com/opsee/basic/schema/aws/elb/types.proto";
+import "github.com/opsee/basic/schema/aws/rds/types.proto";
+
+package opsee;
+
+option go_package = "schema";
+option (opseeproto.graphql) = true;
+
+// An Opsee region object representing an AWS region.
+message Region {
+	// The region identifier, e.g. us-west-1.
+  string region = 1;
+	string customer_id = 2;
+
+	// The region's supported platforms [EC2-VPC, Classic].
+	repeated string supported_platforms = 3;
+
+	// The region's VPCs.
+	repeated Vpc vpcs = 4;
+
+	// The region's subnets.
+	repeated Subnet subnets = 5;
+}
+
+// An Opsee VPC object representing an AWS VPC resource.
+message Vpc {
+	// The VPC identifier.
+	string vpc_id = 1;
+
+	string state = 2;
+	repeated aws.ec2.Tag tags = 3;
+	
+  // The last seen number of instances in the VPC. This value is cached, so it may not be consistent.
+  int32 instance_count = 4;
+	
+	bool is_default = 5;
+	string cidr_block = 6;
+}
+
+// An Opsee subnet object representing an AWS Subnet resource.
+message Subnet {
+	string availability_zone = 1;
+	int64 available_ip_address_count = 2;
+	string cidr_block = 3;
+	bool default_for_az = 4;
+	bool map_public_ip_on_launch = 5;
+	string state = 6;
+	string subnet_id = 7;
+	string vpc_id = 8;
+	repeated aws.ec2.Tag tags = 9;
+	int32 instance_count = 10;
+	string routing = 11;
+}
