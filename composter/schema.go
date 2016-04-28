@@ -452,11 +452,8 @@ func (c *Composter) queryVpc() *graphql.Field {
 			Name:        "VPC",
 			Description: "An AWS VPC",
 			Fields: graphql.Fields{
-				"groups":          c.queryGroups(),
-				"instances":       c.queryInstances(),
-				"rebootInstances": c.instanceAction(instanceReboot),
-				"startInstances":  c.instanceAction(instanceStart),
-				"stopInstances":   c.instanceAction(instanceStop),
+				"groups":    c.queryGroups(),
+				"instances": c.queryInstances(),
 			},
 		}),
 		Args: graphql.FieldConfigArgument{
@@ -863,26 +860,40 @@ func (c *Composter) mutation() *graphql.Object {
 			"deleteChecks":              c.deleteChecks(),
 			"testCheck":                 c.testCheck(),
 			"makeLaunchRoleUrlTemplate": c.makeLaunchRoleUrlTemplate(),
-			"scanRegion":                c.scanRegion(),
+			"region":                    c.mutateRegion(),
 		},
 	})
 
 	return mutation
 }
 
-func (c *Composter) scanRegion() *graphql.Field {
+func (c *Composter) mutateRegion() *graphql.Field {
 	return &graphql.Field{
-		Type: schema.GraphQLRegionType,
+		Type: graphql.NewObject(graphql.ObjectConfig{
+			Name:        "RegionMutation",
+			Description: "The AWS Region",
+			Fields: graphql.Fields{
+				"rebootInstances": c.instanceAction(instanceReboot),
+				"startInstances":  c.instanceAction(instanceStart),
+				"stopInstances":   c.instanceAction(instanceStop),
+				"scan":            c.scanRegion(),
+			},
+		}),
 		Args: graphql.FieldConfigArgument{
 			"id": &graphql.ArgumentConfig{
-				Description: "A region name to scan (us-west-2 etc.)",
+				Description: "The region id",
 				Type:        graphql.NewNonNull(graphql.String),
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
+			_, ok := p.Context.Value(userKey).(*schema.User)
 			if !ok {
 				return nil, errDecodeUser
+			}
+
+			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
+			if !ok {
+				return nil, errDecodeQueryContext
 			}
 
 			region, _ := p.Args["id"].(string)
@@ -890,7 +901,32 @@ func (c *Composter) scanRegion() *graphql.Field {
 				return nil, errMissingRegion
 			}
 
-			return c.resolver.ScanRegion(p.Context, user, region)
+			queryContext.Region = region
+
+			return struct{}{}, nil
+		},
+	}
+}
+
+func (c *Composter) scanRegion() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLRegionType,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
+			if !ok {
+				return nil, errDecodeQueryContext
+			}
+
+			if queryContext.Region == "" {
+				return nil, errMissingRegion
+			}
+
+			return c.resolver.ScanRegion(p.Context, user, queryContext.Region)
 		},
 	}
 }
