@@ -33,12 +33,11 @@ message ScanVpcsResponse {
 
 message LaunchStackRequest {
   User user = 1;
-	string access_key = 2;
-	string secret_key = 3;
 	string region = 4;
 	string vpc_id = 5;
 	string subnet_id = 6;
 	string instance_size = 7;
+	string subnet_routing = 8;
 }
 
 message LaunchStackResponse {
