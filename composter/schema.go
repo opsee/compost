@@ -877,6 +877,7 @@ func (c *Composter) mutateRegion() *graphql.Field {
 				"startInstances":  c.instanceAction(instanceStart),
 				"stopInstances":   c.instanceAction(instanceStop),
 				"scan":            c.scanRegion(),
+				"launchStack":     c.launchStack(),
 			},
 		}),
 		Args: graphql.FieldConfigArgument{
@@ -904,6 +905,55 @@ func (c *Composter) mutateRegion() *graphql.Field {
 			queryContext.Region = region
 
 			return struct{}{}, nil
+		},
+	}
+}
+
+func (c *Composter) launchStack() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.Boolean,
+		Args: graphql.FieldConfigArgument{
+			"vpc_id": &graphql.ArgumentConfig{
+				Description: "The VPC id",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+			"subnet_id": &graphql.ArgumentConfig{
+				Description: "The Subnet id",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+			"subnet_routing": &graphql.ArgumentConfig{
+				Description: "The Subnet routing",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+			"instance_size": &graphql.ArgumentConfig{
+				Description: "The AWS instance size",
+				Type:        graphql.String,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
+			if !ok {
+				return nil, errDecodeQueryContext
+			}
+
+			if queryContext.Region == "" {
+				return nil, errMissingRegion
+			}
+
+			vpcId, _ := p.Args["vpc_id"].(string)
+			subnetId, _ := p.Args["subnet_id"].(string)
+			subnetRouting, _ := p.Args["subnet_routing"].(string)
+			instanceSize, _ := p.Args["instance_size"].(string)
+			if instanceSize == "" {
+				instanceSize = "t2.micro"
+			}
+
+			return c.resolver.LaunchBastionStack(p.Context, user, queryContext.Region, vpcId, subnetId, subnetRouting, instanceSize)
 		},
 	}
 }
