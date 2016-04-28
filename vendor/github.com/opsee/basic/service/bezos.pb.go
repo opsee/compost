@@ -21,6 +21,7 @@
 		ResultsResource
 		TestCheckRequest
 		TestCheckResponse
+		Filter
 		ListBastionStatesRequest
 		ListBastionStatesResponse
 		ScanVpcsRequest
