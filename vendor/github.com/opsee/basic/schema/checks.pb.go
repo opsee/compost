@@ -1419,17 +1419,17 @@ type CheckResultGetter interface {
 
 var GraphQLCheckResultType *github_com_graphql_go_graphql.Object
 
-func (g *Check_HttpCheck) GetHttpCheck() *HttpCheck {
-	return g.HttpCheck
-}
-func (g *Check_CloudwatchCheck) GetCloudWatchCheck() *CloudWatchCheck {
-	return g.CloudwatchCheck
-}
 func (g *CheckResponse_HttpResponse) GetHttpResponse() *HttpResponse {
 	return g.HttpResponse
 }
 func (g *CheckResponse_CloudwatchResponse) GetCloudWatchResponse() *CloudWatchResponse {
 	return g.CloudwatchResponse
+}
+func (g *Check_HttpCheck) GetHttpCheck() *HttpCheck {
+	return g.HttpCheck
+}
+func (g *Check_CloudwatchCheck) GetCloudWatchCheck() *CloudWatchCheck {
+	return g.CloudwatchCheck
 }
 
 func init() {

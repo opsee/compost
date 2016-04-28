@@ -257,8 +257,9 @@ func (c *Composter) query() *graphql.Object {
 	query := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"checks": c.queryChecks(),
-			"region": c.queryRegion(),
+			"checks":                c.queryChecks(),
+			"region":                c.queryRegion(),
+			"launchRoleUrlTemplate": c.queryLaunchRoleUrlTemplate(),
 		},
 	})
 
@@ -369,6 +370,20 @@ func (c *Composter) adminQuery() *graphql.Object {
 	})
 
 	return query
+}
+
+func (c *Composter) queryLaunchRoleUrlTemplate() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.String,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			return c.resolver.LaunchRoleUrlTemplate(p.Context, user)
+		},
+	}
 }
 
 func (c *Composter) queryChecks() *graphql.Field {
