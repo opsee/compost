@@ -46,6 +46,27 @@ func (c *Client) HasRole(ctx context.Context, user *schema.User) (bool, error) {
 	return true, nil
 }
 
+func (c *Client) ScanRegion(ctx context.Context, user *schema.User, region string) (*schema.Region, error) {
+	logger := log.WithFields(log.Fields{
+		"customer_id": user.CustomerId,
+		"email":       user.Email,
+	})
+	logger.Info("scan region request")
+
+	resp, err := c.Keelhaul.ScanVpcs(ctx, &opsee.ScanVpcsRequest{
+		User:   user,
+		Region: region,
+	})
+
+	if err != nil {
+		logger.WithError(err).Error("error scanning region")
+		return nil, err
+	}
+
+	logger.Infof("scanned region: %s", region)
+	return resp.Region, nil
+}
+
 func (c *Client) LaunchBastionStack(ctx context.Context, user *schema.User, region, vpcId, subnetId, subnetRouting, instanceSize string) (bool, error) {
 	logger := log.WithFields(log.Fields{
 		"customer_id": user.CustomerId,
@@ -70,4 +91,3 @@ func (c *Client) LaunchBastionStack(ctx context.Context, user *schema.User, regi
 	logger.Infof("launched stack - region: %s, vpc: %s, subnet: %s, routing: %s, size: %s", region, vpcId, subnetId, subnetRouting, instanceSize)
 	return true, nil
 }
-

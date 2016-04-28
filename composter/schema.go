@@ -863,10 +863,36 @@ func (c *Composter) mutation() *graphql.Object {
 			"deleteChecks":              c.deleteChecks(),
 			"testCheck":                 c.testCheck(),
 			"makeLaunchRoleUrlTemplate": c.makeLaunchRoleUrlTemplate(),
+			"scanRegion":                c.scanRegion(),
 		},
 	})
 
 	return mutation
+}
+
+func (c *Composter) scanRegion() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLRegionType,
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Description: "A region name to scan (us-west-2 etc.)",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			region, _ := p.Args["id"].(string)
+			if region == "" {
+				return nil, errMissingRegion
+			}
+
+			return c.resolver.ScanRegion(p.Context, user, region)
+		},
+	}
 }
 
 func (c *Composter) makeLaunchRoleUrlTemplate() *graphql.Field {
