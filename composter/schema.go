@@ -110,6 +110,10 @@ func (c *Composter) initTypes() {
 			Name:        "Check",
 			Description: "An Opsee Check",
 			Fields: graphql.InputObjectConfigFieldMap{
+				"id": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The check id",
+				},
 				"name": &graphql.InputObjectFieldConfig{
 					Type:        graphql.NewNonNull(graphql.String),
 					Description: "The check name",
