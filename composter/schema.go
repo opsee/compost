@@ -988,7 +988,7 @@ func (c *Composter) scanRegion() *graphql.Field {
 
 func (c *Composter) makeLaunchRoleUrlTemplate() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.String,
+		Type: JsonScalar,
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			user, ok := p.Context.Value(userKey).(*schema.User)
 			if !ok {
