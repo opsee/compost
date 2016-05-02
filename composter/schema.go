@@ -1,6 +1,7 @@
 package composter
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
@@ -994,7 +995,13 @@ func (c *Composter) makeLaunchRoleUrlTemplate() *graphql.Field {
 				return nil, errDecodeUser
 			}
 
-			return c.resolver.LaunchRoleUrlTemplate(p.Context, user)
+			templ, err := c.resolver.LaunchRoleUrlTemplate(p.Context, user)
+			if err != nil {
+				return nil, err
+			}
+
+			// returning as a json.RawMessage so as to not escape the ampersand
+			return json.RawMessage(templ), nil
 		},
 	}
 }
