@@ -1764,47 +1764,6 @@ func init() {
 			}
 		}),
 	})
-	GraphQLBezosRequestInputUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
-		Name:        "BezosRequestInput",
-		Description: "",
-		Types: []*github_com_graphql_go_graphql.Object{
-			opsee_aws_cloudwatch.GraphQLListMetricsInputType,
-			opsee_aws_cloudwatch.GraphQLGetMetricStatisticsInputType,
-			opsee_aws_ec2.GraphQLDescribeInstancesInputType,
-			opsee_aws_ec2.GraphQLDescribeSecurityGroupsInputType,
-			opsee_aws_ec2.GraphQLDescribeSubnetsInputType,
-			opsee_aws_ec2.GraphQLDescribeVpcsInputType,
-			opsee_aws_ec2.GraphQLDescribeRouteTablesInputType,
-			opsee_aws_elb.GraphQLDescribeLoadBalancersInputType,
-			opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsInputType,
-			opsee_aws_rds.GraphQLDescribeDBInstancesInputType,
-		},
-		ResolveType: func(value interface{}, info github_com_graphql_go_graphql.ResolveInfo) *github_com_graphql_go_graphql.Object {
-			switch value.(type) {
-			case *BezosRequest_Cloudwatch_ListMetricsInput:
-				return opsee_aws_cloudwatch.GraphQLListMetricsInputType
-			case *BezosRequest_Cloudwatch_GetMetricStatisticsInput:
-				return opsee_aws_cloudwatch.GraphQLGetMetricStatisticsInputType
-			case *BezosRequest_Ec2_DescribeInstancesInput:
-				return opsee_aws_ec2.GraphQLDescribeInstancesInputType
-			case *BezosRequest_Ec2_DescribeSecurityGroupsInput:
-				return opsee_aws_ec2.GraphQLDescribeSecurityGroupsInputType
-			case *BezosRequest_Ec2_DescribeSubnetsInput:
-				return opsee_aws_ec2.GraphQLDescribeSubnetsInputType
-			case *BezosRequest_Ec2_DescribeVpcsInput:
-				return opsee_aws_ec2.GraphQLDescribeVpcsInputType
-			case *BezosRequest_Ec2_DescribeRouteTablesInput:
-				return opsee_aws_ec2.GraphQLDescribeRouteTablesInputType
-			case *BezosRequest_Elb_DescribeLoadBalancersInput:
-				return opsee_aws_elb.GraphQLDescribeLoadBalancersInputType
-			case *BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput:
-				return opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsInputType
-			case *BezosRequest_Rds_DescribeDBInstancesInput:
-				return opsee_aws_rds.GraphQLDescribeDBInstancesInputType
-			}
-			return nil
-		},
-	})
 	GraphQLBezosResponseOutputUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
 		Name:        "BezosResponseOutput",
 		Description: "",
@@ -1842,6 +1801,47 @@ func init() {
 				return opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsOutputType
 			case *BezosResponse_Rds_DescribeDBInstancesOutput:
 				return opsee_aws_rds.GraphQLDescribeDBInstancesOutputType
+			}
+			return nil
+		},
+	})
+	GraphQLBezosRequestInputUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
+		Name:        "BezosRequestInput",
+		Description: "",
+		Types: []*github_com_graphql_go_graphql.Object{
+			opsee_aws_cloudwatch.GraphQLListMetricsInputType,
+			opsee_aws_cloudwatch.GraphQLGetMetricStatisticsInputType,
+			opsee_aws_ec2.GraphQLDescribeInstancesInputType,
+			opsee_aws_ec2.GraphQLDescribeSecurityGroupsInputType,
+			opsee_aws_ec2.GraphQLDescribeSubnetsInputType,
+			opsee_aws_ec2.GraphQLDescribeVpcsInputType,
+			opsee_aws_ec2.GraphQLDescribeRouteTablesInputType,
+			opsee_aws_elb.GraphQLDescribeLoadBalancersInputType,
+			opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsInputType,
+			opsee_aws_rds.GraphQLDescribeDBInstancesInputType,
+		},
+		ResolveType: func(value interface{}, info github_com_graphql_go_graphql.ResolveInfo) *github_com_graphql_go_graphql.Object {
+			switch value.(type) {
+			case *BezosRequest_Cloudwatch_ListMetricsInput:
+				return opsee_aws_cloudwatch.GraphQLListMetricsInputType
+			case *BezosRequest_Cloudwatch_GetMetricStatisticsInput:
+				return opsee_aws_cloudwatch.GraphQLGetMetricStatisticsInputType
+			case *BezosRequest_Ec2_DescribeInstancesInput:
+				return opsee_aws_ec2.GraphQLDescribeInstancesInputType
+			case *BezosRequest_Ec2_DescribeSecurityGroupsInput:
+				return opsee_aws_ec2.GraphQLDescribeSecurityGroupsInputType
+			case *BezosRequest_Ec2_DescribeSubnetsInput:
+				return opsee_aws_ec2.GraphQLDescribeSubnetsInputType
+			case *BezosRequest_Ec2_DescribeVpcsInput:
+				return opsee_aws_ec2.GraphQLDescribeVpcsInputType
+			case *BezosRequest_Ec2_DescribeRouteTablesInput:
+				return opsee_aws_ec2.GraphQLDescribeRouteTablesInputType
+			case *BezosRequest_Elb_DescribeLoadBalancersInput:
+				return opsee_aws_elb.GraphQLDescribeLoadBalancersInputType
+			case *BezosRequest_Autoscaling_DescribeAutoScalingGroupsInput:
+				return opsee_aws_autoscaling.GraphQLDescribeAutoScalingGroupsInputType
+			case *BezosRequest_Rds_DescribeDBInstancesInput:
+				return opsee_aws_rds.GraphQLDescribeDBInstancesInputType
 			}
 			return nil
 		},

@@ -15,6 +15,8 @@ message BastionState {
 	string customer_id = 2 [(gogoproto.moretags) = "db:\"customer_id\""];
 	string status = 3;
 	opsee.types.Timestamp last_seen = 4 [(gogoproto.moretags) = "db:\"last_seen\""];
+	string region = 5;
+	string vpc_id = 6;
 }
 
 message Stack {
