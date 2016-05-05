@@ -2772,23 +2772,6 @@ func init() {
 			}
 		}),
 	})
-	GraphQLCheckSpecUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
-		Name:        "CheckSpec",
-		Description: "",
-		Types: []*github_com_graphql_go_graphql.Object{
-			GraphQLHttpCheckType,
-			GraphQLCloudWatchCheckType,
-		},
-		ResolveType: func(value interface{}, info github_com_graphql_go_graphql.ResolveInfo) *github_com_graphql_go_graphql.Object {
-			switch value.(type) {
-			case *Check_HttpCheck:
-				return GraphQLHttpCheckType
-			case *Check_CloudwatchCheck:
-				return GraphQLCloudWatchCheckType
-			}
-			return nil
-		},
-	})
 	GraphQLCheckResponseReplyUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
 		Name:        "CheckResponseReply",
 		Description: "",
@@ -2802,6 +2785,23 @@ func init() {
 				return GraphQLHttpResponseType
 			case *CheckResponse_CloudwatchResponse:
 				return GraphQLCloudWatchResponseType
+			}
+			return nil
+		},
+	})
+	GraphQLCheckSpecUnion = github_com_graphql_go_graphql.NewUnion(github_com_graphql_go_graphql.UnionConfig{
+		Name:        "CheckSpec",
+		Description: "",
+		Types: []*github_com_graphql_go_graphql.Object{
+			GraphQLHttpCheckType,
+			GraphQLCloudWatchCheckType,
+		},
+		ResolveType: func(value interface{}, info github_com_graphql_go_graphql.ResolveInfo) *github_com_graphql_go_graphql.Object {
+			switch value.(type) {
+			case *Check_HttpCheck:
+				return GraphQLHttpCheckType
+			case *Check_CloudwatchCheck:
+				return GraphQLCloudWatchCheckType
 			}
 			return nil
 		},

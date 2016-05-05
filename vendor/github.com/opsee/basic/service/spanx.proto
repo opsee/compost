@@ -33,6 +33,7 @@ message GetCredentialsRequest {
 
 message GetCredentialsResponse {
 	aws.credentials.Value credentials = 1;
+	opsee.types.Timestamp Expires = 2;
 }
 
 service Spanx {
