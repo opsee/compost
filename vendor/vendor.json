@@ -429,6 +429,12 @@
 			"revisionTime": "2016-04-14T10:55:35-07:00"
 		},
 		{
+			"checksumSHA1": "ZdlPkhYQOsXxMLGOKorifQ4zEU0=",
+			"path": "github.com/opsee/spanx/spanxcreds",
+			"revision": "8d9c9415f9621c52980494e8bb37dbab31e7af91",
+			"revisionTime": "2016-05-06T15:20:28-07:00"
+		},
+		{
 			"checksumSHA1": "Hqn9bX1B1dMlG4p6WQcwAD+W2g8=",
 			"path": "github.com/opsee/vaper",
 			"revision": "7a6308e9d536835f8697064d57f6502d172369d1",
