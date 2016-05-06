@@ -5,7 +5,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/opsee/basic/schema"
-	opsee "github.com/opsee/basic/service"
 	"github.com/opsee/spanx/spanxcreds"
 	"golang.org/x/net/context"
 )
