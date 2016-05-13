@@ -4,6 +4,7 @@ import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 import "github.com/opsee/basic/schema/aws/credentials/types.proto";
 import "github.com/opsee/basic/schema/user.proto";
+import "stack.proto";
 
 package opsee;
 
@@ -16,15 +17,15 @@ message EnhancedCombatModeRequest {
 
 message EnhancedCombatModeResponse {
 	string stack_url = 1;
+	string template_url = 2;
 }
 
-message PutRoleRequest {
+message GetRoleStackRequest {
 	User user = 1;
-	aws.credentials.Value credentials = 2;
 }
 
-message PutRoleResponse {
-	aws.credentials.Value credentials = 1;
+message GetRoleStackResponse {
+	RoleStack role_stack = 1;
 }
 
 message GetCredentialsRequest {
@@ -38,6 +39,6 @@ message GetCredentialsResponse {
 
 service Spanx {
 	rpc EnhancedCombatMode(EnhancedCombatModeRequest) returns (EnhancedCombatModeResponse) {}
-	rpc PutRole(PutRoleRequest) returns (PutRoleResponse) {}
+	rpc GetRoleStack(GetRoleStackRequest) returns (GetRoleStackResponse) {}
 	rpc GetCredentials(GetCredentialsRequest) returns (GetCredentialsResponse) {}
 }
