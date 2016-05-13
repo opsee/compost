@@ -265,6 +265,7 @@ func (c *Composter) query() *graphql.Object {
 			"checks":  c.queryChecks(),
 			"region":  c.queryRegion(),
 			"hasRole": c.queryHasRole(),
+			"role":    c.queryRole(),
 		},
 	})
 
@@ -387,6 +388,20 @@ func (c *Composter) queryHasRole() *graphql.Field {
 			}
 
 			return c.resolver.HasRole(p.Context, user)
+		},
+	}
+}
+
+func (c *Composter) queryRole() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLRoleStackType,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			return c.resolver.GetRoleStack(p.Context, user)
 		},
 	}
 }
@@ -865,6 +880,7 @@ func (c *Composter) mutation() *graphql.Object {
 			"deleteChecks":              c.deleteChecks(),
 			"testCheck":                 c.testCheck(),
 			"makeLaunchRoleUrlTemplate": c.makeLaunchRoleUrlTemplate(),
+			"makeLaunchRoleUrl":         c.makeLaunchRoleUrl(),
 			"region":                    c.mutateRegion(),
 		},
 	})
@@ -996,6 +1012,26 @@ func (c *Composter) makeLaunchRoleUrlTemplate() *graphql.Field {
 			}
 
 			templ, err := c.resolver.LaunchRoleUrlTemplate(p.Context, user)
+			if err != nil {
+				return nil, err
+			}
+
+			// returning as a json.RawMessage so as to not escape the ampersand
+			return json.RawMessage(templ), nil
+		},
+	}
+}
+
+func (c *Composter) makeLaunchRoleUrl() *graphql.Field {
+	return &graphql.Field{
+		Type: JsonScalar,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			templ, err := c.resolver.LaunchRoleUrl(p.Context, user)
 			if err != nil {
 				return nil, err
 			}

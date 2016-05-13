@@ -30,3 +30,14 @@ message Stack {
 	opsee.types.Timestamp created_at = 8 [(gogoproto.moretags) = "db:\"created_at\""];
 	opsee.types.Timestamp updated_at = 9 [(gogoproto.moretags) = "db:\"updated_at\""];
 }
+
+message RoleStack {
+	string external_id = 1 [(gogoproto.moretags) = "db:\"external_id\""];
+	string customer_id = 2 [(gogoproto.moretags) = "db:\"customer_id\""];
+	string stack_id = 3 [(gogoproto.moretags) = "db:\"stack_id\""];
+	string stack_name = 4 [(gogoproto.moretags) = "db:\"stack_name\""];
+	string region = 5;
+	bool active = 6 ;
+	opsee.types.Timestamp created_at = 7 [(gogoproto.moretags) = "db:\"created_at\""];
+	opsee.types.Timestamp updated_at = 8 [(gogoproto.moretags) = "db:\"updated_at\""];
+}

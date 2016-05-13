@@ -23,7 +23,7 @@ func (t *SpanxTestClient) EnhancedCombatMode(ctx context.Context, in *service.En
 }
 
 // Stub
-func (t *SpanxTestClient) PutRole(ctx context.Context, in *service.PutRoleRequest, opts ...grpc.CallOption) (*service.PutRoleResponse, error) {
+func (t *SpanxTestClient) GetRoleStack(ctx context.Context, in *service.GetRoleStackRequest, opts ...grpc.CallOption) (*service.GetRoleStackResponse, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

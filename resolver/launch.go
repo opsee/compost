@@ -24,6 +24,30 @@ func (c *Client) LaunchRoleUrlTemplate(ctx context.Context, user *schema.User) (
 	}
 
 	logger.Infof("got new role url template: %s", spanxResp.StackUrl)
+	if spanxResp.TemplateUrl != "" {
+		return spanxResp.TemplateUrl, nil
+	} else {
+		return spanxResp.StackUrl, nil
+	}
+}
+
+func (c *Client) LaunchRoleUrl(ctx context.Context, user *schema.User) (string, error) {
+	logger := log.WithFields(log.Fields{
+		"customer_id": user.CustomerId,
+		"email":       user.Email,
+	})
+	logger.Info("launch role url request")
+
+	spanxResp, err := c.Spanx.EnhancedCombatMode(ctx, &opsee.EnhancedCombatModeRequest{
+		User: user,
+	})
+
+	if err != nil {
+		logger.WithError(err).Error("error getting new role url")
+		return "", err
+	}
+
+	logger.Infof("got new role url template: %s", spanxResp.StackUrl)
 	return spanxResp.StackUrl, nil
 }
 
@@ -44,6 +68,25 @@ func (c *Client) HasRole(ctx context.Context, user *schema.User) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func (c *Client) GetRoleStack(ctx context.Context, user *schema.User) (*schema.RoleStack, error) {
+	logger := log.WithFields(log.Fields{
+		"customer_id": user.CustomerId,
+		"email":       user.Email,
+	})
+	logger.Info("role request")
+
+	resp, err := c.Spanx.GetRoleStack(ctx, &opsee.GetRoleStackRequest{
+		User: user,
+	})
+
+	if err != nil {
+		logger.WithError(err).Error("error getting role stack")
+		return nil, err
+	}
+
+	return resp.RoleStack, nil
 }
 
 func (c *Client) ScanRegion(ctx context.Context, user *schema.User, region string) (*schema.Region, error) {
