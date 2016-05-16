@@ -86,6 +86,11 @@ func (c *Client) GetRoleStack(ctx context.Context, user *schema.User) (*schema.R
 		return nil, err
 	}
 
+	if resp == nil {
+		logger.Debug("no role stack found")
+		return nil, nil
+	}
+
 	return resp.RoleStack, nil
 }
 
