@@ -32,3 +32,26 @@ message Customer {
 	repeated User users = 5;
 	repeated BastionState bastion_states = 6;
 }
+
+message Team {
+  string id = 1;
+	string name = 2;
+	string subscription = 3;
+	CreditCardInfo creditCardInfo = 4;
+	repeated Invoice invoices = 5;
+	repeated User users = 6;
+}
+
+message Invoice {
+	opsee.types.Timestamp date = 1;
+	int32 amount = 2;
+	bool paid = 3;
+}
+
+message CreditCardInfo {
+	string name = 1;
+	string last4 = 2;
+	int32 exp_month = 3;
+	int32 exp_year = 4;
+	string brand = 5;
+}

@@ -1,0 +1,134 @@
+syntax = "proto2";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+
+package opsee.aws.ecs;
+
+option go_package = "ecs";
+option (opseeproto.graphql) = true;
+
+
+message Attribute {
+  optional string Name = 2;
+  optional string Value = 3;
+}
+
+message Container {
+  optional string ContainerArn = 2;
+  optional sint64 ExitCode = 3;
+  optional string LastStatus = 4;
+  optional string Name = 5;
+  repeated NetworkBinding NetworkBindings = 6;
+  optional string Reason = 7;
+  optional string TaskArn = 8;
+}
+
+message ContainerInstance {
+  optional bool AgentConnected = 2;
+  optional string AgentUpdateStatus = 3;
+  repeated Attribute Attributes = 4;
+  optional string ContainerInstanceArn = 5;
+  optional string Ec2InstanceId = 6;
+  optional sint64 PendingTasksCount = 7;
+  repeated Resource RegisteredResources = 8;
+  repeated Resource RemainingResources = 9;
+  optional sint64 RunningTasksCount = 10;
+  optional string Status = 11;
+  optional VersionInfo VersionInfo = 12;
+}
+
+message ContainerOverride {
+  repeated string Command = 2;
+  repeated KeyValuePair Environment = 3;
+  optional string Name = 4;
+}
+
+message DescribeContainerInstancesInput {
+  optional string Cluster = 2;
+  repeated string ContainerInstances = 3;
+}
+
+message DescribeContainerInstancesOutput {
+  repeated ContainerInstance ContainerInstances = 2;
+  repeated Failure Failures = 3;
+}
+
+message DescribeTasksInput {
+  optional string Cluster = 2;
+  repeated string Tasks = 3;
+}
+
+message DescribeTasksOutput {
+  repeated Failure Failures = 2;
+  repeated Task Tasks = 3;
+}
+
+message Failure {
+  optional string Arn = 2;
+  optional string Reason = 3;
+}
+
+message KeyValuePair {
+  optional string Name = 2;
+  optional string Value = 3;
+}
+
+message ListTasksInput {
+  optional string Cluster = 2;
+  optional string ContainerInstance = 3;
+  optional string DesiredStatus = 4;
+  optional string Family = 5;
+  optional sint64 MaxResults = 6;
+  optional string NextToken = 7;
+  optional string ServiceName = 8;
+  optional string StartedBy = 9;
+}
+
+message ListTasksOutput {
+  optional string NextToken = 2;
+  repeated string TaskArns = 3;
+}
+
+message NetworkBinding {
+  optional string BindIP = 2;
+  optional sint64 ContainerPort = 3;
+  optional sint64 HostPort = 4;
+  optional string Protocol = 5;
+}
+
+message Resource {
+  optional double DoubleValue = 2;
+  optional sint64 IntegerValue = 3;
+  optional sint64 LongValue = 4;
+  optional string Name = 5;
+  repeated string StringSetValue = 6;
+  optional string Type = 7;
+}
+
+message Task {
+  optional string ClusterArn = 2;
+  optional string ContainerInstanceArn = 3;
+  repeated Container Containers = 4;
+  optional opsee.types.Timestamp CreatedAt = 5;
+  optional string DesiredStatus = 6;
+  optional string LastStatus = 7;
+  optional TaskOverride Overrides = 8;
+  optional opsee.types.Timestamp StartedAt = 9;
+  optional string StartedBy = 10;
+  optional opsee.types.Timestamp StoppedAt = 11;
+  optional string StoppedReason = 12;
+  optional string TaskArn = 13;
+  optional string TaskDefinitionArn = 14;
+}
+
+message TaskOverride {
+  repeated ContainerOverride ContainerOverrides = 2;
+}
+
+message VersionInfo {
+  optional string AgentHash = 2;
+  optional string AgentVersion = 3;
+  optional string DockerVersion = 4;
+}
+

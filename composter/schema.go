@@ -30,12 +30,20 @@ var (
 	errUnknownInstanceMetricType   = errors.New("no metrics for that instance type")
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
 	errDecodeCheckInput            = errors.New("error decoding checks input")
+	errDecodeTeamInput             = errors.New("error decoding team input")
+	errDecodeUserInput             = errors.New("error decoding team input")
 	errUnknownAction               = errors.New("unknown action")
+
+	UserStatusEnumType       *graphql.Enum
+	TeamSubscriptionEnumType *graphql.Enum
 
 	InstanceType   *graphql.Object
 	DbInstanceType *graphql.Object
 	CheckType      *graphql.Object
+
 	CheckInputType *graphql.InputObject
+	TeamInputType  *graphql.InputObject
+	UserInputType  *graphql.InputObject
 )
 
 type instanceAction int
@@ -72,8 +80,41 @@ func (c *Composter) mustSchema() {
 }
 
 func (c *Composter) initTypes() {
-	metrics := c.queryMetrics()
+	if UserStatusEnumType == nil {
+		UserStatusEnumType = graphql.NewEnum(graphql.EnumConfig{
+			Name: "UserStatus",
+			Values: graphql.EnumValueConfigMap{
+				"invited": &graphql.EnumValueConfig{
+					Value: "invited",
+				},
+				"active": &graphql.EnumValueConfig{
+					Value: "active",
+				},
+				"inactive": &graphql.EnumValueConfig{
+					Value: "inactive",
+				},
+			},
+		})
+	}
 
+	if TeamSubscriptionEnumType == nil {
+		TeamSubscriptionEnumType = graphql.NewEnum(graphql.EnumConfig{
+			Name: "TeamSubscription",
+			Values: graphql.EnumValueConfigMap{
+				"free": &graphql.EnumValueConfig{
+					Value: "free",
+				},
+				"basic": &graphql.EnumValueConfig{
+					Value: "basic",
+				},
+				"advanced": &graphql.EnumValueConfig{
+					Value: "advanced",
+				},
+			},
+		})
+	}
+
+	metrics := c.queryMetrics()
 	if InstanceType == nil {
 		InstanceType = graphql.NewObject(graphql.ObjectConfig{
 			Name: opsee_aws_ec2.GraphQLInstanceType.Name(),
@@ -256,6 +297,40 @@ func (c *Composter) initTypes() {
 			},
 		})
 	}
+
+	if TeamInputType == nil {
+		TeamInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "Team",
+			Description: "An Opsee Team",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"subscription": &graphql.InputObjectFieldConfig{
+					Type:        TeamSubscriptionEnumType,
+					Description: "The subscription plan",
+				},
+				"stripeToken": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The credit card token",
+				},
+			},
+		})
+	}
+
+	if UserInputType == nil {
+		UserInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "User",
+			Description: "An Opsee User",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"id": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Int,
+					Description: "The user id",
+				},
+				"status": &graphql.InputObjectFieldConfig{
+					Type:        graphql.NewNonNull(UserStatusEnumType),
+					Description: "The user's status",
+				},
+			},
+		})
+	}
 }
 
 func (c *Composter) query() *graphql.Object {
@@ -266,6 +341,7 @@ func (c *Composter) query() *graphql.Object {
 			"region":  c.queryRegion(),
 			"hasRole": c.queryHasRole(),
 			"role":    c.queryRole(),
+			"team":    c.queryTeam(),
 		},
 	})
 
@@ -402,6 +478,20 @@ func (c *Composter) queryRole() *graphql.Field {
 			}
 
 			return c.resolver.GetRoleStack(p.Context, user)
+		},
+	}
+}
+
+func (c *Composter) queryTeam() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLTeamType,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			return c.resolver.GetTeam(p.Context, user)
 		},
 	}
 }
@@ -882,10 +972,62 @@ func (c *Composter) mutation() *graphql.Object {
 			"makeLaunchRoleUrlTemplate": c.makeLaunchRoleUrlTemplate(),
 			"makeLaunchRoleUrl":         c.makeLaunchRoleUrl(),
 			"region":                    c.mutateRegion(),
+			"team":                      c.mutateTeam(),
+			"user":                      c.mutateUser(),
 		},
 	})
 
 	return mutation
+}
+
+func (c *Composter) mutateTeam() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLTeamType,
+		Args: graphql.FieldConfigArgument{
+			"team": &graphql.ArgumentConfig{
+				Description: "The Team to update",
+				Type:        TeamInputType,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			teamInput, ok := p.Args["team"].(map[string]interface{})
+			if !ok {
+				return nil, errDecodeTeamInput
+			}
+
+			return c.resolver.PutTeam(p.Context, user, teamInput)
+		},
+	}
+}
+
+func (c *Composter) mutateUser() *graphql.Field {
+	return &graphql.Field{
+		Type: schema.GraphQLUserType,
+		Args: graphql.FieldConfigArgument{
+			"user": &graphql.ArgumentConfig{
+				Description: "The Team to update",
+				Type:        UserInputType,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			userInput, ok := p.Args["user"].(map[string]interface{})
+			if !ok {
+				return nil, errDecodeUserInput
+			}
+
+			return c.resolver.PutUser(p.Context, user, userInput)
+		},
+	}
 }
 
 func (c *Composter) mutateRegion() *graphql.Field {
