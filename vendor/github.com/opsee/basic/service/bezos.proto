@@ -4,6 +4,7 @@ import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 import "github.com/opsee/basic/schema/aws/cloudwatch/types.proto";
 import "github.com/opsee/basic/schema/aws/ec2/types.proto";
+import "github.com/opsee/basic/schema/aws/ecs/types.proto";
 import "github.com/opsee/basic/schema/aws/elb/types.proto";
 import "github.com/opsee/basic/schema/aws/autoscaling/types.proto";
 import "github.com/opsee/basic/schema/aws/rds/types.proto";
@@ -35,6 +36,10 @@ message BezosRequest {
     aws.autoscaling.DescribeAutoScalingGroupsInput autoscaling_DescribeAutoScalingGroupsInput = 401;
 
     aws.rds.DescribeDBInstancesInput rds_DescribeDBInstancesInput = 501;
+	
+	aws.ecs.ListTasksInput ecs_ListTasksInput = 601;
+	aws.ecs.DescribeTasksInput ecs_DescribeTasksInput = 602;
+	aws.ecs.DescribeContainerInstancesInput ecs_DescribeContainerInstancesInput = 603;
   }
 }
 
@@ -56,6 +61,10 @@ message BezosResponse {
     aws.autoscaling.DescribeAutoScalingGroupsOutput autoscaling_DescribeAutoScalingGroupsOutput = 401;
 
     aws.rds.DescribeDBInstancesOutput rds_DescribeDBInstancesOutput = 501;
+	
+	aws.ecs.ListTasksOutput ecs_ListTasksOutput = 601;
+	aws.ecs.DescribeTasksOutput ecs_DescribeTasksOutput = 602;
+	aws.ecs.DescribeContainerInstancesOutput ecs_DescribeContainerInstancesOutput = 603;
   }
 }
 
