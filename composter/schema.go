@@ -10,6 +10,7 @@ import (
 	opsee_aws_autoscaling "github.com/opsee/basic/schema/aws/autoscaling"
 	opsee_aws_cloudwatch "github.com/opsee/basic/schema/aws/cloudwatch"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
+	opsee_aws_ecs "github.com/opsee/basic/schema/aws/ecs"
 	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
@@ -604,6 +605,7 @@ func (c *Composter) queryGroups() *graphql.Field {
 			Description: "A group target",
 			Types: []*graphql.Object{
 				opsee_aws_ec2.GraphQLSecurityGroupType,
+				opsee_aws_ecs.GraphQLServiceType,
 				opsee_aws_elb.GraphQLLoadBalancerDescriptionType,
 				opsee_aws_autoscaling.GraphQLGroupType,
 			},
@@ -611,6 +613,8 @@ func (c *Composter) queryGroups() *graphql.Field {
 				switch value.(type) {
 				case *opsee_aws_ec2.SecurityGroup:
 					return opsee_aws_ec2.GraphQLSecurityGroupType
+				case *opsee_aws_ecs.Service:
+					return opsee_aws_ecs.GraphQLServiceType
 				case *opsee_aws_elb.LoadBalancerDescription:
 					return opsee_aws_elb.GraphQLLoadBalancerDescriptionType
 				case *opsee_aws_autoscaling.Group:
