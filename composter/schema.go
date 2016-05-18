@@ -354,6 +354,8 @@ func (c *Composter) adminQuery() *graphql.Object {
 		Fields: graphql.Fields{
 			"checks": c.queryChecks(),
 			"region": c.queryRegion(),
+			"role":   c.queryRole(),
+			"team":   c.queryTeam(),
 			"listCustomers": &graphql.Field{
 				Type: opsee.GraphQLListCustomersResponseType,
 				Args: graphql.FieldConfigArgument{
