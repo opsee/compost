@@ -387,6 +387,12 @@
 			"revisionTime": "2016-05-17T15:59:22-07:00"
 		},
 		{
+			"checksumSHA1": "w8a/12OSULhXLKPN3boKz9zFs34=",
+			"path": "github.com/opsee/basic/schema/aws/ecs",
+			"revision": "1afdfb519e10e0618112a1b446782f7ac391a4ff",
+			"revisionTime": "2016-05-18T18:49:23Z"
+		},
+		{
 			"checksumSHA1": "9JoTo+10PvSF5YcdZahA35SnCUk=",
 			"origin": "github.com/opsee/compost/vendor/github.com/opsee/basic/schema/aws/elb",
 			"path": "github.com/opsee/basic/schema/aws/elb",
@@ -401,11 +407,10 @@
 			"revisionTime": "2016-05-17T15:59:22-07:00"
 		},
 		{
-			"checksumSHA1": "OCoSCNdAbb6AI6ewoMQjRrGouEA=",
-			"origin": "github.com/opsee/compost/vendor/github.com/opsee/basic/service",
+			"checksumSHA1": "Or4IYwpNCT9UDf7zlGLuxStnYdA=",
 			"path": "github.com/opsee/basic/service",
-			"revision": "4d95f79b4e7eb54f7d9d643a9850b4f48e0e3a73",
-			"revisionTime": "2016-05-17T15:59:22-07:00"
+			"revision": "1afdfb519e10e0618112a1b446782f7ac391a4ff",
+			"revisionTime": "2016-05-18T18:49:23Z"
 		},
 		{
 			"checksumSHA1": "ClyUhQrtvzKEiaw0VIl5cdePSOQ=",
