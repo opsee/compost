@@ -44,6 +44,22 @@ message ContainerOverride {
   optional string Name = 4;
 }
 
+message Deployment {
+  optional opsee.types.Timestamp CreatedAt = 2;
+  optional sint64 DesiredCount = 3;
+  optional string Id = 4;
+  optional sint64 PendingCount = 5;
+  optional sint64 RunningCount = 6;
+  optional string Status = 7;
+  optional string TaskDefinition = 8;
+  optional opsee.types.Timestamp UpdatedAt = 9;
+}
+
+message DeploymentConfiguration {
+  optional sint64 MaximumPercent = 2;
+  optional sint64 MinimumHealthyPercent = 3;
+}
+
 message DescribeContainerInstancesInput {
   optional string Cluster = 2;
   repeated string ContainerInstances = 3;
@@ -52,6 +68,16 @@ message DescribeContainerInstancesInput {
 message DescribeContainerInstancesOutput {
   repeated ContainerInstance ContainerInstances = 2;
   repeated Failure Failures = 3;
+}
+
+message DescribeServicesInput {
+  optional string Cluster = 2;
+  repeated string Services = 3;
+}
+
+message DescribeServicesOutput {
+  repeated Failure Failures = 2;
+  repeated Service Services = 3;
 }
 
 message DescribeTasksInput {
@@ -74,6 +100,27 @@ message KeyValuePair {
   optional string Value = 3;
 }
 
+message ListClustersInput {
+  optional sint64 MaxResults = 2;
+  optional string NextToken = 3;
+}
+
+message ListClustersOutput {
+  repeated string ClusterArns = 2;
+  optional string NextToken = 3;
+}
+
+message ListServicesInput {
+  optional string Cluster = 2;
+  optional sint64 MaxResults = 3;
+  optional string NextToken = 4;
+}
+
+message ListServicesOutput {
+  optional string NextToken = 2;
+  repeated string ServiceArns = 3;
+}
+
 message ListTasksInput {
   optional string Cluster = 2;
   optional string ContainerInstance = 3;
@@ -90,6 +137,12 @@ message ListTasksOutput {
   repeated string TaskArns = 3;
 }
 
+message LoadBalancer {
+  optional string ContainerName = 2;
+  optional sint64 ContainerPort = 3;
+  optional string LoadBalancerName = 4;
+}
+
 message NetworkBinding {
   optional string BindIP = 2;
   optional sint64 ContainerPort = 3;
@@ -104,6 +157,29 @@ message Resource {
   optional string Name = 5;
   repeated string StringSetValue = 6;
   optional string Type = 7;
+}
+
+message Service {
+  optional string ClusterArn = 2;
+  optional opsee.types.Timestamp CreatedAt = 3;
+  optional DeploymentConfiguration DeploymentConfiguration = 4;
+  repeated Deployment Deployments = 5;
+  optional sint64 DesiredCount = 6;
+  repeated ServiceEvent Events = 7;
+  repeated LoadBalancer LoadBalancers = 8;
+  optional sint64 PendingCount = 9;
+  optional string RoleArn = 10;
+  optional sint64 RunningCount = 11;
+  optional string ServiceArn = 12;
+  optional string ServiceName = 13;
+  optional string Status = 14;
+  optional string TaskDefinition = 15;
+}
+
+message ServiceEvent {
+  optional opsee.types.Timestamp CreatedAt = 2;
+  optional string Id = 3;
+  optional string Message = 4;
 }
 
 message Task {

@@ -2,10 +2,13 @@ package resolver
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/opsee/basic/schema"
 	opsee_aws_autoscaling "github.com/opsee/basic/schema/aws/autoscaling"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
+	opsee_aws_ecs "github.com/opsee/basic/schema/aws/ecs"
 	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 	opsee "github.com/opsee/basic/service"
 	log "github.com/sirupsen/logrus"
@@ -20,6 +23,8 @@ func (c *Client) GetGroups(ctx context.Context, user *schema.User, region, vpc, 
 	switch groupType {
 	case "security":
 		return c.getGroupsSecurity(ctx, user, region, vpc, groupId)
+	case "ecs_service":
+		return c.getGroupsEcsService(ctx, user, region, vpc, groupId)
 	case "elb":
 		return c.getGroupsElb(ctx, user, region, vpc, groupId)
 	case "autoscaling":
@@ -27,6 +32,169 @@ func (c *Client) GetGroups(ctx context.Context, user *schema.User, region, vpc, 
 	}
 
 	return fmt.Errorf("group type not known: %s", groupType), nil
+}
+
+// getGroupsEcsService takes the normal arguments, but the groupId argument is actually a tuple of
+// (ecs cluster name/arn, service name/arn). If left blank, we will try our best to find all of the
+// services running only on clusters deployed to this VPC.
+func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, region, vpc, groupId string) ([]*opsee_aws_ecs.Service, error) {
+	if groupId != "" {
+		t := strings.Split("\x00", groupId)
+		if len(t) < 2 {
+			return nil, fmt.Errorf("Invalid group id for ECS Service")
+		}
+
+		cluster_id := t[0]
+		service_name := t[1]
+
+		input := &opsee_aws_ecs.DescribeServicesInput{
+			Services: []string{service_name},
+			Cluster:  aws.String(cluster_id),
+		}
+
+		resp, err := c.Bezos.Get(
+			ctx,
+			&opsee.BezosRequest{
+				User:   user,
+				Region: region,
+				VpcId:  vpc,
+				Input:  &opsee.BezosRequest_Ecs_DescribeServicesInput{input},
+			},
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		output := resp.GetEcs_DescribeServicesOutput()
+		if output == nil {
+			return nil, fmt.Errorf("error decoding aws response")
+		}
+
+		svc := make([]*opsee_aws_ecs.Service, 0, 1)
+		if len(output.Services) > 0 {
+			svc[0] = output.Services[0]
+		}
+		return svc, nil
+	}
+
+	lcInput := &opsee_aws_ecs.ListClustersInput{}
+	resp, err := c.Bezos.Get(
+		ctx,
+		&opsee.BezosRequest{
+			User:   user,
+			Region: region,
+			VpcId:  vpc,
+			Input:  &opsee.BezosRequest_Ecs_ListClustersInput{lcInput},
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO(greg): support paging. god help us.
+	lcOutput := resp.GetEcs_ListClustersOutput()
+	if lcOutput == nil {
+		return nil, fmt.Errorf("error decoding aws response")
+	}
+
+	var svcs []*opsee_aws_ecs.Service
+
+	for _, cArn := range lcOutput.ClusterArns {
+		dciInput := &opsee_aws_ecs.DescribeContainerInstancesInput{
+			Cluster: aws.String(cArn),
+		}
+		resp, err := c.Bezos.Get(
+			ctx,
+			&opsee.BezosRequest{
+				User:   user,
+				Region: region,
+				VpcId:  vpc,
+				Input:  &opsee.BezosRequest_Ecs_DescribeContainerInstancesInput{dciInput},
+			},
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		// TODO(greg): support paging. god help us.
+		dciOutput := resp.GetEcs_DescribeContainerInstancesOutput()
+		if dciOutput == nil {
+			return nil, fmt.Errorf("error decoding aws response")
+		}
+
+		if len(dciOutput.ContainerInstances) > 0 {
+			instanceId := dciOutput.ContainerInstances[0].Ec2InstanceId
+			input := &opsee_aws_ec2.DescribeInstancesInput{
+				InstanceIds: []string{aws.StringValue(instanceId)},
+			}
+
+			resp, err := c.Bezos.Get(
+				ctx,
+				&opsee.BezosRequest{
+					User:   user,
+					Region: region,
+					VpcId:  vpc,
+					Input:  &opsee.BezosRequest_Ec2_DescribeInstancesInput{input},
+				},
+			)
+			if err != nil {
+				return nil, err
+			}
+
+			output := resp.GetEc2_DescribeInstancesOutput()
+			if output != nil {
+				// we have a container instance in the vpc we're in... now we can get
+				// services for this cluster.
+				lsInput := &opsee_aws_ecs.ListServicesInput{
+					Cluster: aws.String(cArn),
+				}
+
+				resp, err := c.Bezos.Get(
+					ctx,
+					&opsee.BezosRequest{
+						User:   user,
+						Region: region,
+						VpcId:  vpc,
+						Input:  &opsee.BezosRequest_Ecs_ListServicesInput{lsInput},
+					},
+				)
+				if err != nil {
+					return nil, err
+				}
+
+				lsOutput := resp.GetEcs_ListServicesOutput()
+				if lsOutput != nil {
+					dsInput := &opsee_aws_ecs.DescribeServicesInput{
+						Cluster:  aws.String(cArn),
+						Services: lsOutput.ServiceArns,
+					}
+
+					resp, err := c.Bezos.Get(
+						ctx,
+						&opsee.BezosRequest{
+							User:   user,
+							Region: region,
+							VpcId:  vpc,
+							Input:  &opsee.BezosRequest_Ecs_DescribeServicesInput{dsInput},
+						},
+					)
+					if err != nil {
+						return nil, err
+					}
+
+					dsOutput := resp.GetEcs_DescribeServicesOutput()
+					if dsOutput != nil {
+						for _, s := range dsOutput.Services {
+							svcs = append(svcs, s)
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	return svcs, nil
 }
 
 func (c *Client) getGroupsSecurity(ctx context.Context, user *schema.User, region, vpc, groupId string) ([]*opsee_aws_ec2.SecurityGroup, error) {
