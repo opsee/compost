@@ -16,7 +16,7 @@ import (
 	opsee "github.com/opsee/basic/service"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	"time"
-	// log "github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -651,7 +651,13 @@ func (c *Composter) queryGroups() *graphql.Field {
 				return nil, errMissingGroupType
 			}
 
-			return c.resolver.GetGroups(p.Context, user, queryContext.Region, queryContext.VpcId, groupType, groupId)
+			groups, err := c.resolver.GetGroups(p.Context, user, queryContext.Region, queryContext.VpcId, groupType, groupId)
+			if err != nil {
+				log.WithError(err).Error("error querying groups")
+				return nil, err
+			}
+
+			return groups, nil
 		},
 	}
 }

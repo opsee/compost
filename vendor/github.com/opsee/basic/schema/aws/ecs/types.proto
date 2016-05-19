@@ -110,6 +110,17 @@ message ListClustersOutput {
   optional string NextToken = 3;
 }
 
+message ListContainerInstancesInput {
+  optional string Cluster = 2;
+  optional sint64 MaxResults = 3;
+  optional string NextToken = 4;
+}
+
+message ListContainerInstancesOutput {
+  repeated string ContainerInstanceArns = 2;
+  optional string NextToken = 3;
+}
+
 message ListServicesInput {
   optional string Cluster = 2;
   optional sint64 MaxResults = 3;
