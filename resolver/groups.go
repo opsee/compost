@@ -38,6 +38,12 @@ func (c *Client) GetGroups(ctx context.Context, user *schema.User, region, vpc, 
 // (ecs cluster name/arn, service name/arn). If left blank, we will try our best to find all of the
 // services running only on clusters deployed to this VPC.
 func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, region, vpc, groupId string) ([]*opsee_aws_ecs.Service, error) {
+	logger := log.WithFields(log.Fields{
+		"customer_id": user.CustomerId,
+		"endpoint":    "getGroupsEcsService",
+	})
+	logger.Info("get groups request")
+
 	if groupId != "" {
 		t := strings.Split("\x00", groupId)
 		if len(t) < 2 {
@@ -71,6 +77,10 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 		}
 
 		svc := make([]*opsee_aws_ecs.Service, 0, 1)
+		if len(output.Services) == 0 {
+			logger.Info("no services found")
+		}
+
 		if len(output.Services) > 0 {
 			svc[0] = output.Services[0]
 		}
@@ -97,13 +107,45 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 		return nil, fmt.Errorf("error decoding aws response")
 	}
 
+	if len(lcOutput.ClusterArns) == 0 {
+		logger.Info("no clusters found")
+	}
+
 	var svcs []*opsee_aws_ecs.Service
 
 	for _, cArn := range lcOutput.ClusterArns {
-		dciInput := &opsee_aws_ecs.DescribeContainerInstancesInput{
+		lciInput := &opsee_aws_ecs.ListContainerInstancesInput{
 			Cluster: aws.String(cArn),
 		}
 		resp, err := c.Bezos.Get(
+			ctx,
+			&opsee.BezosRequest{
+				User:   user,
+				Region: region,
+				VpcId:  vpc,
+				Input:  &opsee.BezosRequest_Ecs_ListContainerInstancesInput{lciInput},
+			},
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		// TODO(greg): support paging. god help us.
+		lciOutput := resp.GetEcs_ListContainerInstancesOutput()
+		if lciOutput == nil {
+			return nil, fmt.Errorf("error decoding aws response")
+		}
+
+		if len(lciOutput.ContainerInstanceArns) == 0 {
+			logger.Info("no container instances found")
+			return svcs, nil
+		}
+
+		dciInput := &opsee_aws_ecs.DescribeContainerInstancesInput{
+			Cluster:            aws.String(cArn),
+			ContainerInstances: lciOutput.ContainerInstanceArns,
+		}
+		resp, err = c.Bezos.Get(
 			ctx,
 			&opsee.BezosRequest{
 				User:   user,
@@ -120,6 +162,10 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 		dciOutput := resp.GetEcs_DescribeContainerInstancesOutput()
 		if dciOutput == nil {
 			return nil, fmt.Errorf("error decoding aws response")
+		}
+
+		if len(dciOutput.ContainerInstances) == 0 {
+			logger.Info("no container instances found")
 		}
 
 		if len(dciOutput.ContainerInstances) > 0 {
@@ -184,6 +230,10 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 
 					dsOutput := resp.GetEcs_DescribeServicesOutput()
 					if dsOutput != nil {
+						if len(dsOutput.Services) == 0 {
+							logger.Info("no services found")
+						}
+
 						for _, s := range dsOutput.Services {
 							svcs = append(svcs, s)
 						}
