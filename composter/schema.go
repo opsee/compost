@@ -15,8 +15,8 @@ import (
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
-	"time"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 var (
@@ -32,7 +32,8 @@ var (
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
 	errDecodeCheckInput            = errors.New("error decoding checks input")
 	errDecodeTeamInput             = errors.New("error decoding team input")
-	errDecodeUserInput             = errors.New("error decoding team input")
+	errDecodeUserInput             = errors.New("error decoding user input")
+	errDecodeNotificationsInput    = errors.New("error decoding notifications input")
 	errUnknownAction               = errors.New("unknown action")
 
 	UserStatusEnumType       *graphql.Enum
@@ -42,9 +43,10 @@ var (
 	DbInstanceType *graphql.Object
 	CheckType      *graphql.Object
 
-	CheckInputType *graphql.InputObject
-	TeamInputType  *graphql.InputObject
-	UserInputType  *graphql.InputObject
+	CheckInputType        *graphql.InputObject
+	TeamInputType         *graphql.InputObject
+	UserInputType         *graphql.InputObject
+	NotificationInputType *graphql.InputObject
 )
 
 type instanceAction int
@@ -146,6 +148,57 @@ func (c *Composter) initTypes() {
 			},
 		})
 		addFields(CheckType, schema.GraphQLCheckType.Fields())
+	}
+
+	if TeamInputType == nil {
+		TeamInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "Team",
+			Description: "An Opsee Team",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"subscription": &graphql.InputObjectFieldConfig{
+					Type:        TeamSubscriptionEnumType,
+					Description: "The subscription plan",
+				},
+				"stripeToken": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The credit card token",
+				},
+			},
+		})
+	}
+
+	if UserInputType == nil {
+		UserInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "User",
+			Description: "An Opsee User",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"id": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Int,
+					Description: "The user id",
+				},
+				"status": &graphql.InputObjectFieldConfig{
+					Type:        graphql.NewNonNull(UserStatusEnumType),
+					Description: "The user's status",
+				},
+			},
+		})
+	}
+
+	if NotificationInputType == nil {
+		NotificationInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "Notification",
+			Description: "A notification endpoint for failing / passing checks",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"type": &graphql.InputObjectFieldConfig{
+					Type:        graphql.NewNonNull(graphql.String),
+					Description: "A notification type, such as slack_bot, email",
+				},
+				"value": &graphql.InputObjectFieldConfig{
+					Type:        graphql.NewNonNull(graphql.String),
+					Description: "A notification value, such as an email address or slack channel",
+				},
+			},
+		})
 	}
 
 	if CheckInputType == nil {
@@ -279,55 +332,8 @@ func (c *Composter) initTypes() {
 					Description: "Check assertions",
 				},
 				"notifications": &graphql.InputObjectFieldConfig{
-					Type: graphql.NewNonNull(graphql.NewList(graphql.NewInputObject(graphql.InputObjectConfig{
-						Name:        "Notification",
-						Description: "A notification endpoint for failing / passing checks",
-						Fields: graphql.InputObjectConfigFieldMap{
-							"type": &graphql.InputObjectFieldConfig{
-								Type:        graphql.NewNonNull(graphql.String),
-								Description: "A notification type, such as slack_bot, email",
-							},
-							"value": &graphql.InputObjectFieldConfig{
-								Type:        graphql.NewNonNull(graphql.String),
-								Description: "A notification value, such as an email address or slack channel",
-							},
-						},
-					}))),
+					Type:        graphql.NewNonNull(graphql.NewList(NotificationInputType)),
 					Description: "Check notifications",
-				},
-			},
-		})
-	}
-
-	if TeamInputType == nil {
-		TeamInputType = graphql.NewInputObject(graphql.InputObjectConfig{
-			Name:        "Team",
-			Description: "An Opsee Team",
-			Fields: graphql.InputObjectConfigFieldMap{
-				"subscription": &graphql.InputObjectFieldConfig{
-					Type:        TeamSubscriptionEnumType,
-					Description: "The subscription plan",
-				},
-				"stripeToken": &graphql.InputObjectFieldConfig{
-					Type:        graphql.String,
-					Description: "The credit card token",
-				},
-			},
-		})
-	}
-
-	if UserInputType == nil {
-		UserInputType = graphql.NewInputObject(graphql.InputObjectConfig{
-			Name:        "User",
-			Description: "An Opsee User",
-			Fields: graphql.InputObjectConfigFieldMap{
-				"id": &graphql.InputObjectFieldConfig{
-					Type:        graphql.Int,
-					Description: "The user id",
-				},
-				"status": &graphql.InputObjectFieldConfig{
-					Type:        graphql.NewNonNull(UserStatusEnumType),
-					Description: "The user's status",
 				},
 			},
 		})
@@ -338,11 +344,12 @@ func (c *Composter) query() *graphql.Object {
 	query := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"checks":  c.queryChecks(),
-			"region":  c.queryRegion(),
-			"hasRole": c.queryHasRole(),
-			"role":    c.queryRole(),
-			"team":    c.queryTeam(),
+			"checks":        c.queryChecks(),
+			"region":        c.queryRegion(),
+			"hasRole":       c.queryHasRole(),
+			"role":          c.queryRole(),
+			"team":          c.queryTeam(),
+			"notifications": c.queryNotifications(),
 		},
 	})
 
@@ -495,6 +502,28 @@ func (c *Composter) queryTeam() *graphql.Field {
 			}
 
 			return c.resolver.GetTeam(p.Context, user)
+		},
+	}
+}
+
+func (c *Composter) queryNotifications() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(schema.GraphQLNotificationType),
+		Args: graphql.FieldConfigArgument{
+			"default": &graphql.ArgumentConfig{
+				Description: "Fetch default notifications",
+				Type:        graphql.Boolean,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			defaultOnly, _ := p.Args["default"].(bool)
+
+			return c.resolver.GetNotifications(p.Context, user, defaultOnly)
 		},
 	}
 }
@@ -986,10 +1015,36 @@ func (c *Composter) mutation() *graphql.Object {
 			"region":                    c.mutateRegion(),
 			"team":                      c.mutateTeam(),
 			"user":                      c.mutateUser(),
+			"notifications":             c.mutateNotifications(),
 		},
 	})
 
 	return mutation
+}
+
+func (c *Composter) mutateNotifications() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(schema.GraphQLNotificationType),
+		Args: graphql.FieldConfigArgument{
+			"default": &graphql.ArgumentConfig{
+				Description: "Default notifications to set",
+				Type:        graphql.NewList(NotificationInputType),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			notificationsInput, ok := p.Args["default"].([]interface{})
+			if !ok {
+				return nil, errDecodeNotificationsInput
+			}
+
+			return c.resolver.PutDefaultNotifications(p.Context, user, notificationsInput)
+		},
+	}
 }
 
 func (c *Composter) mutateTeam() *graphql.Field {

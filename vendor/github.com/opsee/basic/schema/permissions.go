@@ -1,9 +1,27 @@
 package schema
 
-import opsee_types "github.com/opsee/protobuf/opseeproto/types"
+import (
+	"sync"
+
+	opsee_types "github.com/opsee/protobuf/opseeproto/types"
+)
 
 func init() {
-	opsee_types.PermissionsBitmap.Register(0, "billing")
-	opsee_types.PermissionsBitmap.Register(1, "management")
-	opsee_types.PermissionsBitmap.Register(2, "editing")
+	opsee_types.PermissionsRegistry.Register("user", &opsee_types.PermissionsBitmap{
+		map[int]string{
+			0: "admin",
+			1: "edit",
+			2: "billing",
+		},
+		sync.RWMutex{},
+	})
+
+	opsee_types.PermissionsRegistry.Register("org", &opsee_types.PermissionsBitmap{
+		map[int]string{
+			0: "multi-user",
+			1: "multibastion",
+			2: "on-site support",
+		},
+		sync.RWMutex{},
+	})
 }
