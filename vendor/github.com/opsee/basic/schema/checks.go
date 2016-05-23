@@ -12,10 +12,10 @@ import (
 
 // register types
 func init() {
-	opsee_types.AnyTypeRegistry.RegisterAny("CloudWatchCheck", reflect.TypeOf(CloudWatchCheck{}))
-	opsee_types.AnyTypeRegistry.RegisterAny("CloudWatchResponse", reflect.TypeOf(CloudWatchResponse{}))
-	opsee_types.AnyTypeRegistry.RegisterAny("HttpCheck", reflect.TypeOf(HttpCheck{}))
-	opsee_types.AnyTypeRegistry.RegisterAny("HttpResponse", reflect.TypeOf(HttpResponse{}))
+	opsee_types.AnyTypeRegistry.Register("CloudWatchCheck", reflect.TypeOf(CloudWatchCheck{}))
+	opsee_types.AnyTypeRegistry.Register("CloudWatchResponse", reflect.TypeOf(CloudWatchResponse{}))
+	opsee_types.AnyTypeRegistry.Register("HttpCheck", reflect.TypeOf(HttpCheck{}))
+	opsee_types.AnyTypeRegistry.Register("HttpResponse", reflect.TypeOf(HttpResponse{}))
 }
 
 // Metrics need to include double 0 values so we must use jsonpb to marshal them to json.

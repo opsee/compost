@@ -15,8 +15,10 @@ import (
 // also... why aren't notifications just part of checks???
 type Client interface {
 	ListNotifications(user *schema.User) ([]*Notification, error)
+	ListNotificationsDefault(user *schema.User) ([]*Notification, error)
 	ListNotificationsCheck(user *schema.User, checkId string) ([]*Notification, error)
 	CreateNotifications(user *schema.User, noteReq *NotificationRequest) error
+	CreateNotificationsDefault(user *schema.User, noteReq *NotificationRequest) error
 	CreateNotificationsMulti(user *schema.User, noteReq []*NotificationRequest) error
 }
 
@@ -49,6 +51,10 @@ func New(endpoint string) *hugsClient {
 
 func (c *hugsClient) ListNotifications(user *schema.User) ([]*Notification, error) {
 	return c.listNotifications(user, "/notifications")
+}
+
+func (c *hugsClient) ListNotificationsDefault(user *schema.User) ([]*Notification, error) {
+	return c.listNotifications(user, "/notifications-default")
 }
 
 func (c *hugsClient) ListNotificationsCheck(user *schema.User, checkId string) ([]*Notification, error) {
@@ -90,6 +96,10 @@ func (c *hugsClient) listNotifications(user *schema.User, path string) ([]*Notif
 
 func (c *hugsClient) CreateNotifications(user *schema.User, noteReq *NotificationRequest) error {
 	return c.createNotifications(user, "/notifications", noteReq)
+}
+
+func (c *hugsClient) CreateNotificationsDefault(user *schema.User, noteReq *NotificationRequest) error {
+	return c.createNotifications(user, "/notifications-default", noteReq)
 }
 
 func (c *hugsClient) CreateNotificationsMulti(user *schema.User, noteReq []*NotificationRequest) error {

@@ -1,34 +1,40 @@
 package types
 
 import (
+	"database/sql/driver"
 	"encoding/json"
+	"fmt"
 	"sync"
 )
 
-var PermissionsBitmap = &permissionsBitmap{bitmap: make(map[int]string)}
+var PermissionsRegistry = NewPermsRegistry()
 
-type permissionsBitmap struct {
-	bitmap map[int]string
+func NewPermissionsBitmap() *PermissionsBitmap {
+	return &PermissionsBitmap{Bitmap: make(map[int]string)}
+}
+
+type PermissionsBitmap struct {
+	Bitmap map[int]string
 	sync.RWMutex
 }
 
-func (p *permissionsBitmap) Get(i int) (string, bool) {
+func (p *PermissionsBitmap) Get(i int) (string, bool) {
 	p.RLock()
 	defer p.RUnlock()
-	t, ok := p.bitmap[i]
+	t, ok := p.Bitmap[i]
 	return t, ok
 }
 
-func (p *permissionsBitmap) Length() int {
+func (p *PermissionsBitmap) Length() int {
 	p.RLock()
 	defer p.RUnlock()
-	return len(p.bitmap)
+	return len(p.Bitmap)
 }
 
-func (p *permissionsBitmap) Register(i int, name string) {
+func (p *PermissionsBitmap) Register(i int, name string) {
 	p.Lock()
 	defer p.Unlock()
-	p.bitmap[i] = name
+	p.Bitmap[i] = name
 }
 
 type BitFlags interface {
@@ -72,9 +78,14 @@ func (p *Permission) HighBits() []int {
 }
 
 func (p *Permission) Permissions() []string {
+	// TODO(dan) return registry errors
 	var perms []string
+	r, ok := PermissionsRegistry.Get(p.Name)
+	if !ok {
+		return []string{}
+	}
 	for _, bit := range p.HighBits() {
-		if perm, ok := PermissionsBitmap.Get(bit); ok {
+		if perm, ok := r.Get(bit); ok {
 			perms = append(perms, perm)
 		}
 	}
@@ -84,4 +95,27 @@ func (p *Permission) Permissions() []string {
 // Override MarshalJson to return a list of permissions
 func (p *Permission) MarshalJSON() ([]byte, error) {
 	return json.Marshal(p.Permissions())
+}
+
+func (p *Permission) Scan(src interface{}) error {
+	switch value := src.(type) {
+	case int:
+		p.Perm = uint64(value)
+	case int32:
+		p.Perm = uint64(value)
+	case int64:
+		p.Perm = uint64(value)
+	default:
+		return fmt.Errorf("invalid type")
+	}
+
+	return p.Validate()
+}
+
+func (p *Permission) Validate() error {
+	return nil
+}
+
+func (p *Permission) Value() (driver.Value, error) {
+	return int64(p.Perm), nil
 }
