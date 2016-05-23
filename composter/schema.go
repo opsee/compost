@@ -360,10 +360,11 @@ func (c *Composter) adminQuery() *graphql.Object {
 	query := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"checks": c.queryChecks(),
-			"region": c.queryRegion(),
-			"role":   c.queryRole(),
-			"team":   c.queryTeam(),
+			"checks":        c.queryChecks(),
+			"region":        c.queryRegion(),
+			"role":          c.queryRole(),
+			"team":          c.queryTeam(),
+			"notifications": c.queryNotifications(),
 			"listCustomers": &graphql.Field{
 				Type: opsee.GraphQLListCustomersResponseType,
 				Args: graphql.FieldConfigArgument{
