@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/graphql-go/graphql"
 	"github.com/opsee/basic/schema"
@@ -16,7 +18,6 @@ import (
 	opsee "github.com/opsee/basic/service"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
-	"time"
 )
 
 var (
@@ -400,6 +401,10 @@ func (c *Composter) adminQuery() *graphql.Object {
 			"getUser": &graphql.Field{
 				Type: opsee.GraphQLGetUserResponseType,
 				Args: graphql.FieldConfigArgument{
+					"requestor": &graphql.ArgumentConfig{
+						Description: "The requesting user",
+						Type:        UserInputType,
+					},
 					"customer_id": &graphql.ArgumentConfig{
 						Description: "The customer Id.",
 						Type:        graphql.String,
@@ -414,7 +419,7 @@ func (c *Composter) adminQuery() *graphql.Object {
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					_, ok := p.Context.Value(userKey).(*schema.User)
+					requestor, ok := p.Context.Value(userKey).(*schema.User)
 					if !ok {
 						return nil, errDecodeUser
 					}
@@ -430,6 +435,7 @@ func (c *Composter) adminQuery() *graphql.Object {
 					id, ok = p.Args["id"].(int)
 
 					return c.resolver.GetUser(p.Context, &opsee.GetUserRequest{
+						Requestor:  requestor,
 						CustomerId: customerId,
 						Email:      email,
 						Id:         int32(id),
