@@ -37,6 +37,7 @@
 		Team
 		Invoice
 		CreditCardInfo
+		Invite
 */
 package schema
 

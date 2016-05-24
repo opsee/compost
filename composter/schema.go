@@ -4,6 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
+	"golang.org/x/net/context"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/graphql-go/graphql"
 	"github.com/opsee/basic/schema"
@@ -16,7 +20,6 @@ import (
 	opsee "github.com/opsee/basic/service"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
-	"time"
 )
 
 var (
@@ -56,6 +59,17 @@ const (
 	instanceStart
 	instanceStop
 )
+
+func UserPermittedFromContext(ctx context.Context, perm string) (*schema.User, error) {
+	user, ok := ctx.Value(userKey).(*schema.User)
+	if !ok {
+		return nil, errDecodeUser
+	}
+	if err := user.CheckPermission(perm); err != nil {
+		return nil, err
+	}
+	return user, nil
+}
 
 func (c *Composter) mustSchema() {
 	c.initTypes()
@@ -400,6 +414,10 @@ func (c *Composter) adminQuery() *graphql.Object {
 			"getUser": &graphql.Field{
 				Type: opsee.GraphQLGetUserResponseType,
 				Args: graphql.FieldConfigArgument{
+					"requestor": &graphql.ArgumentConfig{
+						Description: "The requesting user",
+						Type:        UserInputType,
+					},
 					"customer_id": &graphql.ArgumentConfig{
 						Description: "The customer Id.",
 						Type:        graphql.String,
@@ -414,22 +432,22 @@ func (c *Composter) adminQuery() *graphql.Object {
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					_, ok := p.Context.Value(userKey).(*schema.User)
-					if !ok {
-						return nil, errDecodeUser
+					requestor, err := UserPermittedFromContext(p.Context, opsee_types.OpseeAdmin)
+					if err != nil {
+						return nil, err
 					}
-
 					var (
 						customerId string
 						email      string
 						id         int
 					)
 
-					customerId, ok = p.Args["customer_id"].(string)
-					email, ok = p.Args["email"].(string)
-					id, ok = p.Args["id"].(int)
+					customerId, _ = p.Args["customer_id"].(string)
+					email, _ = p.Args["email"].(string)
+					id, _ = p.Args["id"].(int)
 
 					return c.resolver.GetUser(p.Context, &opsee.GetUserRequest{
+						Requestor:  requestor,
 						CustomerId: customerId,
 						Email:      email,
 						Id:         int32(id),

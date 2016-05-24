@@ -8,10 +8,11 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "github.com/opsee/protobuf/opseeproto"
-import _ "github.com/opsee/protobuf/opseeproto/types"
+import opsee_types1 "github.com/opsee/protobuf/opseeproto/types"
 import opsee1 "github.com/opsee/basic/schema"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
+import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 
 import (
 	context "golang.org/x/net/context"
@@ -25,16 +26,45 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// Customers
+type ListCustomersResponse struct {
+	Customers []*opsee1.Customer `protobuf:"bytes,1,rep,name=customers" json:"customers,omitempty"`
+	Page      int32              `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage   int32              `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	Total     int32              `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
+}
+
+func (m *ListCustomersResponse) Reset()                    { *m = ListCustomersResponse{} }
+func (m *ListCustomersResponse) String() string            { return proto.CompactTextString(m) }
+func (*ListCustomersResponse) ProtoMessage()               {}
+func (*ListCustomersResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{0} }
+
+func (m *ListCustomersResponse) GetCustomers() []*opsee1.Customer {
+	if m != nil {
+		return m.Customers
+	}
+	return nil
+}
+
+// Users
 type GetUserRequest struct {
-	CustomerId string `protobuf:"bytes,1,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
-	Id         int32  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	Email      string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Requestor  *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	CustomerId string       `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
+	Id         int32        `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
+	Email      string       `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
 }
 
 func (m *GetUserRequest) Reset()                    { *m = GetUserRequest{} }
 func (m *GetUserRequest) String() string            { return proto.CompactTextString(m) }
 func (*GetUserRequest) ProtoMessage()               {}
-func (*GetUserRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{0} }
+func (*GetUserRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{1} }
+
+func (m *GetUserRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
 
 type GetUserResponse struct {
 	User       *opsee1.User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
@@ -44,7 +74,7 @@ type GetUserResponse struct {
 func (m *GetUserResponse) Reset()                    { *m = GetUserResponse{} }
 func (m *GetUserResponse) String() string            { return proto.CompactTextString(m) }
 func (*GetUserResponse) ProtoMessage()               {}
-func (*GetUserResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{1} }
+func (*GetUserResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{2} }
 
 func (m *GetUserResponse) GetUser() *opsee1.User {
 	if m != nil {
@@ -54,14 +84,22 @@ func (m *GetUserResponse) GetUser() *opsee1.User {
 }
 
 type ListUsersRequest struct {
-	Page    int32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PerPage int32 `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	Requestor *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	Page      int32        `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage   int32        `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
 }
 
 func (m *ListUsersRequest) Reset()                    { *m = ListUsersRequest{} }
 func (m *ListUsersRequest) String() string            { return proto.CompactTextString(m) }
 func (*ListUsersRequest) ProtoMessage()               {}
-func (*ListUsersRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{2} }
+func (*ListUsersRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{3} }
+
+func (m *ListUsersRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
 
 type ListUsersResponse struct {
 	Users   []*opsee1.User `protobuf:"bytes,1,rep,name=users" json:"users,omitempty"`
@@ -73,7 +111,7 @@ type ListUsersResponse struct {
 func (m *ListUsersResponse) Reset()                    { *m = ListUsersResponse{} }
 func (m *ListUsersResponse) String() string            { return proto.CompactTextString(m) }
 func (*ListUsersResponse) ProtoMessage()               {}
-func (*ListUsersResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{3} }
+func (*ListUsersResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{4} }
 
 func (m *ListUsersResponse) GetUsers() []*opsee1.User {
 	if m != nil {
@@ -82,31 +120,348 @@ func (m *ListUsersResponse) GetUsers() []*opsee1.User {
 	return nil
 }
 
-type ListCustomersResponse struct {
-	Customers []*opsee1.Customer `protobuf:"bytes,1,rep,name=customers" json:"customers,omitempty"`
-	Page      int32              `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PerPage   int32              `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
-	Total     int32              `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
+type InviteUserRequest struct {
+	Requestor *opsee1.User             `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	Email     string                   `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Perms     *opsee_types1.Permission `protobuf:"bytes,3,opt,name=perms" json:"perms,omitempty"`
 }
 
-func (m *ListCustomersResponse) Reset()                    { *m = ListCustomersResponse{} }
-func (m *ListCustomersResponse) String() string            { return proto.CompactTextString(m) }
-func (*ListCustomersResponse) ProtoMessage()               {}
-func (*ListCustomersResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{4} }
+func (m *InviteUserRequest) Reset()                    { *m = InviteUserRequest{} }
+func (m *InviteUserRequest) String() string            { return proto.CompactTextString(m) }
+func (*InviteUserRequest) ProtoMessage()               {}
+func (*InviteUserRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{5} }
 
-func (m *ListCustomersResponse) GetCustomers() []*opsee1.Customer {
+func (m *InviteUserRequest) GetRequestor() *opsee1.User {
 	if m != nil {
-		return m.Customers
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *InviteUserRequest) GetPerms() *opsee_types1.Permission {
+	if m != nil {
+		return m.Perms
+	}
+	return nil
+}
+
+type InviteUserResponse struct {
+	Invite *opsee1.Invite `protobuf:"bytes,1,opt,name=invite" json:"invite,omitempty"`
+}
+
+func (m *InviteUserResponse) Reset()                    { *m = InviteUserResponse{} }
+func (m *InviteUserResponse) String() string            { return proto.CompactTextString(m) }
+func (*InviteUserResponse) ProtoMessage()               {}
+func (*InviteUserResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{6} }
+
+func (m *InviteUserResponse) GetInvite() *opsee1.Invite {
+	if m != nil {
+		return m.Invite
+	}
+	return nil
+}
+
+type DeleteUserRequest struct {
+	Requestor *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	User      *opsee1.User `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+}
+
+func (m *DeleteUserRequest) Reset()                    { *m = DeleteUserRequest{} }
+func (m *DeleteUserRequest) String() string            { return proto.CompactTextString(m) }
+func (*DeleteUserRequest) ProtoMessage()               {}
+func (*DeleteUserRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{7} }
+
+func (m *DeleteUserRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *DeleteUserRequest) GetUser() *opsee1.User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+type DeleteUserResponse struct {
+	User *opsee1.User `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+}
+
+func (m *DeleteUserResponse) Reset()                    { *m = DeleteUserResponse{} }
+func (m *DeleteUserResponse) String() string            { return proto.CompactTextString(m) }
+func (*DeleteUserResponse) ProtoMessage()               {}
+func (*DeleteUserResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{8} }
+
+func (m *DeleteUserResponse) GetUser() *opsee1.User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+type UpdateUserRequest struct {
+	Requestor *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	User      *opsee1.User `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+	Email     string       `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Name      string       `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Password  string       `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
+	Status    string       `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+}
+
+func (m *UpdateUserRequest) Reset()                    { *m = UpdateUserRequest{} }
+func (m *UpdateUserRequest) String() string            { return proto.CompactTextString(m) }
+func (*UpdateUserRequest) ProtoMessage()               {}
+func (*UpdateUserRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{9} }
+
+func (m *UpdateUserRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *UpdateUserRequest) GetUser() *opsee1.User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+type UpdateUserPermsRequest struct {
+	Requestor *opsee1.User             `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	User      *opsee1.User             `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+	Perms     *opsee_types1.Permission `protobuf:"bytes,3,opt,name=perms" json:"perms,omitempty"`
+}
+
+func (m *UpdateUserPermsRequest) Reset()                    { *m = UpdateUserPermsRequest{} }
+func (m *UpdateUserPermsRequest) String() string            { return proto.CompactTextString(m) }
+func (*UpdateUserPermsRequest) ProtoMessage()               {}
+func (*UpdateUserPermsRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{10} }
+
+func (m *UpdateUserPermsRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *UpdateUserPermsRequest) GetUser() *opsee1.User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+func (m *UpdateUserPermsRequest) GetPerms() *opsee_types1.Permission {
+	if m != nil {
+		return m.Perms
+	}
+	return nil
+}
+
+type UserTokenResponse struct {
+	User  *opsee1.User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
+	Token string       `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+}
+
+func (m *UserTokenResponse) Reset()                    { *m = UserTokenResponse{} }
+func (m *UserTokenResponse) String() string            { return proto.CompactTextString(m) }
+func (*UserTokenResponse) ProtoMessage()               {}
+func (*UserTokenResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{11} }
+
+func (m *UserTokenResponse) GetUser() *opsee1.User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
+// Teams
+type GetTeamRequest struct {
+	Requestor *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	Team      *opsee1.Team `protobuf:"bytes,2,opt,name=team" json:"team,omitempty"`
+}
+
+func (m *GetTeamRequest) Reset()                    { *m = GetTeamRequest{} }
+func (m *GetTeamRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetTeamRequest) ProtoMessage()               {}
+func (*GetTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{12} }
+
+func (m *GetTeamRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *GetTeamRequest) GetTeam() *opsee1.Team {
+	if m != nil {
+		return m.Team
+	}
+	return nil
+}
+
+type GetTeamResponse struct {
+	Team *opsee1.Team `protobuf:"bytes,1,opt,name=team" json:"team,omitempty"`
+}
+
+func (m *GetTeamResponse) Reset()                    { *m = GetTeamResponse{} }
+func (m *GetTeamResponse) String() string            { return proto.CompactTextString(m) }
+func (*GetTeamResponse) ProtoMessage()               {}
+func (*GetTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{13} }
+
+func (m *GetTeamResponse) GetTeam() *opsee1.Team {
+	if m != nil {
+		return m.Team
+	}
+	return nil
+}
+
+type UpdateTeamRequest struct {
+	Requestor *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	Team      *opsee1.Team `protobuf:"bytes,2,opt,name=team" json:"team,omitempty"`
+}
+
+func (m *UpdateTeamRequest) Reset()                    { *m = UpdateTeamRequest{} }
+func (m *UpdateTeamRequest) String() string            { return proto.CompactTextString(m) }
+func (*UpdateTeamRequest) ProtoMessage()               {}
+func (*UpdateTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{14} }
+
+func (m *UpdateTeamRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *UpdateTeamRequest) GetTeam() *opsee1.Team {
+	if m != nil {
+		return m.Team
+	}
+	return nil
+}
+
+type UpdateTeamResponse struct {
+	Team *opsee1.Team `protobuf:"bytes,2,opt,name=team" json:"team,omitempty"`
+}
+
+func (m *UpdateTeamResponse) Reset()                    { *m = UpdateTeamResponse{} }
+func (m *UpdateTeamResponse) String() string            { return proto.CompactTextString(m) }
+func (*UpdateTeamResponse) ProtoMessage()               {}
+func (*UpdateTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{15} }
+
+func (m *UpdateTeamResponse) GetTeam() *opsee1.Team {
+	if m != nil {
+		return m.Team
+	}
+	return nil
+}
+
+type DeleteTeamRequest struct {
+	Requestor *opsee1.User `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	Team      *opsee1.Team `protobuf:"bytes,2,opt,name=team" json:"team,omitempty"`
+}
+
+func (m *DeleteTeamRequest) Reset()                    { *m = DeleteTeamRequest{} }
+func (m *DeleteTeamRequest) String() string            { return proto.CompactTextString(m) }
+func (*DeleteTeamRequest) ProtoMessage()               {}
+func (*DeleteTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{16} }
+
+func (m *DeleteTeamRequest) GetRequestor() *opsee1.User {
+	if m != nil {
+		return m.Requestor
+	}
+	return nil
+}
+
+func (m *DeleteTeamRequest) GetTeam() *opsee1.Team {
+	if m != nil {
+		return m.Team
+	}
+	return nil
+}
+
+type DeleteTeamResponse struct {
+	Team *opsee1.Team `protobuf:"bytes,2,opt,name=team" json:"team,omitempty"`
+}
+
+func (m *DeleteTeamResponse) Reset()                    { *m = DeleteTeamResponse{} }
+func (m *DeleteTeamResponse) String() string            { return proto.CompactTextString(m) }
+func (*DeleteTeamResponse) ProtoMessage()               {}
+func (*DeleteTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{17} }
+
+func (m *DeleteTeamResponse) GetTeam() *opsee1.Team {
+	if m != nil {
+		return m.Team
 	}
 	return nil
 }
 
 func init() {
+	proto.RegisterType((*ListCustomersResponse)(nil), "opsee.ListCustomersResponse")
 	proto.RegisterType((*GetUserRequest)(nil), "opsee.GetUserRequest")
 	proto.RegisterType((*GetUserResponse)(nil), "opsee.GetUserResponse")
 	proto.RegisterType((*ListUsersRequest)(nil), "opsee.ListUsersRequest")
 	proto.RegisterType((*ListUsersResponse)(nil), "opsee.ListUsersResponse")
-	proto.RegisterType((*ListCustomersResponse)(nil), "opsee.ListCustomersResponse")
+	proto.RegisterType((*InviteUserRequest)(nil), "opsee.InviteUserRequest")
+	proto.RegisterType((*InviteUserResponse)(nil), "opsee.InviteUserResponse")
+	proto.RegisterType((*DeleteUserRequest)(nil), "opsee.DeleteUserRequest")
+	proto.RegisterType((*DeleteUserResponse)(nil), "opsee.DeleteUserResponse")
+	proto.RegisterType((*UpdateUserRequest)(nil), "opsee.UpdateUserRequest")
+	proto.RegisterType((*UpdateUserPermsRequest)(nil), "opsee.UpdateUserPermsRequest")
+	proto.RegisterType((*UserTokenResponse)(nil), "opsee.UserTokenResponse")
+	proto.RegisterType((*GetTeamRequest)(nil), "opsee.GetTeamRequest")
+	proto.RegisterType((*GetTeamResponse)(nil), "opsee.GetTeamResponse")
+	proto.RegisterType((*UpdateTeamRequest)(nil), "opsee.UpdateTeamRequest")
+	proto.RegisterType((*UpdateTeamResponse)(nil), "opsee.UpdateTeamResponse")
+	proto.RegisterType((*DeleteTeamRequest)(nil), "opsee.DeleteTeamRequest")
+	proto.RegisterType((*DeleteTeamResponse)(nil), "opsee.DeleteTeamResponse")
+}
+func (this *ListCustomersResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*ListCustomersResponse)
+	if !ok {
+		that2, ok := that.(ListCustomersResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Customers) != len(that1.Customers) {
+		return false
+	}
+	for i := range this.Customers {
+		if !this.Customers[i].Equal(that1.Customers[i]) {
+			return false
+		}
+	}
+	if this.Page != that1.Page {
+		return false
+	}
+	if this.PerPage != that1.PerPage {
+		return false
+	}
+	if this.Total != that1.Total {
+		return false
+	}
+	return true
 }
 func (this *GetUserRequest) Equal(that interface{}) bool {
 	if that == nil {
@@ -131,6 +486,9 @@ func (this *GetUserRequest) Equal(that interface{}) bool {
 		}
 		return false
 	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
 		return false
 	}
 	if this.CustomerId != that1.CustomerId {
@@ -202,6 +560,9 @@ func (this *ListUsersRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
 	if this.Page != that1.Page {
 		return false
 	}
@@ -254,7 +615,7 @@ func (this *ListUsersResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ListCustomersResponse) Equal(that interface{}) bool {
+func (this *InviteUserRequest) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
 			return true
@@ -262,9 +623,9 @@ func (this *ListCustomersResponse) Equal(that interface{}) bool {
 		return false
 	}
 
-	that1, ok := that.(*ListCustomersResponse)
+	that1, ok := that.(*InviteUserRequest)
 	if !ok {
-		that2, ok := that.(ListCustomersResponse)
+		that2, ok := that.(InviteUserRequest)
 		if ok {
 			that1 = &that2
 		} else {
@@ -279,25 +640,419 @@ func (this *ListCustomersResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Customers) != len(that1.Customers) {
+	if !this.Requestor.Equal(that1.Requestor) {
 		return false
 	}
-	for i := range this.Customers {
-		if !this.Customers[i].Equal(that1.Customers[i]) {
-			return false
-		}
-	}
-	if this.Page != that1.Page {
+	if this.Email != that1.Email {
 		return false
 	}
-	if this.PerPage != that1.PerPage {
-		return false
-	}
-	if this.Total != that1.Total {
+	if !this.Perms.Equal(that1.Perms) {
 		return false
 	}
 	return true
 }
+func (this *InviteUserResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*InviteUserResponse)
+	if !ok {
+		that2, ok := that.(InviteUserResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Invite.Equal(that1.Invite) {
+		return false
+	}
+	return true
+}
+func (this *DeleteUserRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DeleteUserRequest)
+	if !ok {
+		that2, ok := that.(DeleteUserRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
+	if !this.User.Equal(that1.User) {
+		return false
+	}
+	return true
+}
+func (this *DeleteUserResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DeleteUserResponse)
+	if !ok {
+		that2, ok := that.(DeleteUserResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.User.Equal(that1.User) {
+		return false
+	}
+	return true
+}
+func (this *UpdateUserRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*UpdateUserRequest)
+	if !ok {
+		that2, ok := that.(UpdateUserRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
+	if !this.User.Equal(that1.User) {
+		return false
+	}
+	if this.Email != that1.Email {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Password != that1.Password {
+		return false
+	}
+	if this.Status != that1.Status {
+		return false
+	}
+	return true
+}
+func (this *UpdateUserPermsRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*UpdateUserPermsRequest)
+	if !ok {
+		that2, ok := that.(UpdateUserPermsRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
+	if !this.User.Equal(that1.User) {
+		return false
+	}
+	if !this.Perms.Equal(that1.Perms) {
+		return false
+	}
+	return true
+}
+func (this *UserTokenResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*UserTokenResponse)
+	if !ok {
+		that2, ok := that.(UserTokenResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.User.Equal(that1.User) {
+		return false
+	}
+	if this.Token != that1.Token {
+		return false
+	}
+	return true
+}
+func (this *GetTeamRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*GetTeamRequest)
+	if !ok {
+		that2, ok := that.(GetTeamRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
+	if !this.Team.Equal(that1.Team) {
+		return false
+	}
+	return true
+}
+func (this *GetTeamResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*GetTeamResponse)
+	if !ok {
+		that2, ok := that.(GetTeamResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Team.Equal(that1.Team) {
+		return false
+	}
+	return true
+}
+func (this *UpdateTeamRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*UpdateTeamRequest)
+	if !ok {
+		that2, ok := that.(UpdateTeamRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
+	if !this.Team.Equal(that1.Team) {
+		return false
+	}
+	return true
+}
+func (this *UpdateTeamResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*UpdateTeamResponse)
+	if !ok {
+		that2, ok := that.(UpdateTeamResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Team.Equal(that1.Team) {
+		return false
+	}
+	return true
+}
+func (this *DeleteTeamRequest) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DeleteTeamRequest)
+	if !ok {
+		that2, ok := that.(DeleteTeamRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Requestor.Equal(that1.Requestor) {
+		return false
+	}
+	if !this.Team.Equal(that1.Team) {
+		return false
+	}
+	return true
+}
+func (this *DeleteTeamResponse) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DeleteTeamResponse)
+	if !ok {
+		that2, ok := that.(DeleteTeamResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Team.Equal(that1.Team) {
+		return false
+	}
+	return true
+}
+
+type ListCustomersResponseGetter interface {
+	GetListCustomersResponse() *ListCustomersResponse
+}
+
+var GraphQLListCustomersResponseType *github_com_graphql_go_graphql.Object
 
 type GetUserRequestGetter interface {
 	GetGetUserRequest() *GetUserRequest
@@ -323,18 +1078,199 @@ type ListUsersResponseGetter interface {
 
 var GraphQLListUsersResponseType *github_com_graphql_go_graphql.Object
 
-type ListCustomersResponseGetter interface {
-	GetListCustomersResponse() *ListCustomersResponse
+type InviteUserRequestGetter interface {
+	GetInviteUserRequest() *InviteUserRequest
 }
 
-var GraphQLListCustomersResponseType *github_com_graphql_go_graphql.Object
+var GraphQLInviteUserRequestType *github_com_graphql_go_graphql.Object
+
+type InviteUserResponseGetter interface {
+	GetInviteUserResponse() *InviteUserResponse
+}
+
+var GraphQLInviteUserResponseType *github_com_graphql_go_graphql.Object
+
+type DeleteUserRequestGetter interface {
+	GetDeleteUserRequest() *DeleteUserRequest
+}
+
+var GraphQLDeleteUserRequestType *github_com_graphql_go_graphql.Object
+
+type DeleteUserResponseGetter interface {
+	GetDeleteUserResponse() *DeleteUserResponse
+}
+
+var GraphQLDeleteUserResponseType *github_com_graphql_go_graphql.Object
+
+type UpdateUserRequestGetter interface {
+	GetUpdateUserRequest() *UpdateUserRequest
+}
+
+var GraphQLUpdateUserRequestType *github_com_graphql_go_graphql.Object
+
+type UpdateUserPermsRequestGetter interface {
+	GetUpdateUserPermsRequest() *UpdateUserPermsRequest
+}
+
+var GraphQLUpdateUserPermsRequestType *github_com_graphql_go_graphql.Object
+
+type UserTokenResponseGetter interface {
+	GetUserTokenResponse() *UserTokenResponse
+}
+
+var GraphQLUserTokenResponseType *github_com_graphql_go_graphql.Object
+
+type GetTeamRequestGetter interface {
+	GetGetTeamRequest() *GetTeamRequest
+}
+
+var GraphQLGetTeamRequestType *github_com_graphql_go_graphql.Object
+
+type GetTeamResponseGetter interface {
+	GetGetTeamResponse() *GetTeamResponse
+}
+
+var GraphQLGetTeamResponseType *github_com_graphql_go_graphql.Object
+
+type UpdateTeamRequestGetter interface {
+	GetUpdateTeamRequest() *UpdateTeamRequest
+}
+
+var GraphQLUpdateTeamRequestType *github_com_graphql_go_graphql.Object
+
+type UpdateTeamResponseGetter interface {
+	GetUpdateTeamResponse() *UpdateTeamResponse
+}
+
+var GraphQLUpdateTeamResponseType *github_com_graphql_go_graphql.Object
+
+type DeleteTeamRequestGetter interface {
+	GetDeleteTeamRequest() *DeleteTeamRequest
+}
+
+var GraphQLDeleteTeamRequestType *github_com_graphql_go_graphql.Object
+
+type DeleteTeamResponseGetter interface {
+	GetDeleteTeamResponse() *DeleteTeamResponse
+}
+
+var GraphQLDeleteTeamResponseType *github_com_graphql_go_graphql.Object
 
 func init() {
-	GraphQLGetUserRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
-		Name:        "serviceGetUserRequest",
-		Description: "",
+	GraphQLListCustomersResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceListCustomersResponse",
+		Description: "Customers",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
+				"customers": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(opsee1.GraphQLCustomerType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*ListCustomersResponse)
+						if ok {
+							return obj.Customers, nil
+						}
+						inter, ok := p.Source.(ListCustomersResponseGetter)
+						if ok {
+							face := inter.GetListCustomersResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Customers, nil
+						}
+						return nil, fmt.Errorf("field customers not resolved")
+					},
+				},
+				"page": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*ListCustomersResponse)
+						if ok {
+							return obj.Page, nil
+						}
+						inter, ok := p.Source.(ListCustomersResponseGetter)
+						if ok {
+							face := inter.GetListCustomersResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Page, nil
+						}
+						return nil, fmt.Errorf("field page not resolved")
+					},
+				},
+				"per_page": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*ListCustomersResponse)
+						if ok {
+							return obj.PerPage, nil
+						}
+						inter, ok := p.Source.(ListCustomersResponseGetter)
+						if ok {
+							face := inter.GetListCustomersResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.PerPage, nil
+						}
+						return nil, fmt.Errorf("field per_page not resolved")
+					},
+				},
+				"total": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*ListCustomersResponse)
+						if ok {
+							return obj.Total, nil
+						}
+						inter, ok := p.Source.(ListCustomersResponseGetter)
+						if ok {
+							face := inter.GetListCustomersResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Total, nil
+						}
+						return nil, fmt.Errorf("field total not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLGetUserRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceGetUserRequest",
+		Description: "Users",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GetUserRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(GetUserRequestGetter)
+						if ok {
+							face := inter.GetGetUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
 				"customer_id": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
@@ -452,6 +1388,31 @@ func init() {
 		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*ListUsersRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(ListUsersRequestGetter)
+						if ok {
+							face := inter.GetListUsersRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
 				"page": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.Int,
 					Description: "",
@@ -577,85 +1538,744 @@ func init() {
 			}
 		}),
 	})
-	GraphQLListCustomersResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
-		Name:        "serviceListCustomersResponse",
+	GraphQLInviteUserRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceInviteUserRequest",
 		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
-				"customers": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.NewList(opsee1.GraphQLCustomerType),
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*ListCustomersResponse)
+						obj, ok := p.Source.(*InviteUserRequest)
 						if ok {
-							return obj.Customers, nil
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
 						}
-						inter, ok := p.Source.(ListCustomersResponseGetter)
+						inter, ok := p.Source.(InviteUserRequestGetter)
 						if ok {
-							face := inter.GetListCustomersResponse()
+							face := inter.GetInviteUserRequest()
 							if face == nil {
 								return nil, nil
 							}
-							return face.Customers, nil
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
 						}
-						return nil, fmt.Errorf("field customers not resolved")
+						return nil, fmt.Errorf("field requestor not resolved")
 					},
 				},
-				"page": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+				"email": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*ListCustomersResponse)
+						obj, ok := p.Source.(*InviteUserRequest)
 						if ok {
-							return obj.Page, nil
+							return obj.Email, nil
 						}
-						inter, ok := p.Source.(ListCustomersResponseGetter)
+						inter, ok := p.Source.(InviteUserRequestGetter)
 						if ok {
-							face := inter.GetListCustomersResponse()
+							face := inter.GetInviteUserRequest()
 							if face == nil {
 								return nil, nil
 							}
-							return face.Page, nil
+							return face.Email, nil
 						}
-						return nil, fmt.Errorf("field page not resolved")
+						return nil, fmt.Errorf("field email not resolved")
 					},
 				},
-				"per_page": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+				"perms": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Permission,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*ListCustomersResponse)
+						obj, ok := p.Source.(*InviteUserRequest)
 						if ok {
-							return obj.PerPage, nil
+							if obj.Perms == nil {
+								return nil, nil
+							}
+							return obj.GetPerms(), nil
 						}
-						inter, ok := p.Source.(ListCustomersResponseGetter)
+						inter, ok := p.Source.(InviteUserRequestGetter)
 						if ok {
-							face := inter.GetListCustomersResponse()
+							face := inter.GetInviteUserRequest()
 							if face == nil {
 								return nil, nil
 							}
-							return face.PerPage, nil
+							if face.Perms == nil {
+								return nil, nil
+							}
+							return face.GetPerms(), nil
 						}
-						return nil, fmt.Errorf("field per_page not resolved")
+						return nil, fmt.Errorf("field perms not resolved")
 					},
 				},
-				"total": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
+			}
+		}),
+	})
+	GraphQLInviteUserResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceInviteUserResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"invite": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLInviteType,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*ListCustomersResponse)
+						obj, ok := p.Source.(*InviteUserResponse)
 						if ok {
-							return obj.Total, nil
+							if obj.Invite == nil {
+								return nil, nil
+							}
+							return obj.GetInvite(), nil
 						}
-						inter, ok := p.Source.(ListCustomersResponseGetter)
+						inter, ok := p.Source.(InviteUserResponseGetter)
 						if ok {
-							face := inter.GetListCustomersResponse()
+							face := inter.GetInviteUserResponse()
 							if face == nil {
 								return nil, nil
 							}
-							return face.Total, nil
+							if face.Invite == nil {
+								return nil, nil
+							}
+							return face.GetInvite(), nil
 						}
-						return nil, fmt.Errorf("field total not resolved")
+						return nil, fmt.Errorf("field invite not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDeleteUserRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceDeleteUserRequest",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DeleteUserRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(DeleteUserRequestGetter)
+						if ok {
+							face := inter.GetDeleteUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
+				"user": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DeleteUserRequest)
+						if ok {
+							if obj.User == nil {
+								return nil, nil
+							}
+							return obj.GetUser(), nil
+						}
+						inter, ok := p.Source.(DeleteUserRequestGetter)
+						if ok {
+							face := inter.GetDeleteUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.User == nil {
+								return nil, nil
+							}
+							return face.GetUser(), nil
+						}
+						return nil, fmt.Errorf("field user not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDeleteUserResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceDeleteUserResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"user": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DeleteUserResponse)
+						if ok {
+							if obj.User == nil {
+								return nil, nil
+							}
+							return obj.GetUser(), nil
+						}
+						inter, ok := p.Source.(DeleteUserResponseGetter)
+						if ok {
+							face := inter.GetDeleteUserResponse()
+							if face == nil {
+								return nil, nil
+							}
+							if face.User == nil {
+								return nil, nil
+							}
+							return face.GetUser(), nil
+						}
+						return nil, fmt.Errorf("field user not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLUpdateUserRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceUpdateUserRequest",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(UpdateUserRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
+				"user": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserRequest)
+						if ok {
+							if obj.User == nil {
+								return nil, nil
+							}
+							return obj.GetUser(), nil
+						}
+						inter, ok := p.Source.(UpdateUserRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.User == nil {
+								return nil, nil
+							}
+							return face.GetUser(), nil
+						}
+						return nil, fmt.Errorf("field user not resolved")
+					},
+				},
+				"email": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserRequest)
+						if ok {
+							return obj.Email, nil
+						}
+						inter, ok := p.Source.(UpdateUserRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Email, nil
+						}
+						return nil, fmt.Errorf("field email not resolved")
+					},
+				},
+				"name": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserRequest)
+						if ok {
+							return obj.Name, nil
+						}
+						inter, ok := p.Source.(UpdateUserRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Name, nil
+						}
+						return nil, fmt.Errorf("field name not resolved")
+					},
+				},
+				"password": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserRequest)
+						if ok {
+							return obj.Password, nil
+						}
+						inter, ok := p.Source.(UpdateUserRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Password, nil
+						}
+						return nil, fmt.Errorf("field password not resolved")
+					},
+				},
+				"status": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserRequest)
+						if ok {
+							return obj.Status, nil
+						}
+						inter, ok := p.Source.(UpdateUserRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserRequest()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Status, nil
+						}
+						return nil, fmt.Errorf("field status not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLUpdateUserPermsRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceUpdateUserPermsRequest",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserPermsRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(UpdateUserPermsRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserPermsRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
+				"user": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserPermsRequest)
+						if ok {
+							if obj.User == nil {
+								return nil, nil
+							}
+							return obj.GetUser(), nil
+						}
+						inter, ok := p.Source.(UpdateUserPermsRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserPermsRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.User == nil {
+								return nil, nil
+							}
+							return face.GetUser(), nil
+						}
+						return nil, fmt.Errorf("field user not resolved")
+					},
+				},
+				"perms": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Permission,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateUserPermsRequest)
+						if ok {
+							if obj.Perms == nil {
+								return nil, nil
+							}
+							return obj.GetPerms(), nil
+						}
+						inter, ok := p.Source.(UpdateUserPermsRequestGetter)
+						if ok {
+							face := inter.GetUpdateUserPermsRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Perms == nil {
+								return nil, nil
+							}
+							return face.GetPerms(), nil
+						}
+						return nil, fmt.Errorf("field perms not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLUserTokenResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceUserTokenResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"user": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UserTokenResponse)
+						if ok {
+							if obj.User == nil {
+								return nil, nil
+							}
+							return obj.GetUser(), nil
+						}
+						inter, ok := p.Source.(UserTokenResponseGetter)
+						if ok {
+							face := inter.GetUserTokenResponse()
+							if face == nil {
+								return nil, nil
+							}
+							if face.User == nil {
+								return nil, nil
+							}
+							return face.GetUser(), nil
+						}
+						return nil, fmt.Errorf("field user not resolved")
+					},
+				},
+				"token": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UserTokenResponse)
+						if ok {
+							return obj.Token, nil
+						}
+						inter, ok := p.Source.(UserTokenResponseGetter)
+						if ok {
+							face := inter.GetUserTokenResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Token, nil
+						}
+						return nil, fmt.Errorf("field token not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLGetTeamRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceGetTeamRequest",
+		Description: "Teams",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GetTeamRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(GetTeamRequestGetter)
+						if ok {
+							face := inter.GetGetTeamRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
+				"team": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLTeamType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GetTeamRequest)
+						if ok {
+							if obj.Team == nil {
+								return nil, nil
+							}
+							return obj.GetTeam(), nil
+						}
+						inter, ok := p.Source.(GetTeamRequestGetter)
+						if ok {
+							face := inter.GetGetTeamRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Team == nil {
+								return nil, nil
+							}
+							return face.GetTeam(), nil
+						}
+						return nil, fmt.Errorf("field team not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLGetTeamResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceGetTeamResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"team": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLTeamType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GetTeamResponse)
+						if ok {
+							if obj.Team == nil {
+								return nil, nil
+							}
+							return obj.GetTeam(), nil
+						}
+						inter, ok := p.Source.(GetTeamResponseGetter)
+						if ok {
+							face := inter.GetGetTeamResponse()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Team == nil {
+								return nil, nil
+							}
+							return face.GetTeam(), nil
+						}
+						return nil, fmt.Errorf("field team not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLUpdateTeamRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceUpdateTeamRequest",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateTeamRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(UpdateTeamRequestGetter)
+						if ok {
+							face := inter.GetUpdateTeamRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
+				"team": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLTeamType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateTeamRequest)
+						if ok {
+							if obj.Team == nil {
+								return nil, nil
+							}
+							return obj.GetTeam(), nil
+						}
+						inter, ok := p.Source.(UpdateTeamRequestGetter)
+						if ok {
+							face := inter.GetUpdateTeamRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Team == nil {
+								return nil, nil
+							}
+							return face.GetTeam(), nil
+						}
+						return nil, fmt.Errorf("field team not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLUpdateTeamResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceUpdateTeamResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"team": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLTeamType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*UpdateTeamResponse)
+						if ok {
+							if obj.Team == nil {
+								return nil, nil
+							}
+							return obj.GetTeam(), nil
+						}
+						inter, ok := p.Source.(UpdateTeamResponseGetter)
+						if ok {
+							face := inter.GetUpdateTeamResponse()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Team == nil {
+								return nil, nil
+							}
+							return face.GetTeam(), nil
+						}
+						return nil, fmt.Errorf("field team not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDeleteTeamRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceDeleteTeamRequest",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"requestor": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLUserType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DeleteTeamRequest)
+						if ok {
+							if obj.Requestor == nil {
+								return nil, nil
+							}
+							return obj.GetRequestor(), nil
+						}
+						inter, ok := p.Source.(DeleteTeamRequestGetter)
+						if ok {
+							face := inter.GetDeleteTeamRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Requestor == nil {
+								return nil, nil
+							}
+							return face.GetRequestor(), nil
+						}
+						return nil, fmt.Errorf("field requestor not resolved")
+					},
+				},
+				"team": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLTeamType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DeleteTeamRequest)
+						if ok {
+							if obj.Team == nil {
+								return nil, nil
+							}
+							return obj.GetTeam(), nil
+						}
+						inter, ok := p.Source.(DeleteTeamRequestGetter)
+						if ok {
+							face := inter.GetDeleteTeamRequest()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Team == nil {
+								return nil, nil
+							}
+							return face.GetTeam(), nil
+						}
+						return nil, fmt.Errorf("field team not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDeleteTeamResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceDeleteTeamResponse",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"team": &github_com_graphql_go_graphql.Field{
+					Type:        opsee1.GraphQLTeamType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DeleteTeamResponse)
+						if ok {
+							if obj.Team == nil {
+								return nil, nil
+							}
+							return obj.GetTeam(), nil
+						}
+						inter, ok := p.Source.(DeleteTeamResponseGetter)
+						if ok {
+							face := inter.GetDeleteTeamResponse()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Team == nil {
+								return nil, nil
+							}
+							return face.GetTeam(), nil
+						}
+						return nil, fmt.Errorf("field team not resolved")
 					},
 				},
 			}
@@ -671,7 +2291,14 @@ var _ grpc.ClientConn
 
 type VapeClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
+	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UserTokenResponse, error)
+	UpdateUserPerms(ctx context.Context, in *UpdateUserPermsRequest, opts ...grpc.CallOption) (*UserTokenResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
+	InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*InviteUserResponse, error)
+	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
+	GetTeam(ctx context.Context, in *GetTeamRequest, opts ...grpc.CallOption) (*GetTeamResponse, error)
+	UpdateTeam(ctx context.Context, in *UpdateTeamRequest, opts ...grpc.CallOption) (*UpdateTeamResponse, error)
+	DeleteTeam(ctx context.Context, in *DeleteTeamRequest, opts ...grpc.CallOption) (*DeleteTeamResponse, error)
 }
 
 type vapeClient struct {
@@ -691,9 +2318,72 @@ func (c *vapeClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...gr
 	return out, nil
 }
 
+func (c *vapeClient) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UserTokenResponse, error) {
+	out := new(UserTokenResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/UpdateUser", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vapeClient) UpdateUserPerms(ctx context.Context, in *UpdateUserPermsRequest, opts ...grpc.CallOption) (*UserTokenResponse, error) {
+	out := new(UserTokenResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/UpdateUserPerms", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *vapeClient) ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error) {
 	out := new(ListUsersResponse)
 	err := grpc.Invoke(ctx, "/opsee.Vape/ListUsers", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vapeClient) InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*InviteUserResponse, error) {
+	out := new(InviteUserResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/InviteUser", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vapeClient) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error) {
+	out := new(DeleteUserResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/DeleteUser", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vapeClient) GetTeam(ctx context.Context, in *GetTeamRequest, opts ...grpc.CallOption) (*GetTeamResponse, error) {
+	out := new(GetTeamResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/GetTeam", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vapeClient) UpdateTeam(ctx context.Context, in *UpdateTeamRequest, opts ...grpc.CallOption) (*UpdateTeamResponse, error) {
+	out := new(UpdateTeamResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/UpdateTeam", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vapeClient) DeleteTeam(ctx context.Context, in *DeleteTeamRequest, opts ...grpc.CallOption) (*DeleteTeamResponse, error) {
+	out := new(DeleteTeamResponse)
+	err := grpc.Invoke(ctx, "/opsee.Vape/DeleteTeam", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -704,7 +2394,14 @@ func (c *vapeClient) ListUsers(ctx context.Context, in *ListUsersRequest, opts .
 
 type VapeServer interface {
 	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
+	UpdateUser(context.Context, *UpdateUserRequest) (*UserTokenResponse, error)
+	UpdateUserPerms(context.Context, *UpdateUserPermsRequest) (*UserTokenResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
+	InviteUser(context.Context, *InviteUserRequest) (*InviteUserResponse, error)
+	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
+	GetTeam(context.Context, *GetTeamRequest) (*GetTeamResponse, error)
+	UpdateTeam(context.Context, *UpdateTeamRequest) (*UpdateTeamResponse, error)
+	DeleteTeam(context.Context, *DeleteTeamRequest) (*DeleteTeamResponse, error)
 }
 
 func RegisterVapeServer(s *grpc.Server, srv VapeServer) {
@@ -723,12 +2420,96 @@ func _Vape_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return out, nil
 }
 
+func _Vape_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(UpdateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).UpdateUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _Vape_UpdateUserPerms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(UpdateUserPermsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).UpdateUserPerms(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func _Vape_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
 	in := new(ListUsersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	out, err := srv.(VapeServer).ListUsers(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _Vape_InviteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(InviteUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).InviteUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _Vape_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(DeleteUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).DeleteUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _Vape_GetTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(GetTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).GetTeam(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _Vape_UpdateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(UpdateTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).UpdateTeam(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _Vape_DeleteTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(DeleteTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(VapeServer).DeleteTeam(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -744,11 +2525,84 @@ var _Vape_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Vape_GetUser_Handler,
 		},
 		{
+			MethodName: "UpdateUser",
+			Handler:    _Vape_UpdateUser_Handler,
+		},
+		{
+			MethodName: "UpdateUserPerms",
+			Handler:    _Vape_UpdateUserPerms_Handler,
+		},
+		{
 			MethodName: "ListUsers",
 			Handler:    _Vape_ListUsers_Handler,
 		},
+		{
+			MethodName: "InviteUser",
+			Handler:    _Vape_InviteUser_Handler,
+		},
+		{
+			MethodName: "DeleteUser",
+			Handler:    _Vape_DeleteUser_Handler,
+		},
+		{
+			MethodName: "GetTeam",
+			Handler:    _Vape_GetTeam_Handler,
+		},
+		{
+			MethodName: "UpdateTeam",
+			Handler:    _Vape_UpdateTeam_Handler,
+		},
+		{
+			MethodName: "DeleteTeam",
+			Handler:    _Vape_DeleteTeam_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{},
+}
+
+func (m *ListCustomersResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *ListCustomersResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Customers) > 0 {
+		for _, msg := range m.Customers {
+			data[i] = 0xa
+			i++
+			i = encodeVarintVape(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Page != 0 {
+		data[i] = 0x10
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		data[i] = 0x18
+		i++
+		i = encodeVarintVape(data, i, uint64(m.PerPage))
+	}
+	if m.Total != 0 {
+		data[i] = 0x20
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Total))
+	}
+	return i, nil
 }
 
 func (m *GetUserRequest) Marshal() (data []byte, err error) {
@@ -766,19 +2620,29 @@ func (m *GetUserRequest) MarshalTo(data []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.CustomerId) > 0 {
+	if m.Requestor != nil {
 		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n1, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if len(m.CustomerId) > 0 {
+		data[i] = 0x12
 		i++
 		i = encodeVarintVape(data, i, uint64(len(m.CustomerId)))
 		i += copy(data[i:], m.CustomerId)
 	}
 	if m.Id != 0 {
-		data[i] = 0x10
+		data[i] = 0x18
 		i++
 		i = encodeVarintVape(data, i, uint64(m.Id))
 	}
 	if len(m.Email) > 0 {
-		data[i] = 0x1a
+		data[i] = 0x22
 		i++
 		i = encodeVarintVape(data, i, uint64(len(m.Email)))
 		i += copy(data[i:], m.Email)
@@ -805,11 +2669,11 @@ func (m *GetUserResponse) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintVape(data, i, uint64(m.User.Size()))
-		n1, err := m.User.MarshalTo(data[i:])
+		n2, err := m.User.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n1
+		i += n2
 	}
 	if len(m.BasicToken) > 0 {
 		data[i] = 0x12
@@ -835,13 +2699,23 @@ func (m *ListUsersRequest) MarshalTo(data []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n3, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
 	if m.Page != 0 {
-		data[i] = 0x8
+		data[i] = 0x10
 		i++
 		i = encodeVarintVape(data, i, uint64(m.Page))
 	}
 	if m.PerPage != 0 {
-		data[i] = 0x10
+		data[i] = 0x18
 		i++
 		i = encodeVarintVape(data, i, uint64(m.PerPage))
 	}
@@ -893,7 +2767,7 @@ func (m *ListUsersResponse) MarshalTo(data []byte) (int, error) {
 	return i, nil
 }
 
-func (m *ListCustomersResponse) Marshal() (data []byte, err error) {
+func (m *InviteUserRequest) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
 	n, err := m.MarshalTo(data)
@@ -903,37 +2777,472 @@ func (m *ListCustomersResponse) Marshal() (data []byte, err error) {
 	return data[:n], nil
 }
 
-func (m *ListCustomersResponse) MarshalTo(data []byte) (int, error) {
+func (m *InviteUserRequest) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.Customers) > 0 {
-		for _, msg := range m.Customers {
-			data[i] = 0xa
-			i++
-			i = encodeVarintVape(data, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(data[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n4, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n4
 	}
-	if m.Page != 0 {
-		data[i] = 0x10
+	if len(m.Email) > 0 {
+		data[i] = 0x12
 		i++
-		i = encodeVarintVape(data, i, uint64(m.Page))
+		i = encodeVarintVape(data, i, uint64(len(m.Email)))
+		i += copy(data[i:], m.Email)
 	}
-	if m.PerPage != 0 {
-		data[i] = 0x18
+	if m.Perms != nil {
+		data[i] = 0x1a
 		i++
-		i = encodeVarintVape(data, i, uint64(m.PerPage))
+		i = encodeVarintVape(data, i, uint64(m.Perms.Size()))
+		n5, err := m.Perms.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
 	}
-	if m.Total != 0 {
-		data[i] = 0x20
+	return i, nil
+}
+
+func (m *InviteUserResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *InviteUserResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Invite != nil {
+		data[i] = 0xa
 		i++
-		i = encodeVarintVape(data, i, uint64(m.Total))
+		i = encodeVarintVape(data, i, uint64(m.Invite.Size()))
+		n6, err := m.Invite.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	return i, nil
+}
+
+func (m *DeleteUserRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DeleteUserRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n7, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	if m.User != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.User.Size()))
+		n8, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	return i, nil
+}
+
+func (m *DeleteUserResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DeleteUserResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.User != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.User.Size()))
+		n9, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	return i, nil
+}
+
+func (m *UpdateUserRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UpdateUserRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n10, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
+	}
+	if m.User != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.User.Size()))
+		n11, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	if len(m.Email) > 0 {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.Email)))
+		i += copy(data[i:], m.Email)
+	}
+	if len(m.Name) > 0 {
+		data[i] = 0x22
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.Name)))
+		i += copy(data[i:], m.Name)
+	}
+	if len(m.Password) > 0 {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.Password)))
+		i += copy(data[i:], m.Password)
+	}
+	if len(m.Status) > 0 {
+		data[i] = 0x32
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.Status)))
+		i += copy(data[i:], m.Status)
+	}
+	return i, nil
+}
+
+func (m *UpdateUserPermsRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UpdateUserPermsRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n12, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
+	}
+	if m.User != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.User.Size()))
+		n13, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
+	}
+	if m.Perms != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Perms.Size()))
+		n14, err := m.Perms.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
+	}
+	return i, nil
+}
+
+func (m *UserTokenResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UserTokenResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.User != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.User.Size()))
+		n15, err := m.User.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
+	}
+	if len(m.Token) > 0 {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(len(m.Token)))
+		i += copy(data[i:], m.Token)
+	}
+	return i, nil
+}
+
+func (m *GetTeamRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *GetTeamRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n16, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
+	}
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n17, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
+	}
+	return i, nil
+}
+
+func (m *GetTeamResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *GetTeamResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Team != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n18, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
+	}
+	return i, nil
+}
+
+func (m *UpdateTeamRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UpdateTeamRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n19, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n20, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
+	}
+	return i, nil
+}
+
+func (m *UpdateTeamResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UpdateTeamResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n21, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
+	}
+	return i, nil
+}
+
+func (m *DeleteTeamRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DeleteTeamRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n22, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n22
+	}
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n23, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n23
+	}
+	return i, nil
+}
+
+func (m *DeleteTeamResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DeleteTeamResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n24, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n24
 	}
 	return i, nil
 }
@@ -965,8 +3274,37 @@ func encodeVarintVape(data []byte, offset int, v uint64) int {
 	data[offset] = uint8(v)
 	return offset + 1
 }
+func NewPopulatedListCustomersResponse(r randyVape, easy bool) *ListCustomersResponse {
+	this := &ListCustomersResponse{}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Customers = make([]*opsee1.Customer, v1)
+		for i := 0; i < v1; i++ {
+			this.Customers[i] = opsee1.NewPopulatedCustomer(r, easy)
+		}
+	}
+	this.Page = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Page *= -1
+	}
+	this.PerPage = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.PerPage *= -1
+	}
+	this.Total = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Total *= -1
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedGetUserRequest(r randyVape, easy bool) *GetUserRequest {
 	this := &GetUserRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
 	this.CustomerId = randStringVape(r)
 	this.Id = int32(r.Int31())
 	if r.Intn(2) == 0 {
@@ -991,6 +3329,9 @@ func NewPopulatedGetUserResponse(r randyVape, easy bool) *GetUserResponse {
 
 func NewPopulatedListUsersRequest(r randyVape, easy bool) *ListUsersRequest {
 	this := &ListUsersRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
 	this.Page = int32(r.Int31())
 	if r.Intn(2) == 0 {
 		this.Page *= -1
@@ -1007,9 +3348,9 @@ func NewPopulatedListUsersRequest(r randyVape, easy bool) *ListUsersRequest {
 func NewPopulatedListUsersResponse(r randyVape, easy bool) *ListUsersResponse {
 	this := &ListUsersResponse{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.Users = make([]*opsee1.User, v1)
-		for i := 0; i < v1; i++ {
+		v2 := r.Intn(5)
+		this.Users = make([]*opsee1.User, v2)
+		for i := 0; i < v2; i++ {
 			this.Users[i] = opsee1.NewPopulatedUser(r, easy)
 		}
 	}
@@ -1030,26 +3371,160 @@ func NewPopulatedListUsersResponse(r randyVape, easy bool) *ListUsersResponse {
 	return this
 }
 
-func NewPopulatedListCustomersResponse(r randyVape, easy bool) *ListCustomersResponse {
-	this := &ListCustomersResponse{}
+func NewPopulatedInviteUserRequest(r randyVape, easy bool) *InviteUserRequest {
+	this := &InviteUserRequest{}
 	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.Customers = make([]*opsee1.Customer, v2)
-		for i := 0; i < v2; i++ {
-			this.Customers[i] = opsee1.NewPopulatedCustomer(r, easy)
-		}
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
 	}
-	this.Page = int32(r.Int31())
-	if r.Intn(2) == 0 {
-		this.Page *= -1
+	this.Email = randStringVape(r)
+	if r.Intn(10) != 0 {
+		this.Perms = opsee_types1.NewPopulatedPermission(r, easy)
 	}
-	this.PerPage = int32(r.Int31())
-	if r.Intn(2) == 0 {
-		this.PerPage *= -1
+	if !easy && r.Intn(10) != 0 {
 	}
-	this.Total = int32(r.Int31())
-	if r.Intn(2) == 0 {
-		this.Total *= -1
+	return this
+}
+
+func NewPopulatedInviteUserResponse(r randyVape, easy bool) *InviteUserResponse {
+	this := &InviteUserResponse{}
+	if r.Intn(10) != 0 {
+		this.Invite = opsee1.NewPopulatedInvite(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedDeleteUserRequest(r randyVape, easy bool) *DeleteUserRequest {
+	this := &DeleteUserRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.User = opsee1.NewPopulatedUser(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedDeleteUserResponse(r randyVape, easy bool) *DeleteUserResponse {
+	this := &DeleteUserResponse{}
+	if r.Intn(10) != 0 {
+		this.User = opsee1.NewPopulatedUser(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedUpdateUserRequest(r randyVape, easy bool) *UpdateUserRequest {
+	this := &UpdateUserRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.User = opsee1.NewPopulatedUser(r, easy)
+	}
+	this.Email = randStringVape(r)
+	this.Name = randStringVape(r)
+	this.Password = randStringVape(r)
+	this.Status = randStringVape(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedUpdateUserPermsRequest(r randyVape, easy bool) *UpdateUserPermsRequest {
+	this := &UpdateUserPermsRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.User = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Perms = opsee_types1.NewPopulatedPermission(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedUserTokenResponse(r randyVape, easy bool) *UserTokenResponse {
+	this := &UserTokenResponse{}
+	if r.Intn(10) != 0 {
+		this.User = opsee1.NewPopulatedUser(r, easy)
+	}
+	this.Token = randStringVape(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedGetTeamRequest(r randyVape, easy bool) *GetTeamRequest {
+	this := &GetTeamRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Team = opsee1.NewPopulatedTeam(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedGetTeamResponse(r randyVape, easy bool) *GetTeamResponse {
+	this := &GetTeamResponse{}
+	if r.Intn(10) != 0 {
+		this.Team = opsee1.NewPopulatedTeam(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedUpdateTeamRequest(r randyVape, easy bool) *UpdateTeamRequest {
+	this := &UpdateTeamRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Team = opsee1.NewPopulatedTeam(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedUpdateTeamResponse(r randyVape, easy bool) *UpdateTeamResponse {
+	this := &UpdateTeamResponse{}
+	if r.Intn(10) != 0 {
+		this.Team = opsee1.NewPopulatedTeam(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedDeleteTeamRequest(r randyVape, easy bool) *DeleteTeamRequest {
+	this := &DeleteTeamRequest{}
+	if r.Intn(10) != 0 {
+		this.Requestor = opsee1.NewPopulatedUser(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Team = opsee1.NewPopulatedTeam(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedDeleteTeamResponse(r randyVape, easy bool) *DeleteTeamResponse {
+	this := &DeleteTeamResponse{}
+	if r.Intn(10) != 0 {
+		this.Team = opsee1.NewPopulatedTeam(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1128,9 +3603,34 @@ func encodeVarintPopulateVape(data []byte, v uint64) []byte {
 	data = append(data, uint8(v))
 	return data
 }
+func (m *ListCustomersResponse) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Customers) > 0 {
+		for _, e := range m.Customers {
+			l = e.Size()
+			n += 1 + l + sovVape(uint64(l))
+		}
+	}
+	if m.Page != 0 {
+		n += 1 + sovVape(uint64(m.Page))
+	}
+	if m.PerPage != 0 {
+		n += 1 + sovVape(uint64(m.PerPage))
+	}
+	if m.Total != 0 {
+		n += 1 + sovVape(uint64(m.Total))
+	}
+	return n
+}
+
 func (m *GetUserRequest) Size() (n int) {
 	var l int
 	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
 	l = len(m.CustomerId)
 	if l > 0 {
 		n += 1 + l + sovVape(uint64(l))
@@ -1162,6 +3662,10 @@ func (m *GetUserResponse) Size() (n int) {
 func (m *ListUsersRequest) Size() (n int) {
 	var l int
 	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
 	if m.Page != 0 {
 		n += 1 + sovVape(uint64(m.Page))
 	}
@@ -1192,23 +3696,188 @@ func (m *ListUsersResponse) Size() (n int) {
 	return n
 }
 
-func (m *ListCustomersResponse) Size() (n int) {
+func (m *InviteUserRequest) Size() (n int) {
 	var l int
 	_ = l
-	if len(m.Customers) > 0 {
-		for _, e := range m.Customers {
-			l = e.Size()
-			n += 1 + l + sovVape(uint64(l))
-		}
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
 	}
-	if m.Page != 0 {
-		n += 1 + sovVape(uint64(m.Page))
+	l = len(m.Email)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
 	}
-	if m.PerPage != 0 {
-		n += 1 + sovVape(uint64(m.PerPage))
+	if m.Perms != nil {
+		l = m.Perms.Size()
+		n += 1 + l + sovVape(uint64(l))
 	}
-	if m.Total != 0 {
-		n += 1 + sovVape(uint64(m.Total))
+	return n
+}
+
+func (m *InviteUserResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Invite != nil {
+		l = m.Invite.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *DeleteUserRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *DeleteUserResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateUserRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	l = len(m.Email)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	l = len(m.Password)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	l = len(m.Status)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateUserPermsRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.Perms != nil {
+		l = m.Perms.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *UserTokenResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.User != nil {
+		l = m.User.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	l = len(m.Token)
+	if l > 0 {
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *GetTeamRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.Team != nil {
+		l = m.Team.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *GetTeamResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Team != nil {
+		l = m.Team.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateTeamRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.Team != nil {
+		l = m.Team.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateTeamResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Team != nil {
+		l = m.Team.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *DeleteTeamRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		l = m.Requestor.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	if m.Team != nil {
+		l = m.Team.Size()
+		n += 1 + l + sovVape(uint64(l))
+	}
+	return n
+}
+
+func (m *DeleteTeamResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Team != nil {
+		l = m.Team.Size()
+		n += 1 + l + sovVape(uint64(l))
 	}
 	return n
 }
@@ -1225,6 +3894,144 @@ func sovVape(x uint64) (n int) {
 }
 func sozVape(x uint64) (n int) {
 	return sovVape(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *ListCustomersResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListCustomersResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListCustomersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Customers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Customers = append(m.Customers, &opsee1.Customer{})
+			if err := m.Customers[len(m.Customers)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Page |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PerPage", wireType)
+			}
+			m.PerPage = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.PerPage |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Total", wireType)
+			}
+			m.Total = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Total |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *GetUserRequest) Unmarshal(data []byte) error {
 	l := len(data)
@@ -1257,6 +4064,39 @@ func (m *GetUserRequest) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
 			}
 			var stringLen uint64
@@ -1284,7 +4124,7 @@ func (m *GetUserRequest) Unmarshal(data []byte) error {
 			}
 			m.CustomerId = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
@@ -1303,7 +4143,7 @@ func (m *GetUserRequest) Unmarshal(data []byte) error {
 					break
 				}
 			}
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
 			}
@@ -1495,6 +4335,39 @@ func (m *ListUsersRequest) Unmarshal(data []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
 			}
@@ -1513,7 +4386,7 @@ func (m *ListUsersRequest) Unmarshal(data []byte) error {
 					break
 				}
 			}
-		case 2:
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PerPage", wireType)
 			}
@@ -1691,7 +4564,7 @@ func (m *ListUsersResponse) Unmarshal(data []byte) error {
 	}
 	return nil
 }
-func (m *ListCustomersResponse) Unmarshal(data []byte) error {
+func (m *InviteUserRequest) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1714,15 +4587,15 @@ func (m *ListCustomersResponse) Unmarshal(data []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ListCustomersResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: InviteUserRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListCustomersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: InviteUserRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Customers", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1746,16 +4619,18 @@ func (m *ListCustomersResponse) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Customers = append(m.Customers, &opsee1.Customer{})
-			if err := m.Customers[len(m.Customers)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
 			}
-			m.Page = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowVape
@@ -1765,16 +4640,26 @@ func (m *ListCustomersResponse) Unmarshal(data []byte) error {
 				}
 				b := data[iNdEx]
 				iNdEx++
-				m.Page |= (int32(b) & 0x7F) << shift
+				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Email = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PerPage", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Perms", wireType)
 			}
-			m.PerPage = 0
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowVape
@@ -1784,16 +4669,457 @@ func (m *ListCustomersResponse) Unmarshal(data []byte) error {
 				}
 				b := data[iNdEx]
 				iNdEx++
-				m.PerPage |= (int32(b) & 0x7F) << shift
+				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Perms == nil {
+				m.Perms = &opsee_types1.Permission{}
+			}
+			if err := m.Perms.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InviteUserResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InviteUserResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InviteUserResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Invite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Invite == nil {
+				m.Invite = &opsee1.Invite{}
+			}
+			if err := m.Invite.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DeleteUserRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DeleteUserRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DeleteUserRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee1.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DeleteUserResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DeleteUserResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DeleteUserResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee1.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateUserRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateUserRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateUserRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee1.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Email = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Total", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
-			m.Total = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowVape
@@ -1803,11 +5129,937 @@ func (m *ListCustomersResponse) Unmarshal(data []byte) error {
 				}
 				b := data[iNdEx]
 				iNdEx++
-				m.Total |= (int32(b) & 0x7F) << shift
+				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Password = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Status = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateUserPermsRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateUserPermsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateUserPermsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee1.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Perms", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Perms == nil {
+				m.Perms = &opsee_types1.Permission{}
+			}
+			if err := m.Perms.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UserTokenResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UserTokenResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UserTokenResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.User == nil {
+				m.User = &opsee1.User{}
+			}
+			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Token = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTeamRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTeamRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTeamRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Team", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Team == nil {
+				m.Team = &opsee1.Team{}
+			}
+			if err := m.Team.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTeamResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTeamResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTeamResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Team", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Team == nil {
+				m.Team = &opsee1.Team{}
+			}
+			if err := m.Team.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateTeamRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateTeamRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateTeamRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Team", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Team == nil {
+				m.Team = &opsee1.Team{}
+			}
+			if err := m.Team.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateTeamResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateTeamResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateTeamResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Team", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Team == nil {
+				m.Team = &opsee1.Team{}
+			}
+			if err := m.Team.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DeleteTeamRequest) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DeleteTeamRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DeleteTeamRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Requestor == nil {
+				m.Requestor = &opsee1.User{}
+			}
+			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Team", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Team == nil {
+				m.Team = &opsee1.Team{}
+			}
+			if err := m.Team.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipVape(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthVape
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DeleteTeamResponse) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowVape
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DeleteTeamResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DeleteTeamResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Team", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowVape
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthVape
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Team == nil {
+				m.Team = &opsee1.Team{}
+			}
+			if err := m.Team.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipVape(data[iNdEx:])
@@ -1935,33 +6187,54 @@ var (
 )
 
 var fileDescriptorVape = []byte{
-	// 433 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x52, 0x3d, 0x8f, 0xd3, 0x40,
-	0x10, 0xc5, 0x89, 0x4d, 0xc8, 0x44, 0x4a, 0x60, 0x45, 0xc0, 0xb8, 0x48, 0xc0, 0x12, 0x52, 0x1a,
-	0x62, 0x14, 0xba, 0x54, 0x7c, 0x14, 0x08, 0x89, 0x02, 0x99, 0x2f, 0x89, 0x26, 0xb2, 0x9d, 0x25,
-	0xb1, 0x88, 0xb3, 0x4b, 0x76, 0x1d, 0x09, 0xd1, 0xd2, 0xf1, 0x2f, 0xa8, 0xf8, 0x09, 0x94, 0x94,
-	0x94, 0xfc, 0x84, 0xbb, 0xfb, 0x15, 0x57, 0xde, 0x78, 0xd6, 0x4e, 0x2e, 0x89, 0x4e, 0xba, 0xe2,
-	0x8a, 0x95, 0x76, 0xde, 0xbc, 0x79, 0xef, 0x79, 0xbc, 0x00, 0xeb, 0x48, 0xf2, 0xa1, 0x5c, 0x09,
-	0x2d, 0x98, 0x23, 0xa4, 0xe2, 0xdc, 0x7b, 0x3c, 0x4b, 0xf5, 0x3c, 0x8f, 0x87, 0x89, 0xc8, 0x02,
-	0x42, 0x02, 0x6a, 0xc7, 0xf9, 0x67, 0x53, 0x52, 0x65, 0xae, 0x66, 0xd0, 0x1b, 0x5f, 0x6a, 0x42,
-	0x7f, 0x93, 0x5c, 0x05, 0x3a, 0xcd, 0xb8, 0xd2, 0x51, 0x26, 0xcb, 0xd9, 0xc1, 0xc1, 0x6c, 0x1c,
-	0xa9, 0x34, 0x09, 0x54, 0x32, 0xe7, 0x59, 0x14, 0xe4, 0x8a, 0xaf, 0x0c, 0xd3, 0xff, 0x08, 0xed,
-	0x97, 0x5c, 0xbf, 0x47, 0x20, 0xe4, 0x5f, 0x73, 0x14, 0x61, 0x7d, 0x68, 0x25, 0xb9, 0xd2, 0x22,
-	0xe3, 0xab, 0x49, 0x3a, 0x75, 0xad, 0xfb, 0xd6, 0xa0, 0x19, 0x42, 0x05, 0xbd, 0x9a, 0xb2, 0x36,
-	0xd4, 0x10, 0xaf, 0x21, 0xee, 0x84, 0x78, 0x63, 0xb7, 0xc1, 0x41, 0xd1, 0x74, 0xe1, 0xd6, 0x89,
-	0x6a, 0x0a, 0xff, 0x2d, 0x74, 0x36, 0xc2, 0x4a, 0x8a, 0xa5, 0xe2, 0xa8, 0x6c, 0x17, 0xce, 0x24,
-	0xd9, 0x1a, 0xb5, 0x86, 0xe6, 0x6b, 0x89, 0x42, 0x8d, 0xc2, 0x9a, 0x72, 0x4e, 0xb4, 0xf8, 0xc2,
-	0x97, 0x64, 0x81, 0xd6, 0x04, 0xbd, 0x2b, 0x10, 0xff, 0x19, 0xdc, 0x7c, 0x9d, 0x2a, 0x52, 0x55,
-	0x55, 0x5e, 0x06, 0xb6, 0x8c, 0x66, 0x9c, 0x54, 0x9d, 0x90, 0xee, 0xec, 0x1e, 0xdc, 0x90, 0x18,
-	0x9f, 0x70, 0x13, 0xb4, 0x81, 0xf5, 0x1b, 0x2c, 0xfd, 0xef, 0x70, 0xeb, 0x9c, 0x44, 0x99, 0xec,
-	0x01, 0x38, 0x45, 0x00, 0x85, 0x22, 0xf5, 0xfd, 0x68, 0xa6, 0xb3, 0xb1, 0xa9, 0x5d, 0x60, 0x53,
-	0xdf, 0xb1, 0x29, 0x96, 0xa2, 0x85, 0x8e, 0x16, 0xae, 0x4d, 0xb8, 0x29, 0xfc, 0x9f, 0x16, 0x74,
-	0x0b, 0xf7, 0x17, 0xe5, 0x36, 0xb7, 0x09, 0x1e, 0x41, 0xb3, 0x5a, 0x71, 0x95, 0xa2, 0x53, 0xa6,
-	0xa8, 0xc8, 0xe1, 0x96, 0x71, 0x25, 0x69, 0x46, 0x3f, 0x2c, 0xb0, 0x3f, 0xe0, 0x4b, 0x65, 0x63,
-	0x68, 0x94, 0xff, 0x8a, 0x75, 0x4b, 0xd3, 0xdd, 0x47, 0xe1, 0xdd, 0xd9, 0x87, 0x4d, 0x6c, 0xff,
-	0x1a, 0x7b, 0x0a, 0xcd, 0xcd, 0x3e, 0xd9, 0xdd, 0x92, 0xb6, 0xff, 0x93, 0x3c, 0xf7, 0xb0, 0x51,
-	0x29, 0x3c, 0x7f, 0x78, 0x7a, 0xdc, 0xb3, 0x7e, 0x9f, 0xf4, 0xac, 0x3f, 0x78, 0xfe, 0xe1, 0xf9,
-	0x8f, 0xe7, 0x08, 0xcf, 0xdf, 0x5f, 0x7d, 0xeb, 0x53, 0x03, 0xd9, 0xeb, 0x34, 0xe1, 0xf1, 0x75,
-	0x7a, 0xb0, 0x4f, 0xce, 0x02, 0x00, 0x00, 0xff, 0xff, 0xf8, 0xc2, 0xe5, 0x97, 0x5d, 0x03, 0x00,
-	0x00,
+	// 774 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xb4, 0x56, 0xc1, 0x6e, 0xd3, 0x4c,
+	0x10, 0xfe, 0x9d, 0x26, 0xe9, 0x9f, 0x89, 0xfe, 0xf6, 0xef, 0x8a, 0x16, 0x37, 0x12, 0x6d, 0xb1,
+	0x54, 0xa9, 0x1c, 0x48, 0x50, 0x10, 0x17, 0xe0, 0x80, 0x5a, 0x24, 0x54, 0xd4, 0x43, 0x65, 0x5a,
+	0x0e, 0x08, 0x29, 0x72, 0x92, 0xa5, 0xb5, 0x68, 0x62, 0xe3, 0xdd, 0x14, 0x21, 0x6e, 0x70, 0xe4,
+	0xc8, 0x1b, 0x70, 0xe2, 0x11, 0xb8, 0x20, 0x71, 0xe4, 0xc8, 0x23, 0x00, 0x07, 0x9e, 0x81, 0x23,
+	0xe3, 0xd9, 0xb5, 0xbd, 0xb1, 0xdb, 0xaa, 0x8d, 0xc8, 0xc1, 0xd2, 0xee, 0xcc, 0xce, 0xcc, 0x37,
+	0x33, 0xdf, 0xec, 0x1a, 0xe0, 0xd8, 0x0b, 0x79, 0x33, 0x8c, 0x02, 0x19, 0xb0, 0x4a, 0x10, 0x0a,
+	0xce, 0x1b, 0x37, 0x0e, 0x7c, 0x79, 0x38, 0xea, 0x36, 0x7b, 0xc1, 0xa0, 0x45, 0x92, 0x16, 0xa9,
+	0xbb, 0xa3, 0x67, 0x6a, 0x4b, 0x3b, 0xb5, 0x54, 0x86, 0x8d, 0xbb, 0xe7, 0xb2, 0x90, 0xaf, 0x42,
+	0x2e, 0x5a, 0x21, 0x8f, 0x06, 0xbe, 0x10, 0x7e, 0x30, 0x14, 0xda, 0x7a, 0xa3, 0x60, 0xdd, 0xf5,
+	0x84, 0xdf, 0x6b, 0x89, 0xde, 0x21, 0x1f, 0x78, 0xad, 0x91, 0xe0, 0x91, 0x3a, 0xe9, 0xbc, 0xb3,
+	0x60, 0x71, 0xc7, 0x17, 0x72, 0x6b, 0x24, 0x64, 0x30, 0xe0, 0x91, 0x70, 0xb9, 0x08, 0xd1, 0x11,
+	0x67, 0xd7, 0xa1, 0xd6, 0x4b, 0x84, 0xb6, 0xb5, 0x36, 0xb3, 0x51, 0x6f, 0xcf, 0x37, 0x15, 0xc4,
+	0xe4, 0xb0, 0x9b, 0x9d, 0x60, 0x0c, 0xca, 0xa1, 0x77, 0xc0, 0xed, 0xd2, 0x9a, 0xb5, 0x51, 0x71,
+	0x69, 0xcd, 0x96, 0xe1, 0x5f, 0xc4, 0xd6, 0x21, 0xf9, 0x0c, 0xc9, 0x67, 0x71, 0xbf, 0x1b, 0xab,
+	0x2e, 0x41, 0x45, 0x06, 0xd2, 0x3b, 0xb2, 0xcb, 0x24, 0x57, 0x1b, 0xe7, 0x8d, 0x05, 0x73, 0x0f,
+	0xb8, 0xdc, 0x47, 0x7c, 0x2e, 0x7f, 0x31, 0xe2, 0x42, 0xb2, 0x6b, 0x50, 0x8b, 0xd4, 0x32, 0x88,
+	0x10, 0x86, 0x85, 0x30, 0xea, 0x1a, 0x06, 0x1d, 0xcb, 0xb4, 0x6c, 0x15, 0xea, 0x09, 0x9e, 0x8e,
+	0xdf, 0x27, 0x24, 0x35, 0x17, 0x12, 0xd1, 0x76, 0x9f, 0xcd, 0x41, 0x09, 0xe5, 0x0a, 0x09, 0xae,
+	0x62, 0x10, 0x58, 0x0e, 0x5f, 0x81, 0xa8, 0xb9, 0x6a, 0xe3, 0x3c, 0x82, 0xf9, 0x14, 0x83, 0xae,
+	0xc5, 0x2a, 0x94, 0xe3, 0x9a, 0x9d, 0x14, 0x9f, 0x14, 0x71, 0x68, 0xaa, 0x70, 0x47, 0x06, 0xcf,
+	0xf9, 0x30, 0x09, 0x4d, 0xa2, 0xbd, 0x58, 0xe2, 0x1c, 0xc1, 0xff, 0x71, 0x99, 0x63, 0x13, 0x31,
+	0x41, 0x6a, 0x17, 0xab, 0xae, 0xf3, 0x1a, 0x16, 0x8c, 0x68, 0x3a, 0x89, 0xab, 0x50, 0x89, 0xb1,
+	0x26, 0xcd, 0x1c, 0x0b, 0xa5, 0x34, 0x7f, 0xa7, 0x89, 0x6f, 0x2d, 0x58, 0xd8, 0x1e, 0x1e, 0xfb,
+	0x92, 0x4f, 0xd8, 0xc7, 0xb4, 0x2d, 0x25, 0xa3, 0x2d, 0xc8, 0xc7, 0x4a, 0x4c, 0x74, 0x41, 0x20,
+	0xea, 0xed, 0xcb, 0xda, 0x98, 0x46, 0xa0, 0xb9, 0x9b, 0x8e, 0x80, 0xab, 0x4e, 0x39, 0x77, 0x80,
+	0x99, 0x20, 0x74, 0x0d, 0xd6, 0xa1, 0xea, 0x93, 0x54, 0x43, 0xf8, 0x4f, 0x7b, 0x51, 0x47, 0x5d,
+	0xad, 0x74, 0x3a, 0xb0, 0x70, 0x9f, 0x1f, 0xf1, 0x89, 0x33, 0x48, 0xf8, 0x52, 0x3a, 0x85, 0x2f,
+	0xce, 0x2d, 0x60, 0x66, 0x80, 0x1c, 0xcd, 0x4e, 0x35, 0xfb, 0x8c, 0xa5, 0xdd, 0x0f, 0xfb, 0xde,
+	0xd4, 0x80, 0x65, 0xb5, 0x9f, 0x31, 0x6b, 0x8f, 0xbc, 0x18, 0x7a, 0x03, 0xae, 0xe7, 0x84, 0xd6,
+	0xac, 0x81, 0xbc, 0xf0, 0x84, 0x78, 0x19, 0x44, 0x7d, 0xbb, 0x42, 0xf2, 0x74, 0xcf, 0x96, 0xa0,
+	0x2a, 0xa4, 0x27, 0x47, 0xc2, 0xae, 0x92, 0x46, 0xef, 0x9c, 0xf7, 0x16, 0x2c, 0x65, 0xf8, 0xe3,
+	0xa6, 0x89, 0x69, 0x24, 0x71, 0x41, 0xaa, 0x3c, 0xc4, 0xa2, 0xa2, 0x19, 0x0d, 0xea, 0xf9, 0x47,
+	0x9e, 0xc8, 0x9f, 0x0d, 0xbb, 0xda, 0x38, 0x4f, 0xe9, 0x02, 0xdb, 0xe3, 0xde, 0x60, 0xb2, 0xc4,
+	0x24, 0x5a, 0xe6, 0x12, 0x23, 0x67, 0xa4, 0x70, 0xda, 0x74, 0x35, 0x29, 0xef, 0x19, 0x4e, 0xb2,
+	0xb1, 0x4e, 0xb3, 0xe9, 0x24, 0x94, 0x99, 0x16, 0x28, 0xe4, 0xb2, 0x19, 0x20, 0x87, 0xab, 0x74,
+	0x06, 0x2e, 0x35, 0x02, 0x53, 0xc4, 0x65, 0x06, 0x38, 0x27, 0xae, 0xf6, 0xaf, 0x32, 0x94, 0x1f,
+	0xe3, 0x0b, 0xce, 0x6e, 0xc3, 0xac, 0x7e, 0x07, 0xd8, 0xa2, 0x3e, 0x36, 0xfe, 0x36, 0x35, 0x96,
+	0xf2, 0x62, 0x15, 0xc3, 0xf9, 0x87, 0x6d, 0x02, 0x64, 0x3c, 0x67, 0x76, 0x92, 0x42, 0x7e, 0x74,
+	0x1b, 0xb6, 0x91, 0xdc, 0x18, 0xff, 0xd0, 0xc7, 0x0e, 0xcc, 0xe7, 0x66, 0x85, 0x5d, 0x29, 0x38,
+	0x32, 0x67, 0xe8, 0x4c, 0x6f, 0xf7, 0xa0, 0x96, 0x3e, 0x09, 0x2c, 0x99, 0x88, 0xfc, 0x93, 0x94,
+	0x7a, 0x28, 0xbc, 0x1e, 0xe8, 0x61, 0x0b, 0x20, 0xbb, 0x51, 0xd3, 0x9c, 0x0a, 0x37, 0x7d, 0x63,
+	0xf9, 0x04, 0x8d, 0xe9, 0x24, 0xbb, 0xf8, 0x52, 0x27, 0x85, 0xcb, 0x36, 0x75, 0x52, 0xbc, 0x25,
+	0xd1, 0x89, 0xea, 0x4c, 0xdc, 0x33, 0xb3, 0x33, 0x06, 0x8f, 0xcc, 0xce, 0x98, 0xdd, 0x57, 0x00,
+	0x32, 0xb6, 0xe6, 0x3a, 0x63, 0x7a, 0x58, 0x3e, 0x41, 0x53, 0xcc, 0x62, 0xcc, 0x49, 0x81, 0xce,
+	0xb9, 0x2c, 0xc6, 0x9d, 0x6c, 0xae, 0xff, 0xfe, 0xb1, 0x62, 0x7d, 0xfc, 0xb9, 0x62, 0x7d, 0xc2,
+	0xef, 0x2b, 0x7e, 0xdf, 0xf0, 0xfb, 0x8e, 0xdf, 0x97, 0x0f, 0xab, 0xd6, 0x93, 0x59, 0x4c, 0xf9,
+	0xd8, 0xef, 0xf1, 0x6e, 0x95, 0x7e, 0xd4, 0x6e, 0xfe, 0x09, 0x00, 0x00, 0xff, 0xff, 0x34, 0xa2,
+	0x0e, 0xcb, 0x57, 0x0a, 0x00, 0x00,
 }
