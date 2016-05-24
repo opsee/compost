@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/permissions.proto";
 import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 import "stack.proto";
 
@@ -22,6 +23,8 @@ message User {
 	string password_hash = 9 [(gogoproto.jsontag) = "-", (gogoproto.moretags) = "db:\"password_hash\""];
 	opsee.types.Timestamp created_at = 10 [(gogoproto.moretags) = "db:\"created_at\""];
 	opsee.types.Timestamp updated_at = 11 [(gogoproto.moretags) = "db:\"updated_at\""];
+	string status = 12 [(gogoproto.moretags) = "token:\"status\" db:\"status\""];
+	opsee.types.Permission perms = 13 [(gogoproto.moretags) = "db:\"perms\""];
 }
 
 message Customer {
@@ -34,7 +37,7 @@ message Customer {
 }
 
 message Team {
-  string id = 1;
+	string id = 1;
 	string name = 2;
 	string subscription = 3;
 	CreditCardInfo creditCardInfo = 4;
@@ -54,4 +57,12 @@ message CreditCardInfo {
 	int32 exp_month = 3;
 	int32 exp_year = 4;
 	string brand = 5;
+}
+
+message Invite {
+    int32 id = 1;
+    string email = 2;
+    string name = 3;
+    string customer_id = 7;
+    opsee.types.Permission perms = 8;
 }

@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
-import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/protobuf/opseeproto/types/permissions.proto";
 import "github.com/opsee/basic/schema/user.proto";
 
 package opsee;
@@ -9,10 +9,21 @@ package opsee;
 option go_package = "service";
 option (opseeproto.graphql) = true;
 
+
+// Customers
+message ListCustomersResponse {
+	repeated Customer customers = 1;
+	int32 page = 2;
+	int32 per_page = 3;
+	int32 total = 4;
+}
+
+// Users
 message GetUserRequest {
-	string customer_id = 1;
-	int32 id = 2;
-	string email = 3;
+	User requestor = 1; 
+	string customer_id = 2;
+	int32 id = 3;
+	string email = 4;
 }
 
 message GetUserResponse {
@@ -21,8 +32,9 @@ message GetUserResponse {
 }
 
 message ListUsersRequest {
-	int32 page = 1;
-	int32 per_page = 2;
+	User requestor = 1; 
+	int32 page = 2;
+	int32 per_page = 3;
 }
 
 message ListUsersResponse {
@@ -32,14 +44,81 @@ message ListUsersResponse {
 	int32 total = 4;
 }
 
-message ListCustomersResponse {
-	repeated Customer customers = 1;
-	int32 page = 2;
-	int32 per_page = 3;
-	int32 total = 4;
+message InviteUserRequest {
+	User requestor = 1; 
+	string email = 2;
+	opsee.types.Permission perms = 3;
+}
+
+message InviteUserResponse {
+    Invite invite = 1; 
+}
+
+message DeleteUserRequest {
+	User requestor = 1; 
+    User user = 2;
+}
+
+message DeleteUserResponse {
+	User user = 2;
+}
+
+message UpdateUserRequest {
+	User requestor = 1; 
+    User user = 2; 
+	string email = 3;
+	string name = 4;
+	string password = 5;
+    string status = 6;
+}
+
+message UpdateUserPermsRequest {
+	User requestor = 1; 
+    User user = 2; 
+	opsee.types.Permission perms = 3;
+}
+
+message UserTokenResponse {
+	User user = 1;
+    string token = 2;
+}
+
+// Teams
+message GetTeamRequest {
+	User requestor = 1; 
+	Team team = 2;
+}
+
+message GetTeamResponse {
+	Team team = 1;
+}
+
+message UpdateTeamRequest {
+	User requestor = 1; 
+    Team team = 2;
+}
+
+message UpdateTeamResponse {
+    Team team = 2;
+}
+
+message DeleteTeamRequest {
+	User requestor = 1; 
+    Team team = 2;
+}
+
+message DeleteTeamResponse {
+    Team team = 2;
 }
 
 service Vape {
 	rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+	rpc UpdateUser(UpdateUserRequest) returns (UserTokenResponse) {}
+	rpc UpdateUserPerms(UpdateUserPermsRequest) returns (UserTokenResponse) {}
 	rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
+	rpc InviteUser(InviteUserRequest) returns (InviteUserResponse) {}
+	rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}
+	rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {}
+	rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse) {}
+	rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {}
 }
