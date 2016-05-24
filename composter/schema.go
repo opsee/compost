@@ -392,9 +392,9 @@ func (c *Composter) adminQuery() *graphql.Object {
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					_, ok := p.Context.Value(userKey).(*schema.User)
-					if !ok {
-						return nil, errDecodeUser
+					requestor, err := UserPermittedFromContext(p.Context, opsee_types.OpseeAdmin)
+					if err != nil {
+						return nil, err
 					}
 
 					var (
@@ -402,12 +402,13 @@ func (c *Composter) adminQuery() *graphql.Object {
 						perPage int
 					)
 
-					page, ok = p.Args["page"].(int)
-					perPage, ok = p.Args["per_page"].(int)
+					page, _ = p.Args["page"].(int)
+					perPage, _ = p.Args["per_page"].(int)
 
 					return c.resolver.ListCustomers(p.Context, &opsee.ListUsersRequest{
-						Page:    int32(page),
-						PerPage: int32(perPage),
+						Requestor: requestor,
+						Page:      int32(page),
+						PerPage:   int32(perPage),
 					})
 				},
 			},
