@@ -516,12 +516,12 @@ func (c *Composter) queryTeam() *graphql.Field {
 	return &graphql.Field{
 		Type: schema.GraphQLTeamType,
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			if err != nil {
+				return nil, err
 			}
 
-			return c.resolver.GetTeam(p.Context, user)
+			return c.resolver.GetTeam(p.Context, requestor)
 		},
 	}
 }
