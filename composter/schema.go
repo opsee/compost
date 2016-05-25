@@ -1077,9 +1077,9 @@ func (c *Composter) mutateTeam() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			if err != nil {
+				return nil, err
 			}
 
 			teamInput, ok := p.Args["team"].(map[string]interface{})
@@ -1087,7 +1087,14 @@ func (c *Composter) mutateTeam() *graphql.Field {
 				return nil, errDecodeTeamInput
 			}
 
-			return c.resolver.PutTeam(p.Context, user, teamInput)
+			// TODO(dan) better way to check this
+			if !requestor.IsOpseeAdmin() {
+				if !requestor.CustomerId == teamInput["id"] {
+					return nil, opsee_types.PermissionsError("invalid team")
+				}
+			}
+
+			return c.resolver.PutTeam(p.Context, requestor, teamInput)
 		},
 	}
 }

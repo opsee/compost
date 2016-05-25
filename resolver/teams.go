@@ -1,11 +1,10 @@
 package resolver
 
 import (
-	"time"
+	"encoding/json"
 
 	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
-	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
@@ -37,45 +36,31 @@ func (c *Client) PutTeam(ctx context.Context, user *schema.User, teamInput map[s
 		"email":       user.Email,
 	}).Info("put team request")
 
-	// FIXME(mark)
-	date1 := &opsee_types.Timestamp{}
-	date2 := &opsee_types.Timestamp{}
-	date1.Scan(time.Now().UTC().Add(-2 * 24 * 30 * time.Hour))
-	date2.Scan(time.Now().UTC().Add(-1 * 24 * 30 * time.Hour))
+	var team schema.Team
+	tb, err := json.Marshal(teamInput)
+	if err != nil {
+		log.WithError(err).Error("marshal team input")
+	}
 
-	resp := &schema.Team{
-		Id:           "deadbeef",
-		Name:         "SeaOrg",
-		Subscription: "basic",
-		CreditCardInfo: &schema.CreditCardInfo{
-			ExpMonth: int32(4),
-			ExpYear:  int32(1992),
-			Last4:    "6969",
-			Brand:    "visa",
-		},
-		Users: []*schema.User{
-			{
-				Id:    7,
-				Name:  "Tom Cruise",
-				Email: "tom@cruise.com",
-			},
-			{
-				Id:    8,
-				Name:  "Isaac Johannsen",
-				Email: "izs@cruise.com",
-			},
-		},
-		Invoices: []*schema.Invoice{
-			{
-				Date:   date1,
-				Amount: int32(6699),
-			},
-			{
-				Date:   date2,
-				Amount: int32(6699),
-			},
+	err = json.Unmarshal(tb, &team)
+	if err != nil {
+		log.WithError(err).Error("marshal team input")
+	}
+
+	req := &opsee.UpdateTeamRequest{
+		Requestor: user,
+		Team: &schema.Team{
+			Id:           user.CustomerId,
+			Name:         team.Name,
+			Subscription: team.Subscription,
 		},
 	}
 
-	return resp, nil
+	resp, err := c.Vape.UpdateTeam(ctx, req)
+	if err != nil {
+		log.WithError(err).Error("error getting team from vape")
+		return nil, err
+	}
+
+	return resp.Team, nil
 }
