@@ -1087,13 +1087,6 @@ func (c *Composter) mutateTeam() *graphql.Field {
 				return nil, errDecodeTeamInput
 			}
 
-			// TODO(dan) better way to check this
-			if !requestor.IsOpseeAdmin() {
-				if !requestor.CustomerId == teamInput["id"] {
-					return nil, opsee_types.PermissionsError("invalid team")
-				}
-			}
-
 			return c.resolver.PutTeam(p.Context, requestor, teamInput)
 		},
 	}

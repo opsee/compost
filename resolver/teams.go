@@ -21,6 +21,7 @@ func (c *Client) GetTeam(ctx context.Context, user *schema.User) (*schema.Team, 
 			Id: user.CustomerId,
 		},
 	}
+
 	resp, err := c.Vape.GetTeam(ctx, req)
 	if err != nil {
 		log.WithError(err).Error("error getting team from vape")
