@@ -19,6 +19,33 @@ message Datapoint {
   optional string Unit = 8;
 }
 
+message DescribeAlarmsForMetricInput {
+  repeated Dimension Dimensions = 2;
+  optional string MetricName = 3;
+  optional string Namespace = 4;
+  optional sint64 Period = 5;
+  optional string Statistic = 6;
+  optional string Unit = 7;
+}
+
+message DescribeAlarmsForMetricOutput {
+  repeated MetricAlarm MetricAlarms = 2;
+}
+
+message DescribeAlarmsInput {
+  optional string ActionPrefix = 2;
+  optional string AlarmNamePrefix = 3;
+  repeated string AlarmNames = 4;
+  optional sint64 MaxRecords = 5;
+  optional string NextToken = 6;
+  optional string StateValue = 7;
+}
+
+message DescribeAlarmsOutput {
+  repeated MetricAlarm MetricAlarms = 2;
+  optional string NextToken = 3;
+}
+
 message Dimension {
   optional string Name = 2;
   optional string Value = 3;
@@ -61,5 +88,29 @@ message Metric {
   repeated Dimension Dimensions = 2;
   optional string MetricName = 3;
   optional string Namespace = 4;
+}
+
+message MetricAlarm {
+  optional bool ActionsEnabled = 2;
+  repeated string AlarmActions = 3;
+  optional string AlarmArn = 4;
+  optional opsee.types.Timestamp AlarmConfigurationUpdatedTimestamp = 5;
+  optional string AlarmDescription = 6;
+  optional string AlarmName = 7;
+  optional string ComparisonOperator = 8;
+  repeated Dimension Dimensions = 9;
+  optional sint64 EvaluationPeriods = 10;
+  repeated string InsufficientDataActions = 11;
+  optional string MetricName = 12;
+  optional string Namespace = 13;
+  repeated string OKActions = 14;
+  optional sint64 Period = 15;
+  optional string StateReason = 16;
+  optional string StateReasonData = 17;
+  optional opsee.types.Timestamp StateUpdatedTimestamp = 18;
+  optional string StateValue = 19;
+  optional string Statistic = 20;
+  optional double Threshold = 21;
+  optional string Unit = 22;
 }
 

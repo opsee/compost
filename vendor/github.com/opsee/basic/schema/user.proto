@@ -38,8 +38,8 @@ message Customer {
 
 message Team {
 	string id = 1;
-	string name = 2;
-	string subscription = 3;
+	string name = 2 [(gogoproto.moretags) = "db:\"name\""];
+	string subscription = 3 [(gogoproto.moretags) = "db:\"subscription\""];
 	CreditCardInfo creditCardInfo = 4;
 	repeated Invoice invoices = 5;
 	repeated User users = 6;
@@ -60,9 +60,9 @@ message CreditCardInfo {
 }
 
 message Invite {
-    int32 id = 1;
-    string email = 2;
-    string name = 3;
-    string customer_id = 7;
-    opsee.types.Permission perms = 8;
+	int32 id = 1;
+	string email = 2;
+	string name = 3;
+	string customer_id = 7;
+	opsee.types.Permission perms = 8;
 }
