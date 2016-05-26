@@ -169,6 +169,10 @@ func (c *Composter) initTypes() {
 			Name:        "Team",
 			Description: "An Opsee Team",
 			Fields: graphql.InputObjectConfigFieldMap{
+				"name": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The team name",
+				},
 				"subscription": &graphql.InputObjectFieldConfig{
 					Type:        TeamSubscriptionEnumType,
 					Description: "The subscription plan",
@@ -516,12 +520,12 @@ func (c *Composter) queryTeam() *graphql.Field {
 	return &graphql.Field{
 		Type: schema.GraphQLTeamType,
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			if err != nil {
+				return nil, err
 			}
 
-			return c.resolver.GetTeam(p.Context, user)
+			return c.resolver.GetTeam(p.Context, requestor)
 		},
 	}
 }
@@ -1077,9 +1081,9 @@ func (c *Composter) mutateTeam() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			if err != nil {
+				return nil, err
 			}
 
 			teamInput, ok := p.Args["team"].(map[string]interface{})
@@ -1087,7 +1091,7 @@ func (c *Composter) mutateTeam() *graphql.Field {
 				return nil, errDecodeTeamInput
 			}
 
-			return c.resolver.PutTeam(p.Context, user, teamInput)
+			return c.resolver.PutTeam(p.Context, requestor, teamInput)
 		},
 	}
 }
