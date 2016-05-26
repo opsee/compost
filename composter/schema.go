@@ -169,6 +169,10 @@ func (c *Composter) initTypes() {
 			Name:        "Team",
 			Description: "An Opsee Team",
 			Fields: graphql.InputObjectConfigFieldMap{
+				"name": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The team name",
+				},
 				"subscription": &graphql.InputObjectFieldConfig{
 					Type:        TeamSubscriptionEnumType,
 					Description: "The subscription plan",
