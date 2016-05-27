@@ -10,6 +10,10 @@
 
 	It has these top-level messages:
 		Datapoint
+		DescribeAlarmsForMetricInput
+		DescribeAlarmsForMetricOutput
+		DescribeAlarmsInput
+		DescribeAlarmsOutput
 		Dimension
 		DimensionFilter
 		GetMetricStatisticsInput
@@ -17,6 +21,7 @@
 		ListMetricsInput
 		ListMetricsOutput
 		Metric
+		MetricAlarm
 */
 package cloudwatch
 
@@ -108,6 +113,166 @@ func (m *Datapoint) GetUnit() string {
 	return ""
 }
 
+type DescribeAlarmsForMetricInput struct {
+	Dimensions       []*Dimension `protobuf:"bytes,2,rep,name=Dimensions,json=dimensions" json:"Dimensions,omitempty"`
+	MetricName       *string      `protobuf:"bytes,3,opt,name=MetricName,json=metricName" json:"MetricName,omitempty"`
+	Namespace        *string      `protobuf:"bytes,4,opt,name=Namespace,json=namespace" json:"Namespace,omitempty"`
+	Period           *int64       `protobuf:"zigzag64,5,opt,name=Period,json=period" json:"Period,omitempty"`
+	Statistic        *string      `protobuf:"bytes,6,opt,name=Statistic,json=statistic" json:"Statistic,omitempty"`
+	Unit             *string      `protobuf:"bytes,7,opt,name=Unit,json=unit" json:"Unit,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
+}
+
+func (m *DescribeAlarmsForMetricInput) Reset()         { *m = DescribeAlarmsForMetricInput{} }
+func (m *DescribeAlarmsForMetricInput) String() string { return proto.CompactTextString(m) }
+func (*DescribeAlarmsForMetricInput) ProtoMessage()    {}
+func (*DescribeAlarmsForMetricInput) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{1}
+}
+
+func (m *DescribeAlarmsForMetricInput) GetDimensions() []*Dimension {
+	if m != nil {
+		return m.Dimensions
+	}
+	return nil
+}
+
+func (m *DescribeAlarmsForMetricInput) GetMetricName() string {
+	if m != nil && m.MetricName != nil {
+		return *m.MetricName
+	}
+	return ""
+}
+
+func (m *DescribeAlarmsForMetricInput) GetNamespace() string {
+	if m != nil && m.Namespace != nil {
+		return *m.Namespace
+	}
+	return ""
+}
+
+func (m *DescribeAlarmsForMetricInput) GetPeriod() int64 {
+	if m != nil && m.Period != nil {
+		return *m.Period
+	}
+	return 0
+}
+
+func (m *DescribeAlarmsForMetricInput) GetStatistic() string {
+	if m != nil && m.Statistic != nil {
+		return *m.Statistic
+	}
+	return ""
+}
+
+func (m *DescribeAlarmsForMetricInput) GetUnit() string {
+	if m != nil && m.Unit != nil {
+		return *m.Unit
+	}
+	return ""
+}
+
+type DescribeAlarmsForMetricOutput struct {
+	MetricAlarms     []*MetricAlarm `protobuf:"bytes,2,rep,name=MetricAlarms,json=metricAlarms" json:"MetricAlarms,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *DescribeAlarmsForMetricOutput) Reset()         { *m = DescribeAlarmsForMetricOutput{} }
+func (m *DescribeAlarmsForMetricOutput) String() string { return proto.CompactTextString(m) }
+func (*DescribeAlarmsForMetricOutput) ProtoMessage()    {}
+func (*DescribeAlarmsForMetricOutput) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{2}
+}
+
+func (m *DescribeAlarmsForMetricOutput) GetMetricAlarms() []*MetricAlarm {
+	if m != nil {
+		return m.MetricAlarms
+	}
+	return nil
+}
+
+type DescribeAlarmsInput struct {
+	ActionPrefix     *string  `protobuf:"bytes,2,opt,name=ActionPrefix,json=actionPrefix" json:"ActionPrefix,omitempty"`
+	AlarmNamePrefix  *string  `protobuf:"bytes,3,opt,name=AlarmNamePrefix,json=alarmNamePrefix" json:"AlarmNamePrefix,omitempty"`
+	AlarmNames       []string `protobuf:"bytes,4,rep,name=AlarmNames,json=alarmNames" json:"AlarmNames,omitempty"`
+	MaxRecords       *int64   `protobuf:"zigzag64,5,opt,name=MaxRecords,json=maxRecords" json:"MaxRecords,omitempty"`
+	NextToken        *string  `protobuf:"bytes,6,opt,name=NextToken,json=nextToken" json:"NextToken,omitempty"`
+	StateValue       *string  `protobuf:"bytes,7,opt,name=StateValue,json=stateValue" json:"StateValue,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *DescribeAlarmsInput) Reset()                    { *m = DescribeAlarmsInput{} }
+func (m *DescribeAlarmsInput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeAlarmsInput) ProtoMessage()               {}
+func (*DescribeAlarmsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+
+func (m *DescribeAlarmsInput) GetActionPrefix() string {
+	if m != nil && m.ActionPrefix != nil {
+		return *m.ActionPrefix
+	}
+	return ""
+}
+
+func (m *DescribeAlarmsInput) GetAlarmNamePrefix() string {
+	if m != nil && m.AlarmNamePrefix != nil {
+		return *m.AlarmNamePrefix
+	}
+	return ""
+}
+
+func (m *DescribeAlarmsInput) GetAlarmNames() []string {
+	if m != nil {
+		return m.AlarmNames
+	}
+	return nil
+}
+
+func (m *DescribeAlarmsInput) GetMaxRecords() int64 {
+	if m != nil && m.MaxRecords != nil {
+		return *m.MaxRecords
+	}
+	return 0
+}
+
+func (m *DescribeAlarmsInput) GetNextToken() string {
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
+	}
+	return ""
+}
+
+func (m *DescribeAlarmsInput) GetStateValue() string {
+	if m != nil && m.StateValue != nil {
+		return *m.StateValue
+	}
+	return ""
+}
+
+type DescribeAlarmsOutput struct {
+	MetricAlarms     []*MetricAlarm `protobuf:"bytes,2,rep,name=MetricAlarms,json=metricAlarms" json:"MetricAlarms,omitempty"`
+	NextToken        *string        `protobuf:"bytes,3,opt,name=NextToken,json=nextToken" json:"NextToken,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *DescribeAlarmsOutput) Reset()                    { *m = DescribeAlarmsOutput{} }
+func (m *DescribeAlarmsOutput) String() string            { return proto.CompactTextString(m) }
+func (*DescribeAlarmsOutput) ProtoMessage()               {}
+func (*DescribeAlarmsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+
+func (m *DescribeAlarmsOutput) GetMetricAlarms() []*MetricAlarm {
+	if m != nil {
+		return m.MetricAlarms
+	}
+	return nil
+}
+
+func (m *DescribeAlarmsOutput) GetNextToken() string {
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
+	}
+	return ""
+}
+
 type Dimension struct {
 	Name             *string `protobuf:"bytes,2,opt,name=Name,json=name" json:"Name,omitempty"`
 	Value            *string `protobuf:"bytes,3,opt,name=Value,json=value" json:"Value,omitempty"`
@@ -117,7 +282,7 @@ type Dimension struct {
 func (m *Dimension) Reset()                    { *m = Dimension{} }
 func (m *Dimension) String() string            { return proto.CompactTextString(m) }
 func (*Dimension) ProtoMessage()               {}
-func (*Dimension) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (*Dimension) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
 
 func (m *Dimension) GetName() string {
 	if m != nil && m.Name != nil {
@@ -142,7 +307,7 @@ type DimensionFilter struct {
 func (m *DimensionFilter) Reset()                    { *m = DimensionFilter{} }
 func (m *DimensionFilter) String() string            { return proto.CompactTextString(m) }
 func (*DimensionFilter) ProtoMessage()               {}
-func (*DimensionFilter) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (*DimensionFilter) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 func (m *DimensionFilter) GetName() string {
 	if m != nil && m.Name != nil {
@@ -173,7 +338,7 @@ type GetMetricStatisticsInput struct {
 func (m *GetMetricStatisticsInput) Reset()                    { *m = GetMetricStatisticsInput{} }
 func (m *GetMetricStatisticsInput) String() string            { return proto.CompactTextString(m) }
 func (*GetMetricStatisticsInput) ProtoMessage()               {}
-func (*GetMetricStatisticsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (*GetMetricStatisticsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
 
 func (m *GetMetricStatisticsInput) GetDimensions() []*Dimension {
 	if m != nil {
@@ -240,7 +405,7 @@ type GetMetricStatisticsOutput struct {
 func (m *GetMetricStatisticsOutput) Reset()                    { *m = GetMetricStatisticsOutput{} }
 func (m *GetMetricStatisticsOutput) String() string            { return proto.CompactTextString(m) }
 func (*GetMetricStatisticsOutput) ProtoMessage()               {}
-func (*GetMetricStatisticsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (*GetMetricStatisticsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
 
 func (m *GetMetricStatisticsOutput) GetDatapoints() []*Datapoint {
 	if m != nil {
@@ -267,7 +432,7 @@ type ListMetricsInput struct {
 func (m *ListMetricsInput) Reset()                    { *m = ListMetricsInput{} }
 func (m *ListMetricsInput) String() string            { return proto.CompactTextString(m) }
 func (*ListMetricsInput) ProtoMessage()               {}
-func (*ListMetricsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (*ListMetricsInput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
 
 func (m *ListMetricsInput) GetDimensions() []*DimensionFilter {
 	if m != nil {
@@ -306,7 +471,7 @@ type ListMetricsOutput struct {
 func (m *ListMetricsOutput) Reset()                    { *m = ListMetricsOutput{} }
 func (m *ListMetricsOutput) String() string            { return proto.CompactTextString(m) }
 func (*ListMetricsOutput) ProtoMessage()               {}
-func (*ListMetricsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (*ListMetricsOutput) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
 
 func (m *ListMetricsOutput) GetMetrics() []*Metric {
 	if m != nil {
@@ -332,7 +497,7 @@ type Metric struct {
 func (m *Metric) Reset()                    { *m = Metric{} }
 func (m *Metric) String() string            { return proto.CompactTextString(m) }
 func (*Metric) ProtoMessage()               {}
-func (*Metric) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*Metric) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 func (m *Metric) GetDimensions() []*Dimension {
 	if m != nil {
@@ -355,8 +520,189 @@ func (m *Metric) GetNamespace() string {
 	return ""
 }
 
+type MetricAlarm struct {
+	ActionsEnabled                     *bool                  `protobuf:"varint,2,opt,name=ActionsEnabled,json=actionsEnabled" json:"ActionsEnabled,omitempty"`
+	AlarmActions                       []string               `protobuf:"bytes,3,rep,name=AlarmActions,json=alarmActions" json:"AlarmActions,omitempty"`
+	AlarmArn                           *string                `protobuf:"bytes,4,opt,name=AlarmArn,json=alarmArn" json:"AlarmArn,omitempty"`
+	AlarmConfigurationUpdatedTimestamp *opsee_types.Timestamp `protobuf:"bytes,5,opt,name=AlarmConfigurationUpdatedTimestamp,json=alarmConfigurationUpdatedTimestamp" json:"AlarmConfigurationUpdatedTimestamp,omitempty"`
+	AlarmDescription                   *string                `protobuf:"bytes,6,opt,name=AlarmDescription,json=alarmDescription" json:"AlarmDescription,omitempty"`
+	AlarmName                          *string                `protobuf:"bytes,7,opt,name=AlarmName,json=alarmName" json:"AlarmName,omitempty"`
+	ComparisonOperator                 *string                `protobuf:"bytes,8,opt,name=ComparisonOperator,json=comparisonOperator" json:"ComparisonOperator,omitempty"`
+	Dimensions                         []*Dimension           `protobuf:"bytes,9,rep,name=Dimensions,json=dimensions" json:"Dimensions,omitempty"`
+	EvaluationPeriods                  *int64                 `protobuf:"zigzag64,10,opt,name=EvaluationPeriods,json=evaluationPeriods" json:"EvaluationPeriods,omitempty"`
+	InsufficientDataActions            []string               `protobuf:"bytes,11,rep,name=InsufficientDataActions,json=insufficientDataActions" json:"InsufficientDataActions,omitempty"`
+	MetricName                         *string                `protobuf:"bytes,12,opt,name=MetricName,json=metricName" json:"MetricName,omitempty"`
+	Namespace                          *string                `protobuf:"bytes,13,opt,name=Namespace,json=namespace" json:"Namespace,omitempty"`
+	OKActions                          []string               `protobuf:"bytes,14,rep,name=OKActions,json=oKActions" json:"OKActions,omitempty"`
+	Period                             *int64                 `protobuf:"zigzag64,15,opt,name=Period,json=period" json:"Period,omitempty"`
+	StateReason                        *string                `protobuf:"bytes,16,opt,name=StateReason,json=stateReason" json:"StateReason,omitempty"`
+	StateReasonData                    *string                `protobuf:"bytes,17,opt,name=StateReasonData,json=stateReasonData" json:"StateReasonData,omitempty"`
+	StateUpdatedTimestamp              *opsee_types.Timestamp `protobuf:"bytes,18,opt,name=StateUpdatedTimestamp,json=stateUpdatedTimestamp" json:"StateUpdatedTimestamp,omitempty"`
+	StateValue                         *string                `protobuf:"bytes,19,opt,name=StateValue,json=stateValue" json:"StateValue,omitempty"`
+	Statistic                          *string                `protobuf:"bytes,20,opt,name=Statistic,json=statistic" json:"Statistic,omitempty"`
+	Threshold                          *float64               `protobuf:"fixed64,21,opt,name=Threshold,json=threshold" json:"Threshold,omitempty"`
+	Unit                               *string                `protobuf:"bytes,22,opt,name=Unit,json=unit" json:"Unit,omitempty"`
+	XXX_unrecognized                   []byte                 `json:"-"`
+}
+
+func (m *MetricAlarm) Reset()                    { *m = MetricAlarm{} }
+func (m *MetricAlarm) String() string            { return proto.CompactTextString(m) }
+func (*MetricAlarm) ProtoMessage()               {}
+func (*MetricAlarm) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+
+func (m *MetricAlarm) GetActionsEnabled() bool {
+	if m != nil && m.ActionsEnabled != nil {
+		return *m.ActionsEnabled
+	}
+	return false
+}
+
+func (m *MetricAlarm) GetAlarmActions() []string {
+	if m != nil {
+		return m.AlarmActions
+	}
+	return nil
+}
+
+func (m *MetricAlarm) GetAlarmArn() string {
+	if m != nil && m.AlarmArn != nil {
+		return *m.AlarmArn
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetAlarmConfigurationUpdatedTimestamp() *opsee_types.Timestamp {
+	if m != nil {
+		return m.AlarmConfigurationUpdatedTimestamp
+	}
+	return nil
+}
+
+func (m *MetricAlarm) GetAlarmDescription() string {
+	if m != nil && m.AlarmDescription != nil {
+		return *m.AlarmDescription
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetAlarmName() string {
+	if m != nil && m.AlarmName != nil {
+		return *m.AlarmName
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetComparisonOperator() string {
+	if m != nil && m.ComparisonOperator != nil {
+		return *m.ComparisonOperator
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetDimensions() []*Dimension {
+	if m != nil {
+		return m.Dimensions
+	}
+	return nil
+}
+
+func (m *MetricAlarm) GetEvaluationPeriods() int64 {
+	if m != nil && m.EvaluationPeriods != nil {
+		return *m.EvaluationPeriods
+	}
+	return 0
+}
+
+func (m *MetricAlarm) GetInsufficientDataActions() []string {
+	if m != nil {
+		return m.InsufficientDataActions
+	}
+	return nil
+}
+
+func (m *MetricAlarm) GetMetricName() string {
+	if m != nil && m.MetricName != nil {
+		return *m.MetricName
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetNamespace() string {
+	if m != nil && m.Namespace != nil {
+		return *m.Namespace
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetOKActions() []string {
+	if m != nil {
+		return m.OKActions
+	}
+	return nil
+}
+
+func (m *MetricAlarm) GetPeriod() int64 {
+	if m != nil && m.Period != nil {
+		return *m.Period
+	}
+	return 0
+}
+
+func (m *MetricAlarm) GetStateReason() string {
+	if m != nil && m.StateReason != nil {
+		return *m.StateReason
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetStateReasonData() string {
+	if m != nil && m.StateReasonData != nil {
+		return *m.StateReasonData
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetStateUpdatedTimestamp() *opsee_types.Timestamp {
+	if m != nil {
+		return m.StateUpdatedTimestamp
+	}
+	return nil
+}
+
+func (m *MetricAlarm) GetStateValue() string {
+	if m != nil && m.StateValue != nil {
+		return *m.StateValue
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetStatistic() string {
+	if m != nil && m.Statistic != nil {
+		return *m.Statistic
+	}
+	return ""
+}
+
+func (m *MetricAlarm) GetThreshold() float64 {
+	if m != nil && m.Threshold != nil {
+		return *m.Threshold
+	}
+	return 0
+}
+
+func (m *MetricAlarm) GetUnit() string {
+	if m != nil && m.Unit != nil {
+		return *m.Unit
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Datapoint)(nil), "opsee.aws.cloudwatch.Datapoint")
+	proto.RegisterType((*DescribeAlarmsForMetricInput)(nil), "opsee.aws.cloudwatch.DescribeAlarmsForMetricInput")
+	proto.RegisterType((*DescribeAlarmsForMetricOutput)(nil), "opsee.aws.cloudwatch.DescribeAlarmsForMetricOutput")
+	proto.RegisterType((*DescribeAlarmsInput)(nil), "opsee.aws.cloudwatch.DescribeAlarmsInput")
+	proto.RegisterType((*DescribeAlarmsOutput)(nil), "opsee.aws.cloudwatch.DescribeAlarmsOutput")
 	proto.RegisterType((*Dimension)(nil), "opsee.aws.cloudwatch.Dimension")
 	proto.RegisterType((*DimensionFilter)(nil), "opsee.aws.cloudwatch.DimensionFilter")
 	proto.RegisterType((*GetMetricStatisticsInput)(nil), "opsee.aws.cloudwatch.GetMetricStatisticsInput")
@@ -364,6 +710,7 @@ func init() {
 	proto.RegisterType((*ListMetricsInput)(nil), "opsee.aws.cloudwatch.ListMetricsInput")
 	proto.RegisterType((*ListMetricsOutput)(nil), "opsee.aws.cloudwatch.ListMetricsOutput")
 	proto.RegisterType((*Metric)(nil), "opsee.aws.cloudwatch.Metric")
+	proto.RegisterType((*MetricAlarm)(nil), "opsee.aws.cloudwatch.MetricAlarm")
 }
 func (this *Datapoint) Equal(that interface{}) bool {
 	if that == nil {
@@ -445,6 +792,257 @@ func (this *Datapoint) Equal(that interface{}) bool {
 	} else if this.Unit != nil {
 		return false
 	} else if that1.Unit != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeAlarmsForMetricInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeAlarmsForMetricInput)
+	if !ok {
+		that2, ok := that.(DescribeAlarmsForMetricInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Dimensions) != len(that1.Dimensions) {
+		return false
+	}
+	for i := range this.Dimensions {
+		if !this.Dimensions[i].Equal(that1.Dimensions[i]) {
+			return false
+		}
+	}
+	if this.MetricName != nil && that1.MetricName != nil {
+		if *this.MetricName != *that1.MetricName {
+			return false
+		}
+	} else if this.MetricName != nil {
+		return false
+	} else if that1.MetricName != nil {
+		return false
+	}
+	if this.Namespace != nil && that1.Namespace != nil {
+		if *this.Namespace != *that1.Namespace {
+			return false
+		}
+	} else if this.Namespace != nil {
+		return false
+	} else if that1.Namespace != nil {
+		return false
+	}
+	if this.Period != nil && that1.Period != nil {
+		if *this.Period != *that1.Period {
+			return false
+		}
+	} else if this.Period != nil {
+		return false
+	} else if that1.Period != nil {
+		return false
+	}
+	if this.Statistic != nil && that1.Statistic != nil {
+		if *this.Statistic != *that1.Statistic {
+			return false
+		}
+	} else if this.Statistic != nil {
+		return false
+	} else if that1.Statistic != nil {
+		return false
+	}
+	if this.Unit != nil && that1.Unit != nil {
+		if *this.Unit != *that1.Unit {
+			return false
+		}
+	} else if this.Unit != nil {
+		return false
+	} else if that1.Unit != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeAlarmsForMetricOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeAlarmsForMetricOutput)
+	if !ok {
+		that2, ok := that.(DescribeAlarmsForMetricOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.MetricAlarms) != len(that1.MetricAlarms) {
+		return false
+	}
+	for i := range this.MetricAlarms {
+		if !this.MetricAlarms[i].Equal(that1.MetricAlarms[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeAlarmsInput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeAlarmsInput)
+	if !ok {
+		that2, ok := that.(DescribeAlarmsInput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.ActionPrefix != nil && that1.ActionPrefix != nil {
+		if *this.ActionPrefix != *that1.ActionPrefix {
+			return false
+		}
+	} else if this.ActionPrefix != nil {
+		return false
+	} else if that1.ActionPrefix != nil {
+		return false
+	}
+	if this.AlarmNamePrefix != nil && that1.AlarmNamePrefix != nil {
+		if *this.AlarmNamePrefix != *that1.AlarmNamePrefix {
+			return false
+		}
+	} else if this.AlarmNamePrefix != nil {
+		return false
+	} else if that1.AlarmNamePrefix != nil {
+		return false
+	}
+	if len(this.AlarmNames) != len(that1.AlarmNames) {
+		return false
+	}
+	for i := range this.AlarmNames {
+		if this.AlarmNames[i] != that1.AlarmNames[i] {
+			return false
+		}
+	}
+	if this.MaxRecords != nil && that1.MaxRecords != nil {
+		if *this.MaxRecords != *that1.MaxRecords {
+			return false
+		}
+	} else if this.MaxRecords != nil {
+		return false
+	} else if that1.MaxRecords != nil {
+		return false
+	}
+	if this.NextToken != nil && that1.NextToken != nil {
+		if *this.NextToken != *that1.NextToken {
+			return false
+		}
+	} else if this.NextToken != nil {
+		return false
+	} else if that1.NextToken != nil {
+		return false
+	}
+	if this.StateValue != nil && that1.StateValue != nil {
+		if *this.StateValue != *that1.StateValue {
+			return false
+		}
+	} else if this.StateValue != nil {
+		return false
+	} else if that1.StateValue != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
+func (this *DescribeAlarmsOutput) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*DescribeAlarmsOutput)
+	if !ok {
+		that2, ok := that.(DescribeAlarmsOutput)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.MetricAlarms) != len(that1.MetricAlarms) {
+		return false
+	}
+	for i := range this.MetricAlarms {
+		if !this.MetricAlarms[i].Equal(that1.MetricAlarms[i]) {
+			return false
+		}
+	}
+	if this.NextToken != nil && that1.NextToken != nil {
+		if *this.NextToken != *that1.NextToken {
+			return false
+		}
+	} else if this.NextToken != nil {
+		return false
+	} else if that1.NextToken != nil {
 		return false
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -851,12 +1449,239 @@ func (this *Metric) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *MetricAlarm) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*MetricAlarm)
+	if !ok {
+		that2, ok := that.(MetricAlarm)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.ActionsEnabled != nil && that1.ActionsEnabled != nil {
+		if *this.ActionsEnabled != *that1.ActionsEnabled {
+			return false
+		}
+	} else if this.ActionsEnabled != nil {
+		return false
+	} else if that1.ActionsEnabled != nil {
+		return false
+	}
+	if len(this.AlarmActions) != len(that1.AlarmActions) {
+		return false
+	}
+	for i := range this.AlarmActions {
+		if this.AlarmActions[i] != that1.AlarmActions[i] {
+			return false
+		}
+	}
+	if this.AlarmArn != nil && that1.AlarmArn != nil {
+		if *this.AlarmArn != *that1.AlarmArn {
+			return false
+		}
+	} else if this.AlarmArn != nil {
+		return false
+	} else if that1.AlarmArn != nil {
+		return false
+	}
+	if !this.AlarmConfigurationUpdatedTimestamp.Equal(that1.AlarmConfigurationUpdatedTimestamp) {
+		return false
+	}
+	if this.AlarmDescription != nil && that1.AlarmDescription != nil {
+		if *this.AlarmDescription != *that1.AlarmDescription {
+			return false
+		}
+	} else if this.AlarmDescription != nil {
+		return false
+	} else if that1.AlarmDescription != nil {
+		return false
+	}
+	if this.AlarmName != nil && that1.AlarmName != nil {
+		if *this.AlarmName != *that1.AlarmName {
+			return false
+		}
+	} else if this.AlarmName != nil {
+		return false
+	} else if that1.AlarmName != nil {
+		return false
+	}
+	if this.ComparisonOperator != nil && that1.ComparisonOperator != nil {
+		if *this.ComparisonOperator != *that1.ComparisonOperator {
+			return false
+		}
+	} else if this.ComparisonOperator != nil {
+		return false
+	} else if that1.ComparisonOperator != nil {
+		return false
+	}
+	if len(this.Dimensions) != len(that1.Dimensions) {
+		return false
+	}
+	for i := range this.Dimensions {
+		if !this.Dimensions[i].Equal(that1.Dimensions[i]) {
+			return false
+		}
+	}
+	if this.EvaluationPeriods != nil && that1.EvaluationPeriods != nil {
+		if *this.EvaluationPeriods != *that1.EvaluationPeriods {
+			return false
+		}
+	} else if this.EvaluationPeriods != nil {
+		return false
+	} else if that1.EvaluationPeriods != nil {
+		return false
+	}
+	if len(this.InsufficientDataActions) != len(that1.InsufficientDataActions) {
+		return false
+	}
+	for i := range this.InsufficientDataActions {
+		if this.InsufficientDataActions[i] != that1.InsufficientDataActions[i] {
+			return false
+		}
+	}
+	if this.MetricName != nil && that1.MetricName != nil {
+		if *this.MetricName != *that1.MetricName {
+			return false
+		}
+	} else if this.MetricName != nil {
+		return false
+	} else if that1.MetricName != nil {
+		return false
+	}
+	if this.Namespace != nil && that1.Namespace != nil {
+		if *this.Namespace != *that1.Namespace {
+			return false
+		}
+	} else if this.Namespace != nil {
+		return false
+	} else if that1.Namespace != nil {
+		return false
+	}
+	if len(this.OKActions) != len(that1.OKActions) {
+		return false
+	}
+	for i := range this.OKActions {
+		if this.OKActions[i] != that1.OKActions[i] {
+			return false
+		}
+	}
+	if this.Period != nil && that1.Period != nil {
+		if *this.Period != *that1.Period {
+			return false
+		}
+	} else if this.Period != nil {
+		return false
+	} else if that1.Period != nil {
+		return false
+	}
+	if this.StateReason != nil && that1.StateReason != nil {
+		if *this.StateReason != *that1.StateReason {
+			return false
+		}
+	} else if this.StateReason != nil {
+		return false
+	} else if that1.StateReason != nil {
+		return false
+	}
+	if this.StateReasonData != nil && that1.StateReasonData != nil {
+		if *this.StateReasonData != *that1.StateReasonData {
+			return false
+		}
+	} else if this.StateReasonData != nil {
+		return false
+	} else if that1.StateReasonData != nil {
+		return false
+	}
+	if !this.StateUpdatedTimestamp.Equal(that1.StateUpdatedTimestamp) {
+		return false
+	}
+	if this.StateValue != nil && that1.StateValue != nil {
+		if *this.StateValue != *that1.StateValue {
+			return false
+		}
+	} else if this.StateValue != nil {
+		return false
+	} else if that1.StateValue != nil {
+		return false
+	}
+	if this.Statistic != nil && that1.Statistic != nil {
+		if *this.Statistic != *that1.Statistic {
+			return false
+		}
+	} else if this.Statistic != nil {
+		return false
+	} else if that1.Statistic != nil {
+		return false
+	}
+	if this.Threshold != nil && that1.Threshold != nil {
+		if *this.Threshold != *that1.Threshold {
+			return false
+		}
+	} else if this.Threshold != nil {
+		return false
+	} else if that1.Threshold != nil {
+		return false
+	}
+	if this.Unit != nil && that1.Unit != nil {
+		if *this.Unit != *that1.Unit {
+			return false
+		}
+	} else if this.Unit != nil {
+		return false
+	} else if that1.Unit != nil {
+		return false
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return false
+	}
+	return true
+}
 
 type DatapointGetter interface {
 	GetDatapoint() *Datapoint
 }
 
 var GraphQLDatapointType *github_com_graphql_go_graphql.Object
+
+type DescribeAlarmsForMetricInputGetter interface {
+	GetDescribeAlarmsForMetricInput() *DescribeAlarmsForMetricInput
+}
+
+var GraphQLDescribeAlarmsForMetricInputType *github_com_graphql_go_graphql.Object
+
+type DescribeAlarmsForMetricOutputGetter interface {
+	GetDescribeAlarmsForMetricOutput() *DescribeAlarmsForMetricOutput
+}
+
+var GraphQLDescribeAlarmsForMetricOutputType *github_com_graphql_go_graphql.Object
+
+type DescribeAlarmsInputGetter interface {
+	GetDescribeAlarmsInput() *DescribeAlarmsInput
+}
+
+var GraphQLDescribeAlarmsInputType *github_com_graphql_go_graphql.Object
+
+type DescribeAlarmsOutputGetter interface {
+	GetDescribeAlarmsOutput() *DescribeAlarmsOutput
+}
+
+var GraphQLDescribeAlarmsOutputType *github_com_graphql_go_graphql.Object
 
 type DimensionGetter interface {
 	GetDimension() *Dimension
@@ -899,6 +1724,12 @@ type MetricGetter interface {
 }
 
 var GraphQLMetricType *github_com_graphql_go_graphql.Object
+
+type MetricAlarmGetter interface {
+	GetMetricAlarm() *MetricAlarm
+}
+
+var GraphQLMetricAlarmType *github_com_graphql_go_graphql.Object
 
 func init() {
 	GraphQLDatapointType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
@@ -1079,6 +1910,389 @@ func init() {
 							return face.GetUnit(), nil
 						}
 						return nil, fmt.Errorf("field Unit not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeAlarmsForMetricInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "cloudwatchDescribeAlarmsForMetricInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"Dimensions": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLDimensionType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricInput)
+						if ok {
+							return obj.Dimensions, nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Dimensions, nil
+						}
+						return nil, fmt.Errorf("field Dimensions not resolved")
+					},
+				},
+				"MetricName": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricInput)
+						if ok {
+							if obj.MetricName == nil {
+								return nil, nil
+							}
+							return obj.GetMetricName(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MetricName == nil {
+								return nil, nil
+							}
+							return face.GetMetricName(), nil
+						}
+						return nil, fmt.Errorf("field MetricName not resolved")
+					},
+				},
+				"Namespace": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricInput)
+						if ok {
+							if obj.Namespace == nil {
+								return nil, nil
+							}
+							return obj.GetNamespace(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Namespace == nil {
+								return nil, nil
+							}
+							return face.GetNamespace(), nil
+						}
+						return nil, fmt.Errorf("field Namespace not resolved")
+					},
+				},
+				"Period": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricInput)
+						if ok {
+							if obj.Period == nil {
+								return nil, nil
+							}
+							return obj.GetPeriod(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Period == nil {
+								return nil, nil
+							}
+							return face.GetPeriod(), nil
+						}
+						return nil, fmt.Errorf("field Period not resolved")
+					},
+				},
+				"Statistic": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricInput)
+						if ok {
+							if obj.Statistic == nil {
+								return nil, nil
+							}
+							return obj.GetStatistic(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Statistic == nil {
+								return nil, nil
+							}
+							return face.GetStatistic(), nil
+						}
+						return nil, fmt.Errorf("field Statistic not resolved")
+					},
+				},
+				"Unit": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricInput)
+						if ok {
+							if obj.Unit == nil {
+								return nil, nil
+							}
+							return obj.GetUnit(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Unit == nil {
+								return nil, nil
+							}
+							return face.GetUnit(), nil
+						}
+						return nil, fmt.Errorf("field Unit not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeAlarmsForMetricOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "cloudwatchDescribeAlarmsForMetricOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"MetricAlarms": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLMetricAlarmType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsForMetricOutput)
+						if ok {
+							return obj.MetricAlarms, nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsForMetricOutputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsForMetricOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.MetricAlarms, nil
+						}
+						return nil, fmt.Errorf("field MetricAlarms not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeAlarmsInputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "cloudwatchDescribeAlarmsInput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"ActionPrefix": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsInput)
+						if ok {
+							if obj.ActionPrefix == nil {
+								return nil, nil
+							}
+							return obj.GetActionPrefix(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.ActionPrefix == nil {
+								return nil, nil
+							}
+							return face.GetActionPrefix(), nil
+						}
+						return nil, fmt.Errorf("field ActionPrefix not resolved")
+					},
+				},
+				"AlarmNamePrefix": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsInput)
+						if ok {
+							if obj.AlarmNamePrefix == nil {
+								return nil, nil
+							}
+							return obj.GetAlarmNamePrefix(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AlarmNamePrefix == nil {
+								return nil, nil
+							}
+							return face.GetAlarmNamePrefix(), nil
+						}
+						return nil, fmt.Errorf("field AlarmNamePrefix not resolved")
+					},
+				},
+				"AlarmNames": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsInput)
+						if ok {
+							return obj.AlarmNames, nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsInput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.AlarmNames, nil
+						}
+						return nil, fmt.Errorf("field AlarmNames not resolved")
+					},
+				},
+				"MaxRecords": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsInput)
+						if ok {
+							if obj.MaxRecords == nil {
+								return nil, nil
+							}
+							return obj.GetMaxRecords(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MaxRecords == nil {
+								return nil, nil
+							}
+							return face.GetMaxRecords(), nil
+						}
+						return nil, fmt.Errorf("field MaxRecords not resolved")
+					},
+				},
+				"NextToken": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsInput)
+						if ok {
+							if obj.NextToken == nil {
+								return nil, nil
+							}
+							return obj.GetNextToken(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NextToken == nil {
+								return nil, nil
+							}
+							return face.GetNextToken(), nil
+						}
+						return nil, fmt.Errorf("field NextToken not resolved")
+					},
+				},
+				"StateValue": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsInput)
+						if ok {
+							if obj.StateValue == nil {
+								return nil, nil
+							}
+							return obj.GetStateValue(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsInputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsInput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.StateValue == nil {
+								return nil, nil
+							}
+							return face.GetStateValue(), nil
+						}
+						return nil, fmt.Errorf("field StateValue not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDescribeAlarmsOutputType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "cloudwatchDescribeAlarmsOutput",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"MetricAlarms": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLMetricAlarmType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsOutput)
+						if ok {
+							return obj.MetricAlarms, nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsOutputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							return face.MetricAlarms, nil
+						}
+						return nil, fmt.Errorf("field MetricAlarms not resolved")
+					},
+				},
+				"NextToken": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*DescribeAlarmsOutput)
+						if ok {
+							if obj.NextToken == nil {
+								return nil, nil
+							}
+							return obj.GetNextToken(), nil
+						}
+						inter, ok := p.Source.(DescribeAlarmsOutputGetter)
+						if ok {
+							face := inter.GetDescribeAlarmsOutput()
+							if face == nil {
+								return nil, nil
+							}
+							if face.NextToken == nil {
+								return nil, nil
+							}
+							return face.GetNextToken(), nil
+						}
+						return nil, fmt.Errorf("field NextToken not resolved")
 					},
 				},
 			}
@@ -1679,6 +2893,515 @@ func init() {
 			}
 		}),
 	})
+	GraphQLMetricAlarmType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "cloudwatchMetricAlarm",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"ActionsEnabled": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.ActionsEnabled == nil {
+								return nil, nil
+							}
+							return obj.GetActionsEnabled(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.ActionsEnabled == nil {
+								return nil, nil
+							}
+							return face.GetActionsEnabled(), nil
+						}
+						return nil, fmt.Errorf("field ActionsEnabled not resolved")
+					},
+				},
+				"AlarmActions": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							return obj.AlarmActions, nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							return face.AlarmActions, nil
+						}
+						return nil, fmt.Errorf("field AlarmActions not resolved")
+					},
+				},
+				"AlarmArn": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.AlarmArn == nil {
+								return nil, nil
+							}
+							return obj.GetAlarmArn(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AlarmArn == nil {
+								return nil, nil
+							}
+							return face.GetAlarmArn(), nil
+						}
+						return nil, fmt.Errorf("field AlarmArn not resolved")
+					},
+				},
+				"AlarmConfigurationUpdatedTimestamp": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.AlarmConfigurationUpdatedTimestamp == nil {
+								return nil, nil
+							}
+							return obj.GetAlarmConfigurationUpdatedTimestamp(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AlarmConfigurationUpdatedTimestamp == nil {
+								return nil, nil
+							}
+							return face.GetAlarmConfigurationUpdatedTimestamp(), nil
+						}
+						return nil, fmt.Errorf("field AlarmConfigurationUpdatedTimestamp not resolved")
+					},
+				},
+				"AlarmDescription": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.AlarmDescription == nil {
+								return nil, nil
+							}
+							return obj.GetAlarmDescription(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AlarmDescription == nil {
+								return nil, nil
+							}
+							return face.GetAlarmDescription(), nil
+						}
+						return nil, fmt.Errorf("field AlarmDescription not resolved")
+					},
+				},
+				"AlarmName": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.AlarmName == nil {
+								return nil, nil
+							}
+							return obj.GetAlarmName(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.AlarmName == nil {
+								return nil, nil
+							}
+							return face.GetAlarmName(), nil
+						}
+						return nil, fmt.Errorf("field AlarmName not resolved")
+					},
+				},
+				"ComparisonOperator": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.ComparisonOperator == nil {
+								return nil, nil
+							}
+							return obj.GetComparisonOperator(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.ComparisonOperator == nil {
+								return nil, nil
+							}
+							return face.GetComparisonOperator(), nil
+						}
+						return nil, fmt.Errorf("field ComparisonOperator not resolved")
+					},
+				},
+				"Dimensions": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLDimensionType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							return obj.Dimensions, nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Dimensions, nil
+						}
+						return nil, fmt.Errorf("field Dimensions not resolved")
+					},
+				},
+				"EvaluationPeriods": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.EvaluationPeriods == nil {
+								return nil, nil
+							}
+							return obj.GetEvaluationPeriods(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.EvaluationPeriods == nil {
+								return nil, nil
+							}
+							return face.GetEvaluationPeriods(), nil
+						}
+						return nil, fmt.Errorf("field EvaluationPeriods not resolved")
+					},
+				},
+				"InsufficientDataActions": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							return obj.InsufficientDataActions, nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							return face.InsufficientDataActions, nil
+						}
+						return nil, fmt.Errorf("field InsufficientDataActions not resolved")
+					},
+				},
+				"MetricName": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.MetricName == nil {
+								return nil, nil
+							}
+							return obj.GetMetricName(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.MetricName == nil {
+								return nil, nil
+							}
+							return face.GetMetricName(), nil
+						}
+						return nil, fmt.Errorf("field MetricName not resolved")
+					},
+				},
+				"Namespace": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.Namespace == nil {
+								return nil, nil
+							}
+							return obj.GetNamespace(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Namespace == nil {
+								return nil, nil
+							}
+							return face.GetNamespace(), nil
+						}
+						return nil, fmt.Errorf("field Namespace not resolved")
+					},
+				},
+				"OKActions": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							return obj.OKActions, nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							return face.OKActions, nil
+						}
+						return nil, fmt.Errorf("field OKActions not resolved")
+					},
+				},
+				"Period": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.Period == nil {
+								return nil, nil
+							}
+							return obj.GetPeriod(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Period == nil {
+								return nil, nil
+							}
+							return face.GetPeriod(), nil
+						}
+						return nil, fmt.Errorf("field Period not resolved")
+					},
+				},
+				"StateReason": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.StateReason == nil {
+								return nil, nil
+							}
+							return obj.GetStateReason(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.StateReason == nil {
+								return nil, nil
+							}
+							return face.GetStateReason(), nil
+						}
+						return nil, fmt.Errorf("field StateReason not resolved")
+					},
+				},
+				"StateReasonData": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.StateReasonData == nil {
+								return nil, nil
+							}
+							return obj.GetStateReasonData(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.StateReasonData == nil {
+								return nil, nil
+							}
+							return face.GetStateReasonData(), nil
+						}
+						return nil, fmt.Errorf("field StateReasonData not resolved")
+					},
+				},
+				"StateUpdatedTimestamp": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.StateUpdatedTimestamp == nil {
+								return nil, nil
+							}
+							return obj.GetStateUpdatedTimestamp(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.StateUpdatedTimestamp == nil {
+								return nil, nil
+							}
+							return face.GetStateUpdatedTimestamp(), nil
+						}
+						return nil, fmt.Errorf("field StateUpdatedTimestamp not resolved")
+					},
+				},
+				"StateValue": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.StateValue == nil {
+								return nil, nil
+							}
+							return obj.GetStateValue(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.StateValue == nil {
+								return nil, nil
+							}
+							return face.GetStateValue(), nil
+						}
+						return nil, fmt.Errorf("field StateValue not resolved")
+					},
+				},
+				"Statistic": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.Statistic == nil {
+								return nil, nil
+							}
+							return obj.GetStatistic(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Statistic == nil {
+								return nil, nil
+							}
+							return face.GetStatistic(), nil
+						}
+						return nil, fmt.Errorf("field Statistic not resolved")
+					},
+				},
+				"Threshold": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Float,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.Threshold == nil {
+								return nil, nil
+							}
+							return obj.GetThreshold(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Threshold == nil {
+								return nil, nil
+							}
+							return face.GetThreshold(), nil
+						}
+						return nil, fmt.Errorf("field Threshold not resolved")
+					},
+				},
+				"Unit": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*MetricAlarm)
+						if ok {
+							if obj.Unit == nil {
+								return nil, nil
+							}
+							return obj.GetUnit(), nil
+						}
+						inter, ok := p.Source.(MetricAlarmGetter)
+						if ok {
+							face := inter.GetMetricAlarm()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Unit == nil {
+								return nil, nil
+							}
+							return face.GetUnit(), nil
+						}
+						return nil, fmt.Errorf("field Unit not resolved")
+					},
+				},
+			}
+		}),
+	})
 }
 func (m *Datapoint) Marshal() (data []byte, err error) {
 	size := m.Size()
@@ -1735,6 +3458,205 @@ func (m *Datapoint) MarshalTo(data []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(data, i, uint64(len(*m.Unit)))
 		i += copy(data[i:], *m.Unit)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeAlarmsForMetricInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeAlarmsForMetricInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Dimensions) > 0 {
+		for _, msg := range m.Dimensions {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.MetricName != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.MetricName)))
+		i += copy(data[i:], *m.MetricName)
+	}
+	if m.Namespace != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Namespace)))
+		i += copy(data[i:], *m.Namespace)
+	}
+	if m.Period != nil {
+		data[i] = 0x28
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Period)<<1)^uint64((*m.Period>>63))))
+	}
+	if m.Statistic != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Statistic)))
+		i += copy(data[i:], *m.Statistic)
+	}
+	if m.Unit != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Unit)))
+		i += copy(data[i:], *m.Unit)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeAlarmsForMetricOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeAlarmsForMetricOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.MetricAlarms) > 0 {
+		for _, msg := range m.MetricAlarms {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeAlarmsInput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeAlarmsInput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ActionPrefix != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ActionPrefix)))
+		i += copy(data[i:], *m.ActionPrefix)
+	}
+	if m.AlarmNamePrefix != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AlarmNamePrefix)))
+		i += copy(data[i:], *m.AlarmNamePrefix)
+	}
+	if len(m.AlarmNames) > 0 {
+		for _, s := range m.AlarmNames {
+			data[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.MaxRecords != nil {
+		data[i] = 0x28
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.MaxRecords)<<1)^uint64((*m.MaxRecords>>63))))
+	}
+	if m.NextToken != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NextToken)))
+		i += copy(data[i:], *m.NextToken)
+	}
+	if m.StateValue != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StateValue)))
+		i += copy(data[i:], *m.StateValue)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *DescribeAlarmsOutput) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DescribeAlarmsOutput) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.MetricAlarms) > 0 {
+		for _, msg := range m.MetricAlarms {
+			data[i] = 0x12
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.NextToken != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.NextToken)))
+		i += copy(data[i:], *m.NextToken)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(data[i:], m.XXX_unrecognized)
@@ -2073,6 +3995,209 @@ func (m *Metric) MarshalTo(data []byte) (int, error) {
 	return i, nil
 }
 
+func (m *MetricAlarm) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *MetricAlarm) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ActionsEnabled != nil {
+		data[i] = 0x10
+		i++
+		if *m.ActionsEnabled {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.AlarmActions) > 0 {
+		for _, s := range m.AlarmActions {
+			data[i] = 0x1a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.AlarmArn != nil {
+		data[i] = 0x22
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AlarmArn)))
+		i += copy(data[i:], *m.AlarmArn)
+	}
+	if m.AlarmConfigurationUpdatedTimestamp != nil {
+		data[i] = 0x2a
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.AlarmConfigurationUpdatedTimestamp.Size()))
+		n4, err := m.AlarmConfigurationUpdatedTimestamp.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if m.AlarmDescription != nil {
+		data[i] = 0x32
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AlarmDescription)))
+		i += copy(data[i:], *m.AlarmDescription)
+	}
+	if m.AlarmName != nil {
+		data[i] = 0x3a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.AlarmName)))
+		i += copy(data[i:], *m.AlarmName)
+	}
+	if m.ComparisonOperator != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.ComparisonOperator)))
+		i += copy(data[i:], *m.ComparisonOperator)
+	}
+	if len(m.Dimensions) > 0 {
+		for _, msg := range m.Dimensions {
+			data[i] = 0x4a
+			i++
+			i = encodeVarintTypes(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.EvaluationPeriods != nil {
+		data[i] = 0x50
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.EvaluationPeriods)<<1)^uint64((*m.EvaluationPeriods>>63))))
+	}
+	if len(m.InsufficientDataActions) > 0 {
+		for _, s := range m.InsufficientDataActions {
+			data[i] = 0x5a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.MetricName != nil {
+		data[i] = 0x62
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.MetricName)))
+		i += copy(data[i:], *m.MetricName)
+	}
+	if m.Namespace != nil {
+		data[i] = 0x6a
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Namespace)))
+		i += copy(data[i:], *m.Namespace)
+	}
+	if len(m.OKActions) > 0 {
+		for _, s := range m.OKActions {
+			data[i] = 0x72
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if m.Period != nil {
+		data[i] = 0x78
+		i++
+		i = encodeVarintTypes(data, i, uint64((uint64(*m.Period)<<1)^uint64((*m.Period>>63))))
+	}
+	if m.StateReason != nil {
+		data[i] = 0x82
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StateReason)))
+		i += copy(data[i:], *m.StateReason)
+	}
+	if m.StateReasonData != nil {
+		data[i] = 0x8a
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StateReasonData)))
+		i += copy(data[i:], *m.StateReasonData)
+	}
+	if m.StateUpdatedTimestamp != nil {
+		data[i] = 0x92
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(m.StateUpdatedTimestamp.Size()))
+		n5, err := m.StateUpdatedTimestamp.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	if m.StateValue != nil {
+		data[i] = 0x9a
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.StateValue)))
+		i += copy(data[i:], *m.StateValue)
+	}
+	if m.Statistic != nil {
+		data[i] = 0xa2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Statistic)))
+		i += copy(data[i:], *m.Statistic)
+	}
+	if m.Threshold != nil {
+		data[i] = 0xa9
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeFixed64Types(data, i, uint64(math.Float64bits(float64(*m.Threshold))))
+	}
+	if m.Unit != nil {
+		data[i] = 0xb2
+		i++
+		data[i] = 0x1
+		i++
+		i = encodeVarintTypes(data, i, uint64(len(*m.Unit)))
+		i += copy(data[i:], *m.Unit)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func encodeFixed64Types(data []byte, offset int, v uint64) int {
 	data[offset] = uint8(v)
 	data[offset+1] = uint8(v >> 8)
@@ -2150,15 +4275,125 @@ func NewPopulatedDatapoint(r randyTypes, easy bool) *Datapoint {
 	return this
 }
 
-func NewPopulatedDimension(r randyTypes, easy bool) *Dimension {
-	this := &Dimension{}
+func NewPopulatedDescribeAlarmsForMetricInput(r randyTypes, easy bool) *DescribeAlarmsForMetricInput {
+	this := &DescribeAlarmsForMetricInput{}
 	if r.Intn(10) != 0 {
-		v7 := randStringTypes(r)
-		this.Name = &v7
+		v7 := r.Intn(5)
+		this.Dimensions = make([]*Dimension, v7)
+		for i := 0; i < v7; i++ {
+			this.Dimensions[i] = NewPopulatedDimension(r, easy)
+		}
 	}
 	if r.Intn(10) != 0 {
 		v8 := randStringTypes(r)
-		this.Value = &v8
+		this.MetricName = &v8
+	}
+	if r.Intn(10) != 0 {
+		v9 := randStringTypes(r)
+		this.Namespace = &v9
+	}
+	if r.Intn(10) != 0 {
+		v10 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v10 *= -1
+		}
+		this.Period = &v10
+	}
+	if r.Intn(10) != 0 {
+		v11 := randStringTypes(r)
+		this.Statistic = &v11
+	}
+	if r.Intn(10) != 0 {
+		v12 := randStringTypes(r)
+		this.Unit = &v12
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 8)
+	}
+	return this
+}
+
+func NewPopulatedDescribeAlarmsForMetricOutput(r randyTypes, easy bool) *DescribeAlarmsForMetricOutput {
+	this := &DescribeAlarmsForMetricOutput{}
+	if r.Intn(10) != 0 {
+		v13 := r.Intn(5)
+		this.MetricAlarms = make([]*MetricAlarm, v13)
+		for i := 0; i < v13; i++ {
+			this.MetricAlarms[i] = NewPopulatedMetricAlarm(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 3)
+	}
+	return this
+}
+
+func NewPopulatedDescribeAlarmsInput(r randyTypes, easy bool) *DescribeAlarmsInput {
+	this := &DescribeAlarmsInput{}
+	if r.Intn(10) != 0 {
+		v14 := randStringTypes(r)
+		this.ActionPrefix = &v14
+	}
+	if r.Intn(10) != 0 {
+		v15 := randStringTypes(r)
+		this.AlarmNamePrefix = &v15
+	}
+	if r.Intn(10) != 0 {
+		v16 := r.Intn(10)
+		this.AlarmNames = make([]string, v16)
+		for i := 0; i < v16; i++ {
+			this.AlarmNames[i] = randStringTypes(r)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v17 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v17 *= -1
+		}
+		this.MaxRecords = &v17
+	}
+	if r.Intn(10) != 0 {
+		v18 := randStringTypes(r)
+		this.NextToken = &v18
+	}
+	if r.Intn(10) != 0 {
+		v19 := randStringTypes(r)
+		this.StateValue = &v19
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 8)
+	}
+	return this
+}
+
+func NewPopulatedDescribeAlarmsOutput(r randyTypes, easy bool) *DescribeAlarmsOutput {
+	this := &DescribeAlarmsOutput{}
+	if r.Intn(10) != 0 {
+		v20 := r.Intn(5)
+		this.MetricAlarms = make([]*MetricAlarm, v20)
+		for i := 0; i < v20; i++ {
+			this.MetricAlarms[i] = NewPopulatedMetricAlarm(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v21 := randStringTypes(r)
+		this.NextToken = &v21
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
+	}
+	return this
+}
+
+func NewPopulatedDimension(r randyTypes, easy bool) *Dimension {
+	this := &Dimension{}
+	if r.Intn(10) != 0 {
+		v22 := randStringTypes(r)
+		this.Name = &v22
+	}
+	if r.Intn(10) != 0 {
+		v23 := randStringTypes(r)
+		this.Value = &v23
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -2169,12 +4404,12 @@ func NewPopulatedDimension(r randyTypes, easy bool) *Dimension {
 func NewPopulatedDimensionFilter(r randyTypes, easy bool) *DimensionFilter {
 	this := &DimensionFilter{}
 	if r.Intn(10) != 0 {
-		v9 := randStringTypes(r)
-		this.Name = &v9
+		v24 := randStringTypes(r)
+		this.Name = &v24
 	}
 	if r.Intn(10) != 0 {
-		v10 := randStringTypes(r)
-		this.Value = &v10
+		v25 := randStringTypes(r)
+		this.Value = &v25
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -2185,9 +4420,9 @@ func NewPopulatedDimensionFilter(r randyTypes, easy bool) *DimensionFilter {
 func NewPopulatedGetMetricStatisticsInput(r randyTypes, easy bool) *GetMetricStatisticsInput {
 	this := &GetMetricStatisticsInput{}
 	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.Dimensions = make([]*Dimension, v11)
-		for i := 0; i < v11; i++ {
+		v26 := r.Intn(5)
+		this.Dimensions = make([]*Dimension, v26)
+		for i := 0; i < v26; i++ {
 			this.Dimensions[i] = NewPopulatedDimension(r, easy)
 		}
 	}
@@ -2195,33 +4430,33 @@ func NewPopulatedGetMetricStatisticsInput(r randyTypes, easy bool) *GetMetricSta
 		this.EndTime = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v12 := randStringTypes(r)
-		this.MetricName = &v12
+		v27 := randStringTypes(r)
+		this.MetricName = &v27
 	}
 	if r.Intn(10) != 0 {
-		v13 := randStringTypes(r)
-		this.Namespace = &v13
+		v28 := randStringTypes(r)
+		this.Namespace = &v28
 	}
 	if r.Intn(10) != 0 {
-		v14 := int64(r.Int63())
+		v29 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v14 *= -1
+			v29 *= -1
 		}
-		this.Period = &v14
+		this.Period = &v29
 	}
 	if r.Intn(10) != 0 {
 		this.StartTime = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v15 := r.Intn(10)
-		this.Statistics = make([]string, v15)
-		for i := 0; i < v15; i++ {
+		v30 := r.Intn(10)
+		this.Statistics = make([]string, v30)
+		for i := 0; i < v30; i++ {
 			this.Statistics[i] = randStringTypes(r)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v16 := randStringTypes(r)
-		this.Unit = &v16
+		v31 := randStringTypes(r)
+		this.Unit = &v31
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 10)
@@ -2232,15 +4467,15 @@ func NewPopulatedGetMetricStatisticsInput(r randyTypes, easy bool) *GetMetricSta
 func NewPopulatedGetMetricStatisticsOutput(r randyTypes, easy bool) *GetMetricStatisticsOutput {
 	this := &GetMetricStatisticsOutput{}
 	if r.Intn(10) != 0 {
-		v17 := r.Intn(5)
-		this.Datapoints = make([]*Datapoint, v17)
-		for i := 0; i < v17; i++ {
+		v32 := r.Intn(5)
+		this.Datapoints = make([]*Datapoint, v32)
+		for i := 0; i < v32; i++ {
 			this.Datapoints[i] = NewPopulatedDatapoint(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v18 := randStringTypes(r)
-		this.Label = &v18
+		v33 := randStringTypes(r)
+		this.Label = &v33
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -2251,23 +4486,23 @@ func NewPopulatedGetMetricStatisticsOutput(r randyTypes, easy bool) *GetMetricSt
 func NewPopulatedListMetricsInput(r randyTypes, easy bool) *ListMetricsInput {
 	this := &ListMetricsInput{}
 	if r.Intn(10) != 0 {
-		v19 := r.Intn(5)
-		this.Dimensions = make([]*DimensionFilter, v19)
-		for i := 0; i < v19; i++ {
+		v34 := r.Intn(5)
+		this.Dimensions = make([]*DimensionFilter, v34)
+		for i := 0; i < v34; i++ {
 			this.Dimensions[i] = NewPopulatedDimensionFilter(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v20 := randStringTypes(r)
-		this.MetricName = &v20
+		v35 := randStringTypes(r)
+		this.MetricName = &v35
 	}
 	if r.Intn(10) != 0 {
-		v21 := randStringTypes(r)
-		this.Namespace = &v21
+		v36 := randStringTypes(r)
+		this.Namespace = &v36
 	}
 	if r.Intn(10) != 0 {
-		v22 := randStringTypes(r)
-		this.NextToken = &v22
+		v37 := randStringTypes(r)
+		this.NextToken = &v37
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 6)
@@ -2278,15 +4513,15 @@ func NewPopulatedListMetricsInput(r randyTypes, easy bool) *ListMetricsInput {
 func NewPopulatedListMetricsOutput(r randyTypes, easy bool) *ListMetricsOutput {
 	this := &ListMetricsOutput{}
 	if r.Intn(10) != 0 {
-		v23 := r.Intn(5)
-		this.Metrics = make([]*Metric, v23)
-		for i := 0; i < v23; i++ {
+		v38 := r.Intn(5)
+		this.Metrics = make([]*Metric, v38)
+		for i := 0; i < v38; i++ {
 			this.Metrics[i] = NewPopulatedMetric(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v24 := randStringTypes(r)
-		this.NextToken = &v24
+		v39 := randStringTypes(r)
+		this.NextToken = &v39
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 4)
@@ -2297,22 +4532,133 @@ func NewPopulatedListMetricsOutput(r randyTypes, easy bool) *ListMetricsOutput {
 func NewPopulatedMetric(r randyTypes, easy bool) *Metric {
 	this := &Metric{}
 	if r.Intn(10) != 0 {
-		v25 := r.Intn(5)
-		this.Dimensions = make([]*Dimension, v25)
-		for i := 0; i < v25; i++ {
+		v40 := r.Intn(5)
+		this.Dimensions = make([]*Dimension, v40)
+		for i := 0; i < v40; i++ {
 			this.Dimensions[i] = NewPopulatedDimension(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v26 := randStringTypes(r)
-		this.MetricName = &v26
+		v41 := randStringTypes(r)
+		this.MetricName = &v41
 	}
 	if r.Intn(10) != 0 {
-		v27 := randStringTypes(r)
-		this.Namespace = &v27
+		v42 := randStringTypes(r)
+		this.Namespace = &v42
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedTypes(r, 5)
+	}
+	return this
+}
+
+func NewPopulatedMetricAlarm(r randyTypes, easy bool) *MetricAlarm {
+	this := &MetricAlarm{}
+	if r.Intn(10) != 0 {
+		v43 := bool(bool(r.Intn(2) == 0))
+		this.ActionsEnabled = &v43
+	}
+	if r.Intn(10) != 0 {
+		v44 := r.Intn(10)
+		this.AlarmActions = make([]string, v44)
+		for i := 0; i < v44; i++ {
+			this.AlarmActions[i] = randStringTypes(r)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v45 := randStringTypes(r)
+		this.AlarmArn = &v45
+	}
+	if r.Intn(10) != 0 {
+		this.AlarmConfigurationUpdatedTimestamp = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v46 := randStringTypes(r)
+		this.AlarmDescription = &v46
+	}
+	if r.Intn(10) != 0 {
+		v47 := randStringTypes(r)
+		this.AlarmName = &v47
+	}
+	if r.Intn(10) != 0 {
+		v48 := randStringTypes(r)
+		this.ComparisonOperator = &v48
+	}
+	if r.Intn(10) != 0 {
+		v49 := r.Intn(5)
+		this.Dimensions = make([]*Dimension, v49)
+		for i := 0; i < v49; i++ {
+			this.Dimensions[i] = NewPopulatedDimension(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v50 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v50 *= -1
+		}
+		this.EvaluationPeriods = &v50
+	}
+	if r.Intn(10) != 0 {
+		v51 := r.Intn(10)
+		this.InsufficientDataActions = make([]string, v51)
+		for i := 0; i < v51; i++ {
+			this.InsufficientDataActions[i] = randStringTypes(r)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v52 := randStringTypes(r)
+		this.MetricName = &v52
+	}
+	if r.Intn(10) != 0 {
+		v53 := randStringTypes(r)
+		this.Namespace = &v53
+	}
+	if r.Intn(10) != 0 {
+		v54 := r.Intn(10)
+		this.OKActions = make([]string, v54)
+		for i := 0; i < v54; i++ {
+			this.OKActions[i] = randStringTypes(r)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v55 := int64(r.Int63())
+		if r.Intn(2) == 0 {
+			v55 *= -1
+		}
+		this.Period = &v55
+	}
+	if r.Intn(10) != 0 {
+		v56 := randStringTypes(r)
+		this.StateReason = &v56
+	}
+	if r.Intn(10) != 0 {
+		v57 := randStringTypes(r)
+		this.StateReasonData = &v57
+	}
+	if r.Intn(10) != 0 {
+		this.StateUpdatedTimestamp = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v58 := randStringTypes(r)
+		this.StateValue = &v58
+	}
+	if r.Intn(10) != 0 {
+		v59 := randStringTypes(r)
+		this.Statistic = &v59
+	}
+	if r.Intn(10) != 0 {
+		v60 := float64(r.Float64())
+		if r.Intn(2) == 0 {
+			v60 *= -1
+		}
+		this.Threshold = &v60
+	}
+	if r.Intn(10) != 0 {
+		v61 := randStringTypes(r)
+		this.Unit = &v61
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedTypes(r, 23)
 	}
 	return this
 }
@@ -2336,9 +4682,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v28 := r.Intn(100)
-	tmps := make([]rune, v28)
-	for i := 0; i < v28; i++ {
+	v62 := r.Intn(100)
+	tmps := make([]rune, v62)
+	for i := 0; i < v62; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -2360,11 +4706,11 @@ func randFieldTypes(data []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateTypes(data, uint64(key))
-		v29 := r.Int63()
+		v63 := r.Int63()
 		if r.Intn(2) == 0 {
-			v29 *= -1
+			v63 *= -1
 		}
-		data = encodeVarintPopulateTypes(data, uint64(v29))
+		data = encodeVarintPopulateTypes(data, uint64(v63))
 	case 1:
 		data = encodeVarintPopulateTypes(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -2413,6 +4759,108 @@ func (m *Datapoint) Size() (n int) {
 	}
 	if m.Unit != nil {
 		l = len(*m.Unit)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeAlarmsForMetricInput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Dimensions) > 0 {
+		for _, e := range m.Dimensions {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MetricName != nil {
+		l = len(*m.MetricName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Namespace != nil {
+		l = len(*m.Namespace)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Period != nil {
+		n += 1 + sozTypes(uint64(*m.Period))
+	}
+	if m.Statistic != nil {
+		l = len(*m.Statistic)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Unit != nil {
+		l = len(*m.Unit)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeAlarmsForMetricOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.MetricAlarms) > 0 {
+		for _, e := range m.MetricAlarms {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeAlarmsInput) Size() (n int) {
+	var l int
+	_ = l
+	if m.ActionPrefix != nil {
+		l = len(*m.ActionPrefix)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AlarmNamePrefix != nil {
+		l = len(*m.AlarmNamePrefix)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.AlarmNames) > 0 {
+		for _, s := range m.AlarmNames {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MaxRecords != nil {
+		n += 1 + sozTypes(uint64(*m.MaxRecords))
+	}
+	if m.NextToken != nil {
+		l = len(*m.NextToken)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.StateValue != nil {
+		l = len(*m.StateValue)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *DescribeAlarmsOutput) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.MetricAlarms) > 0 {
+		for _, e := range m.MetricAlarms {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.NextToken != nil {
+		l = len(*m.NextToken)
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -2580,6 +5028,103 @@ func (m *Metric) Size() (n int) {
 	if m.Namespace != nil {
 		l = len(*m.Namespace)
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *MetricAlarm) Size() (n int) {
+	var l int
+	_ = l
+	if m.ActionsEnabled != nil {
+		n += 2
+	}
+	if len(m.AlarmActions) > 0 {
+		for _, s := range m.AlarmActions {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AlarmArn != nil {
+		l = len(*m.AlarmArn)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AlarmConfigurationUpdatedTimestamp != nil {
+		l = m.AlarmConfigurationUpdatedTimestamp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AlarmDescription != nil {
+		l = len(*m.AlarmDescription)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AlarmName != nil {
+		l = len(*m.AlarmName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ComparisonOperator != nil {
+		l = len(*m.ComparisonOperator)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Dimensions) > 0 {
+		for _, e := range m.Dimensions {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.EvaluationPeriods != nil {
+		n += 1 + sozTypes(uint64(*m.EvaluationPeriods))
+	}
+	if len(m.InsufficientDataActions) > 0 {
+		for _, s := range m.InsufficientDataActions {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MetricName != nil {
+		l = len(*m.MetricName)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Namespace != nil {
+		l = len(*m.Namespace)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.OKActions) > 0 {
+		for _, s := range m.OKActions {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.Period != nil {
+		n += 1 + sozTypes(uint64(*m.Period))
+	}
+	if m.StateReason != nil {
+		l = len(*m.StateReason)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.StateReasonData != nil {
+		l = len(*m.StateReasonData)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.StateUpdatedTimestamp != nil {
+		l = m.StateUpdatedTimestamp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.StateValue != nil {
+		l = len(*m.StateValue)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Statistic != nil {
+		l = len(*m.Statistic)
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Threshold != nil {
+		n += 10
+	}
+	if m.Unit != nil {
+		l = len(*m.Unit)
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -2786,6 +5331,646 @@ func (m *Datapoint) Unmarshal(data []byte) error {
 			}
 			s := string(data[iNdEx:postIndex])
 			m.Unit = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeAlarmsForMetricInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeAlarmsForMetricInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeAlarmsForMetricInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Dimensions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Dimensions = append(m.Dimensions, &Dimension{})
+			if err := m.Dimensions[len(m.Dimensions)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MetricName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.MetricName = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Namespace = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Period = &v2
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Statistic", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Statistic = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Unit", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Unit = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeAlarmsForMetricOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeAlarmsForMetricOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeAlarmsForMetricOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MetricAlarms", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MetricAlarms = append(m.MetricAlarms, &MetricAlarm{})
+			if err := m.MetricAlarms[len(m.MetricAlarms)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeAlarmsInput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeAlarmsInput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeAlarmsInput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActionPrefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ActionPrefix = &s
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmNamePrefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AlarmNamePrefix = &s
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AlarmNames = append(m.AlarmNames, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRecords", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.MaxRecords = &v2
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NextToken = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateValue", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StateValue = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DescribeAlarmsOutput) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DescribeAlarmsOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DescribeAlarmsOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MetricAlarms", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MetricAlarms = append(m.MetricAlarms, &MetricAlarm{})
+			if err := m.MetricAlarms[len(m.MetricAlarms)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NextToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.NextToken = &s
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3858,6 +7043,655 @@ func (m *Metric) Unmarshal(data []byte) error {
 	}
 	return nil
 }
+func (m *MetricAlarm) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MetricAlarm: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MetricAlarm: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActionsEnabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.ActionsEnabled = &b
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmActions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AlarmActions = append(m.AlarmActions, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmArn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AlarmArn = &s
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmConfigurationUpdatedTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AlarmConfigurationUpdatedTimestamp == nil {
+				m.AlarmConfigurationUpdatedTimestamp = &opsee_types.Timestamp{}
+			}
+			if err := m.AlarmConfigurationUpdatedTimestamp.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmDescription", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AlarmDescription = &s
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlarmName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.AlarmName = &s
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ComparisonOperator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.ComparisonOperator = &s
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Dimensions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Dimensions = append(m.Dimensions, &Dimension{})
+			if err := m.Dimensions[len(m.Dimensions)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EvaluationPeriods", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.EvaluationPeriods = &v2
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InsufficientDataActions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InsufficientDataActions = append(m.InsufficientDataActions, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MetricName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.MetricName = &s
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Namespace = &s
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OKActions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OKActions = append(m.OKActions, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 15:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			v2 := int64(v)
+			m.Period = &v2
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateReason", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StateReason = &s
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateReasonData", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StateReasonData = &s
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateUpdatedTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.StateUpdatedTimestamp == nil {
+				m.StateUpdatedTimestamp = &opsee_types.Timestamp{}
+			}
+			if err := m.StateUpdatedTimestamp.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateValue", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.StateValue = &s
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Statistic", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Statistic = &s
+			iNdEx = postIndex
+		case 21:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			var v uint64
+			if (iNdEx + 8) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += 8
+			v = uint64(data[iNdEx-8])
+			v |= uint64(data[iNdEx-7]) << 8
+			v |= uint64(data[iNdEx-6]) << 16
+			v |= uint64(data[iNdEx-5]) << 24
+			v |= uint64(data[iNdEx-4]) << 32
+			v |= uint64(data[iNdEx-3]) << 40
+			v |= uint64(data[iNdEx-2]) << 48
+			v |= uint64(data[iNdEx-1]) << 56
+			v2 := float64(math.Float64frombits(v))
+			m.Threshold = &v2
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Unit", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			s := string(data[iNdEx:postIndex])
+			m.Unit = &s
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipTypes(data []byte) (n int, err error) {
 	l := len(data)
 	iNdEx := 0
@@ -3964,43 +7798,71 @@ var (
 )
 
 var fileDescriptorTypes = []byte{
-	// 597 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xa4, 0x53, 0xcd, 0x6e, 0xd3, 0x40,
-	0x10, 0x96, 0xeb, 0xfc, 0xe0, 0xc9, 0x81, 0xb2, 0xaa, 0x2a, 0x53, 0x55, 0x69, 0x15, 0x09, 0xa9,
-	0x17, 0x9c, 0x0a, 0x01, 0x07, 0x38, 0x20, 0x7e, 0x0a, 0x42, 0x6a, 0x01, 0x39, 0x85, 0x03, 0xb7,
-	0x8d, 0xb3, 0xa4, 0x2b, 0x6c, 0xaf, 0xe5, 0x5d, 0xb7, 0xe5, 0x09, 0x78, 0x0f, 0x4e, 0xbc, 0x00,
-	0x12, 0x47, 0x8e, 0x5c, 0x90, 0xb8, 0x71, 0x05, 0x9e, 0x82, 0x23, 0xb3, 0xbb, 0xf1, 0x26, 0xa9,
-	0x02, 0x01, 0xf5, 0xb0, 0x8a, 0x67, 0xe6, 0xfb, 0x76, 0xbe, 0x99, 0x6f, 0x03, 0x1d, 0xf5, 0xa6,
-	0x60, 0x32, 0x2a, 0x4a, 0xa1, 0x04, 0x59, 0x13, 0x85, 0x64, 0x2c, 0xa2, 0x27, 0x32, 0x4a, 0x52,
-	0x51, 0x8d, 0x4e, 0xa8, 0x4a, 0x8e, 0x36, 0xae, 0x8e, 0xb9, 0x3a, 0xaa, 0x86, 0x51, 0x22, 0xb2,
-	0xfe, 0x58, 0x8c, 0x45, 0xdf, 0x80, 0x87, 0xd5, 0x2b, 0x13, 0x99, 0xc0, 0x7c, 0xd9, 0x4b, 0x36,
-	0x76, 0x67, 0xe0, 0xe6, 0xbe, 0x29, 0xde, 0x84, 0x96, 0x60, 0x3b, 0x59, 0xc6, 0xad, 0x7f, 0x62,
-	0x18, 0xa1, 0x7d, 0xc5, 0x33, 0x26, 0x15, 0xcd, 0x0a, 0xcb, 0xed, 0x7d, 0xf3, 0x20, 0x78, 0x40,
-	0x15, 0x2d, 0x04, 0xcf, 0x15, 0x09, 0xa1, 0x7d, 0xf7, 0x98, 0x95, 0x74, 0xcc, 0xc2, 0x95, 0x6d,
-	0x6f, 0xc7, 0x8b, 0xdb, 0xd4, 0x86, 0xba, 0x72, 0x40, 0x4f, 0x79, 0x56, 0x65, 0xa1, 0x6f, 0x2b,
-	0x99, 0x0d, 0x4d, 0x85, 0xe7, 0xa6, 0xd2, 0x98, 0x54, 0x6c, 0x48, 0xb6, 0xa1, 0x33, 0xc0, 0x4e,
-	0x29, 0xbb, 0x2f, 0xaa, 0x5c, 0x85, 0x4d, 0x53, 0xed, 0xc8, 0x69, 0x8a, 0xac, 0x82, 0x3f, 0x40,
-	0x5e, 0xcb, 0x54, 0x7c, 0x89, 0x9c, 0xeb, 0x10, 0x1c, 0xd6, 0x12, 0xc3, 0x36, 0xe6, 0x3b, 0xd7,
-	0xd6, 0x23, 0x3b, 0xac, 0xdd, 0xb4, 0xab, 0xc6, 0x81, 0x9b, 0x85, 0x10, 0x68, 0x3c, 0xcf, 0xb9,
-	0x0a, 0x2f, 0x20, 0x21, 0x88, 0x1b, 0x15, 0x7e, 0xf7, 0x6e, 0xe0, 0x60, 0x08, 0xc8, 0x25, 0x17,
-	0xb9, 0x06, 0x3c, 0xa1, 0x99, 0x9d, 0x0a, 0x01, 0x39, 0x7e, 0x93, 0x35, 0x68, 0xbe, 0xa0, 0x69,
-	0xc5, 0xcc, 0x40, 0x41, 0xdc, 0x3c, 0xd6, 0x41, 0xef, 0x36, 0x5c, 0x74, 0xb4, 0x87, 0x3c, 0x55,
-	0xac, 0xfc, 0x0f, 0xf2, 0x97, 0x15, 0x08, 0x1f, 0x31, 0x75, 0xc0, 0x54, 0xc9, 0x93, 0x81, 0xa2,
-	0x8a, 0x4b, 0xc5, 0x13, 0xf9, 0x38, 0x2f, 0x2a, 0x45, 0xee, 0x00, 0xb8, 0x9b, 0x25, 0x5e, 0xe6,
-	0xe3, 0x6c, 0x5b, 0xd1, 0xa2, 0x27, 0x13, 0x39, 0x5c, 0x0c, 0x23, 0x47, 0x21, 0xbb, 0xd0, 0xde,
-	0xcb, 0x47, 0x7a, 0x01, 0xa6, 0xeb, 0x9f, 0x37, 0xd3, 0x66, 0x16, 0x46, 0xba, 0x00, 0x56, 0x8b,
-	0xd1, 0xdf, 0x30, 0x52, 0x21, 0x73, 0x19, 0xb2, 0x09, 0x81, 0xfe, 0x95, 0x05, 0x4d, 0x98, 0xf1,
-	0x27, 0x88, 0x83, 0xbc, 0x4e, 0x90, 0x75, 0x68, 0x3d, 0x63, 0x25, 0x17, 0x23, 0x63, 0x10, 0x89,
-	0x5b, 0x85, 0x89, 0xb4, 0x47, 0x38, 0x5b, 0xa9, 0x8c, 0x92, 0x25, 0x1e, 0xc9, 0x1a, 0xa8, 0xb5,
-	0x4c, 0x37, 0x82, 0x4e, 0xf9, 0x5a, 0x8b, 0x74, 0x19, 0xe7, 0x61, 0x30, 0xe3, 0x61, 0x09, 0x97,
-	0x17, 0xac, 0xf3, 0x69, 0xa5, 0xea, 0x7d, 0xd6, 0x2f, 0x77, 0xd9, 0x3e, 0x6b, 0x1c, 0xee, 0xd3,
-	0x51, 0xb4, 0x87, 0xfb, 0x74, 0xc8, 0xd2, 0xda, 0xc3, 0x54, 0x07, 0xbd, 0x0f, 0x1e, 0xac, 0xee,
-	0x63, 0x23, 0xdb, 0x75, 0xe2, 0xdd, 0xde, 0x02, 0xef, 0xae, 0x2c, 0xf1, 0xce, 0xbe, 0x9e, 0x39,
-	0x07, 0xe7, 0xfd, 0xf0, 0xff, 0xee, 0x47, 0xe3, 0xac, 0x1f, 0xba, 0xca, 0x4e, 0xd5, 0xa1, 0x78,
-	0xcd, 0x72, 0xe7, 0x56, 0x9d, 0xe8, 0x71, 0xb8, 0x34, 0x23, 0x7b, 0xb2, 0xa3, 0x9b, 0xf8, 0xe7,
-	0xb4, 0x89, 0x89, 0xe8, 0xcd, 0xc5, 0xa2, 0x2d, 0x08, 0xff, 0xba, 0x16, 0x3c, 0xdf, 0xca, 0x3f,
-	0xdb, 0xea, 0xad, 0x07, 0x2d, 0xcb, 0x38, 0xff, 0xa3, 0x3e, 0xd7, 0x4a, 0xee, 0xed, 0xfc, 0xfa,
-	0xd1, 0xf5, 0xde, 0xff, 0xec, 0x7a, 0x1f, 0xf1, 0x7c, 0xc6, 0xf3, 0x15, 0xcf, 0x77, 0x3c, 0x9f,
-	0xde, 0x6d, 0x79, 0x2f, 0x61, 0xda, 0xfd, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0x14, 0xbe, 0x0f,
-	0xab, 0xa9, 0x05, 0x00, 0x00,
+	// 1048 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xc4, 0x56, 0x4f, 0x6f, 0xdc, 0x44,
+	0x14, 0x97, 0xbb, 0xff, 0xe2, 0xb7, 0x4b, 0xb2, 0x99, 0x26, 0xa9, 0x89, 0x42, 0x5a, 0x2c, 0x81,
+	0x22, 0x04, 0x9b, 0x0a, 0x15, 0x84, 0xe0, 0x80, 0x42, 0xb2, 0x45, 0x15, 0x29, 0xa9, 0x9c, 0x94,
+	0x03, 0xb7, 0x59, 0xef, 0xec, 0x66, 0x84, 0xed, 0xb1, 0x3c, 0xe3, 0x76, 0x11, 0x1f, 0x80, 0xef,
+	0xc1, 0x89, 0x2f, 0x80, 0xc4, 0x91, 0x23, 0x17, 0x24, 0x6e, 0x5c, 0x29, 0x17, 0xbe, 0x02, 0x27,
+	0xc4, 0xfc, 0xb1, 0xbd, 0xb6, 0xbb, 0xd9, 0x25, 0x52, 0xa4, 0x1e, 0xac, 0xdd, 0x79, 0x7f, 0xfc,
+	0xde, 0xfb, 0xbd, 0xf7, 0x7e, 0x63, 0xe8, 0x8a, 0x6f, 0x63, 0xc2, 0x07, 0x71, 0xc2, 0x04, 0x43,
+	0x5b, 0x2c, 0xe6, 0x84, 0x0c, 0xf0, 0x73, 0x3e, 0xf0, 0x03, 0x96, 0x8e, 0x9f, 0x63, 0xe1, 0x5f,
+	0xee, 0xbe, 0x37, 0xa5, 0xe2, 0x32, 0x1d, 0x0d, 0x7c, 0x16, 0x1e, 0x4e, 0xd9, 0x94, 0x1d, 0x6a,
+	0xe3, 0x51, 0x3a, 0xd1, 0x27, 0x7d, 0xd0, 0xff, 0xcc, 0x4b, 0x76, 0xef, 0x97, 0xcc, 0xf5, 0xfb,
+	0xe6, 0xf6, 0xfa, 0x68, 0x1c, 0x4c, 0x24, 0xe3, 0xf1, 0xf1, 0xff, 0xf2, 0xd0, 0x89, 0x1e, 0x0a,
+	0x1a, 0x12, 0x2e, 0x70, 0x18, 0x1b, 0x5f, 0xf7, 0x0f, 0x0b, 0xec, 0x13, 0x2c, 0x70, 0xcc, 0x68,
+	0x24, 0x90, 0x03, 0x9d, 0xa3, 0x67, 0x24, 0xc1, 0x53, 0xe2, 0xdc, 0xba, 0x67, 0x1d, 0x58, 0x5e,
+	0x07, 0x9b, 0xa3, 0xd2, 0x3c, 0xc6, 0x33, 0x1a, 0xa6, 0xa1, 0xd3, 0x30, 0x9a, 0xd0, 0x1c, 0xb5,
+	0x86, 0x46, 0x5a, 0xd3, 0xcc, 0x34, 0xe6, 0x88, 0xee, 0x41, 0xf7, 0x5c, 0x46, 0x0a, 0xc8, 0x31,
+	0x4b, 0x23, 0xe1, 0xb4, 0xb4, 0xb6, 0xcb, 0xe7, 0x22, 0xd4, 0x87, 0xc6, 0xb9, 0xf4, 0x6b, 0x6b,
+	0x4d, 0x83, 0x4b, 0x9f, 0x07, 0x60, 0x5f, 0xe4, 0x29, 0x3a, 0x1d, 0x29, 0xef, 0xbe, 0xbf, 0x33,
+	0x30, 0xc5, 0x1a, 0xa4, 0x0b, 0xad, 0x67, 0x17, 0xb5, 0x20, 0x04, 0xcd, 0xa7, 0x11, 0x15, 0xce,
+	0x9a, 0x74, 0xb0, 0xbd, 0x66, 0x2a, 0xff, 0xbb, 0x7f, 0x5b, 0xb0, 0x77, 0x42, 0xb8, 0x9f, 0xd0,
+	0x11, 0x39, 0x0a, 0x70, 0x12, 0xf2, 0x87, 0x2c, 0x79, 0x4c, 0x44, 0x42, 0xfd, 0x47, 0x51, 0x9c,
+	0x0a, 0xf4, 0x29, 0xc0, 0x89, 0x7c, 0x43, 0xc4, 0x29, 0x8b, 0xb8, 0xac, 0xb7, 0x21, 0x63, 0xdd,
+	0x1d, 0x2c, 0x6a, 0xe1, 0xa0, 0xb0, 0xf3, 0x60, 0x5c, 0xb8, 0xa0, 0x7d, 0x00, 0xf3, 0xbe, 0x2f,
+	0x71, 0x48, 0x34, 0x2c, 0xb6, 0x07, 0x61, 0x21, 0x41, 0x7b, 0x60, 0xab, 0x5f, 0x1e, 0x63, 0x9f,
+	0x68, 0x6c, 0x6c, 0xcf, 0x8e, 0x72, 0x01, 0xda, 0x81, 0xf6, 0x13, 0x92, 0x50, 0x36, 0xd6, 0xc0,
+	0x20, 0xaf, 0x1d, 0xeb, 0x93, 0xf2, 0x3a, 0x17, 0x58, 0x50, 0x2e, 0xa8, 0xaf, 0x91, 0x91, 0x5e,
+	0x3c, 0x17, 0x14, 0x95, 0x76, 0x4a, 0x95, 0x4e, 0xe0, 0x8d, 0x2b, 0x0a, 0x3d, 0x4b, 0x85, 0xaa,
+	0x74, 0x08, 0x3d, 0x73, 0x36, 0xea, 0xac, 0xd6, 0x37, 0x17, 0xd7, 0x5a, 0xb2, 0xf4, 0x7a, 0x61,
+	0xc9, 0xcd, 0x7d, 0x61, 0xc1, 0xed, 0x6a, 0x20, 0x03, 0xa4, 0x0b, 0xbd, 0x23, 0x5f, 0x48, 0x48,
+	0x9e, 0x24, 0x64, 0x42, 0x67, 0x7a, 0x74, 0x6c, 0xaf, 0x87, 0x4b, 0x32, 0x74, 0x00, 0x1b, 0xda,
+	0x45, 0x01, 0x92, 0x99, 0x19, 0xc0, 0x36, 0x70, 0x55, 0xac, 0x50, 0x2d, 0x2c, 0xb9, 0x84, 0xad,
+	0xa1, 0x50, 0x2d, 0x8c, 0x0c, 0xea, 0x78, 0xe6, 0x11, 0x9f, 0x25, 0x63, 0x9e, 0x61, 0x07, 0x61,
+	0x21, 0xd1, 0xa8, 0x93, 0x99, 0xb8, 0x60, 0xdf, 0x90, 0x28, 0xc7, 0x2f, 0xca, 0x05, 0xca, 0x5b,
+	0xa1, 0x4b, 0xbe, 0xc2, 0x41, 0x4a, 0x32, 0x14, 0x81, 0x17, 0x12, 0xf7, 0x3b, 0xd8, 0xaa, 0x96,
+	0x78, 0xa3, 0x10, 0x56, 0x93, 0x6b, 0xd4, 0x92, 0x73, 0x3f, 0x90, 0xbb, 0x98, 0x8f, 0x97, 0xea,
+	0xb4, 0x9e, 0x2b, 0x83, 0x66, 0x53, 0x0d, 0x0e, 0xda, 0x82, 0x96, 0x49, 0xdc, 0xb8, 0xb6, 0x9e,
+	0xe9, 0x9c, 0x3f, 0x81, 0x8d, 0xc2, 0xed, 0x21, 0x0d, 0x04, 0x49, 0xae, 0xe1, 0xfc, 0xdb, 0x2d,
+	0x70, 0x3e, 0x27, 0xc2, 0xa4, 0x5c, 0x0c, 0x1e, 0xbf, 0xa1, 0x15, 0xb9, 0x0f, 0x9d, 0x61, 0x34,
+	0x56, 0x3b, 0xab, 0xa3, 0x5e, 0xbd, 0xcc, 0x1d, 0x62, 0xcc, 0x6a, 0x4b, 0xd5, 0x5c, 0xbe, 0x54,
+	0xad, 0xab, 0x97, 0xaa, 0x5d, 0x59, 0xaa, 0x07, 0x7a, 0xa9, 0x12, 0xa1, 0x33, 0x59, 0x41, 0x2b,
+	0x3c, 0x37, 0xcc, 0x87, 0xc5, 0x20, 0x22, 0xc9, 0xa5, 0x91, 0x0f, 0x8b, 0x91, 0x14, 0xcb, 0x68,
+	0x97, 0x96, 0x31, 0x81, 0xd7, 0x17, 0xc0, 0x99, 0x4d, 0x91, 0xc2, 0x33, 0x27, 0xdb, 0x55, 0x78,
+	0xe6, 0x76, 0x12, 0xcf, 0xc2, 0x45, 0xf5, 0xf0, 0x14, 0x8f, 0x48, 0x90, 0xf7, 0x30, 0x50, 0x07,
+	0xf7, 0x27, 0x0b, 0xfa, 0xa7, 0x32, 0x90, 0x89, 0x9a, 0xf5, 0x6e, 0xb8, 0xa0, 0x77, 0x6f, 0xad,
+	0xe8, 0x9d, 0x99, 0x9e, 0x1b, 0x24, 0xb9, 0xca, 0xbc, 0xb7, 0xea, 0xf3, 0x4e, 0x61, 0xb3, 0x94,
+	0x76, 0x86, 0xd1, 0x87, 0xf2, 0x3e, 0x31, 0x82, 0x2c, 0xe9, 0xbd, 0x65, 0x4b, 0x26, 0x6f, 0x1b,
+	0x63, 0xbc, 0x62, 0xb5, 0xbe, 0xb7, 0xa0, 0x6d, 0x3c, 0x5e, 0x31, 0xef, 0xbb, 0xff, 0xb6, 0xa1,
+	0x5b, 0x22, 0x08, 0xf4, 0x36, 0xac, 0x1b, 0xf6, 0xe4, 0xc3, 0x08, 0x8f, 0x02, 0x32, 0xd6, 0x4b,
+	0xbb, 0xe6, 0xad, 0xe3, 0x8a, 0x54, 0xb3, 0xac, 0x72, 0xc8, 0x8c, 0x65, 0xdc, 0x86, 0x66, 0xd9,
+	0x92, 0x0c, 0xed, 0xc2, 0x9a, 0xb1, 0x49, 0xa2, 0x2c, 0xf0, 0x1a, 0xce, 0xce, 0x68, 0x02, 0xae,
+	0xd6, 0x1d, 0xb3, 0x68, 0x42, 0xa7, 0x69, 0x82, 0x95, 0xcb, 0xd3, 0x58, 0x0e, 0x17, 0x19, 0xcf,
+	0xaf, 0xdc, 0xd6, 0xd2, 0xdd, 0x70, 0xf1, 0xca, 0x37, 0xa0, 0x77, 0xa0, 0xaf, 0xe3, 0x18, 0x1a,
+	0x8d, 0x95, 0x4d, 0x46, 0xc3, 0x7d, 0x5c, 0x93, 0x2b, 0xa4, 0x0a, 0xae, 0xcf, 0xc8, 0xd8, 0x2e,
+	0xa8, 0x1e, 0x0d, 0x00, 0x1d, 0xb3, 0x30, 0xc6, 0x09, 0xe5, 0x2c, 0x3a, 0x93, 0x9b, 0x8c, 0x05,
+	0x4b, 0xb2, 0x3b, 0x1e, 0xf9, 0x2f, 0x69, 0x6a, 0x8d, 0xb5, 0xaf, 0xdf, 0xd8, 0x77, 0x61, 0x73,
+	0xa8, 0x58, 0x51, 0x17, 0x66, 0x78, 0x84, 0x3b, 0xa0, 0x89, 0x64, 0x93, 0xd4, 0x15, 0xe8, 0x23,
+	0xb8, 0xf3, 0x28, 0xe2, 0xe9, 0x64, 0x42, 0x7d, 0x4a, 0x22, 0xa1, 0x16, 0x36, 0xef, 0x4d, 0x57,
+	0xf7, 0xe6, 0x0e, 0x5d, 0xac, 0xae, 0x0d, 0x50, 0x6f, 0xf9, 0x00, 0xbd, 0xb6, 0x60, 0xa7, 0xce,
+	0xbe, 0xc8, 0x23, 0xad, 0xeb, 0x48, 0x36, 0xcb, 0x05, 0x25, 0x06, 0xdc, 0xa8, 0x30, 0xa0, 0xfa,
+	0x18, 0x53, 0xd7, 0x9c, 0x47, 0xb0, 0xc4, 0xcc, 0xe9, 0xeb, 0xb7, 0x76, 0xf9, 0x5c, 0xa4, 0xae,
+	0xe8, 0x92, 0x85, 0xca, 0xd7, 0xd9, 0x34, 0x57, 0x34, 0xaf, 0x8a, 0xd1, 0x29, 0x6c, 0x6b, 0xcb,
+	0x97, 0xa6, 0x07, 0x2d, 0x9d, 0x9e, 0x6d, 0xbe, 0xc8, 0xa9, 0x76, 0x25, 0xdf, 0xae, 0x5f, 0xc9,
+	0xd5, 0x0f, 0xa2, 0xad, 0xfa, 0x07, 0x91, 0xd4, 0x5e, 0x5c, 0x26, 0x84, 0x5f, 0xb2, 0x60, 0xec,
+	0x6c, 0xeb, 0x0f, 0x49, 0x5b, 0xe4, 0x82, 0x82, 0xa1, 0x77, 0xe6, 0x0c, 0xfd, 0xd9, 0xc1, 0x3f,
+	0x2f, 0xf6, 0xad, 0x1f, 0xff, 0xda, 0xb7, 0x7e, 0x96, 0xcf, 0xaf, 0xf2, 0xf9, 0x5d, 0x3e, 0x7f,
+	0xca, 0xe7, 0x97, 0x1f, 0xee, 0x5a, 0x5f, 0xc3, 0x7c, 0x4a, 0xfe, 0x0b, 0x00, 0x00, 0xff, 0xff,
+	0x64, 0x71, 0xf7, 0xed, 0xdd, 0x0b, 0x00, 0x00,
 }

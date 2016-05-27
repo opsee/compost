@@ -32,10 +32,6 @@ func (user *User) Validate() error {
 		return errMissingEmail
 	}
 
-	if user.Verified == false {
-		return errUnverified
-	}
-
 	if user.Active == false {
 		return errInactive
 	}
