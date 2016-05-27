@@ -24,6 +24,8 @@ message BezosRequest {
   oneof input {
     aws.cloudwatch.ListMetricsInput cloudwatch_ListMetricsInput = 101;
     aws.cloudwatch.GetMetricStatisticsInput cloudwatch_GetMetricStatisticsInput = 102;
+    aws.cloudwatch.DescribeAlarmsInput cloudwatch_DescribeAlarmsInput = 103;
+    aws.cloudwatch.DescribeAlarmsForMetricInput cloudwatch_DescribeAlarmsForMetricInput = 104;
 
     aws.ec2.DescribeInstancesInput ec2_DescribeInstancesInput = 201;
     aws.ec2.DescribeSecurityGroupsInput ec2_DescribeSecurityGroupsInput = 202;
@@ -53,6 +55,8 @@ message BezosResponse {
   oneof output {
     aws.cloudwatch.ListMetricsOutput cloudwatch_ListMetricsOutput = 101;
     aws.cloudwatch.GetMetricStatisticsOutput cloudwatch_GetMetricStatisticsOutput = 102;
+    aws.cloudwatch.DescribeAlarmsOutput cloudwatch_DescribeAlarmsOutput = 103;
+    aws.cloudwatch.DescribeAlarmsForMetricOutput cloudwatch_DescribeAlarmsForMetricOutput = 104;
 
     aws.ec2.DescribeInstancesOutput ec2_DescribeInstancesOutput = 201;
     aws.ec2.DescribeSecurityGroupsOutput ec2_DescribeSecurityGroupsOutput = 202;
