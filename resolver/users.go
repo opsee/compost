@@ -83,18 +83,18 @@ func (c *Client) GetUser(ctx context.Context, req *opsee.GetUserRequest) (*opsee
 	return resp, nil
 }
 
-func (c *Client) PutUser(ctx context.Context, user *schema.User, userInput map[string]interface{}) (*schema.User, error) {
+func (c *Client) PutUser(ctx context.Context, req *opsee.UpdateUserRequest) (*schema.User, error) {
 	log.WithFields(log.Fields{
-		"customer_id": user.CustomerId,
-		"email":       user.Email,
-	}).Info("put team request")
+		"customer_id": req.User.CustomerId,
+		"id":          req.User.Id,
+		"email":       req.User.Email,
+	}).Info("update user request")
 
-	// FIXME(mark)
-	resp := &schema.User{
-		Id:    7,
-		Name:  "Tom Cruise",
-		Email: "tom@cruise.com",
+	resp, err := c.Vape.UpdateUser(ctx, req)
+	if err != nil {
+		log.WithError(err).Error("error updating user")
+		return nil, err
 	}
 
-	return resp, nil
+	return resp.User, nil
 }

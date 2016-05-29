@@ -191,8 +191,16 @@ func (c *Composter) initTypes() {
 			Description: "An Opsee User",
 			Fields: graphql.InputObjectConfigFieldMap{
 				"id": &graphql.InputObjectFieldConfig{
-					Type:        graphql.Int,
+					Type:        graphql.NewNonNull(graphql.Int),
 					Description: "The user id",
+				},
+				"email": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The user's email",
+				},
+				"name": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "The user's name",
 				},
 				"status": &graphql.InputObjectFieldConfig{
 					Type:        graphql.NewNonNull(UserStatusEnumType),
@@ -1101,22 +1109,52 @@ func (c *Composter) mutateUser() *graphql.Field {
 		Type: schema.GraphQLUserType,
 		Args: graphql.FieldConfigArgument{
 			"user": &graphql.ArgumentConfig{
-				Description: "The Team to update",
+				Description: "The User to update",
 				Type:        UserInputType,
+			},
+			"password": &graphql.ArgumentConfig{
+				Description: "The user's new password",
+				Type:        graphql.String,
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			if err != nil {
+				return nil, err
 			}
 
 			userInput, ok := p.Args["user"].(map[string]interface{})
 			if !ok {
 				return nil, errDecodeUserInput
 			}
+			password, _ := p.Args["password"].(string)
 
-			return c.resolver.PutUser(p.Context, user, userInput)
+			var newUser schema.User
+			tb, err := json.Marshal(userInput)
+			if err != nil {
+				log.WithError(err).Error("marshal user input")
+				return nil, errDecodeUserInput
+			}
+
+			err = json.Unmarshal(tb, &newUser)
+			if err != nil {
+				log.WithError(err).Error("unmarshal user input")
+				return nil, errDecodeUserInput
+			}
+
+			req := &opsee.UpdateUserRequest{
+				Requestor: requestor,
+				User: &schema.User{
+					Id:         newUser.Id,
+					CustomerId: requestor.CustomerId,
+				},
+				Email:    newUser.Email,
+				Name:     newUser.Name,
+				Status:   newUser.Status,
+				Password: password,
+			}
+
+			return c.resolver.PutUser(p.Context, req)
 		},
 	}
 }
