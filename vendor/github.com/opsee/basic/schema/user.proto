@@ -64,6 +64,6 @@ message Invite {
 	int32 id = 1;
 	string email = 2;
 	string name = 3;
-	string customer_id = 7;
-	opsee.types.Permission perms = 8;
+	string customer_id = 4;
+	opsee.types.Permission perms = 5;
 }
