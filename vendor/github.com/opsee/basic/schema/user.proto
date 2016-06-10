@@ -16,15 +16,16 @@ message User {
 	string customer_id = 2 [(opseeproto.required) = true, (gogoproto.moretags) = "token:\"customer_id\" db:\"customer_id\""];
 	string email = 3 [(opseeproto.required) = true, (gogoproto.moretags) = "token:\"email\""];
 	string name = 4 [(opseeproto.required) = true, (gogoproto.moretags) = "token:\"name\""];
-	bool verified = 5 [(opseeproto.required) = true, (gogoproto.moretags) = "token:\"verified\""];
-	bool admin = 6 [(opseeproto.required) = true, (gogoproto.moretags) = "token:\"admin\""];
-	bool active = 7 [(opseeproto.required) = true, (gogoproto.moretags) = "token:\"active\""];
+	bool verified = 5 [(gogoproto.jsontag) = "verified", (opseeproto.required) = true, (gogoproto.moretags) = "token:\"verified\""];
+	bool admin = 6 [(gogoproto.jsontag) = "admin", (opseeproto.required) = true, (gogoproto.moretags) = "token:\"admin\""];
+	bool active = 7 [(gogoproto.jsontag) = "active", (opseeproto.required) = true, (gogoproto.moretags) = "token:\"active\""];
 	int32 admin_id = 8 [(gogoproto.moretags) = "token:\"admin_id\""];
 	string password_hash = 9 [(gogoproto.jsontag) = "-", (gogoproto.moretags) = "db:\"password_hash\""];
 	opsee.types.Timestamp created_at = 10 [(gogoproto.moretags) = "db:\"created_at\""];
 	opsee.types.Timestamp updated_at = 11 [(gogoproto.moretags) = "db:\"updated_at\""];
 	string status = 12 [(gogoproto.moretags) = "token:\"status\" db:\"status\""];
 	opsee.types.Permission perms = 13 [(gogoproto.moretags) = "db:\"perms\""];
+	bool has_password = 14 [(gogoproto.jsontag) = "has_password"];
 }
 
 message Customer {

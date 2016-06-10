@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/julienschmidt/httprouter"
-	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
 
@@ -147,11 +146,6 @@ func (r *Router) wrapHandler(decoders []DecodeFunc, handler HandleFunc) httprout
 			rw.Header().Set("Content-Type", contentType)
 			rw.WriteHeader(rf.status)
 			rw.Write(encodedResponse)
-			log.WithFields(log.Fields{
-				"status": rf.status,
-				"path":   req.URL.RequestURI(),
-				"method": req.Method,
-			}).Info("tp request")
 
 		case <-ctx.Done():
 			msg, _ := json.Marshal(MessageResponse{"Backend service unavailable."})
@@ -177,8 +171,6 @@ func (r *Router) getEncoder(accept string) (string, EncodeFunc) {
 }
 
 func serverError(rw http.ResponseWriter, req *http.Request, status int, err error) {
-	log.WithError(err).WithField("request", *req).WithError(err).Error("error")
-
 	var message string
 	if status == 0 || status == http.StatusInternalServerError {
 		message = "An unexpeced error happened."

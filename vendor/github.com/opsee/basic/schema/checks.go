@@ -18,6 +18,11 @@ func init() {
 	opsee_types.AnyTypeRegistry.Register("HttpResponse", reflect.TypeOf(HttpResponse{}))
 }
 
+// CheckResponseReply is the exported version of isCheckResponse_Reply
+// which allows us to use that interface and make CheckResponse.Reply
+// easier to set indirectly in bastion workers.
+type CheckResponseReply isCheckResponse_Reply
+
 // Metrics need to include double 0 values so we must use jsonpb to marshal them to json.
 func (m *Metric) MarshalJSON() ([]byte, error) {
 	var jsonBytes bytes.Buffer

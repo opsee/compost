@@ -4,6 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"sync"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
@@ -11,12 +16,16 @@ import (
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
-	"sync"
 )
 
 type checkCompostResponse struct {
 	response interface{}
 }
+
+const (
+	CheckResultTableName   = "check_results"
+	CheckResponseTableName = "check_responses"
+)
 
 // ListChecks fetches Checks from Bartnet and CheckResults from Beavis
 // concurrently, then zips them together. If the request to Beavis fails,
@@ -35,6 +44,11 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 			results []*schema.CheckResult
 			err     error
 		)
+		
+		// a temporary "feature flag" to pull results from dynamo instead of beavis
+		if user.Admin {
+			
+		}
 
 		if checkId != "" {
 			results, err = c.Beavis.ListResultsCheck(user, checkId)
@@ -300,4 +314,49 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 	}
 
 	return checkReponse, nil
+}
+
+func (c *Client) CheckResults(ctx context.Context, user *schema.User, checkId string) ([]*schema.CheckResult, error) {
+	resp, err := c.Dynamo.Query(&dynamodb.QueryInput{
+		TableName:              aws.String(CheckResultTableName),
+		KeyConditionExpression: aws.String(fmt.Sprintf("check_id = %s", checkId)),
+		ScanIndexForward:       aws.Bool(true),
+		Select:                 aws.String("ALL_ATTRIBUTES"),
+		Limit:                  aws.Int64(1),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	results := make([]*schema.CheckResult, 0, len(resp.Items))
+	for resultIdx, item := range resp.Items {
+		resultId := item["result_id"]
+
+		bastionResult := &schema.CheckResult{}
+		if err := dynamodbattribute.UnmarshalMap(item, bastionResult); err != nil {
+			return nil, err
+		}
+
+		grResp, err := c.Dynamo.Query(&dynamodb.QueryInput{
+			TableName:              aws.String(CheckResponseTableName),
+			KeyConditionExpression: aws.String(fmt.Sprintf("check_id = %s AND result_id = %s", checkId, resultId)),
+			Select:                 aws.String("ALL_ATTRIBUTES"),
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		responses := make([]*schema.CheckResponse, 0, len(grResp.Items))
+		for i, response := range grResp.Items {
+			checkResponse := &schema.CheckResponse{}
+			if err := dynamodbattribute.UnmarshalMap(response, checkResponse); err != nil {
+				return nil, err
+			}
+			responses[i] = checkResponse
+		}
+		bastionResult.Responses = responses
+		results[resultIdx] = bastionResult
+	}
+
+	return results, nil
 }

@@ -20,7 +20,7 @@ message Target {
 	string name = 1;
 	string type = 2 [(opseeproto.required) = true];
 	string id = 3 [(opseeproto.required) = true];
-	string address = 4;
+	string address = 4 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
 }
 
 message Check {
@@ -37,6 +37,10 @@ message Check {
 		CloudWatchCheck cloudwatch_check = 102;
 	}
 	repeated Notification notifications = 9;
+	string customer_id = 10 [(gogoproto.moretags) = "db:\"customer_id\""];
+	string execution_group_id = 11;
+	int32 min_failing_count = 12 [(gogoproto.moretags) = "db:\"min_failing_count\""];
+	int64 min_failing_time = 13 [(gogoproto.moretags) = "db:\"min_failing_time\""];
 }
 
 message Notification {
@@ -93,29 +97,29 @@ message Tag {
 message Metric {
 	string name = 1;
 	double value = 2 [(opseeproto.required) = true];
-	repeated Tag tags = 3;
+	repeated Tag tags = 3 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
 	opsee.types.Timestamp timestamp = 4;
 	string unit = 5;	  // kbps, percent, ...
-	string statistic = 6; // average, sum, ...
+	string statistic = 6 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""]; // average, sum, ...
 }
 
 message HttpResponse {
 	int32 code = 1;
-	string body = 2;
-	repeated Header headers = 3;
-	repeated Metric metrics = 4;
+	string body = 2 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
+	repeated Header headers = 3 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
+	repeated Metric metrics = 4 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
 	string host = 5;
 }
 
 
 message CheckResponse {
-	Target target = 1; //
-	opsee.types.Any response = 2;
+	Target target = 1;
+	opsee.types.Any response = 2 [(gogoproto.moretags) = "dynamodbav:\"-\""];
 	string error = 3;
 	bool passing = 4;
 	oneof reply {
-		HttpResponse http_response = 101;
-		CloudWatchResponse cloudwatch_response = 102;
+		HttpResponse http_response = 101 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
+		CloudWatchResponse cloudwatch_response = 102 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
 	}
 }
 
@@ -124,8 +128,9 @@ message CheckResult {
 	string customer_id = 2;
 	opsee.types.Timestamp timestamp = 3;
 	bool passing = 4;
-	repeated CheckResponse responses = 5;
+	repeated CheckResponse responses = 5 [(gogoproto.moretags) = "dynamodbav:\"-\""];
 	Target target = 6;
 	string check_name = 7;
 	int32 version = 8;
+	string bastion_id = 9;
 }

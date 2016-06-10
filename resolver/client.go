@@ -3,6 +3,9 @@ package resolver
 
 import (
 	"crypto/tls"
+
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/opsee/basic/clients/bartnet"
 	"github.com/opsee/basic/clients/beavis"
 	"github.com/opsee/basic/clients/hugs"
@@ -30,6 +33,7 @@ type Client struct {
 	Keelhaul opsee.KeelhaulClient
 	Hugs     hugs.Client
 	Bezos    opsee.BezosClient
+	Dynamo   *dynamodb.DynamoDB
 }
 
 func NewClient(config ClientConfig) (*Client, error) {
@@ -61,6 +65,7 @@ func NewClient(config ClientConfig) (*Client, error) {
 		Keelhaul: opsee.NewKeelhaulClient(keelhaulConn),
 		Hugs:     hugs.New(config.Hugs),
 		Bezos:    opsee.NewBezosClient(bezosConn),
+		Dynamo:   dynamodb.New(session.New()),
 	}, nil
 }
 
