@@ -48,15 +48,16 @@ message InviteUserRequest {
 	User requestor = 1; 
 	string email = 2;
 	opsee.types.Permission perms = 3;
+	string name = 4;
 }
 
 message InviteUserResponse {
-    Invite invite = 1; 
+	Invite invite = 1; 
 }
 
 message DeleteUserRequest {
 	User requestor = 1; 
-    User user = 2;
+	User user = 2;
 }
 
 message DeleteUserResponse {
@@ -65,22 +66,22 @@ message DeleteUserResponse {
 
 message UpdateUserRequest {
 	User requestor = 1; 
-    User user = 2; 
+	User user = 2; 
 	string email = 3;
 	string name = 4;
 	string password = 5;
-    string status = 6;
+	string status = 6;
 }
 
 message UpdateUserPermsRequest {
 	User requestor = 1; 
-    User user = 2; 
+	User user = 2; 
 	opsee.types.Permission perms = 3;
 }
 
 message UserTokenResponse {
 	User user = 1;
-    string token = 2;
+	string token = 2;
 }
 
 // Teams
@@ -95,20 +96,20 @@ message GetTeamResponse {
 
 message UpdateTeamRequest {
 	User requestor = 1; 
-    Team team = 2;
+	Team team = 2;
 }
 
 message UpdateTeamResponse {
-    Team team = 2;
+	Team team = 2;
 }
 
 message DeleteTeamRequest {
 	User requestor = 1; 
-    Team team = 2;
+	Team team = 2;
 }
 
 message DeleteTeamResponse {
-    Team team = 2;
+	Team team = 2;
 }
 
 service Vape {
