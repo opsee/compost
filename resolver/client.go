@@ -4,6 +4,7 @@ package resolver
 import (
 	"crypto/tls"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/opsee/basic/clients/bartnet"
@@ -65,7 +66,7 @@ func NewClient(config ClientConfig) (*Client, error) {
 		Keelhaul: opsee.NewKeelhaulClient(keelhaulConn),
 		Hugs:     hugs.New(config.Hugs),
 		Bezos:    opsee.NewBezosClient(bezosConn),
-		Dynamo:   dynamodb.New(session.New()),
+		Dynamo:   dynamodb.New(session.New(aws.NewConfig().WithRegion("us-west-2"))),
 	}, nil
 }
 
