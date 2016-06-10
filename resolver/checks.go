@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"path"
 	"sync"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	etcd "github.com/coreos/etcd/client"
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
@@ -16,6 +19,7 @@ import (
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
+	"google.golang.org/grpc"
 )
 
 type checkCompostResponse struct {
@@ -25,6 +29,9 @@ type checkCompostResponse struct {
 const (
 	CheckResultTableName   = "check_results"
 	CheckResponseTableName = "check_responses"
+
+	RoutePath           = "/opsee.co/routes"
+	MagicExecutionGroup = "127a7354-290e-11e6-b178-2bc1f6aefc14"
 )
 
 // ListChecks fetches Checks from Bartnet and CheckResults from Beavis
@@ -44,10 +51,10 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 			results []*schema.CheckResult
 			err     error
 		)
-		
+
 		// a temporary "feature flag" to pull results from dynamo instead of beavis
 		if user.Admin {
-			
+
 		}
 
 		if checkId != "" {
@@ -277,6 +284,11 @@ func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInpu
 }
 
 func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput map[string]interface{}) (*opsee.TestCheckResponse, error) {
+	var (
+		responses []*schema.CheckResponse
+		exgroupId = user.CustomerId
+	)
+
 	checkJson, err := json.Marshal(checkInput)
 	if err != nil {
 		return nil, err
@@ -288,32 +300,51 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 		return nil, err
 	}
 
-	checkReponse, err := c.Bartnet.TestCheck(user, checkProto)
-	if err != nil {
-		return nil, err
+	if checkProto.Target == nil {
+		return nil, fmt.Errorf("test check is missing target")
 	}
 
-	for _, res := range checkReponse.Responses {
-		if res.Reply == nil {
-			if res.Response == nil {
+	if checkProto.Target.Type == "external_host" {
+		exgroupId = MagicExecutionGroup
+	}
+
+	// use customer id or execution group id ok!!
+	response, err := c.EtcdKeys.Get(ctx, path.Join(RoutePath, exgroupId), &etcd.GetOptions{
+		Recursive: true,
+		Quorum:    true,
+	})
+
+	if len(response.Node.Nodes) == 0 {
+		return nil, fmt.Errorf("no bastions found")
+	}
+
+	deadline := &opsee_types.Timestamp{}
+	deadline.Scan(time.Now().UTC().Add(1 * time.Minute))
+
+	for _, node := range response.Node.Nodes {
+		services := make(map[string]interface{})
+
+		err = json.Unmarshal([]byte(node.Value), &services)
+		if err != nil {
+			return nil, err
+		}
+
+		if checker, ok := services["checker"].(string); ok {
+			conn, err := grpc.Dial(checker)
+			if err != nil {
 				continue
 			}
 
-			any, err := opsee_types.UnmarshalAny(res.Response)
+			resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
 			if err != nil {
-				return nil, err
+				continue
 			}
 
-			switch reply := any.(type) {
-			case *schema.HttpResponse:
-				res.Reply = &schema.CheckResponse_HttpResponse{reply}
-			case *schema.CloudWatchResponse:
-				res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
-			}
+			responses = append(responses, resp.Responses...)
 		}
 	}
 
-	return checkReponse, nil
+	return &opsee.TestCheckResponse{Responses: responses}, nil
 }
 
 func (c *Client) CheckResults(ctx context.Context, user *schema.User, checkId string) ([]*schema.CheckResult, error) {

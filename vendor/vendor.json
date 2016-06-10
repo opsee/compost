@@ -177,6 +177,24 @@
 			"revisionTime": "2016-03-17T16:54:49-07:00"
 		},
 		{
+			"checksumSHA1": "934R1lazzxwTFpRLN0PMx+692Nw=",
+			"path": "github.com/coreos/etcd/client",
+			"revision": "ca5dff66828657c62c304ad0debc7fb239eab899",
+			"revisionTime": "2016-03-23T10:32:49-07:00"
+		},
+		{
+			"checksumSHA1": "mKIXx1kDwmVmdIpZ3pJtRBuUKso=",
+			"path": "github.com/coreos/etcd/pkg/pathutil",
+			"revision": "ca5dff66828657c62c304ad0debc7fb239eab899",
+			"revisionTime": "2016-03-23T10:32:49-07:00"
+		},
+		{
+			"checksumSHA1": "sWFTfWCr1bOglNmNA7WxlEgXKv0=",
+			"path": "github.com/coreos/etcd/pkg/types",
+			"revision": "ca5dff66828657c62c304ad0debc7fb239eab899",
+			"revisionTime": "2016-03-23T10:32:49-07:00"
+		},
+		{
 			"checksumSHA1": "5rPfda8jFccr3A6heL+JAmi9K9g=",
 			"path": "github.com/davecgh/go-spew/spew",
 			"revision": "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d",
@@ -495,6 +513,13 @@
 			"path": "github.com/stretchr/testify/assert",
 			"revision": "6fe211e493929a8aac0469b93f28b1d0688a9a3a",
 			"revisionTime": "2016-03-05T16:54:46Z"
+		},
+		{
+			"checksumSHA1": "0bs9QxbsLB3lMUU7vOo3gurUzEo=",
+			"origin": "github.com/coreos/etcd/vendor/github.com/ugorji/go/codec",
+			"path": "github.com/ugorji/go/codec",
+			"revision": "ca5dff66828657c62c304ad0debc7fb239eab899",
+			"revisionTime": "2016-03-23T10:32:49-07:00"
 		},
 		{
 			"checksumSHA1": "9QKY4bQlbQ/VZZFP8/1WtH4b0mA=",
