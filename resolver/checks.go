@@ -331,8 +331,8 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 
 		if checker, ok := services["checker"].(map[string]interface{}); ok {
 			checkerHost, _ := checker["hostname"].(string)
-			checkerPort, _ := checker["port"].(int)
-			addr := fmt.Sprintf("%s:%d", checkerHost, checkerPort)
+			checkerPort, _ := checker["port"].(float64)
+			addr := fmt.Sprintf("%s:%d", checkerHost, int(checkerPort))
 
 			conn, err := grpc.Dial(addr)
 			if err != nil {
