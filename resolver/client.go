@@ -3,10 +3,12 @@ package resolver
 
 import (
 	"crypto/tls"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	etcd "github.com/coreos/etcd/client"
 	"github.com/opsee/basic/clients/bartnet"
 	"github.com/opsee/basic/clients/beavis"
 	"github.com/opsee/basic/clients/hugs"
@@ -24,6 +26,7 @@ type ClientConfig struct {
 	Keelhaul   string
 	Bezos      string
 	Hugs       string
+	Etcd       string
 }
 
 type Client struct {
@@ -35,6 +38,7 @@ type Client struct {
 	Hugs     hugs.Client
 	Bezos    opsee.BezosClient
 	Dynamo   *dynamodb.DynamoDB
+	EtcdKeys etcd.KeysAPI
 }
 
 func NewClient(config ClientConfig) (*Client, error) {
@@ -58,6 +62,15 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, err
 	}
 
+	etcdClient, err := etcd.New(etcd.Config{
+		Endpoints:               []string{config.Etcd},
+		Transport:               etcd.DefaultTransport,
+		HeaderTimeoutPerRequest: time.Second,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &Client{
 		Bartnet:  bartnet.New(config.Bartnet),
 		Beavis:   beavis.New(config.Beavis),
@@ -67,6 +80,7 @@ func NewClient(config ClientConfig) (*Client, error) {
 		Hugs:     hugs.New(config.Hugs),
 		Bezos:    opsee.NewBezosClient(bezosConn),
 		Dynamo:   dynamodb.New(session.New(aws.NewConfig().WithRegion("us-west-2"))),
+		EtcdKeys: etcd.NewKeysAPI(etcdClient),
 	}, nil
 }
 
