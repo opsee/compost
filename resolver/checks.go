@@ -329,14 +329,20 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 			return nil, err
 		}
 
-		if checker, ok := services["checker"].(string); ok {
-			conn, err := grpc.Dial(checker)
+		if checker, ok := services["checker"].(map[string]interface{}); ok {
+			checkerHost, _ := checker["hostname"].(string)
+			checkerPort, _ := checker["port"].(int)
+			addr := fmt.Sprintf("%s:%d", checkerHost, checkerPort)
+
+			conn, err := grpc.Dial(addr)
 			if err != nil {
+				log.Infof("coudln't contact bastion at: %s", addr)
 				continue
 			}
 
 			resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
 			if err != nil {
+				log.WithError(err).Errorf("got error from bastion at: %s ... ignoring", addr)
 				continue
 			}
 
