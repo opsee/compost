@@ -1041,8 +1041,7 @@ func (c *Composter) mutation() *graphql.Object {
 		Fields: graphql.Fields{
 			"checks":                    c.upsertChecks(),
 			"deleteChecks":              c.deleteChecks(),
-			"testCheck":                 c.deprecatedTestCheck(),
-			"testCheckBeta":             c.testCheck(),
+			"testCheck":                 c.testCheck(),
 			"makeLaunchRoleUrlTemplate": c.makeLaunchRoleUrlTemplate(),
 			"makeLaunchRoleUrl":         c.makeLaunchRoleUrl(),
 			"region":                    c.mutateRegion(),
