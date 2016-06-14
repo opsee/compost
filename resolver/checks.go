@@ -340,6 +340,8 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 		return nil, err
 	}
 
+	checkProto.Interval = int32(30)
+
 	// backwards compat with old bastion proto: TODO(mark) remove
 	switch t := checkProto.Spec.(type) {
 	case *schema.Check_HttpCheck:
