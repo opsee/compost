@@ -338,7 +338,7 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 				addr,
 				grpc.WithInsecure(),
 				grpc.WithBlock(),
-				grpc.WithTimeout(10*time.Second),
+				grpc.WithTimeout(5*time.Second),
 			)
 			if err != nil {
 				log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
