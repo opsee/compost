@@ -343,7 +343,7 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 	checkProto.Interval = int32(30)
 
 	// backwards compat with old bastion proto: TODO(mark) remove
-	if checkproto.Spec != nil {
+	if checkProto.Spec != nil {
 		switch t := checkProto.Spec.(type) {
 		case *schema.Check_HttpCheck:
 			checkProto.CheckSpec, err = opsee_types.MarshalAny(t.HttpCheck)
@@ -355,7 +355,7 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 			return nil, err
 		}
 
-		checkproto.Spec = nil
+		checkProto.Spec = nil
 	}
 
 	if checkProto.Target == nil {
