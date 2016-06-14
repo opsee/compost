@@ -375,19 +375,21 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 	deadline := &opsee_types.Timestamp{}
 	deadline.Scan(time.Now().UTC().Add(5 * time.Second))
 
-	responseChan := make(chan *opsee.TestCheckResponse)
-
-	// going to set a timeout for our grpc context that's a bit bigger than the
-	// TestCheckRequest deadline
-	ctx, _ = context.WithTimeout(ctx, 6*time.Second)
-
 	for _, node := range response.Node.Nodes {
+		responseChan := make(chan *opsee.TestCheckResponse)
+		errChan := make(chan error)
+
+		// going to set a timeout for our grpc context that's a bit bigger than the
+		// TestCheckRequest deadline
+		ctx, _ = context.WithTimeout(ctx, 6*time.Second)
+
 		go func(node *etcd.Node) {
 			services := make(map[string]interface{})
 
 			err = json.Unmarshal([]byte(node.Value), &services)
 			if err != nil {
 				log.WithError(err).Errorf("error unmarshaling portmapper: %#v", node.Value)
+				errChan <- err
 				return
 			}
 
@@ -404,6 +406,7 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 				)
 				if err != nil {
 					log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
+					errChan <- err
 					return
 				}
 				log.Info("established grpc connection to bastion at: %s", addr)
@@ -412,19 +415,21 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 				resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
 				if err != nil {
 					log.WithError(err).Errorf("got error from bastion at: %s ... ignoring", addr)
+					errChan <- err
 					return
 				}
 
 				responseChan <- resp
 			}
 		}(node)
-	}
 
-	for {
 		select {
 		case resp := <-responseChan:
 			responses = append(responses, resp.Responses...)
+		case <-errChan:
+			// idk what to do with errors here
 		case <-ctx.Done():
+			// idk what to do with errors here
 		}
 	}
 
