@@ -340,6 +340,18 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 		return nil, err
 	}
 
+	// backwards compat with old bastion proto: TODO(mark) remove
+	switch t := checkProto.Spec.(type) {
+	case *schema.Check_HttpCheck:
+		checkProto.CheckSpec, err = opsee_types.MarshalAny(t.HttpCheck)
+	case *schema.Check_CloudwatchCheck:
+		checkProto.CheckSpec, err = opsee_types.MarshalAny(t.CloudwatchCheck)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
 	if checkProto.Target == nil {
 		return nil, fmt.Errorf("test check is missing target")
 	}
@@ -358,40 +370,61 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 		return nil, fmt.Errorf("no bastions found")
 	}
 
+	// the deadline for the TestCheckRequest, this gets folded into the bastion check runner's
+	// context, but i'm not sure why it's different than our grpc request context
 	deadline := &opsee_types.Timestamp{}
-	deadline.Scan(time.Now().UTC().Add(1 * time.Minute))
+	deadline.Scan(time.Now().UTC().Add(5 * time.Second))
+
+	responseChan := make(chan *opsee.TestCheckResponse)
+
+	// going to set a timeout for our grpc context that's a bit bigger than the
+	// TestCheckRequest deadline
+	ctx, _ = context.WithTimeout(ctx, 6*time.Second)
 
 	for _, node := range response.Node.Nodes {
-		services := make(map[string]interface{})
+		go func(node *etcd.Node) {
+			services := make(map[string]interface{})
 
-		err = json.Unmarshal([]byte(node.Value), &services)
-		if err != nil {
-			return nil, err
-		}
-
-		if checker, ok := services["checker"].(map[string]interface{}); ok {
-			checkerHost, _ := checker["hostname"].(string)
-			checkerPort, _ := checker["port"].(float64)
-			addr := fmt.Sprintf("%s:%d", checkerHost, int(checkerPort))
-
-			conn, err := grpc.Dial(
-				addr,
-				grpc.WithInsecure(),
-				grpc.WithBlock(),
-				grpc.WithTimeout(5*time.Second),
-			)
+			err = json.Unmarshal([]byte(node.Value), &services)
 			if err != nil {
-				log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
-				continue
+				log.WithError(err).Errorf("error unmarshaling portmapper: %#v", node.Value)
+				return
 			}
 
-			resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
-			if err != nil {
-				log.WithError(err).Errorf("got error from bastion at: %s ... ignoring", addr)
-				continue
-			}
+			if checker, ok := services["checker"].(map[string]interface{}); ok {
+				checkerHost, _ := checker["hostname"].(string)
+				checkerPort, _ := checker["port"].(float64)
+				addr := fmt.Sprintf("%s:%d", checkerHost, int(checkerPort))
 
+				conn, err := grpc.Dial(
+					addr,
+					grpc.WithInsecure(),
+					grpc.WithBlock(),
+					grpc.WithTimeout(3*time.Second),
+				)
+				if err != nil {
+					log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
+					return
+				}
+				log.Info("established grpc connection to bastion at: %s", addr)
+				defer conn.Close()
+
+				resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
+				if err != nil {
+					log.WithError(err).Errorf("got error from bastion at: %s ... ignoring", addr)
+					return
+				}
+
+				responseChan <- resp
+			}
+		}(node)
+	}
+
+	for {
+		select {
+		case resp := <-responseChan:
 			responses = append(responses, resp.Responses...)
+		case <-ctx.Done():
 		}
 	}
 
