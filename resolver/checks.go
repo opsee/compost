@@ -373,7 +373,7 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 	// the deadline for the TestCheckRequest, this gets folded into the bastion check runner's
 	// context, but i'm not sure why it's different than our grpc request context
 	deadline := &opsee_types.Timestamp{}
-	deadline.Scan(time.Now().UTC().Add(time.Minute))
+	deadline.Scan(time.Now().Add(time.Minute))
 
 	for _, node := range response.Node.Nodes {
 		responseChan := make(chan *opsee.TestCheckResponse)
