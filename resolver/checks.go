@@ -334,9 +334,14 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 			checkerPort, _ := checker["port"].(float64)
 			addr := fmt.Sprintf("%s:%d", checkerHost, int(checkerPort))
 
-			conn, err := grpc.Dial(addr)
+			conn, err := grpc.Dial(
+				addr,
+				grpc.WithInsecure(),
+				grpc.WithBlock(),
+				grpc.WithTimeout(10*time.Second),
+			)
 			if err != nil {
-				log.Infof("coudln't contact bastion at: %s", addr)
+				log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
 				continue
 			}
 
