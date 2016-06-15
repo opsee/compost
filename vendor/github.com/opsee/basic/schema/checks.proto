@@ -46,6 +46,11 @@ message Check {
 	string state = 16;
 }
 
+message CheckTargets {
+	Check check = 1;
+	repeated Target targets = 2;
+}
+
 message Notification {
 	string type = 1;
 	string value = 2;

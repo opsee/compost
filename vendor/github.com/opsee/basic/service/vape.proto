@@ -71,8 +71,10 @@ message UpdateUserRequest {
 	string name = 4;
 	string password = 5;
 	string status = 6;
+	opsee.types.Permission perms = 7;
 }
 
+// not implemented
 message UpdateUserPermsRequest {
 	User requestor = 1; 
 	User user = 2; 

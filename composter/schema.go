@@ -1144,14 +1144,14 @@ func (c *Composter) mutateUser() *graphql.Field {
 						ps = append(ps, pv)
 					}
 				}
+
+				newPerm, err := opsee_types.NewPermissions("user", ps...)
+				if err != nil {
+					return nil, err
+				}
+				newUser.Perms = newPerm
 				delete(userInput, "perms")
 			}
-
-			newPerm, err := opsee_types.NewPermissions("user", ps...)
-			if err != nil {
-				return nil, err
-			}
-
 			tb, err := json.Marshal(userInput)
 			if err != nil {
 				log.WithError(err).Error("marshal user input")
@@ -1163,7 +1163,6 @@ func (c *Composter) mutateUser() *graphql.Field {
 				log.WithError(err).Error("unmarshal user input")
 				return nil, errDecodeUserInput
 			}
-			newUser.Perms = newPerm
 
 			log.Debugf("unmarshalled user %v", newUser)
 
@@ -1187,6 +1186,7 @@ func (c *Composter) mutateUser() *graphql.Field {
 				Email:    newUser.Email,
 				Name:     newUser.Name,
 				Status:   newUser.Status,
+				Perms:    newUser.Perms,
 				Password: password,
 			}
 
