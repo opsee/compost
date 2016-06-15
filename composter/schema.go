@@ -31,6 +31,7 @@ var (
 	errMissingGroupType            = errors.New("missing group type - must be one of (security, elb, autoscaling)")
 	errDecodeInstances             = errors.New("error decoding instances")
 	errDecodeInstanceIds           = errors.New("error decoding instance ids")
+	errDecodeUserPermissions       = errors.New("error decoding permissions")
 	errUnknownInstanceMetricType   = errors.New("no metrics for that instance type")
 	errDecodeMetricStatisticsInput = errors.New("error decoding metric statistics input")
 	errDecodeCheckInput            = errors.New("error decoding checks input")
@@ -61,8 +62,9 @@ const (
 )
 
 func UserPermittedFromContext(ctx context.Context, perm string) (*schema.User, error) {
+	log.Debugf("checking permission %v for context %v", ctx, perm)
 	user, ok := ctx.Value(userKey).(*schema.User)
-	if !ok {
+	if !ok || user == nil {
 		return nil, errDecodeUser
 	}
 	if err := user.CheckPermission(perm); err != nil {
@@ -173,9 +175,9 @@ func (c *Composter) initTypes() {
 					Type:        graphql.String,
 					Description: "The team name",
 				},
-				"subscription": &graphql.InputObjectFieldConfig{
+				"plan": &graphql.InputObjectFieldConfig{
 					Type:        TeamSubscriptionEnumType,
-					Description: "The subscription plan",
+					Description: "The plan",
 				},
 				"stripeToken": &graphql.InputObjectFieldConfig{
 					Type:        graphql.String,
@@ -205,6 +207,11 @@ func (c *Composter) initTypes() {
 				"status": &graphql.InputObjectFieldConfig{
 					Type:        graphql.NewNonNull(UserStatusEnumType),
 					Description: "The user's status",
+				},
+				// TODO(dan) change in the user proto and invite proto
+				"perms": &graphql.InputObjectFieldConfig{
+					Description: "A list of user permissions",
+					Type:        graphql.NewList(graphql.String),
 				},
 			},
 		})
@@ -427,10 +434,6 @@ func (c *Composter) adminQuery() *graphql.Object {
 			"getUser": &graphql.Field{
 				Type: opsee.GraphQLGetUserResponseType,
 				Args: graphql.FieldConfigArgument{
-					"requestor": &graphql.ArgumentConfig{
-						Description: "The requesting user",
-						Type:        UserInputType,
-					},
 					"customer_id": &graphql.ArgumentConfig{
 						Description: "The customer Id.",
 						Type:        graphql.String,
@@ -1130,17 +1133,49 @@ func (c *Composter) mutateUser() *graphql.Field {
 			}
 			password, _ := p.Args["password"].(string)
 
-			var newUser schema.User
+			log.Debugf("user %v", p.Args["user"])
+			newUser := &schema.User{}
+
+			// TODO(dan) Fix this in protobuf
+			var ps []string
+			if pi, ok := userInput["perms"].([]interface{}); ok {
+				for _, p := range pi {
+					if pv, ok := p.(string); ok {
+						ps = append(ps, pv)
+					}
+				}
+				delete(userInput, "perms")
+			}
+
+			newPerm, err := opsee_types.NewPermissions("user", ps...)
+			if err != nil {
+				return nil, err
+			}
+
 			tb, err := json.Marshal(userInput)
 			if err != nil {
 				log.WithError(err).Error("marshal user input")
 				return nil, errDecodeUserInput
 			}
 
-			err = json.Unmarshal(tb, &newUser)
+			err = json.Unmarshal(tb, newUser)
 			if err != nil {
 				log.WithError(err).Error("unmarshal user input")
 				return nil, errDecodeUserInput
+			}
+			newUser.Perms = newPerm
+
+			log.Debugf("unmarshalled user %v", newUser)
+
+			// invites
+			if newUser.Id == 0 && newUser.Email != "" && newUser.Perms != nil {
+				req := &opsee.InviteUserRequest{
+					Requestor: requestor,
+					Email:     newUser.Email,
+					Perms:     newUser.Perms,
+				}
+
+				return c.resolver.InviteUser(p.Context, req)
 			}
 
 			req := &opsee.UpdateUserRequest{

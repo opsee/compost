@@ -1,12 +1,13 @@
 package main
 
 import (
+	"io/ioutil"
+	"os"
+
 	"github.com/opsee/compost/composter"
 	"github.com/opsee/compost/resolver"
 	"github.com/opsee/vaper"
 	log "github.com/sirupsen/logrus"
-	"io/ioutil"
-	"os"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest) (*opsee.ListCustomersResponse, error) {
-	log.Info("list users request")
+	log.Debug("list users request")
 
 	resp, err := c.Vape.ListUsers(ctx, req)
 	if err != nil {
@@ -72,7 +72,7 @@ func (c *Client) GetUser(ctx context.Context, req *opsee.GetUserRequest) (*opsee
 		"customer_id": req.CustomerId,
 		"id":          req.Id,
 		"email":       req.Email,
-	}).Info("get user request")
+	}).Debug("get user request")
 
 	resp, err := c.Vape.GetUser(ctx, req)
 	if err != nil {
@@ -88,7 +88,7 @@ func (c *Client) PutUser(ctx context.Context, req *opsee.UpdateUserRequest) (*sc
 		"customer_id": req.User.CustomerId,
 		"id":          req.User.Id,
 		"email":       req.User.Email,
-	}).Info("update user request")
+	}).Debug("update user request")
 
 	resp, err := c.Vape.UpdateUser(ctx, req)
 	if err != nil {
@@ -97,4 +97,28 @@ func (c *Client) PutUser(ctx context.Context, req *opsee.UpdateUserRequest) (*sc
 	}
 
 	return resp.User, nil
+}
+
+func (c *Client) InviteUser(ctx context.Context, req *opsee.InviteUserRequest) (*schema.User, error) {
+	log.WithFields(log.Fields{
+		"customer_id": req.Requestor.CustomerId,
+		"email":       req.Email,
+		"perms":       req.Perms.Permissions(),
+	}).Debug("invite user request")
+
+	resp, err := c.Vape.InviteUser(ctx, req)
+	if err != nil {
+		log.WithError(err).Error("error inviting user")
+		return nil, err
+	}
+	if resp.Invite == nil {
+		return &schema.User{}, nil
+	}
+
+	return &schema.User{
+		Id:         resp.Invite.Id,
+		Email:      resp.Invite.Email,
+		CustomerId: resp.Invite.CustomerId,
+		Perms:      resp.Invite.Perms,
+	}, nil
 }
