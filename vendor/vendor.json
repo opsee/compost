@@ -177,6 +177,12 @@
 			"revisionTime": "2016-03-17T16:54:49-07:00"
 		},
 		{
+			"checksumSHA1": "9NoxW1ZvnX4inGkH4SA9RW6rIgM=",
+			"path": "github.com/cenkalti/backoff",
+			"revision": "cdf48bbc1eb78d1349cbda326a4a037f7ba565c6",
+			"revisionTime": "2016-06-10T10:09:12Z"
+		},
+		{
 			"checksumSHA1": "934R1lazzxwTFpRLN0PMx+692Nw=",
 			"path": "github.com/coreos/etcd/client",
 			"revision": "ca5dff66828657c62c304ad0debc7fb239eab899",
