@@ -9,18 +9,10 @@ import (
 	"golang.org/x/net/context"
 )
 
-func (c *Client) GetTeam(ctx context.Context, user *schema.User) (*schema.Team, error) {
+func (c *Client) GetTeam(ctx context.Context, req *opsee.GetTeamRequest) (*schema.Team, error) {
 	log.WithFields(log.Fields{
-		"customer_id": user.CustomerId,
-		"email":       user.Email,
+		"id": req.Team.Id,
 	}).Info("get team request")
-
-	req := &opsee.GetTeamRequest{
-		Requestor: user,
-		Team: &schema.Team{
-			Id: user.CustomerId,
-		},
-	}
 
 	resp, err := c.Vape.GetTeam(ctx, req)
 	if err != nil {

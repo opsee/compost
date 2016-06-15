@@ -396,7 +396,6 @@ func (c *Composter) adminQuery() *graphql.Object {
 			"checks":        c.queryChecks(),
 			"region":        c.queryRegion(),
 			"role":          c.queryRole(),
-			"team":          c.queryTeam(),
 			"notifications": c.queryNotifications(),
 			"listCustomers": &graphql.Field{
 				Type: opsee.GraphQLListCustomersResponseType,
@@ -470,6 +469,33 @@ func (c *Composter) adminQuery() *graphql.Object {
 					})
 				},
 			},
+			"getTeam": &graphql.Field{
+				Type: opsee.GraphQLGetUserResponseType,
+				Args: graphql.FieldConfigArgument{
+					"id": &graphql.ArgumentConfig{
+						Description: "The team's id.",
+						Type:        graphql.String,
+					},
+				},
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					requestor, err := UserPermittedFromContext(p.Context, opsee_types.OpseeAdmin)
+					if err != nil {
+						return nil, err
+					}
+					var (
+						id string
+					)
+
+					id, _ = p.Args["id"].(string)
+
+					return c.resolver.GetTeam(p.Context, &opsee.GetTeamRequest{
+						Requestor: requestor,
+						Team: &schema.Team{
+							Id: id,
+						},
+					})
+				},
+			},
 			"getCredentials": &graphql.Field{
 				Type: opsee.GraphQLGetCredentialsResponseType,
 				Args: graphql.FieldConfigArgument{
@@ -536,7 +562,12 @@ func (c *Composter) queryTeam() *graphql.Field {
 				return nil, err
 			}
 
-			return c.resolver.GetTeam(p.Context, requestor)
+			return c.resolver.GetTeam(p.Context, &opsee.GetTeamRequest{
+				Requestor: requestor,
+				Team: &schema.Team{
+					Id: requestor.CustomerId,
+				},
+			})
 		},
 	}
 }
