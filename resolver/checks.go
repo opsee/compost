@@ -55,20 +55,10 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 			err     error
 		)
 
-		// a temporary "feature flag" to pull results from dynamo instead of beavis
-
 		if checkId != "" {
-			if user.Admin {
-				results, err = c.CheckResults(ctx, user, checkId)
-			} else {
-				results, err = c.Beavis.ListResultsCheck(user, checkId)
-			}
+			results, err = c.CheckResults(ctx, user, checkId)
 		} else {
-			if user.Admin {
-				results, err = c.AllCheckResults(ctx, user)
-			} else {
-				results, err = c.Beavis.ListResults(user)
-			}
+			results, err = c.AllCheckResults(ctx, user)
 		}
 
 		if err != nil {
