@@ -11,9 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/cenkalti/backoff"
 	etcd "github.com/coreos/etcd/client"
 	"github.com/gogo/protobuf/jsonpb"
+	"github.com/golang/protobuf/proto"
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
@@ -447,142 +447,162 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 }
 
 func (c *Client) AllCheckResults(ctx context.Context, user *schema.User) ([]*schema.CheckResult, error) {
-	params := &dynamodb.QueryInput{
-		TableName:              aws.String(CheckResultTableName),
-		IndexName:              aws.String(CheckResultCustomerIdIndexName),
-		KeyConditionExpression: aws.String(fmt.Sprintf("customer_id = %s", user.CustomerId)),
-		Select:                 aws.String("ALL_ATTRIBUTES"),
-	}
-
-	resp, err := c.Dynamo.Query(params)
+	customerIdAv, err := dynamodbattribute.Marshal(user.CustomerId)
 	if err != nil {
 		return nil, err
 	}
 
-	resultIds := []map[string]*dynamodb.AttributeValue{}
-	for _, item := range resp.Items {
-		resultIds = append(resultIds, map[string]*dynamodb.AttributeValue{
-			"result_id": item["result_id"],
-		})
-	}
-
-	bgiInput := &dynamodb.BatchGetItemInput{
-		RequestItems: map[string]*dynamodb.KeysAndAttributes{
-			CheckResultTableName: {
-				Keys: resultIds,
-			},
+	resultIdsResponse, err := c.Dynamo.Query(&dynamodb.QueryInput{
+		TableName:              aws.String(CheckResultTableName),
+		IndexName:              aws.String(CheckResultCustomerIdIndexName),
+		KeyConditionExpression: aws.String("customer_id = :customer_id"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":customer_id": customerIdAv,
 		},
+	})
+	if err != nil {
+		return nil, err
 	}
 
-	// This will allow us to fetch a maximum of 1000 items or a maximum of 160MB
-	// of data. Those are upper bounds and assume there are no failures when attempting
-	// to fetch data from DynamoDB. A few notes:
-	//
-	// TODO(greg):
-	// * Implement a paging mechanism of our own on top of dynamodb--or at the very least
-	// expose these limits directly to the API. Is this possible in GQL?
-	// * Cache results and attempt to fetch from a cache first.
-	//
-	// For documentation on dynamodb BatchGetItem requests, see:
-	// http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
-	results := []*schema.CheckResult{}
-	tries := 0
-	stopTrying := 10
-	for {
-		// TODO(greg): Signal that we have returned partial results to gql somehow?
-		if tries == stopTrying {
-			break
-		}
-
-		resp := &dynamodb.BatchGetItemOutput{}
-		err = backoff.Retry(func() error {
-			var err error
-			resp, err = c.Dynamo.BatchGetItem(bgiInput)
-			return err
-		}, backoff.NewExponentialBackOff())
-
+	results := make([]*schema.CheckResult, len(resultIdsResponse.Items))
+	for i, resultItem := range resultIdsResponse.Items {
+		// This is almost entirely copypasta from below, but without the
+		// check id index query.
+		resultGetItemResponse, err := c.Dynamo.GetItem(&dynamodb.GetItemInput{
+			TableName: aws.String(CheckResultTableName),
+			Key: map[string]*dynamodb.AttributeValue{
+				"result_id": resultItem["result_id"],
+			},
+		})
 		if err != nil {
 			return nil, err
 		}
 
-		resultsResponses, ok := resp.Responses[CheckResultTableName]
-		if !ok {
-			return nil, fmt.Errorf("Error searching database: no results table")
+		dynamoCheckResult := resultGetItemResponse.Item
+		result := &schema.CheckResult{}
+		if err := dynamodbattribute.UnmarshalMap(dynamoCheckResult, result); err != nil {
+			return nil, err
 		}
-		for _, item := range resultsResponses {
-			result := &schema.CheckResult{}
 
-			// NOTE(greg): should we do something different here? return partial results
-			// instead of bailing on a single bad response?
-			if err := dynamodbattribute.UnmarshalMap(item, result); err != nil {
+		responseIds := []string{}
+		err = dynamodbattribute.Unmarshal(dynamoCheckResult["responses"], &responseIds)
+		if err != nil {
+			return nil, err
+		}
+
+		checkResponses := make([]*schema.CheckResponse, len(responseIds))
+		for j, responseId := range responseIds {
+			responseIdAv, err := dynamodbattribute.Marshal(responseId)
+
+			responseGetItemResponse, err := c.Dynamo.GetItem(&dynamodb.GetItemInput{
+				TableName: aws.String(CheckResponseTableName),
+				Key: map[string]*dynamodb.AttributeValue{
+					"response_id": responseIdAv,
+				},
+			})
+			if err != nil {
 				return nil, err
 			}
 
-			results = append(results, result)
+			checkResponse := &schema.CheckResponse{}
+			responseProtoAv, ok := responseGetItemResponse.Item["response_protobuf"]
+			if !ok {
+				return nil, fmt.Errorf("Response in dynamodb had no response object.")
+			}
+			responseProto := []byte{}
+			if err := dynamodbattribute.Unmarshal(responseProtoAv, &responseProto); err != nil {
+				return nil, err
+			}
+			if err := proto.Unmarshal(responseProto, checkResponse); err != nil {
+				return nil, err
+			}
+			checkResponses[j] = checkResponse
 		}
 
-		// we're done!
-		if len(resp.UnprocessedKeys) == 0 {
-			break
-		}
-
-		bgiInput = &dynamodb.BatchGetItemInput{RequestItems: resp.UnprocessedKeys}
-
-		tries += 1
+		result.Responses = checkResponses
+		results[i] = result
 	}
 
 	return results, nil
 }
 
 func (c *Client) CheckResults(ctx context.Context, user *schema.User, checkId string) ([]*schema.CheckResult, error) {
-	params := &dynamodb.QueryInput{
-		TableName:              aws.String(CheckResultTableName),
-		IndexName:              aws.String(CheckResultCheckIdIndexName),
-		KeyConditionExpression: aws.String(fmt.Sprintf("check_id = %s", checkId)),
-		Select:                 aws.String("ALL_ATTRIBUTES"),
-	}
-
-	resp, err := c.Dynamo.Query(params)
+	checkIdAv, err := dynamodbattribute.Marshal(checkId)
 	if err != nil {
 		return nil, err
 	}
 
-	results := []*schema.CheckResult{}
-	for _, item := range resp.Items {
-		bastionResult := &schema.CheckResult{}
-		if err := dynamodbattribute.UnmarshalMap(item, bastionResult); err != nil {
-			return nil, err
-		}
+	// First we must query check_results-index for the result_ids for that check.
+	params := &dynamodb.QueryInput{
+		TableName:              aws.String(CheckResultTableName),
+		IndexName:              aws.String(CheckResultCheckIdIndexName),
+		KeyConditionExpression: aws.String("check_id = :check_id"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":check_id": checkIdAv,
+		},
+	}
 
-		checkResponses := []string{}
-		err := dynamodbattribute.Unmarshal(item["responses"], &checkResponses)
+	checkIndexResponse, err := c.Dynamo.Query(params)
+	if err != nil {
+		return nil, err
+	}
+
+	results := make([]*schema.CheckResult, len(checkIndexResponse.Items))
+	for i, resultAvMap := range checkIndexResponse.Items {
+		// Now we must call GetItem for that result_id
+		resultGetItemResponse, err := c.Dynamo.GetItem(&dynamodb.GetItemInput{
+			TableName: aws.String(CheckResultTableName),
+			Key: map[string]*dynamodb.AttributeValue{
+				"result_id": resultAvMap["result_id"],
+			},
+		})
 		if err != nil {
 			return nil, err
 		}
 
-		checkResponsesAccum := make([]*schema.CheckResponse, len(checkResponses))
-		for _, checkResponse := range checkResponses {
-			params := &dynamodb.QueryInput{
-				TableName:              aws.String(CheckResponseTableName),
-				KeyConditionExpression: aws.String(fmt.Sprintf("response_id = %s", checkResponse)),
-				Select:                 aws.String("ALL_ATTRIBUTES"),
-			}
+		dynamoCheckResult := resultGetItemResponse.Item
+		result := &schema.CheckResult{}
+		if err := dynamodbattribute.UnmarshalMap(dynamoCheckResult, result); err != nil {
+			return nil, err
+		}
 
-			checkResponsesQueryResp, err := c.Dynamo.Query(params)
+		responseIds := []string{}
+		err = dynamodbattribute.Unmarshal(dynamoCheckResult["responses"], &responseIds)
+		if err != nil {
+			return nil, err
+		}
+
+		checkResponses := make([]*schema.CheckResponse, len(responseIds))
+		for j, responseId := range responseIds {
+			responseIdAv, err := dynamodbattribute.Marshal(responseId)
+
+			responseGetItemResponse, err := c.Dynamo.GetItem(&dynamodb.GetItemInput{
+				TableName: aws.String(CheckResponseTableName),
+				Key: map[string]*dynamodb.AttributeValue{
+					"response_id": responseIdAv,
+				},
+			})
 			if err != nil {
 				return nil, err
 			}
-			for i, r := range checkResponsesQueryResp.Items {
-				checkResponse := &schema.CheckResponse{}
-				if err := dynamodbattribute.UnmarshalMap(r, checkResponse); err != nil {
-					return nil, err
-				}
-				checkResponsesAccum[i] = checkResponse
+
+			checkResponse := &schema.CheckResponse{}
+			responseProtoAv, ok := responseGetItemResponse.Item["response_protobuf"]
+			if !ok {
+				return nil, fmt.Errorf("Response in dynamodb had no response object.")
 			}
+			responseProto := []byte{}
+			if err := dynamodbattribute.Unmarshal(responseProtoAv, &responseProto); err != nil {
+				return nil, err
+			}
+			if err := proto.Unmarshal(responseProto, checkResponse); err != nil {
+				return nil, err
+			}
+			checkResponses[j] = checkResponse
 		}
 
-		bastionResult.Responses = checkResponsesAccum
-		results = append(results, bastionResult)
+		result.Responses = checkResponses
+		results[i] = result
 	}
 
 	return results, nil
