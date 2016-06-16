@@ -292,6 +292,10 @@ func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInpu
 }
 
 func (c *Client) DeprecatedTestCheck(ctx context.Context, user *schema.User, checkInput map[string]interface{}) (*opsee.TestCheckResponse, error) {
+	if user.Admin {
+		return c.TestCheck(ctx, user, checkInput)
+	}
+
 	checkJson, err := json.Marshal(checkInput)
 	if err != nil {
 		return nil, err
