@@ -281,50 +281,6 @@ func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInpu
 	return deleted, nil
 }
 
-func (c *Client) DeprecatedTestCheck(ctx context.Context, user *schema.User, checkInput map[string]interface{}) (*opsee.TestCheckResponse, error) {
-	if user.Admin {
-		return c.TestCheck(ctx, user, checkInput)
-	}
-
-	checkJson, err := json.Marshal(checkInput)
-	if err != nil {
-		return nil, err
-	}
-
-	checkProto := &schema.Check{}
-	err = jsonpb.Unmarshal(bytes.NewBuffer(checkJson), checkProto)
-	if err != nil {
-		return nil, err
-	}
-
-	checkReponse, err := c.Bartnet.TestCheck(user, checkProto)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, res := range checkReponse.Responses {
-		if res.Reply == nil {
-			if res.Response == nil {
-				continue
-			}
-
-			any, err := opsee_types.UnmarshalAny(res.Response)
-			if err != nil {
-				return nil, err
-			}
-
-			switch reply := any.(type) {
-			case *schema.HttpResponse:
-				res.Reply = &schema.CheckResponse_HttpResponse{reply}
-			case *schema.CloudWatchResponse:
-				res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
-			}
-		}
-	}
-
-	return checkReponse, nil
-}
-
 func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput map[string]interface{}) (*opsee.TestCheckResponse, error) {
 	var (
 		responses []*schema.CheckResponse
