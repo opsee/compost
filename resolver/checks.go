@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	etcd "github.com/coreos/etcd/client"
 	"github.com/gogo/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
+	"github.com/gogo/protobuf/proto"
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
