@@ -43,32 +43,32 @@ const (
 func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId string) ([]*schema.Check, error) {
 	var (
 		responseChan = make(chan *checkCompostResponse, 2)
-		checkMap     = make(map[string][]*schema.CheckResult)
-		notifMap     = make(map[string][]*schema.Notification)
-		wg           sync.WaitGroup
+		// checkMap     = make(map[string][]*schema.CheckResult)
+		notifMap = make(map[string][]*schema.Notification)
+		wg       sync.WaitGroup
 	)
 
-	wg.Add(1)
-	go func() {
-		var (
-			results []*schema.CheckResult
-			err     error
-		)
-
-		if checkId != "" {
-			results, err = c.CheckResults(ctx, user, checkId)
-		} else {
-			results, err = c.AllCheckResults(ctx, user)
-		}
-
-		if err != nil {
-			responseChan <- &checkCompostResponse{err}
-		} else {
-			responseChan <- &checkCompostResponse{results}
-		}
-
-		wg.Done()
-	}()
+	// wg.Add(1)
+	// go func() {
+	// 	var (
+	// 		results []*schema.CheckResult
+	// 		err     error
+	// 	)
+	//
+	// 	if checkId != "" {
+	// 		results, err = c.CheckResults(ctx, user, checkId)
+	// 	} else {
+	// 		results, err = c.AllCheckResults(ctx, user)
+	// 	}
+	//
+	// 	if err != nil {
+	// 		responseChan <- &checkCompostResponse{err}
+	// 	} else {
+	// 		responseChan <- &checkCompostResponse{results}
+	// 	}
+	//
+	// 	wg.Done()
+	// }()
 
 	wg.Add(1)
 	go func() {
@@ -118,36 +118,36 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 
 	for resp := range responseChan {
 		switch t := resp.response.(type) {
-		case []*schema.CheckResult:
-			for _, result := range t {
-				for _, res := range result.Responses {
-					if res.Reply == nil {
-						if res.Response == nil {
-							continue
-						}
-
-						any, err := opsee_types.UnmarshalAny(res.Response)
-						if err != nil {
-							log.WithError(err).Error("couldn't list results from beavis")
-							return nil, err
-						}
-
-						switch reply := any.(type) {
-						case *schema.HttpResponse:
-							res.Reply = &schema.CheckResponse_HttpResponse{reply}
-						case *schema.CloudWatchResponse:
-							res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
-						}
-					}
-				}
-
-				if _, ok := checkMap[result.CheckId]; !ok {
-					checkMap[result.CheckId] = []*schema.CheckResult{result}
-				} else {
-					checkMap[result.CheckId] = append(checkMap[result.CheckId], result)
-				}
-			}
-
+		// case []*schema.CheckResult:
+		// 	for _, result := range t {
+		// 		for _, res := range result.Responses {
+		// 			if res.Reply == nil {
+		// 				if res.Response == nil {
+		// 					continue
+		// 				}
+		//
+		// 				any, err := opsee_types.UnmarshalAny(res.Response)
+		// 				if err != nil {
+		// 					log.WithError(err).Error("couldn't list results from beavis")
+		// 					return nil, err
+		// 				}
+		//
+		// 				switch reply := any.(type) {
+		// 				case *schema.HttpResponse:
+		// 					res.Reply = &schema.CheckResponse_HttpResponse{reply}
+		// 				case *schema.CloudWatchResponse:
+		// 					res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
+		// 				}
+		// 			}
+		// 		}
+		//
+		// 		if _, ok := checkMap[result.CheckId]; !ok {
+		// 			checkMap[result.CheckId] = []*schema.CheckResult{result}
+		// 		} else {
+		// 			checkMap[result.CheckId] = append(checkMap[result.CheckId], result)
+		// 		}
+		// 	}
+		//
 		case []*hugs.Notification:
 			for _, notif := range t {
 				notifMap[notif.CheckId] = append(notifMap[notif.CheckId], &schema.Notification{Type: notif.Type, Value: notif.Value})
@@ -159,7 +159,12 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 	}
 
 	for _, check := range checks {
-		check.Results = checkMap[check.Id]
+		results, err := c.CheckResults(ctx, user, check.Id)
+		if err != nil {
+			return nil, err
+		}
+
+		check.Results = results
 		check.Notifications = notifMap[check.Id]
 
 		if check.Spec == nil {
