@@ -533,9 +533,7 @@ func (c *Composter) queryTeam() *graphql.Field {
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			requestor, err := UserPermittedFromContext(p.Context, "admin")
 			if err != nil {
-				return &opsee.GetTeamResponse{
-					Team: new(schema.Team),
-				}, err
+				return nil, err
 			}
 
 			return c.resolver.GetTeam(p.Context, requestor)

@@ -24,7 +24,7 @@ message User {
 	opsee.types.Timestamp created_at = 10 [(gogoproto.moretags) = "db:\"created_at\""];
 	opsee.types.Timestamp updated_at = 11 [(gogoproto.moretags) = "db:\"updated_at\""];
 	string status = 12 [(gogoproto.moretags) = "token:\"status\" db:\"status\""];
-	opsee.types.Permission perms = 13 [(gogoproto.moretags) = "db:\"perms\""];
+	opsee.types.Permission perms = 13 [(gogoproto.moretags) = "db:\"perms\" token:\"perms\""];
 	bool has_password = 14 [(gogoproto.jsontag) = "has_password"];
 }
 
