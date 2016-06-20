@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	log.SetLevel(log.DebugLevel)
 	key, err := ioutil.ReadFile(mustEnvString("COMPOST_VAPE_KEYFILE"))
 	if err != nil {
 		log.Fatal("Unable to read vape key: ", err)
@@ -36,10 +37,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	composter := composter.New(resolver)
-	composter.StartHTTP(
-		mustEnvString("COMPOST_ADDRESS"),
-	)
+	go func() {
+		composter := composter.New(resolver)
+		composter.StartHTTP(
+			mustEnvString("COMPOST_ADDRESS"),
+		)
+	}()
+	select {}
 }
 
 func mustEnvString(envVar string) string {
