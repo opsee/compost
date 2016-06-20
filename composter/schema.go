@@ -368,6 +368,14 @@ func (c *Composter) initTypes() {
 					Type:        graphql.NewNonNull(graphql.NewList(NotificationInputType)),
 					Description: "Check notifications",
 				},
+				"min_failing_count": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Int,
+					Description: "How many nodes must fail in order for a check to fail",
+				},
+				"min_failing_time": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Int,
+					Description: "How long (in seconds) must a check fail in order to be considered failing",
+				},
 			},
 		})
 	}
