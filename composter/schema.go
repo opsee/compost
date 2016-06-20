@@ -62,11 +62,11 @@ const (
 )
 
 func UserPermittedFromContext(ctx context.Context, perm string) (*schema.User, error) {
-	log.Debugf("checking permission %v for context %v", ctx, perm)
 	user, ok := ctx.Value(userKey).(*schema.User)
 	if !ok || user == nil {
 		return nil, errDecodeUser
 	}
+	log.Debugf("checking user permissions %v against for scope %s", user.Perms, perm)
 	if err := user.CheckPermission(perm); err != nil {
 		return nil, err
 	}
@@ -533,7 +533,9 @@ func (c *Composter) queryTeam() *graphql.Field {
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			requestor, err := UserPermittedFromContext(p.Context, "admin")
 			if err != nil {
-				return nil, err
+				return &opsee.GetTeamResponse{
+					Team: new(schema.Team),
+				}, err
 			}
 
 			return c.resolver.GetTeam(p.Context, requestor)
