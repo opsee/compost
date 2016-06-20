@@ -61,16 +61,42 @@ const (
 	instanceStop
 )
 
-func UserPermittedFromContext(ctx context.Context, perm string) (*schema.User, error) {
+type PermissionOp struct {
+	op   string
+	perm string
+}
+
+func (p PermissionOp) Op(user *schema.User, has error) error {
+	switch p.op {
+	case "and":
+		if has != nil {
+			return has
+		}
+		return user.CheckPermission(p.perm)
+	case "or":
+		has = user.CheckPermission(p.perm)
+	default:
+		return fmt.Errorf("invalid op: %s", p.op)
+	}
+	return has
+}
+
+func UserPermittedFromContext(ctx context.Context, perm string, extra ...PermissionOp) (*schema.User, error) {
 	log.Debugf("checking permission %v for context %v", ctx, perm)
 	user, ok := ctx.Value(userKey).(*schema.User)
 	if !ok || user == nil {
 		return nil, errDecodeUser
 	}
-	if err := user.CheckPermission(perm); err != nil {
-		return nil, err
+
+	has := user.CheckPermission(perm)
+	for _, op := range extra {
+		has = op.Op(user, has)
+		if has != nil {
+			return user, has
+		}
 	}
-	return user, nil
+
+	return user, has
 }
 
 func (c *Composter) mustSchema() {
@@ -208,7 +234,6 @@ func (c *Composter) initTypes() {
 					Type:        graphql.NewNonNull(UserStatusEnumType),
 					Description: "The user's status",
 				},
-				// TODO(dan) change in the user proto and invite proto
 				"perms": &graphql.InputObjectFieldConfig{
 					Description: "A list of user permissions",
 					Type:        graphql.NewList(graphql.String),
@@ -539,12 +564,12 @@ func (c *Composter) queryTeam() *graphql.Field {
 	return &graphql.Field{
 		Type: schema.GraphQLTeamType,
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			requestor, err := UserPermittedFromContext(p.Context, "admin")
-			if err != nil {
-				return nil, err
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
 			}
 
-			return c.resolver.GetTeam(p.Context, requestor)
+			return c.resolver.GetTeam(p.Context, user)
 		},
 	}
 }
@@ -796,11 +821,11 @@ func (c *Composter) instanceAction(action instanceAction) *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			if err != nil {
+				return nil, err
 			}
-
+			user := requestor
 			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
 			if !ok {
 				return nil, errDecodeQueryContext
@@ -820,8 +845,6 @@ func (c *Composter) instanceAction(action instanceAction) *graphql.Field {
 
 				ids = append(ids, idstr)
 			}
-
-			var err error
 
 			switch action {
 			case instanceReboot:
@@ -1075,9 +1098,9 @@ func (c *Composter) mutateNotifications() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			requestor, err := UserPermittedFromContext(p.Context, "admin", PermissionOp{"or", "edit"})
+			if err != nil {
+				return nil, err
 			}
 
 			notificationsInput, ok := p.Args["default"].([]interface{})
@@ -1085,7 +1108,7 @@ func (c *Composter) mutateNotifications() *graphql.Field {
 				return nil, errDecodeNotificationsInput
 			}
 
-			return c.resolver.PutDefaultNotifications(p.Context, user, notificationsInput)
+			return c.resolver.PutDefaultNotifications(p.Context, requestor, notificationsInput)
 		},
 	}
 }
@@ -1129,6 +1152,7 @@ func (c *Composter) mutateUser() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			// TODO(dan) only admins mutate users rn
 			requestor, err := UserPermittedFromContext(p.Context, "admin")
 			if err != nil {
 				return nil, err
@@ -1204,6 +1228,7 @@ func (c *Composter) mutateUser() *graphql.Field {
 }
 
 func (c *Composter) mutateRegion() *graphql.Field {
+
 	return &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
 			Name:        "RegionMutation",
@@ -1223,9 +1248,9 @@ func (c *Composter) mutateRegion() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			_, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			_, err := UserPermittedFromContext(p.Context, "admin", PermissionOp{"or", "edit"})
+			if err != nil {
+				return nil, err
 			}
 
 			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
@@ -1367,6 +1392,12 @@ func (c *Composter) upsertChecks() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			// must have admin or edit to upsert checks
+			_, err := UserPermittedFromContext(p.Context, "admin", PermissionOp{"or", "edit"})
+			if err != nil {
+				return nil, err
+			}
+
 			user, ok := p.Context.Value(userKey).(*schema.User)
 			if !ok {
 				return nil, errDecodeUser
@@ -1391,9 +1422,10 @@ func (c *Composter) deleteChecks() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			// must have admin or edit to delete checks
+			requestor, err := UserPermittedFromContext(p.Context, "admin", PermissionOp{"or", "edit"})
+			if err != nil {
+				return nil, err
 			}
 
 			checksInput, ok := p.Args["ids"].([]interface{})
@@ -1401,7 +1433,7 @@ func (c *Composter) deleteChecks() *graphql.Field {
 				return nil, errDecodeCheckInput
 			}
 
-			return c.resolver.DeleteChecks(p.Context, user, checksInput)
+			return c.resolver.DeleteChecks(p.Context, requestor, checksInput)
 		},
 	}
 }
@@ -1416,9 +1448,10 @@ func (c *Composter) testCheck() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			user, ok := p.Context.Value(userKey).(*schema.User)
-			if !ok {
-				return nil, errDecodeUser
+			// TODO(dan) not sure about this one
+			requestor, err := UserPermittedFromContext(p.Context, "admin", PermissionOp{"or", "edit"})
+			if err != nil {
+				return nil, err
 			}
 
 			checkInput, ok := p.Args["check"].(map[string]interface{})
@@ -1426,7 +1459,7 @@ func (c *Composter) testCheck() *graphql.Field {
 				return nil, errDecodeCheckInput
 			}
 
-			return c.resolver.TestCheck(p.Context, user, checkInput)
+			return c.resolver.TestCheck(p.Context, requestor, checkInput)
 		},
 	}
 }
