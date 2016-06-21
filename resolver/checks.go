@@ -340,62 +340,61 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 	deadline := &opsee_types.Timestamp{}
 	deadline.Scan(time.Now().Add(time.Minute))
 
-	for _, node := range response.Node.Nodes {
-		responseChan := make(chan *opsee.TestCheckResponse)
-		errChan := make(chan error)
+	node := response.Node.Nodes[0]
+	responseChan := make(chan *opsee.TestCheckResponse)
+	errChan := make(chan error)
 
-		// going to set a timeout for our grpc context that's a bit bigger than the
-		// TestCheckRequest deadline
-		ctx, _ = context.WithTimeout(ctx, time.Minute)
+	// going to set a timeout for our grpc context that's a bit bigger than the
+	// TestCheckRequest deadline
+	ctx, _ = context.WithTimeout(ctx, time.Minute)
 
-		go func(node *etcd.Node) {
-			services := make(map[string]interface{})
+	go func(node *etcd.Node) {
+		services := make(map[string]interface{})
 
-			err = json.Unmarshal([]byte(node.Value), &services)
+		err = json.Unmarshal([]byte(node.Value), &services)
+		if err != nil {
+			log.WithError(err).Errorf("error unmarshaling portmapper: %#v", node.Value)
+			errChan <- err
+			return
+		}
+
+		if checker, ok := services["checker"].(map[string]interface{}); ok {
+			checkerHost, _ := checker["hostname"].(string)
+			checkerPort, _ := checker["port"].(float64)
+			addr := fmt.Sprintf("%s:%d", checkerHost, int(checkerPort))
+
+			conn, err := grpc.Dial(
+				addr,
+				grpc.WithInsecure(),
+				grpc.WithBlock(),
+				grpc.WithTimeout(3*time.Second),
+			)
 			if err != nil {
-				log.WithError(err).Errorf("error unmarshaling portmapper: %#v", node.Value)
+				log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
+				errChan <- err
+				return
+			}
+			log.Info("established grpc connection to bastion at: %s", addr)
+			defer conn.Close()
+
+			resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
+			if err != nil {
+				log.WithError(err).Errorf("got error from bastion at: %s ... ignoring", addr)
 				errChan <- err
 				return
 			}
 
-			if checker, ok := services["checker"].(map[string]interface{}); ok {
-				checkerHost, _ := checker["hostname"].(string)
-				checkerPort, _ := checker["port"].(float64)
-				addr := fmt.Sprintf("%s:%d", checkerHost, int(checkerPort))
-
-				conn, err := grpc.Dial(
-					addr,
-					grpc.WithInsecure(),
-					grpc.WithBlock(),
-					grpc.WithTimeout(3*time.Second),
-				)
-				if err != nil {
-					log.WithError(err).Errorf("coudln't contact bastion at: %s ... ignoring", addr)
-					errChan <- err
-					return
-				}
-				log.Info("established grpc connection to bastion at: %s", addr)
-				defer conn.Close()
-
-				resp, err := opsee.NewCheckerClient(conn).TestCheck(ctx, &opsee.TestCheckRequest{Deadline: deadline, Check: checkProto})
-				if err != nil {
-					log.WithError(err).Errorf("got error from bastion at: %s ... ignoring", addr)
-					errChan <- err
-					return
-				}
-
-				responseChan <- resp
-			}
-		}(node)
-
-		select {
-		case resp := <-responseChan:
-			responses = append(responses, resp.Responses...)
-		case <-errChan:
-			// idk what to do with errors here
-		case <-ctx.Done():
-			// idk what to do with errors here
+			responseChan <- resp
 		}
+	}(node)
+
+	select {
+	case resp := <-responseChan:
+		responses = append(responses, resp.Responses...)
+	case <-errChan:
+		// idk what to do with errors here
+	case <-ctx.Done():
+		// idk what to do with errors here
 	}
 
 	return &opsee.TestCheckResponse{Responses: responses}, nil
