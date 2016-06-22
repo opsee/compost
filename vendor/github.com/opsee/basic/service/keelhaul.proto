@@ -14,13 +14,13 @@ option (opseeproto.graphql) = true;
 
 
 message Filter {
-    string key = 1;
-    string value = 2;
+	string key = 1;
+	string value = 2;
 }
 
 message ListBastionStatesRequest {
 	repeated string customer_ids = 1;
-    repeated Filter filters = 2;
+	repeated Filter filters = 2;
 }
 
 message ListBastionStatesResponse {
@@ -43,6 +43,7 @@ message LaunchStackRequest {
 	string subnet_id = 6;
 	string instance_size = 7;
 	string subnet_routing = 8;
+	string execution_group_id = 9;
 }
 
 message LaunchStackResponse {

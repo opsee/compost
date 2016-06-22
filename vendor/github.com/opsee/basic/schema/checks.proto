@@ -141,4 +141,5 @@ message CheckResult {
 	string check_name = 7;
 	int32 version = 8;
 	string bastion_id = 9;
+	string region = 10;
 }

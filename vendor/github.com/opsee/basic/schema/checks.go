@@ -108,8 +108,10 @@ func (check *Check) MarshalCrappyJSON() ([]byte, error) {
 	}
 
 	jsonString := fmt.Sprintf(
-		`{"name": "%s", "interval": 30, "target": %s, "check_spec": {"type_url": "%s", "value": %s}, "assertions": %s}`,
+		`{"name": "%s", "min_failing_count": %d, "min_failing_time": %d, "interval": 30, "target": %s, "check_spec": {"type_url": "%s", "value": %s}, "assertions": %s}`,
 		check.Name,
+		check.MinFailingCount,
+		check.MinFailingTime,
 		jsonTarget,
 		typeUrl,
 		jsonSpec,
