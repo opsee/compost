@@ -1152,9 +1152,10 @@ func (c *Composter) mutateUser() *graphql.Field {
 					}
 				}
 
-				newPerm, err := opsee_types.NewPermissions("user", ps...)
-				if err != nil {
-					return nil, err
+				newPerm := &schema.UserFlags{}
+				errs := newPerm.SetFlags(ps...)
+				if len(errs) > 0 {
+					return nil, fmt.Errorf("Couldn't set permissions")
 				}
 				newUser.Perms = newPerm
 				delete(userInput, "perms")

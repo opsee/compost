@@ -600,6 +600,10 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion3
+
 // Client API for Spanx service
 
 type SpanxClient interface {
@@ -655,40 +659,58 @@ func RegisterSpanxServer(s *grpc.Server, srv SpanxServer) {
 	s.RegisterService(&_Spanx_serviceDesc, srv)
 }
 
-func _Spanx_EnhancedCombatMode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Spanx_EnhancedCombatMode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EnhancedCombatModeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(SpanxServer).EnhancedCombatMode(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(SpanxServer).EnhancedCombatMode(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Spanx/EnhancedCombatMode",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SpanxServer).EnhancedCombatMode(ctx, req.(*EnhancedCombatModeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Spanx_GetRoleStack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Spanx_GetRoleStack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRoleStackRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(SpanxServer).GetRoleStack(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(SpanxServer).GetRoleStack(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Spanx/GetRoleStack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SpanxServer).GetRoleStack(ctx, req.(*GetRoleStackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Spanx_GetCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Spanx_GetCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetCredentialsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(SpanxServer).GetCredentials(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(SpanxServer).GetCredentials(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Spanx/GetCredentials",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SpanxServer).GetCredentials(ctx, req.(*GetCredentialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Spanx_serviceDesc = grpc.ServiceDesc{
@@ -708,7 +730,8 @@ var _Spanx_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Spanx_GetCredentials_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: fileDescriptorSpanx,
 }
 
 func (m *EnhancedCombatModeRequest) Marshal() (data []byte, err error) {

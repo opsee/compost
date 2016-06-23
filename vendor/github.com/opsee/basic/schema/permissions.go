@@ -7,22 +7,6 @@ func init() {
 	opsee_types.PermissionsRegistry.Register("team", opsee_types.NewPermissionsBitmap("multi_user", "multi_bastion", "on_site_support"))
 }
 
-// Wrapper for check if requesting user can modify target
-func CheckRead(requestor *User, target interface{}, requiredPerms ...string) error {
-	if requestor == nil || !requestor.CanRead(target, requiredPerms...) {
-		return errNoRead
-	}
-	return nil
-}
-
-// Wrapper for check if requesting user can modify target
-func CheckModify(requestor *User, target interface{}, requiredPerms ...string) error {
-	if requestor == nil || !requestor.CanModify(target, requiredPerms...) {
-		return errNoModify
-	}
-	return nil
-}
-
 // Wrapper for Opsee Admin permissions check that does null check
 func IsOpseeAdmin(user *User) bool {
 	if user == nil || !user.IsOpseeAdmin() {

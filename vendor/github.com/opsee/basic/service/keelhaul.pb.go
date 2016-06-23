@@ -999,6 +999,10 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion3
+
 // Client API for Keelhaul service
 
 type KeelhaulClient interface {
@@ -1065,52 +1069,76 @@ func RegisterKeelhaulServer(s *grpc.Server, srv KeelhaulServer) {
 	s.RegisterService(&_Keelhaul_serviceDesc, srv)
 }
 
-func _Keelhaul_ListBastionStates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Keelhaul_ListBastionStates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListBastionStatesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(KeelhaulServer).ListBastionStates(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(KeelhaulServer).ListBastionStates(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Keelhaul/ListBastionStates",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeelhaulServer).ListBastionStates(ctx, req.(*ListBastionStatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Keelhaul_ScanVpcs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Keelhaul_ScanVpcs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ScanVpcsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(KeelhaulServer).ScanVpcs(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(KeelhaulServer).ScanVpcs(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Keelhaul/ScanVpcs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeelhaulServer).ScanVpcs(ctx, req.(*ScanVpcsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Keelhaul_LaunchStack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Keelhaul_LaunchStack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LaunchStackRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(KeelhaulServer).LaunchStack(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(KeelhaulServer).LaunchStack(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Keelhaul/LaunchStack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeelhaulServer).LaunchStack(ctx, req.(*LaunchStackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Keelhaul_AuthenticateBastion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Keelhaul_AuthenticateBastion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AuthenticateBastionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(KeelhaulServer).AuthenticateBastion(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(KeelhaulServer).AuthenticateBastion(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Keelhaul/AuthenticateBastion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeelhaulServer).AuthenticateBastion(ctx, req.(*AuthenticateBastionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Keelhaul_serviceDesc = grpc.ServiceDesc{
@@ -1134,7 +1162,8 @@ var _Keelhaul_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Keelhaul_AuthenticateBastion_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: fileDescriptorKeelhaul,
 }
 
 func (m *Filter) Marshal() (data []byte, err error) {
