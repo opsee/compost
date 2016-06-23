@@ -3,9 +3,11 @@ package vaper
 import (
 	"encoding/json"
 	"errors"
-	"github.com/dvsekhvalnov/jose2go"
 	"reflect"
 	"time"
+
+	"github.com/dvsekhvalnov/jose2go"
+	"github.com/opsee/basic/schema"
 )
 
 type Token map[string]interface{}
@@ -78,8 +80,23 @@ func (token *Token) Reify(thing interface{}) error {
 			} else {
 				t.Field(i).Set(reflect.ValueOf(val))
 			}
+		case map[string]interface{}:
+			switch tag {
+			case "perms":
+				var p *schema.UserFlags
+				b, err := json.Marshal(val)
+				if err != nil {
+					continue
+				}
+				json.Unmarshal(b, &p)
+				if t.Field(i).CanSet() {
+					t.Field(i).Set(reflect.ValueOf(p))
+				}
+			}
 		default:
-			t.Field(i).Set(reflect.ValueOf(val))
+			if t.Field(i).CanSet() {
+				t.Field(i).Set(reflect.ValueOf(val))
+			}
 		}
 	}
 

@@ -677,6 +677,10 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion3
+
 // Client API for Checker service
 
 type CheckerClient interface {
@@ -754,64 +758,94 @@ func RegisterCheckerServer(s *grpc.Server, srv CheckerServer) {
 	s.RegisterService(&_Checker_serviceDesc, srv)
 }
 
-func _Checker_TestCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Checker_TestCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TestCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(CheckerServer).TestCheck(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(CheckerServer).TestCheck(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Checker/TestCheck",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CheckerServer).TestCheck(ctx, req.(*TestCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Checker_CreateCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Checker_CreateCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(CheckerServer).CreateCheck(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(CheckerServer).CreateCheck(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Checker/CreateCheck",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CheckerServer).CreateCheck(ctx, req.(*CheckResourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Checker_RetrieveCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Checker_RetrieveCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(CheckerServer).RetrieveCheck(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(CheckerServer).RetrieveCheck(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Checker/RetrieveCheck",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CheckerServer).RetrieveCheck(ctx, req.(*CheckResourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Checker_UpdateCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Checker_UpdateCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(CheckerServer).UpdateCheck(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(CheckerServer).UpdateCheck(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Checker/UpdateCheck",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CheckerServer).UpdateCheck(ctx, req.(*CheckResourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Checker_DeleteCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Checker_DeleteCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(CheckerServer).DeleteCheck(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(CheckerServer).DeleteCheck(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Checker/DeleteCheck",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CheckerServer).DeleteCheck(ctx, req.(*CheckResourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Checker_serviceDesc = grpc.ServiceDesc{
@@ -839,7 +873,8 @@ var _Checker_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Checker_DeleteCheck_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: fileDescriptorChecker,
 }
 
 func (m *CheckResourceResponse) Marshal() (data []byte, err error) {

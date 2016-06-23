@@ -2,6 +2,7 @@ package schema
 
 import (
 	"errors"
+	"fmt"
 
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 )
@@ -39,64 +40,6 @@ func (user *User) Validate() error {
 	return nil
 }
 
-// Can user get target resource
-func (user *User) CanRead(target interface{}, requiredPerms ...string) bool {
-	//requesting user is opsee admin or has ability to modify
-	if user.IsOpseeAdmin() {
-		return true
-	}
-
-	// check extra, required permissions
-	if !user.HasPermissions(requiredPerms...) {
-		return false
-	}
-
-	switch t := target.(type) {
-	case *User:
-		// requesting user is target user or is on same team
-		if user.Id == t.Id || user.CustomerId == t.CustomerId {
-			return true
-		}
-	case *Team:
-		// requesting user is on target team
-		if user.CustomerId == t.Id {
-			return true
-		}
-	}
-	return false
-}
-
-// Can user update or delete target resource
-func (user *User) CanModify(target interface{}, requiredPerms ...string) bool {
-	//requesting user is opsee admin
-	if user.IsOpseeAdmin() {
-		return true
-	}
-
-	// check extra, required permissions
-	if !user.HasPermissions(requiredPerms...) {
-		return false
-	}
-
-	switch t := target.(type) {
-	case *User:
-		// requesting user is target user
-		if user.Id == t.Id {
-			return true
-		}
-		// requesting user is on same team and is team admin
-		if user.CustomerId == t.CustomerId && user.HasPermission("admin") {
-			return true
-		}
-	case *Team:
-		// requesting user is on same team and is team admin
-		if user.CustomerId == t.Id && user.HasPermission("admin") {
-			return true
-		}
-	}
-	return false
-}
-
 // Returns true if user is a Opsee Admin
 func (user *User) IsOpseeAdmin() bool {
 	if user.Admin {
@@ -115,22 +58,7 @@ func (user *User) HasPermissions(pnames ...string) bool {
 	if user.IsOpseeAdmin() || len(pnames) == 0 {
 		return true
 	}
-
-	hasPermissions := true
-	for pname, err := range user.Perms.CheckPermissions(pnames...) {
-		switch pname {
-		case opsee_types.OpseeAdmin:
-			// if opsee_types.OpseeAdmin is specified, nothing else matters
-			return user.IsOpseeAdmin()
-		default:
-			if err != nil {
-				hasPermissions = false
-				break
-			}
-		}
-	}
-
-	return hasPermissions
+	return user.Perms.TestFlags(pnames...)
 }
 
 // Returs the value of a single permission t/f for a user
@@ -151,18 +79,12 @@ func (user *User) CheckPermissions(pnames ...string) []error {
 	}
 
 	var errors []error
-	for pname, err := range user.Perms.CheckPermissions(pnames...) {
-		switch pname {
-		case opsee_types.OpseeAdmin:
-			if !user.IsOpseeAdmin() {
-				errors = append(errors, errNotOpseeAdmin)
-			}
-		default:
-			if err != nil {
-				errors = append(errors, err)
-			}
+	for _, pname := range pnames {
+		if user.Perms.TestFlag(pname) {
+			continue
+		} else {
+			errors = append(errors, fmt.Errorf("missing permission: %v", pname))
 		}
 	}
-
 	return errors
 }
