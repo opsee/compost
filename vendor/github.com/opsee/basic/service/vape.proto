@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
-import "github.com/opsee/protobuf/opseeproto/types/permissions.proto";
 import "github.com/opsee/basic/schema/user.proto";
 
 package opsee;
@@ -47,7 +46,7 @@ message ListUsersResponse {
 message InviteUserRequest {
 	User requestor = 1; 
 	string email = 2;
-	opsee.types.Permission perms = 3;
+	opsee.UserFlags perms = 3;
 	string name = 4;
 }
 
@@ -71,14 +70,7 @@ message UpdateUserRequest {
 	string name = 4;
 	string password = 5;
 	string status = 6;
-	opsee.types.Permission perms = 7;
-}
-
-// not implemented
-message UpdateUserPermsRequest {
-	User requestor = 1; 
-	User user = 2; 
-	opsee.types.Permission perms = 3;
+	opsee.UserFlags perms = 7;
 }
 
 message UserTokenResponse {
@@ -117,7 +109,6 @@ message DeleteTeamResponse {
 service Vape {
 	rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
 	rpc UpdateUser(UpdateUserRequest) returns (UserTokenResponse) {}
-	rpc UpdateUserPerms(UpdateUserPermsRequest) returns (UserTokenResponse) {}
 	rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
 	rpc InviteUser(InviteUserRequest) returns (InviteUserResponse) {}
 	rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}

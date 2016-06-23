@@ -8,11 +8,9 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "github.com/opsee/protobuf/opseeproto"
-import opsee_types1 "github.com/opsee/protobuf/opseeproto/types"
 import opsee1 "github.com/opsee/basic/schema"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
-import github_com_opsee_protobuf_plugin_graphql_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 
 import (
 	context "golang.org/x/net/context"
@@ -121,10 +119,10 @@ func (m *ListUsersResponse) GetUsers() []*opsee1.User {
 }
 
 type InviteUserRequest struct {
-	Requestor *opsee1.User             `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
-	Email     string                   `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Perms     *opsee_types1.Permission `protobuf:"bytes,3,opt,name=perms" json:"perms,omitempty"`
-	Name      string                   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Requestor *opsee1.User      `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	Email     string            `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Perms     *opsee1.UserFlags `protobuf:"bytes,3,opt,name=perms" json:"perms,omitempty"`
+	Name      string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 }
 
 func (m *InviteUserRequest) Reset()                    { *m = InviteUserRequest{} }
@@ -139,7 +137,7 @@ func (m *InviteUserRequest) GetRequestor() *opsee1.User {
 	return nil
 }
 
-func (m *InviteUserRequest) GetPerms() *opsee_types1.Permission {
+func (m *InviteUserRequest) GetPerms() *opsee1.UserFlags {
 	if m != nil {
 		return m.Perms
 	}
@@ -203,13 +201,13 @@ func (m *DeleteUserResponse) GetUser() *opsee1.User {
 }
 
 type UpdateUserRequest struct {
-	Requestor *opsee1.User             `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
-	User      *opsee1.User             `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
-	Email     string                   `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Name      string                   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Password  string                   `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
-	Status    string                   `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	Perms     *opsee_types1.Permission `protobuf:"bytes,7,opt,name=perms" json:"perms,omitempty"`
+	Requestor *opsee1.User      `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
+	User      *opsee1.User      `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+	Email     string            `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Name      string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Password  string            `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
+	Status    string            `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	Perms     *opsee1.UserFlags `protobuf:"bytes,7,opt,name=perms" json:"perms,omitempty"`
 }
 
 func (m *UpdateUserRequest) Reset()                    { *m = UpdateUserRequest{} }
@@ -231,40 +229,7 @@ func (m *UpdateUserRequest) GetUser() *opsee1.User {
 	return nil
 }
 
-func (m *UpdateUserRequest) GetPerms() *opsee_types1.Permission {
-	if m != nil {
-		return m.Perms
-	}
-	return nil
-}
-
-// not implemented
-type UpdateUserPermsRequest struct {
-	Requestor *opsee1.User             `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
-	User      *opsee1.User             `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
-	Perms     *opsee_types1.Permission `protobuf:"bytes,3,opt,name=perms" json:"perms,omitempty"`
-}
-
-func (m *UpdateUserPermsRequest) Reset()                    { *m = UpdateUserPermsRequest{} }
-func (m *UpdateUserPermsRequest) String() string            { return proto.CompactTextString(m) }
-func (*UpdateUserPermsRequest) ProtoMessage()               {}
-func (*UpdateUserPermsRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{10} }
-
-func (m *UpdateUserPermsRequest) GetRequestor() *opsee1.User {
-	if m != nil {
-		return m.Requestor
-	}
-	return nil
-}
-
-func (m *UpdateUserPermsRequest) GetUser() *opsee1.User {
-	if m != nil {
-		return m.User
-	}
-	return nil
-}
-
-func (m *UpdateUserPermsRequest) GetPerms() *opsee_types1.Permission {
+func (m *UpdateUserRequest) GetPerms() *opsee1.UserFlags {
 	if m != nil {
 		return m.Perms
 	}
@@ -279,7 +244,7 @@ type UserTokenResponse struct {
 func (m *UserTokenResponse) Reset()                    { *m = UserTokenResponse{} }
 func (m *UserTokenResponse) String() string            { return proto.CompactTextString(m) }
 func (*UserTokenResponse) ProtoMessage()               {}
-func (*UserTokenResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{11} }
+func (*UserTokenResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{10} }
 
 func (m *UserTokenResponse) GetUser() *opsee1.User {
 	if m != nil {
@@ -297,7 +262,7 @@ type GetTeamRequest struct {
 func (m *GetTeamRequest) Reset()                    { *m = GetTeamRequest{} }
 func (m *GetTeamRequest) String() string            { return proto.CompactTextString(m) }
 func (*GetTeamRequest) ProtoMessage()               {}
-func (*GetTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{12} }
+func (*GetTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{11} }
 
 func (m *GetTeamRequest) GetRequestor() *opsee1.User {
 	if m != nil {
@@ -320,7 +285,7 @@ type GetTeamResponse struct {
 func (m *GetTeamResponse) Reset()                    { *m = GetTeamResponse{} }
 func (m *GetTeamResponse) String() string            { return proto.CompactTextString(m) }
 func (*GetTeamResponse) ProtoMessage()               {}
-func (*GetTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{13} }
+func (*GetTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{12} }
 
 func (m *GetTeamResponse) GetTeam() *opsee1.Team {
 	if m != nil {
@@ -337,7 +302,7 @@ type UpdateTeamRequest struct {
 func (m *UpdateTeamRequest) Reset()                    { *m = UpdateTeamRequest{} }
 func (m *UpdateTeamRequest) String() string            { return proto.CompactTextString(m) }
 func (*UpdateTeamRequest) ProtoMessage()               {}
-func (*UpdateTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{14} }
+func (*UpdateTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{13} }
 
 func (m *UpdateTeamRequest) GetRequestor() *opsee1.User {
 	if m != nil {
@@ -360,7 +325,7 @@ type UpdateTeamResponse struct {
 func (m *UpdateTeamResponse) Reset()                    { *m = UpdateTeamResponse{} }
 func (m *UpdateTeamResponse) String() string            { return proto.CompactTextString(m) }
 func (*UpdateTeamResponse) ProtoMessage()               {}
-func (*UpdateTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{15} }
+func (*UpdateTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{14} }
 
 func (m *UpdateTeamResponse) GetTeam() *opsee1.Team {
 	if m != nil {
@@ -377,7 +342,7 @@ type DeleteTeamRequest struct {
 func (m *DeleteTeamRequest) Reset()                    { *m = DeleteTeamRequest{} }
 func (m *DeleteTeamRequest) String() string            { return proto.CompactTextString(m) }
 func (*DeleteTeamRequest) ProtoMessage()               {}
-func (*DeleteTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{16} }
+func (*DeleteTeamRequest) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{15} }
 
 func (m *DeleteTeamRequest) GetRequestor() *opsee1.User {
 	if m != nil {
@@ -400,7 +365,7 @@ type DeleteTeamResponse struct {
 func (m *DeleteTeamResponse) Reset()                    { *m = DeleteTeamResponse{} }
 func (m *DeleteTeamResponse) String() string            { return proto.CompactTextString(m) }
 func (*DeleteTeamResponse) ProtoMessage()               {}
-func (*DeleteTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{17} }
+func (*DeleteTeamResponse) Descriptor() ([]byte, []int) { return fileDescriptorVape, []int{16} }
 
 func (m *DeleteTeamResponse) GetTeam() *opsee1.Team {
 	if m != nil {
@@ -420,7 +385,6 @@ func init() {
 	proto.RegisterType((*DeleteUserRequest)(nil), "opsee.DeleteUserRequest")
 	proto.RegisterType((*DeleteUserResponse)(nil), "opsee.DeleteUserResponse")
 	proto.RegisterType((*UpdateUserRequest)(nil), "opsee.UpdateUserRequest")
-	proto.RegisterType((*UpdateUserPermsRequest)(nil), "opsee.UpdateUserPermsRequest")
 	proto.RegisterType((*UserTokenResponse)(nil), "opsee.UserTokenResponse")
 	proto.RegisterType((*GetTeamRequest)(nil), "opsee.GetTeamRequest")
 	proto.RegisterType((*GetTeamResponse)(nil), "opsee.GetTeamResponse")
@@ -805,42 +769,6 @@ func (this *UpdateUserRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *UpdateUserPermsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		if this == nil {
-			return true
-		}
-		return false
-	}
-
-	that1, ok := that.(*UpdateUserPermsRequest)
-	if !ok {
-		that2, ok := that.(UpdateUserPermsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		if this == nil {
-			return true
-		}
-		return false
-	} else if this == nil {
-		return false
-	}
-	if !this.Requestor.Equal(that1.Requestor) {
-		return false
-	}
-	if !this.User.Equal(that1.User) {
-		return false
-	}
-	if !this.Perms.Equal(that1.Perms) {
-		return false
-	}
-	return true
-}
 func (this *UserTokenResponse) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
@@ -1123,12 +1051,6 @@ type UpdateUserRequestGetter interface {
 }
 
 var GraphQLUpdateUserRequestType *github_com_graphql_go_graphql.Object
-
-type UpdateUserPermsRequestGetter interface {
-	GetUpdateUserPermsRequest() *UpdateUserPermsRequest
-}
-
-var GraphQLUpdateUserPermsRequestType *github_com_graphql_go_graphql.Object
 
 type UserTokenResponseGetter interface {
 	GetUserTokenResponse() *UserTokenResponse
@@ -1604,7 +1526,7 @@ func init() {
 					},
 				},
 				"perms": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Permission,
+					Type:        opsee1.GraphQLUserFlagsType,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*InviteUserRequest)
@@ -1906,7 +1828,7 @@ func init() {
 					},
 				},
 				"perms": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Permission,
+					Type:        opsee1.GraphQLUserFlagsType,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*UpdateUserRequest)
@@ -1919,89 +1841,6 @@ func init() {
 						inter, ok := p.Source.(UpdateUserRequestGetter)
 						if ok {
 							face := inter.GetUpdateUserRequest()
-							if face == nil {
-								return nil, nil
-							}
-							if face.Perms == nil {
-								return nil, nil
-							}
-							return face.GetPerms(), nil
-						}
-						return nil, fmt.Errorf("field perms not resolved")
-					},
-				},
-			}
-		}),
-	})
-	GraphQLUpdateUserPermsRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
-		Name:        "serviceUpdateUserPermsRequest",
-		Description: "not implemented",
-		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
-			return github_com_graphql_go_graphql.Fields{
-				"requestor": &github_com_graphql_go_graphql.Field{
-					Type:        opsee1.GraphQLUserType,
-					Description: "",
-					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*UpdateUserPermsRequest)
-						if ok {
-							if obj.Requestor == nil {
-								return nil, nil
-							}
-							return obj.GetRequestor(), nil
-						}
-						inter, ok := p.Source.(UpdateUserPermsRequestGetter)
-						if ok {
-							face := inter.GetUpdateUserPermsRequest()
-							if face == nil {
-								return nil, nil
-							}
-							if face.Requestor == nil {
-								return nil, nil
-							}
-							return face.GetRequestor(), nil
-						}
-						return nil, fmt.Errorf("field requestor not resolved")
-					},
-				},
-				"user": &github_com_graphql_go_graphql.Field{
-					Type:        opsee1.GraphQLUserType,
-					Description: "",
-					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*UpdateUserPermsRequest)
-						if ok {
-							if obj.User == nil {
-								return nil, nil
-							}
-							return obj.GetUser(), nil
-						}
-						inter, ok := p.Source.(UpdateUserPermsRequestGetter)
-						if ok {
-							face := inter.GetUpdateUserPermsRequest()
-							if face == nil {
-								return nil, nil
-							}
-							if face.User == nil {
-								return nil, nil
-							}
-							return face.GetUser(), nil
-						}
-						return nil, fmt.Errorf("field user not resolved")
-					},
-				},
-				"perms": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Permission,
-					Description: "",
-					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*UpdateUserPermsRequest)
-						if ok {
-							if obj.Perms == nil {
-								return nil, nil
-							}
-							return obj.GetPerms(), nil
-						}
-						inter, ok := p.Source.(UpdateUserPermsRequestGetter)
-						if ok {
-							face := inter.GetUpdateUserPermsRequest()
 							if face == nil {
 								return nil, nil
 							}
@@ -2347,12 +2186,15 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion3
+
 // Client API for Vape service
 
 type VapeClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UserTokenResponse, error)
-	UpdateUserPerms(ctx context.Context, in *UpdateUserPermsRequest, opts ...grpc.CallOption) (*UserTokenResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 	InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*InviteUserResponse, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
@@ -2381,15 +2223,6 @@ func (c *vapeClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...gr
 func (c *vapeClient) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UserTokenResponse, error) {
 	out := new(UserTokenResponse)
 	err := grpc.Invoke(ctx, "/opsee.Vape/UpdateUser", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *vapeClient) UpdateUserPerms(ctx context.Context, in *UpdateUserPermsRequest, opts ...grpc.CallOption) (*UserTokenResponse, error) {
-	out := new(UserTokenResponse)
-	err := grpc.Invoke(ctx, "/opsee.Vape/UpdateUserPerms", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2455,7 +2288,6 @@ func (c *vapeClient) DeleteTeam(ctx context.Context, in *DeleteTeamRequest, opts
 type VapeServer interface {
 	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UserTokenResponse, error)
-	UpdateUserPerms(context.Context, *UpdateUserPermsRequest) (*UserTokenResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	InviteUser(context.Context, *InviteUserRequest) (*InviteUserResponse, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
@@ -2468,112 +2300,148 @@ func RegisterVapeServer(s *grpc.Server, srv VapeServer) {
 	s.RegisterService(&_Vape_serviceDesc, srv)
 }
 
-func _Vape_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).GetUser(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).GetUser(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/GetUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).GetUser(ctx, req.(*GetUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).UpdateUser(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).UpdateUser(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/UpdateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).UpdateUser(ctx, req.(*UpdateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_UpdateUserPerms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(UpdateUserPermsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(VapeServer).UpdateUserPerms(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func _Vape_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListUsersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).ListUsers(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).ListUsers(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/ListUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).ListUsers(ctx, req.(*ListUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_InviteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_InviteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InviteUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).InviteUser(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).InviteUser(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/InviteUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).InviteUser(ctx, req.(*InviteUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).DeleteUser(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).DeleteUser(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/DeleteUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).DeleteUser(ctx, req.(*DeleteUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_GetTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_GetTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).GetTeam(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).GetTeam(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/GetTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).GetTeam(ctx, req.(*GetTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_UpdateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_UpdateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).UpdateTeam(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).UpdateTeam(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/UpdateTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).UpdateTeam(ctx, req.(*UpdateTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _Vape_DeleteTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Vape_DeleteTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(VapeServer).DeleteTeam(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(VapeServer).DeleteTeam(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/opsee.Vape/DeleteTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VapeServer).DeleteTeam(ctx, req.(*DeleteTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Vape_serviceDesc = grpc.ServiceDesc{
@@ -2587,10 +2455,6 @@ var _Vape_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUser",
 			Handler:    _Vape_UpdateUser_Handler,
-		},
-		{
-			MethodName: "UpdateUserPerms",
-			Handler:    _Vape_UpdateUserPerms_Handler,
 		},
 		{
 			MethodName: "ListUsers",
@@ -2617,7 +2481,8 @@ var _Vape_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Vape_DeleteTeam_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: fileDescriptorVape,
 }
 
 func (m *ListCustomersResponse) Marshal() (data []byte, err error) {
@@ -3043,54 +2908,6 @@ func (m *UpdateUserRequest) MarshalTo(data []byte) (int, error) {
 	return i, nil
 }
 
-func (m *UpdateUserPermsRequest) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *UpdateUserPermsRequest) MarshalTo(data []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Requestor != nil {
-		data[i] = 0xa
-		i++
-		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
-		n13, err := m.Requestor.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-	}
-	if m.User != nil {
-		data[i] = 0x12
-		i++
-		i = encodeVarintVape(data, i, uint64(m.User.Size()))
-		n14, err := m.User.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n14
-	}
-	if m.Perms != nil {
-		data[i] = 0x1a
-		i++
-		i = encodeVarintVape(data, i, uint64(m.Perms.Size()))
-		n15, err := m.Perms.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	return i, nil
-}
-
 func (m *UserTokenResponse) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
@@ -3110,11 +2927,11 @@ func (m *UserTokenResponse) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintVape(data, i, uint64(m.User.Size()))
-		n16, err := m.User.MarshalTo(data[i:])
+		n13, err := m.User.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n13
 	}
 	if len(m.Token) > 0 {
 		data[i] = 0x12
@@ -3144,21 +2961,21 @@ func (m *GetTeamRequest) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
-		n17, err := m.Requestor.MarshalTo(data[i:])
+		n14, err := m.Requestor.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n17
+		i += n14
 	}
 	if m.Team != nil {
 		data[i] = 0x12
 		i++
 		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
-		n18, err := m.Team.MarshalTo(data[i:])
+		n15, err := m.Team.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n18
+		i += n15
 	}
 	return i, nil
 }
@@ -3182,11 +2999,11 @@ func (m *GetTeamResponse) MarshalTo(data []byte) (int, error) {
 		data[i] = 0xa
 		i++
 		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
-		n19, err := m.Team.MarshalTo(data[i:])
+		n16, err := m.Team.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n19
+		i += n16
 	}
 	return i, nil
 }
@@ -3202,6 +3019,72 @@ func (m *UpdateTeamRequest) Marshal() (data []byte, err error) {
 }
 
 func (m *UpdateTeamRequest) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Requestor != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
+		n17, err := m.Requestor.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
+	}
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n18, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
+	}
+	return i, nil
+}
+
+func (m *UpdateTeamResponse) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *UpdateTeamResponse) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Team != nil {
+		data[i] = 0x12
+		i++
+		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
+		n19, err := m.Team.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	return i, nil
+}
+
+func (m *DeleteTeamRequest) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *DeleteTeamRequest) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -3229,72 +3112,6 @@ func (m *UpdateTeamRequest) MarshalTo(data []byte) (int, error) {
 	return i, nil
 }
 
-func (m *UpdateTeamResponse) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *UpdateTeamResponse) MarshalTo(data []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Team != nil {
-		data[i] = 0x12
-		i++
-		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
-		n22, err := m.Team.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
-	}
-	return i, nil
-}
-
-func (m *DeleteTeamRequest) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *DeleteTeamRequest) MarshalTo(data []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Requestor != nil {
-		data[i] = 0xa
-		i++
-		i = encodeVarintVape(data, i, uint64(m.Requestor.Size()))
-		n23, err := m.Requestor.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
-	}
-	if m.Team != nil {
-		data[i] = 0x12
-		i++
-		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
-		n24, err := m.Team.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n24
-	}
-	return i, nil
-}
-
 func (m *DeleteTeamResponse) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
@@ -3314,11 +3131,11 @@ func (m *DeleteTeamResponse) MarshalTo(data []byte) (int, error) {
 		data[i] = 0x12
 		i++
 		i = encodeVarintVape(data, i, uint64(m.Team.Size()))
-		n25, err := m.Team.MarshalTo(data[i:])
+		n22, err := m.Team.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n22
 	}
 	return i, nil
 }
@@ -3454,7 +3271,7 @@ func NewPopulatedInviteUserRequest(r randyVape, easy bool) *InviteUserRequest {
 	}
 	this.Email = randStringVape(r)
 	if r.Intn(10) != 0 {
-		this.Perms = opsee_types1.NewPopulatedPermission(r, easy)
+		this.Perms = opsee1.NewPopulatedUserFlags(r, easy)
 	}
 	this.Name = randStringVape(r)
 	if !easy && r.Intn(10) != 0 {
@@ -3508,23 +3325,7 @@ func NewPopulatedUpdateUserRequest(r randyVape, easy bool) *UpdateUserRequest {
 	this.Password = randStringVape(r)
 	this.Status = randStringVape(r)
 	if r.Intn(10) != 0 {
-		this.Perms = opsee_types1.NewPopulatedPermission(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedUpdateUserPermsRequest(r randyVape, easy bool) *UpdateUserPermsRequest {
-	this := &UpdateUserPermsRequest{}
-	if r.Intn(10) != 0 {
-		this.Requestor = opsee1.NewPopulatedUser(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.User = opsee1.NewPopulatedUser(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Perms = opsee_types1.NewPopulatedPermission(r, easy)
+		this.Perms = opsee1.NewPopulatedUserFlags(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -3857,24 +3658,6 @@ func (m *UpdateUserRequest) Size() (n int) {
 	}
 	l = len(m.Status)
 	if l > 0 {
-		n += 1 + l + sovVape(uint64(l))
-	}
-	if m.Perms != nil {
-		l = m.Perms.Size()
-		n += 1 + l + sovVape(uint64(l))
-	}
-	return n
-}
-
-func (m *UpdateUserPermsRequest) Size() (n int) {
-	var l int
-	_ = l
-	if m.Requestor != nil {
-		l = m.Requestor.Size()
-		n += 1 + l + sovVape(uint64(l))
-	}
-	if m.User != nil {
-		l = m.User.Size()
 		n += 1 + l + sovVape(uint64(l))
 	}
 	if m.Perms != nil {
@@ -4770,7 +4553,7 @@ func (m *InviteUserRequest) Unmarshal(data []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Perms == nil {
-				m.Perms = &opsee_types1.Permission{}
+				m.Perms = &opsee1.UserFlags{}
 			}
 			if err := m.Perms.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
@@ -5346,156 +5129,7 @@ func (m *UpdateUserRequest) Unmarshal(data []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Perms == nil {
-				m.Perms = &opsee_types1.Permission{}
-			}
-			if err := m.Perms.Unmarshal(data[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVape(data[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthVape
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *UpdateUserPermsRequest) Unmarshal(data []byte) error {
-	l := len(data)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVape
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := data[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: UpdateUserPermsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UpdateUserPermsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVape
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVape
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Requestor == nil {
-				m.Requestor = &opsee1.User{}
-			}
-			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVape
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVape
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.User == nil {
-				m.User = &opsee1.User{}
-			}
-			if err := m.User.Unmarshal(data[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Perms", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVape
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVape
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Perms == nil {
-				m.Perms = &opsee_types1.Permission{}
+				m.Perms = &opsee1.UserFlags{}
 			}
 			if err := m.Perms.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
@@ -6337,54 +5971,51 @@ var (
 )
 
 var fileDescriptorVape = []byte{
-	// 781 bytes of a gzipped FileDescriptorProto
+	// 731 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xb4, 0x56, 0xbd, 0x6e, 0x13, 0x41,
-	0x10, 0xe6, 0x1c, 0xff, 0xe0, 0xb1, 0x48, 0xc8, 0x8a, 0x84, 0x8b, 0x25, 0x92, 0xb0, 0x52, 0xa4,
-	0x50, 0x60, 0x23, 0x23, 0x1a, 0xa0, 0x40, 0x09, 0x12, 0x0a, 0x4a, 0x11, 0x1d, 0x09, 0x05, 0x42,
-	0xb2, 0xce, 0xf6, 0x92, 0x9c, 0x88, 0x7d, 0xc7, 0xed, 0x3a, 0x08, 0xd1, 0xd1, 0x52, 0x52, 0xd0,
-	0x53, 0xf1, 0x08, 0x94, 0x94, 0x94, 0x3c, 0x02, 0x50, 0x50, 0xf1, 0x00, 0x94, 0xec, 0xcd, 0xee,
-	0xdd, 0xad, 0xef, 0x9c, 0xc8, 0xb1, 0x70, 0x71, 0xd2, 0xee, 0xcc, 0xce, 0xcc, 0x37, 0xf3, 0xcd,
-	0xec, 0x1e, 0xc0, 0x89, 0x1b, 0xb0, 0x46, 0x10, 0xfa, 0xc2, 0x27, 0x25, 0x3f, 0xe0, 0x8c, 0xd5,
-	0x6f, 0x1d, 0x7a, 0xe2, 0x68, 0xd8, 0x69, 0x74, 0xfd, 0x7e, 0x13, 0x25, 0x4d, 0x54, 0x77, 0x86,
-	0x2f, 0xd4, 0x16, 0x77, 0x6a, 0xa9, 0x0c, 0xeb, 0xf7, 0x27, 0xb2, 0x10, 0x6f, 0x02, 0xc6, 0x9b,
-	0x01, 0x0b, 0xfb, 0x1e, 0xe7, 0x9e, 0x3f, 0xe0, 0xda, 0x7a, 0x33, 0x67, 0xdd, 0x71, 0xb9, 0xd7,
-	0x6d, 0xf2, 0xee, 0x11, 0xeb, 0xbb, 0xcd, 0x21, 0x67, 0xa1, 0x3a, 0x49, 0xdf, 0x5b, 0xb0, 0xb4,
-	0xeb, 0x71, 0xb1, 0x3d, 0xe4, 0xc2, 0xef, 0xb3, 0x90, 0x3b, 0x8c, 0x07, 0xd2, 0x11, 0x23, 0x37,
-	0xa1, 0xda, 0x8d, 0x85, 0xb6, 0xb5, 0x3e, 0xb7, 0x59, 0x6b, 0x2d, 0x34, 0x14, 0xc4, 0xf8, 0xb0,
-	0x93, 0x9e, 0x20, 0x04, 0x8a, 0x81, 0x7b, 0xc8, 0xec, 0xc2, 0xba, 0xb5, 0x59, 0x72, 0x70, 0x4d,
-	0x56, 0xe0, 0xa2, 0xc4, 0xd6, 0x46, 0xf9, 0x1c, 0xca, 0x2b, 0x72, 0xbf, 0x17, 0xa9, 0xae, 0x40,
-	0x49, 0xf8, 0xc2, 0x3d, 0xb6, 0x8b, 0x28, 0x57, 0x1b, 0xfa, 0xce, 0x82, 0xf9, 0x47, 0x4c, 0x1c,
-	0x48, 0x7c, 0x0e, 0x7b, 0x35, 0x64, 0x5c, 0x90, 0x1b, 0x50, 0x0d, 0xd5, 0xd2, 0x0f, 0x25, 0x0c,
-	0x4b, 0xc2, 0xa8, 0x69, 0x18, 0x78, 0x2c, 0xd5, 0x92, 0x35, 0xa8, 0xc5, 0x78, 0xda, 0x5e, 0x0f,
-	0x91, 0x54, 0x1d, 0x88, 0x45, 0x3b, 0x3d, 0x32, 0x0f, 0x05, 0x29, 0x57, 0x48, 0xe4, 0x2a, 0x02,
-	0x21, 0xcb, 0xe1, 0x29, 0x10, 0x55, 0x47, 0x6d, 0xe8, 0x13, 0x58, 0x48, 0x30, 0xe8, 0x5a, 0xac,
-	0x41, 0x31, 0xaa, 0xd9, 0xb8, 0xf8, 0xa8, 0x88, 0x42, 0x63, 0x85, 0xdb, 0xc2, 0x7f, 0xc9, 0x06,
-	0x71, 0x68, 0x14, 0xed, 0x47, 0x12, 0x7a, 0x0c, 0x97, 0xa3, 0x32, 0x47, 0x26, 0x7c, 0x8a, 0xd4,
-	0xce, 0x57, 0x5d, 0xfa, 0x16, 0x16, 0x8d, 0x68, 0x3a, 0x89, 0xeb, 0x50, 0x8a, 0xb0, 0xc6, 0x64,
-	0x8e, 0x84, 0x52, 0x9a, 0xff, 0x43, 0xe2, 0x47, 0x0b, 0x16, 0x77, 0x06, 0x27, 0x9e, 0x60, 0x53,
-	0xf2, 0x98, 0xd0, 0x52, 0x30, 0x68, 0x91, 0xfd, 0x58, 0x8a, 0x1a, 0x9d, 0x23, 0x88, 0x5a, 0xeb,
-	0xaa, 0x36, 0xc6, 0x11, 0x68, 0xec, 0x25, 0x23, 0xe0, 0xa8, 0x53, 0x51, 0x2a, 0x03, 0xb7, 0xcf,
-	0x34, 0xb5, 0xb8, 0xa6, 0xf7, 0x80, 0x98, 0xc0, 0x74, 0x5d, 0x36, 0xa0, 0xec, 0xa1, 0x54, 0xc3,
-	0xba, 0xa4, 0x3d, 0xab, 0xa3, 0x8e, 0x56, 0xd2, 0x36, 0x2c, 0x3e, 0x64, 0xc7, 0x6c, 0xea, 0xac,
-	0xe2, 0x1e, 0x2a, 0x9c, 0xd2, 0x43, 0xf4, 0x0e, 0x10, 0x33, 0x40, 0xa6, 0xf5, 0x4e, 0x35, 0xfb,
-	0x23, 0xcb, 0x7d, 0x10, 0xf4, 0xdc, 0x99, 0x01, 0x4b, 0xf9, 0x98, 0x33, 0xf9, 0x18, 0x53, 0x60,
-	0x52, 0x97, 0xbd, 0xe2, 0x72, 0xfe, 0xda, 0x0f, 0x7b, 0x76, 0x09, 0xe5, 0xc9, 0x9e, 0x2c, 0x43,
-	0x99, 0x0b, 0x57, 0x0c, 0xb9, 0x5d, 0x46, 0x8d, 0xde, 0xa5, 0xbc, 0x56, 0x26, 0xe1, 0x95, 0x7e,
-	0xb0, 0x60, 0x39, 0x4d, 0x37, 0xd2, 0xf3, 0x59, 0xe4, 0x7c, 0xbe, 0x6e, 0xa3, 0x8f, 0x25, 0x07,
-	0xd2, 0x0c, 0x67, 0x7d, 0xf2, 0x5b, 0x03, 0xe7, 0x27, 0xbd, 0x2f, 0xd4, 0x86, 0x3e, 0xc7, 0x3b,
-	0x70, 0x9f, 0xb9, 0xfd, 0xe9, 0x12, 0x13, 0xd2, 0x32, 0x93, 0x18, 0x3a, 0x43, 0x05, 0x6d, 0xe1,
-	0xed, 0xa6, 0xbc, 0xa7, 0x38, 0xd1, 0xc6, 0x3a, 0xcd, 0xa6, 0x1d, 0x77, 0xd8, 0xac, 0x40, 0xc9,
-	0xd6, 0x37, 0x03, 0x64, 0x70, 0x15, 0xce, 0xc0, 0xa5, 0x26, 0x66, 0x86, 0xb8, 0xcc, 0x00, 0x13,
-	0xe2, 0x6a, 0xfd, 0x2e, 0x42, 0xf1, 0xa9, 0xfc, 0x09, 0x20, 0x77, 0xa1, 0xa2, 0x9f, 0x12, 0xb2,
-	0xa4, 0x8f, 0x8d, 0x3e, 0x6f, 0xf5, 0xe5, 0xac, 0x58, 0xc5, 0xa0, 0x17, 0xc8, 0x16, 0x40, 0xda,
-	0xe7, 0xc4, 0x8e, 0x53, 0xc8, 0x4e, 0x7a, 0xdd, 0x36, 0x92, 0x1b, 0xe9, 0x3f, 0xe9, 0x63, 0x17,
-	0x16, 0x32, 0xb3, 0x42, 0xae, 0xe5, 0x1c, 0x99, 0x33, 0x74, 0xa6, 0xb7, 0x07, 0x50, 0x4d, 0x5e,
-	0x15, 0x12, 0x4f, 0x44, 0xf6, 0x55, 0x4b, 0x3c, 0xe4, 0x1e, 0x20, 0xe9, 0x61, 0x1b, 0x20, 0xbd,
-	0x80, 0x93, 0x9c, 0x72, 0x8f, 0x45, 0x7d, 0x65, 0x8c, 0xc6, 0x74, 0x92, 0xde, 0x93, 0x89, 0x93,
-	0xdc, 0xdd, 0x9c, 0x38, 0xc9, 0x5f, 0xaa, 0xd2, 0x89, 0x62, 0x26, 0xe2, 0xcc, 0x64, 0xc6, 0xe8,
-	0x23, 0x93, 0x19, 0x93, 0x7d, 0x05, 0x20, 0xed, 0xd6, 0x0c, 0x33, 0xa6, 0x87, 0x95, 0x31, 0x9a,
-	0x7c, 0x16, 0x23, 0x4e, 0x72, 0xed, 0x9c, 0xc9, 0x62, 0xd4, 0xc9, 0xd6, 0xc6, 0xdf, 0x9f, 0xab,
-	0xd6, 0xe7, 0x5f, 0xab, 0xd6, 0x17, 0xf9, 0x7d, 0x93, 0xdf, 0x77, 0xf9, 0xfd, 0x90, 0xdf, 0xd7,
-	0x4f, 0x6b, 0xd6, 0xb3, 0x8a, 0x4c, 0xf9, 0xc4, 0xeb, 0xb2, 0x4e, 0x19, 0xff, 0xf5, 0x6e, 0xff,
-	0x0b, 0x00, 0x00, 0xff, 0xff, 0x2f, 0x91, 0x77, 0x55, 0x9a, 0x0a, 0x00, 0x00,
+	0x10, 0xe6, 0x1c, 0xff, 0xe0, 0xb1, 0xc8, 0xcf, 0x8a, 0x84, 0x8b, 0x8b, 0x24, 0xac, 0x14, 0x14,
+	0x0a, 0x62, 0x64, 0x44, 0x03, 0x0d, 0x4a, 0x10, 0x28, 0x88, 0x02, 0x1d, 0x09, 0x05, 0x42, 0xb2,
+	0xce, 0xf6, 0x92, 0x9c, 0xf0, 0xf9, 0x8e, 0xdb, 0xbd, 0x50, 0xd0, 0xd1, 0xd2, 0x50, 0x52, 0x53,
+	0xf1, 0x08, 0x94, 0x94, 0x94, 0x3c, 0x02, 0x20, 0xf1, 0x0e, 0x94, 0xec, 0xcd, 0xee, 0xdd, 0xad,
+	0xef, 0x9c, 0x28, 0x58, 0xa4, 0x38, 0x69, 0x67, 0x66, 0x67, 0xe6, 0x9b, 0x6f, 0x66, 0xc7, 0x06,
+	0x38, 0x76, 0x43, 0xb6, 0x1d, 0x46, 0x81, 0x08, 0x48, 0x2d, 0x08, 0x39, 0x63, 0xed, 0x9b, 0x87,
+	0x9e, 0x38, 0x8a, 0xfb, 0xdb, 0x83, 0xc0, 0xef, 0xa0, 0xa6, 0x83, 0xe6, 0x7e, 0xfc, 0x52, 0x89,
+	0x28, 0xa9, 0xa3, 0x72, 0x6c, 0x6f, 0x95, 0x3c, 0xfa, 0x2e, 0xf7, 0x06, 0x1d, 0x3e, 0x38, 0x62,
+	0xbe, 0xdb, 0x89, 0x39, 0x8b, 0xd4, 0x4d, 0xfa, 0xde, 0x82, 0xe5, 0xc7, 0x1e, 0x17, 0xbb, 0x31,
+	0x17, 0x81, 0xcf, 0x22, 0xee, 0x30, 0x1e, 0x06, 0x63, 0xce, 0xc8, 0x0d, 0x68, 0x0e, 0x52, 0xa5,
+	0x6d, 0x6d, 0xcc, 0x6d, 0xb5, 0xba, 0x0b, 0xdb, 0x2a, 0x49, 0x7a, 0xd9, 0xc9, 0x6f, 0x10, 0x02,
+	0xd5, 0xd0, 0x3d, 0x64, 0x76, 0x65, 0xc3, 0xda, 0xaa, 0x39, 0x78, 0x26, 0xab, 0x70, 0x31, 0x64,
+	0x51, 0x0f, 0xf5, 0x73, 0xa8, 0x6f, 0x48, 0xf9, 0x49, 0x62, 0xba, 0x0c, 0x35, 0x11, 0x08, 0x77,
+	0x64, 0x57, 0x51, 0xaf, 0x04, 0xfa, 0xce, 0x82, 0xf9, 0x87, 0x4c, 0x1c, 0x48, 0x7c, 0x0e, 0x7b,
+	0x1d, 0x33, 0x2e, 0xc8, 0x75, 0x68, 0x46, 0xea, 0x18, 0x44, 0x12, 0x86, 0x25, 0x61, 0xb4, 0x34,
+	0x0c, 0xbc, 0x96, 0x5b, 0xc9, 0x3a, 0xb4, 0x52, 0x3c, 0x3d, 0x6f, 0x88, 0x48, 0x9a, 0x0e, 0xa4,
+	0xaa, 0xbd, 0x21, 0x99, 0x87, 0x8a, 0xd4, 0x2b, 0x24, 0xf2, 0x94, 0x80, 0x90, 0x74, 0x78, 0x0a,
+	0x44, 0xd3, 0x51, 0x02, 0x7d, 0x0a, 0x0b, 0x19, 0x06, 0xcd, 0xc5, 0x3a, 0x54, 0x13, 0xce, 0xa6,
+	0xe5, 0x47, 0x43, 0x92, 0x1a, 0x19, 0xee, 0x89, 0xe0, 0x15, 0x1b, 0xa7, 0xa9, 0x51, 0xb5, 0x9f,
+	0x68, 0xe8, 0x08, 0x16, 0x13, 0x9a, 0x13, 0x17, 0x3e, 0x43, 0x69, 0xff, 0xc6, 0x2e, 0x7d, 0x0b,
+	0x4b, 0x46, 0x36, 0x5d, 0xc4, 0x55, 0xa8, 0x25, 0x58, 0xd3, 0x66, 0x4e, 0xa4, 0x52, 0x96, 0xff,
+	0xd3, 0xc4, 0x0f, 0x16, 0x2c, 0xed, 0x8d, 0x8f, 0x3d, 0xc1, 0x66, 0xec, 0x63, 0xd6, 0x96, 0x8a,
+	0xd1, 0x16, 0x72, 0x0d, 0x6a, 0x32, 0xaf, 0xcf, 0x11, 0x44, 0xab, 0xbb, 0x68, 0x38, 0x3f, 0x18,
+	0xb9, 0x87, 0xdc, 0x51, 0xe6, 0xa4, 0x86, 0xb1, 0xeb, 0x33, 0xdd, 0x53, 0x3c, 0xd3, 0xbb, 0x40,
+	0x4c, 0x44, 0x9a, 0x90, 0x4d, 0xa8, 0x7b, 0xa8, 0xd5, 0x78, 0x2e, 0xe9, 0x90, 0xea, 0xaa, 0xa3,
+	0x8d, 0xb4, 0x07, 0x4b, 0xf7, 0xd9, 0x88, 0xcd, 0x5c, 0x4e, 0x3a, 0x3c, 0x95, 0x13, 0x86, 0x87,
+	0xde, 0x06, 0x62, 0x26, 0x28, 0xcc, 0xdc, 0x89, 0x6e, 0xbf, 0x25, 0xcf, 0x07, 0xe1, 0xd0, 0x3d,
+	0x37, 0x60, 0x79, 0x23, 0xe6, 0xcc, 0x46, 0x4c, 0x21, 0x98, 0xb4, 0xe5, 0x90, 0xb8, 0x9c, 0xbf,
+	0x09, 0xa2, 0xa1, 0x5d, 0x43, 0x7d, 0x26, 0x93, 0x15, 0xa8, 0x73, 0xe1, 0x8a, 0x98, 0xdb, 0x75,
+	0xb4, 0x68, 0x29, 0x6f, 0x68, 0xe3, 0xd4, 0x86, 0xd2, 0x47, 0xb2, 0x4c, 0xa9, 0xc3, 0x77, 0x74,
+	0xf6, 0x17, 0x89, 0xb3, 0x99, 0xbf, 0x45, 0x25, 0xd0, 0x17, 0xb8, 0x5f, 0xf6, 0x99, 0xeb, 0xcf,
+	0xc6, 0x97, 0x90, 0x9e, 0x05, 0xbe, 0x30, 0x18, 0x1a, 0x68, 0x17, 0x37, 0x87, 0x8a, 0x9e, 0xe3,
+	0x44, 0x1f, 0xeb, 0x24, 0x9f, 0x5e, 0xda, 0xc4, 0xf3, 0x02, 0x25, 0xa7, 0xcb, 0x4c, 0x50, 0xc0,
+	0x55, 0x39, 0x05, 0x97, 0x1a, 0xca, 0x73, 0xc4, 0x65, 0x26, 0x38, 0x23, 0xae, 0xee, 0xc7, 0x2a,
+	0x54, 0x9f, 0xc9, 0x9f, 0x48, 0x72, 0x07, 0x1a, 0x7a, 0x4d, 0x93, 0x65, 0x7d, 0x6d, 0xf2, 0xa7,
+	0xa3, 0xbd, 0x52, 0x54, 0xab, 0x1c, 0xf4, 0x02, 0xd9, 0x01, 0xc8, 0x5f, 0x0e, 0xb1, 0xd3, 0x12,
+	0x8a, 0x8f, 0xa9, 0x6d, 0x1b, 0xc5, 0x4d, 0xcc, 0x9f, 0x8c, 0x71, 0x0f, 0x9a, 0xd9, 0x8e, 0x25,
+	0x57, 0xf4, 0xc5, 0xe2, 0x8e, 0xcf, 0x22, 0x94, 0xd6, 0xb1, 0x8c, 0xb0, 0x0b, 0x90, 0x6f, 0xa5,
+	0x0c, 0x45, 0x69, 0x75, 0xb6, 0x57, 0xa7, 0x58, 0xcc, 0x20, 0xf9, 0xf2, 0xc8, 0x82, 0x94, 0x16,
+	0x56, 0x16, 0xa4, 0xbc, 0x69, 0x64, 0x10, 0xc5, 0x65, 0xc2, 0xb2, 0xc9, 0xa5, 0xd1, 0x79, 0x93,
+	0x4b, 0xb3, 0x5f, 0x0a, 0x40, 0x3e, 0x5f, 0x05, 0x2e, 0xcd, 0x08, 0xab, 0x53, 0x2c, 0xe5, 0x2a,
+	0x26, 0x82, 0x94, 0x06, 0xb0, 0x50, 0xc5, 0x64, 0x90, 0x9d, 0xcd, 0x3f, 0x3f, 0xd7, 0xac, 0xcf,
+	0xbf, 0xd6, 0xac, 0x2f, 0xf2, 0xfb, 0x26, 0xbf, 0xef, 0xf2, 0xfb, 0x21, 0xbf, 0xaf, 0x9f, 0xd6,
+	0xad, 0xe7, 0x0d, 0x59, 0xf2, 0xb1, 0x37, 0x60, 0xfd, 0x3a, 0xfe, 0xf3, 0xb9, 0xf5, 0x37, 0x00,
+	0x00, 0xff, 0xff, 0xc3, 0xa2, 0x60, 0x96, 0x6a, 0x09, 0x00, 0x00,
 }

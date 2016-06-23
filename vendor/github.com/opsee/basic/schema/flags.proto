@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/permissions.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "stack.proto";
+
+package opsee;
+
+option go_package = "schema";
+option (opseeproto.graphql) = true;
+
