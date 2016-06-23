@@ -103,7 +103,7 @@ func (c *Client) InviteUser(ctx context.Context, req *opsee.InviteUserRequest) (
 	log.WithFields(log.Fields{
 		"customer_id": req.Requestor.CustomerId,
 		"email":       req.Email,
-		"perms":       req.Perms.Permissions(),
+		"perms":       req.Perms.HighFlags(),
 	}).Debug("invite user request")
 
 	resp, err := c.Vape.InviteUser(ctx, req)
