@@ -12,10 +12,10 @@ option go_package = "schema";
 option (opseeproto.graphql) = true;
 
 message UserFlags {
-    option (opseeproto.bitflags) = true;
-    bool admin = 1;
-    bool edit = 2;
-    bool billing = 3;
+	option (opseeproto.bitflags) = true;
+	bool admin = 1;
+	bool edit = 2;
+	bool billing = 3;
 }
 
 message User {
@@ -31,8 +31,9 @@ message User {
 	opsee.types.Timestamp created_at = 10 [(gogoproto.moretags) = "db:\"created_at\""];
 	opsee.types.Timestamp updated_at = 11 [(gogoproto.moretags) = "db:\"updated_at\""];
 	string status = 12 [(gogoproto.moretags) = "token:\"status\" db:\"status\""];
-	UserFlags perms = 13 [(gogoproto.moretags) = "db:\"perms\" token:\"perms\""];
+	opsee.types.Permission old_perms = 13;
 	bool has_password = 14 [(gogoproto.jsontag) = "has_password"];
+	UserFlags perms = 15 [(gogoproto.moretags) = "db:\"perms\" token:\"perms\""];
 }
 
 message Customer {
@@ -72,5 +73,6 @@ message Invite {
 	string email = 2;
 	string name = 3;
 	string customer_id = 4;
-    UserFlags perms = 5;
+	opsee.types.Permission old_perms = 5;
+	UserFlags perms = 6;
 }
