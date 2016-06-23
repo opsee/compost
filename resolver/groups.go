@@ -45,7 +45,7 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 	logger.Info("get groups request")
 
 	if groupId != "" {
-		t := strings.Split("\x00", groupId)
+		t := strings.Split("»", groupId)
 		if len(t) < 2 {
 			return nil, fmt.Errorf("Invalid group id for ECS Service")
 		}
