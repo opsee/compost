@@ -82,7 +82,7 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 		}
 
 		if len(output.Services) > 0 {
-			svc[0] = output.Services[0]
+			svc = append(svc, output.Services[0])
 		}
 		return svc, nil
 	}
