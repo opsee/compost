@@ -17,8 +17,8 @@ import (
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
+	log "github.com/opsee/logrus"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
-	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

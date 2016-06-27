@@ -2,12 +2,13 @@ package resolver
 
 import (
 	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/opsee/basic/schema"
 	opsee_aws_ec2 "github.com/opsee/basic/schema/aws/ec2"
 	opsee_aws_rds "github.com/opsee/basic/schema/aws/rds"
 	opsee "github.com/opsee/basic/service"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 	"golang.org/x/net/context"
 )
 

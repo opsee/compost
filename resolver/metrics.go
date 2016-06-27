@@ -2,13 +2,13 @@ package resolver
 
 import (
 	"fmt"
+	"sort"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/opsee/basic/schema"
-	// log "github.com/sirupsen/logrus"
 	opsee_aws_cloudwatch "github.com/opsee/basic/schema/aws/cloudwatch"
 	opsee "github.com/opsee/basic/service"
 	"golang.org/x/net/context"
-	"sort"
 )
 
 type metricList []*schema.Metric
