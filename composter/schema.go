@@ -50,6 +50,7 @@ var (
 	CheckInputType        *graphql.InputObject
 	TeamInputType         *graphql.InputObject
 	UserInputType         *graphql.InputObject
+	UserFlagsInputType    *graphql.InputObject
 	NotificationInputType *graphql.InputObject
 )
 
@@ -213,6 +214,27 @@ func (c *Composter) initTypes() {
 		})
 	}
 
+	if UserFlagsInputType == nil {
+		UserFlagsInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "UserFlags",
+			Description: "An Opsee Team",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"admin": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Boolean,
+					Description: "Administrator access",
+				},
+				"edit": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Boolean,
+					Description: "Edit access",
+				},
+				"billing": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Boolean,
+					Description: "Billing access",
+				},
+			},
+		})
+	}
+
 	if UserInputType == nil {
 		UserInputType = graphql.NewInputObject(graphql.InputObjectConfig{
 			Name:        "User",
@@ -236,7 +258,7 @@ func (c *Composter) initTypes() {
 				},
 				"perms": &graphql.InputObjectFieldConfig{
 					Description: "A list of user permissions",
-					Type:        graphql.NewList(graphql.String),
+					Type:        UserFlagsInputType,
 				},
 			},
 		})
@@ -1167,23 +1189,6 @@ func (c *Composter) mutateUser() *graphql.Field {
 			log.Debugf("user %v", p.Args["user"])
 			newUser := &schema.User{}
 
-			// TODO(dan) Fix this in protobuf
-			var ps []string
-			if pi, ok := userInput["perms"].([]interface{}); ok {
-				for _, p := range pi {
-					if pv, ok := p.(string); ok {
-						ps = append(ps, pv)
-					}
-				}
-
-				newPerm := &schema.UserFlags{}
-				errs := newPerm.SetFlags(ps...)
-				if len(errs) > 0 {
-					return nil, fmt.Errorf("Couldn't set permissions")
-				}
-				newUser.Perms = newPerm
-				delete(userInput, "perms")
-			}
 			tb, err := json.Marshal(userInput)
 			if err != nil {
 				log.WithError(err).Error("marshal user input")
