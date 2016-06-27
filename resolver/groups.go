@@ -11,7 +11,7 @@ import (
 	opsee_aws_ecs "github.com/opsee/basic/schema/aws/ecs"
 	opsee_aws_elb "github.com/opsee/basic/schema/aws/elb"
 	opsee "github.com/opsee/basic/service"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 	"golang.org/x/net/context"
 )
 

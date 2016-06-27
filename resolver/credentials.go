@@ -2,7 +2,7 @@ package resolver
 
 import (
 	opsee "github.com/opsee/basic/service"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 	"golang.org/x/net/context"
 )
 

@@ -3,7 +3,7 @@ package resolver
 import (
 	"github.com/opsee/basic/clients/hugs"
 	"github.com/opsee/basic/schema"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 	"golang.org/x/net/context"
 )
 

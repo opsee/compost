@@ -443,6 +443,12 @@
 			"revisionTime": "2016-06-23T22:26:15Z"
 		},
 		{
+			"checksumSHA1": "4SRqRNsZ2S+7ZXFbHn/4NxrflLU=",
+			"path": "github.com/opsee/logrus",
+			"revision": "6d9ae300aaf85d6acd2e5424081c7fcddb21dab8",
+			"revisionTime": "2016-05-24T13:24:53Z"
+		},
+		{
 			"checksumSHA1": "AdAlxYpERfxuIqtd5eQ0LumzbrE=",
 			"origin": "github.com/opsee/compost/vendor/github.com/opsee/protobuf/opseeproto",
 			"path": "github.com/opsee/protobuf/opseeproto",
@@ -464,11 +470,10 @@
 			"revisionTime": "2016-05-31T18:45:39-04:00"
 		},
 		{
-			"checksumSHA1": "8eGyvOJ1nP/OtF4K7N52Xf/+qZQ=",
-			"origin": "github.com/opsee/compost/vendor/github.com/opsee/spanx/spanxcreds",
+			"checksumSHA1": "c3jbuoaQfih/TZyJZRu2M8Ei3mM=",
 			"path": "github.com/opsee/spanx/spanxcreds",
-			"revision": "f2ffb610c15e2483879c890582598a1a0ecd5258",
-			"revisionTime": "2016-05-13T13:37:31-07:00"
+			"revision": "23a5816ded67d01b12fc8c8db7722ac8828c32d5",
+			"revisionTime": "2016-06-27T20:29:21Z"
 		},
 		{
 			"checksumSHA1": "Ef6kamEgbztofQjZJ/GHLgg1dpA=",
@@ -482,12 +487,6 @@
 			"path": "github.com/pmezard/go-difflib/difflib",
 			"revision": "792786c7400a136282c1664665ae0a8db921c6c2",
 			"revisionTime": "2016-01-10T11:55:54+01:00"
-		},
-		{
-			"checksumSHA1": "V8karzcTIpqi4yarvOCqXnGWbvo=",
-			"path": "github.com/sirupsen/logrus",
-			"revision": "4b6ea7319e214d98c938f12692336f7ca9348d6b",
-			"revisionTime": "2016-03-17T14:11:10Z"
 		},
 		{
 			"checksumSHA1": "Bn333k9lTndxU3D6n/G5c+GMcYY=",

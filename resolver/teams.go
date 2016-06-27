@@ -5,7 +5,7 @@ import (
 
 	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 	"golang.org/x/net/context"
 )
 
