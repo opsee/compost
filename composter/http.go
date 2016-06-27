@@ -3,15 +3,16 @@ package composter
 import (
 	"errors"
 	"fmt"
-	"github.com/julienschmidt/httprouter"
-	"github.com/opsee/basic/schema"
-	"github.com/opsee/basic/tp"
-	"github.com/opsee/vaper"
-	log "github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/opsee/basic/schema"
+	"github.com/opsee/basic/tp"
+	log "github.com/opsee/logrus"
+	"github.com/opsee/vaper"
+	"golang.org/x/net/context"
 )
 
 var (
