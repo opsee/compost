@@ -470,11 +470,10 @@
 			"revisionTime": "2016-05-31T18:45:39-04:00"
 		},
 		{
-			"checksumSHA1": "8eGyvOJ1nP/OtF4K7N52Xf/+qZQ=",
-			"origin": "github.com/opsee/compost/vendor/github.com/opsee/spanx/spanxcreds",
+			"checksumSHA1": "c3jbuoaQfih/TZyJZRu2M8Ei3mM=",
 			"path": "github.com/opsee/spanx/spanxcreds",
-			"revision": "f2ffb610c15e2483879c890582598a1a0ecd5258",
-			"revisionTime": "2016-05-13T13:37:31-07:00"
+			"revision": "23a5816ded67d01b12fc8c8db7722ac8828c32d5",
+			"revisionTime": "2016-06-27T20:29:21Z"
 		},
 		{
 			"checksumSHA1": "Ef6kamEgbztofQjZJ/GHLgg1dpA=",

@@ -6,8 +6,8 @@ import (
 
 	"github.com/opsee/compost/composter"
 	"github.com/opsee/compost/resolver"
+	log "github.com/opsee/logrus"
 	"github.com/opsee/vaper"
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {

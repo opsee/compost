@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/opsee/basic/schema"
 	"github.com/opsee/basic/service"
-	log "github.com/sirupsen/logrus"
+	log "github.com/opsee/logrus"
 )
 
 const SpanxProviderName = "SpanxProvider"
