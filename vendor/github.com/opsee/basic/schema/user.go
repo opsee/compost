@@ -37,7 +37,18 @@ func (user *User) Validate() error {
 		return errInactive
 	}
 
+	if user.Status == "inactive" {
+		return errInactive
+	}
+
 	return nil
+}
+
+func (user *User) CheckActiveStatus() error {
+	if user.Status == "active" {
+		return nil
+	}
+	return errInactive
 }
 
 // Returns true if user is a Opsee Admin
@@ -55,6 +66,10 @@ func (user *User) HasPermission(pname string) bool {
 
 // Returns true if a user has all of the requested permissions
 func (user *User) HasPermissions(pnames ...string) bool {
+	if err := user.CheckActiveStatus(); err != nil {
+		return false
+	}
+
 	if user.IsOpseeAdmin() || len(pnames) == 0 {
 		return true
 	}
@@ -73,6 +88,11 @@ func (user *User) CheckPermission(pname string) error {
 
 // Checks a number of permissions and returns permission errors
 func (user *User) CheckPermissions(pnames ...string) []error {
+	err := user.CheckActiveStatus()
+	if err != nil {
+		return []error{err}
+	}
+
 	// Opsee Admins can do anything
 	if user.IsOpseeAdmin() {
 		return nil

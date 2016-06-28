@@ -1,5 +1,15 @@
 package schema
 
+func (r *CheckResult) Targets() []*Target {
+	var targets []*Target
+	if r != nil {
+		for _, resp := range r.Responses {
+			targets = append(targets, resp.Target)
+		}
+	}
+	return targets
+}
+
 func (r *CheckResult) filterResponses(passing bool) []*CheckResponse {
 	responses := []*CheckResponse{}
 	if r != nil {

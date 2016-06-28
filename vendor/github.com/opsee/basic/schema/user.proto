@@ -32,7 +32,7 @@ message User {
 	opsee.types.Timestamp updated_at = 11 [(gogoproto.moretags) = "db:\"updated_at\""];
 	string status = 12 [(gogoproto.moretags) = "token:\"status\" db:\"status\""];
 	opsee.types.Permission old_perms = 13;
-	bool has_password = 14 [(gogoproto.jsontag) = "has_password"];
+	bool has_password = 14 [(gogoproto.jsontag) = "has_password", (gogoproto.moretags) = "db:\"has_password\""];
 	UserFlags perms = 15 [(gogoproto.moretags) = "db:\"perms\" token:\"perms\""];
 }
 
