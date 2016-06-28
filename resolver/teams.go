@@ -32,7 +32,7 @@ func (c *Client) GetTeam(ctx context.Context, user *schema.User) (*schema.Team, 
 
 	if resp.Team != nil {
 		for _, u := range resp.Team.Users {
-			fu = append(fu, &schema.User{Id: u.Id, Name: u.Name, Email: u.Email, Perms: u.Perms})
+			fu = append(fu, &schema.User{Id: u.Id, Name: u.Name, Email: u.Email, Perms: u.Perms, Status: u.Status})
 		}
 	}
 	resp.Team.Users = fu
