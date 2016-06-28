@@ -30,10 +30,9 @@ func (c *Client) GetTeam(ctx context.Context, user *schema.User) (*schema.Team, 
 
 	var fu []*schema.User
 
-	// filter team if user is not an admin
 	if resp.Team != nil {
 		for _, u := range resp.Team.Users {
-			fu = append(fu, &schema.User{Id: u.Id, Name: u.Name, Email: u.Email})
+			fu = append(fu, &schema.User{Id: u.Id, Name: u.Name, Email: u.Email, Perms: u.Perms})
 		}
 	}
 	resp.Team.Users = fu
