@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"golang.org/x/net/context"
@@ -45,6 +46,7 @@ var (
 
 	InstanceType   *graphql.Object
 	DbInstanceType *graphql.Object
+	EcsServiceType *graphql.Object
 	CheckType      *graphql.Object
 
 	CheckInputType        *graphql.InputObject
@@ -179,6 +181,16 @@ func (c *Composter) initTypes() {
 			},
 		})
 		addFields(DbInstanceType, opsee_aws_rds.GraphQLDBInstanceType.Fields())
+	}
+
+	if EcsServiceType == nil {
+		EcsServiceType = graphql.NewObject(graphql.ObjectConfig{
+			Name: opsee_aws_ecs.GraphQLServiceType.Name(),
+			Fields: graphql.Fields{
+				"metrics": metrics,
+			},
+		})
+		addFields(EcsServiceType, opsee_aws_ecs.GraphQLServiceType.Fields())
 	}
 
 	if CheckType == nil {
@@ -724,7 +736,7 @@ func (c *Composter) queryGroups() *graphql.Field {
 			Description: "A group target",
 			Types: []*graphql.Object{
 				opsee_aws_ec2.GraphQLSecurityGroupType,
-				opsee_aws_ecs.GraphQLServiceType,
+				EcsServiceType,
 				opsee_aws_elb.GraphQLLoadBalancerDescriptionType,
 				opsee_aws_autoscaling.GraphQLGroupType,
 			},
@@ -733,7 +745,7 @@ func (c *Composter) queryGroups() *graphql.Field {
 				case *opsee_aws_ec2.SecurityGroup:
 					return opsee_aws_ec2.GraphQLSecurityGroupType
 				case *opsee_aws_ecs.Service:
-					return opsee_aws_ecs.GraphQLServiceType
+					return EcsServiceType
 				case *opsee_aws_elb.LoadBalancerDescription:
 					return opsee_aws_elb.GraphQLLoadBalancerDescriptionType
 				case *opsee_aws_autoscaling.Group:
@@ -1018,20 +1030,44 @@ func (c *Composter) queryMetrics() *graphql.Field {
 			}
 
 			var (
-				instanceId    string
-				namespace     string
-				dimensionName string
+				namespace  string
+				dimensions []*opsee_aws_cloudwatch.Dimension
 			)
 
 			switch t := p.Source.(type) {
 			case *opsee_aws_ec2.Instance:
-				instanceId = aws.StringValue(t.InstanceId)
 				namespace = "AWS/EC2"
-				dimensionName = "InstanceId"
+				dimensions = []*opsee_aws_cloudwatch.Dimension{
+					{
+						Name:  aws.String("InstanceId"),
+						Value: t.InstanceId,
+					},
+				}
 			case *opsee_aws_rds.DBInstance:
-				instanceId = aws.StringValue(t.DBInstanceIdentifier)
 				namespace = "AWS/RDS"
-				dimensionName = "DBInstanceIdentifier"
+				dimensions = []*opsee_aws_cloudwatch.Dimension{
+					{
+						Name:  aws.String("DBInstanceIdentifier"),
+						Value: t.DBInstanceIdentifier,
+					},
+				}
+			case *opsee_aws_ecs.Service:
+				clustername, err := clusterNameFromArn(t.ClusterArn)
+				if err != nil {
+					return nil, err
+				}
+
+				namespace = "AWS/ECS"
+				dimensions = []*opsee_aws_cloudwatch.Dimension{
+					{
+						Name:  aws.String("ClusterName"),
+						Value: clustername,
+					},
+					{
+						Name:  aws.String("ServiceName"),
+						Value: t.ServiceName,
+					},
+				}
 			default:
 				return nil, errUnknownInstanceMetricType
 			}
@@ -1054,12 +1090,7 @@ func (c *Composter) queryMetrics() *graphql.Field {
 				Period:     aws.Int64(int64(period)),
 				Namespace:  aws.String(namespace),
 				Statistics: []string{"Average"},
-				Dimensions: []*opsee_aws_cloudwatch.Dimension{
-					{
-						Name:  aws.String(dimensionName),
-						Value: aws.String(instanceId),
-					},
-				},
+				Dimensions: dimensions,
 			}, nil
 		},
 	}
@@ -1478,4 +1509,13 @@ func addFields(obj *graphql.Object, fields graphql.FieldDefinitionMap) {
 			Resolve:     f.Resolve,
 		})
 	}
+}
+
+func clusterNameFromArn(arn *string) (*string, error) {
+	arnParts := strings.Split(aws.StringValue(arn), "/")
+	if len(arnParts) < 2 {
+		return nil, fmt.Errorf("invalid cluster ARN")
+	}
+
+	return aws.String(arnParts[len(arnParts)-1]), nil
 }
