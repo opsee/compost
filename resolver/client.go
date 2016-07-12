@@ -22,7 +22,7 @@ type ClientConfig struct {
 	Bartnet    string
 	Beavis     string
 	Spanx      string
-	Vape       string
+	Cats       string
 	Keelhaul   string
 	Bezos      string
 	Hugs       string
@@ -33,7 +33,7 @@ type Client struct {
 	Bartnet  bartnet.Client
 	Beavis   beavis.Client
 	Spanx    opsee.SpanxClient
-	Vape     opsee.VapeClient
+	Cats     opsee.CatsClient
 	Keelhaul opsee.KeelhaulClient
 	Hugs     hugs.Client
 	Bezos    opsee.BezosClient
@@ -47,7 +47,7 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, err
 	}
 
-	vapeConn, err := grpcConn(config.Vape, config.SkipVerify)
+	catsConn, err := grpcConn(config.Cats, config.SkipVerify)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func NewClient(config ClientConfig) (*Client, error) {
 		Bartnet:  bartnet.New(config.Bartnet),
 		Beavis:   beavis.New(config.Beavis),
 		Spanx:    opsee.NewSpanxClient(spanxConn),
-		Vape:     opsee.NewVapeClient(vapeConn),
+		Cats:     opsee.NewCatsClient(catsConn),
 		Keelhaul: opsee.NewKeelhaulClient(keelhaulConn),
 		Hugs:     hugs.New(config.Hugs),
 		Bezos:    opsee.NewBezosClient(bezosConn),

@@ -11,9 +11,9 @@ func (c *Client) GetCredentials(ctx context.Context, customerId string) (*opsee.
 		"customer_id": customerId,
 	}).Info("get credentials request")
 
-	userResp, err := c.Vape.GetUser(ctx, &opsee.GetUserRequest{CustomerId: customerId})
+	userResp, err := c.Cats.GetUser(ctx, &opsee.GetUserRequest{CustomerId: customerId})
 	if err != nil {
-		log.WithError(err).Error("error getting user from vape")
+		log.WithError(err).Error("error getting user from cats")
 		return nil, err
 	}
 

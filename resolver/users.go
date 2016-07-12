@@ -10,13 +10,13 @@ import (
 func (c *Client) ListCustomers(ctx context.Context, req *opsee.ListUsersRequest) (*opsee.ListCustomersResponse, error) {
 	log.Debug("list users request")
 
-	resp, err := c.Vape.ListUsers(ctx, req)
+	resp, err := c.Cats.ListUsers(ctx, req)
 	if err != nil {
-		log.WithError(err).Error("error listing users from vape")
+		log.WithError(err).Error("error listing users from cats")
 		return nil, err
 	}
 
-	// as a shim until we have a vape endpoint for listing customers, unique the customers with a map
+	// as a shim until we have a cats endpoint for listing customers, unique the customers with a map
 	customerIdMap := make(map[string][]*schema.User)
 	for _, user := range resp.Users {
 		_, ok := customerIdMap[user.CustomerId]
@@ -74,9 +74,9 @@ func (c *Client) GetUser(ctx context.Context, req *opsee.GetUserRequest) (*opsee
 		"email":       req.Email,
 	}).Debug("get user request")
 
-	resp, err := c.Vape.GetUser(ctx, req)
+	resp, err := c.Cats.GetUser(ctx, req)
 	if err != nil {
-		log.WithError(err).Error("error getting user from vape")
+		log.WithError(err).Error("error getting user from cats")
 		return nil, err
 	}
 
@@ -90,7 +90,7 @@ func (c *Client) PutUser(ctx context.Context, req *opsee.UpdateUserRequest) (*sc
 		"email":       req.User.Email,
 	}).Debug("update user request")
 
-	resp, err := c.Vape.UpdateUser(ctx, req)
+	resp, err := c.Cats.UpdateUser(ctx, req)
 	if err != nil {
 		log.WithError(err).Error("error updating user")
 		return nil, err
@@ -106,7 +106,7 @@ func (c *Client) InviteUser(ctx context.Context, req *opsee.InviteUserRequest) (
 		"perms":       req.Perms.HighFlags(),
 	}).Debug("invite user request")
 
-	resp, err := c.Vape.InviteUser(ctx, req)
+	resp, err := c.Cats.InviteUser(ctx, req)
 	if err != nil {
 		log.WithError(err).Error("error inviting user")
 		return nil, err

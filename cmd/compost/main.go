@@ -25,7 +25,7 @@ func main() {
 		Bartnet:    "https://bartnet.in.opsee.com",
 		Beavis:     "https://beavis.in.opsee.com",
 		Spanx:      "spanx.in.opsee.com:8443",
-		Vape:       "vape.in.opsee.com:443",
+		Cats:       "cats.in.opsee.com:443",
 		Keelhaul:   "keelhaul.in.opsee.com:443",
 		Bezos:      "bezosphere.in.opsee.com:8443",
 		Hugs:       "https://hugs.in.opsee.com",

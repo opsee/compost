@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
+import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
+import "github.com/opsee/basic/schema/aws/credentials/types.proto";
 import "github.com/opsee/basic/schema/user.proto";
 
 package opsee;
@@ -8,6 +10,15 @@ package opsee;
 option go_package = "service";
 option (opseeproto.graphql) = true;
 
+message GetCheckCountRequest {
+  User user = 1;
+	bool prorated = 2;
+}
+
+message GetCheckCountResponse {
+	float count = 1;
+	bool prorated = 2;
+}
 
 // Customers
 message ListCustomersResponse {
@@ -106,7 +117,8 @@ message DeleteTeamResponse {
 	Team team = 2;
 }
 
-service Vape {
+service Cats {
+	rpc GetCheckCount(GetCheckCountRequest) returns (GetCheckCountResponse) {}
 	rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
 	rpc UpdateUser(UpdateUserRequest) returns (UserTokenResponse) {}
 	rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
