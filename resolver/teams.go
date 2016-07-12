@@ -22,9 +22,9 @@ func (c *Client) GetTeam(ctx context.Context, user *schema.User) (*schema.Team, 
 		},
 	}
 
-	resp, err := c.Vape.GetTeam(ctx, req)
+	resp, err := c.Cats.GetTeam(ctx, req)
 	if err != nil {
-		log.WithError(err).Error("error getting team from vape")
+		log.WithError(err).Error("error getting team from cats")
 		return nil, err
 	}
 
@@ -66,9 +66,9 @@ func (c *Client) PutTeam(ctx context.Context, user *schema.User, teamInput map[s
 		},
 	}
 
-	resp, err := c.Vape.UpdateTeam(ctx, req)
+	resp, err := c.Cats.UpdateTeam(ctx, req)
 	if err != nil {
-		log.WithError(err).Error("error getting team from vape")
+		log.WithError(err).Error("error getting team from cats")
 		return nil, err
 	}
 
