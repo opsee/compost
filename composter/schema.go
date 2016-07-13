@@ -778,10 +778,6 @@ func (c *Composter) queryGroups() *graphql.Field {
 			groupId, _ := p.Args["id"].(string)
 			groupType, _ := p.Args["type"].(string)
 
-			if groupType == "" {
-				return nil, errMissingGroupType
-			}
-
 			groups, err := c.resolver.GetGroups(p.Context, user, queryContext.Region, queryContext.VpcId, groupType, groupId)
 			if err != nil {
 				log.WithError(err).Error("error querying groups")

@@ -29,6 +29,43 @@ func (c *Client) GetGroups(ctx context.Context, user *schema.User, region, vpc, 
 		return c.getGroupsElb(ctx, user, region, vpc, groupId)
 	case "autoscaling":
 		return c.getGroupsAutoscaling(ctx, user, region, vpc, groupId)
+	case "":
+		groupsSec, err := c.getGroupsSecurity(ctx, user, region, vpc, groupId)
+		if err != nil {
+			return nil, err
+		}
+
+		groupsEcs, err := c.getGroupsEcsService(ctx, user, region, vpc, groupId)
+		if err != nil {
+			return nil, err
+		}
+
+		groupsElb, err := c.getGroupsElb(ctx, user, region, vpc, groupId)
+		if err != nil {
+			return nil, err
+		}
+
+		groupsAut, err := c.getGroupsAutoscaling(ctx, user, region, vpc, groupId)
+		if err != nil {
+			return nil, err
+		}
+
+		// TODO: concurrency
+		var allgroups []interface{}
+		for _, g := range groupsSec {
+			allgroups = append(allgroups, interface{}(g))
+		}
+		for _, g := range groupsEcs {
+			allgroups = append(allgroups, interface{}(g))
+		}
+		for _, g := range groupsElb {
+			allgroups = append(allgroups, interface{}(g))
+		}
+		for _, g := range groupsAut {
+			allgroups = append(allgroups, interface{}(g))
+		}
+
+		return allgroups, nil
 	}
 
 	return fmt.Errorf("group type not known: %s", groupType), nil
