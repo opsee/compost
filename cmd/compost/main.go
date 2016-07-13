@@ -29,6 +29,7 @@ func main() {
 		Keelhaul:   "keelhaul.in.opsee.com:443",
 		Bezos:      "bezosphere.in.opsee.com:8443",
 		Hugs:       "https://hugs.in.opsee.com",
+		Marktricks: "marktricks.in.opsee.com:443",
 		Etcd:       "http://etcd.in.opsee.com:2479",
 	})
 

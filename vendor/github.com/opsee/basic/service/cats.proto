@@ -102,6 +102,7 @@ message GetTeamResponse {
 message UpdateTeamRequest {
 	User requestor = 1; 
 	Team team = 2;
+	string stripe_token = 3;
 }
 
 message UpdateTeamResponse {

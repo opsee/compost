@@ -10,6 +10,7 @@
 		cats.proto
 		checker.proto
 		keelhaul.proto
+		marktricks.proto
 		spanx.proto
 
 	It has these top-level messages:
@@ -49,6 +50,11 @@
 		LaunchStackResponse
 		AuthenticateBastionRequest
 		AuthenticateBastionResponse
+		Group
+		Aggregation
+		QueryResult
+		GetMetricsRequest
+		GetMetricsResponse
 		EnhancedCombatModeRequest
 		EnhancedCombatModeResponse
 		GetRoleStackRequest
