@@ -761,7 +761,7 @@ func (c *Composter) queryGroups() *graphql.Field {
 			},
 			"type": &graphql.ArgumentConfig{
 				Description: "A group type (security, elb, autoscaling)",
-				Type:        graphql.NewNonNull(graphql.String),
+				Type:        graphql.String,
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
