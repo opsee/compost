@@ -26,19 +26,21 @@ type ClientConfig struct {
 	Keelhaul   string
 	Bezos      string
 	Hugs       string
+	Marktricks string
 	Etcd       string
 }
 
 type Client struct {
-	Bartnet  bartnet.Client
-	Beavis   beavis.Client
-	Spanx    opsee.SpanxClient
-	Cats     opsee.CatsClient
-	Keelhaul opsee.KeelhaulClient
-	Hugs     hugs.Client
-	Bezos    opsee.BezosClient
-	Dynamo   *dynamodb.DynamoDB
-	EtcdKeys etcd.KeysAPI
+	Bartnet    bartnet.Client
+	Beavis     beavis.Client
+	Spanx      opsee.SpanxClient
+	Cats       opsee.CatsClient
+	Keelhaul   opsee.KeelhaulClient
+	Hugs       hugs.Client
+	Bezos      opsee.BezosClient
+	Marktricks opsee.MarktricksClient
+	Dynamo     *dynamodb.DynamoDB
+	EtcdKeys   etcd.KeysAPI
 }
 
 func NewClient(config ClientConfig) (*Client, error) {
@@ -62,6 +64,11 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, err
 	}
 
+	marktricksConn, err := grpcConn(config.Marktricks, config.SkipVerify)
+	if err != nil {
+		return nil, err
+	}
+
 	etcdClient, err := etcd.New(etcd.Config{
 		Endpoints:               []string{config.Etcd},
 		Transport:               etcd.DefaultTransport,
@@ -72,15 +79,16 @@ func NewClient(config ClientConfig) (*Client, error) {
 	}
 
 	return &Client{
-		Bartnet:  bartnet.New(config.Bartnet),
-		Beavis:   beavis.New(config.Beavis),
-		Spanx:    opsee.NewSpanxClient(spanxConn),
-		Cats:     opsee.NewCatsClient(catsConn),
-		Keelhaul: opsee.NewKeelhaulClient(keelhaulConn),
-		Hugs:     hugs.New(config.Hugs),
-		Bezos:    opsee.NewBezosClient(bezosConn),
-		Dynamo:   dynamodb.New(session.New(aws.NewConfig().WithRegion("us-west-2"))),
-		EtcdKeys: etcd.NewKeysAPI(etcdClient),
+		Bartnet:    bartnet.New(config.Bartnet),
+		Beavis:     beavis.New(config.Beavis),
+		Spanx:      opsee.NewSpanxClient(spanxConn),
+		Cats:       opsee.NewCatsClient(catsConn),
+		Keelhaul:   opsee.NewKeelhaulClient(keelhaulConn),
+		Hugs:       hugs.New(config.Hugs),
+		Bezos:      opsee.NewBezosClient(bezosConn),
+		Marktricks: opsee.NewMarktricksClient(marktricksConn),
+		Dynamo:     dynamodb.New(session.New(aws.NewConfig().WithRegion("us-west-2"))),
+		EtcdKeys:   etcd.NewKeysAPI(etcdClient),
 	}, nil
 }
 

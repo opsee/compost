@@ -21,6 +21,7 @@ import (
 	opsee "github.com/opsee/basic/service"
 	log "github.com/opsee/logrus"
 	opsee_types "github.com/opsee/protobuf/opseeproto/types"
+	opsee_scalars "github.com/opsee/protobuf/plugin/graphql/scalars"
 )
 
 var (
@@ -43,6 +44,7 @@ var (
 
 	UserStatusEnumType       *graphql.Enum
 	TeamSubscriptionEnumType *graphql.Enum
+	AggregationEnumType      *graphql.Enum
 
 	InstanceType   *graphql.Object
 	DbInstanceType *graphql.Object
@@ -54,6 +56,7 @@ var (
 	UserInputType         *graphql.InputObject
 	UserFlagsInputType    *graphql.InputObject
 	NotificationInputType *graphql.InputObject
+	AggregationInputType  *graphql.InputObject
 )
 
 type instanceAction int
@@ -193,6 +196,48 @@ func (c *Composter) initTypes() {
 		addFields(EcsServiceType, opsee_aws_ecs.GraphQLServiceType.Fields())
 	}
 
+	if AggregationEnumType == nil {
+		AggregationEnumType = graphql.NewEnum(graphql.EnumConfig{
+			Name: "AggregationEnum",
+			Values: graphql.EnumValueConfigMap{
+				"avg": &graphql.EnumValueConfig{
+					Value: "avg",
+				},
+				"sum": &graphql.EnumValueConfig{
+					Value: "sum",
+				},
+				"min": &graphql.EnumValueConfig{
+					Value: "min",
+				},
+				"max": &graphql.EnumValueConfig{
+					Value: "max",
+				},
+			},
+		})
+	}
+
+	if AggregationInputType == nil {
+		AggregationInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+			Name:        "Aggregation",
+			Description: "Metrics Aggregation",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"unit": &graphql.InputObjectFieldConfig{
+					Type:        graphql.String,
+					Description: "Unit of time (milliseconds, seconds, minutes...)",
+				},
+				"period": &graphql.InputObjectFieldConfig{
+					Type:        graphql.Int,
+					Description: "Period over which to aggregate",
+				},
+				"type": &graphql.InputObjectFieldConfig{
+					Type:        AggregationEnumType,
+					Description: "sum, avg, min, max etc",
+				},
+			},
+		})
+	}
+
+	checkMetrics := c.queryCheckMetrics()
 	if CheckType == nil {
 		CheckType = graphql.NewObject(graphql.ObjectConfig{
 			Name: schema.GraphQLCheckType.Name(),
@@ -200,6 +245,7 @@ func (c *Composter) initTypes() {
 				"notifications": &graphql.Field{
 					Type: graphql.NewList(schema.GraphQLNotificationType),
 				},
+				"metrics": checkMetrics,
 			},
 		})
 		addFields(CheckType, schema.GraphQLCheckType.Fields())
@@ -454,6 +500,72 @@ func (c *Composter) query() *graphql.Object {
 	})
 
 	return query
+}
+
+func (c *Composter) queryCheckMetrics() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(schema.GraphQLMetricType),
+		Args: graphql.FieldConfigArgument{
+			"metric_name": &graphql.ArgumentConfig{
+				Description: "name of the metric",
+				Type:        graphql.String,
+			},
+			"start_time": &graphql.ArgumentConfig{
+				Description: "unix timestamp start time",
+				Type:        opsee_scalars.Timestamp,
+			},
+			"end_time": &graphql.ArgumentConfig{
+				Description: "unix timestmap end time",
+				Type:        opsee_scalars.Timestamp,
+			},
+			"aggregation": &graphql.ArgumentConfig{
+				Description: "aggregator",
+				Type:        AggregationInputType,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			check, ok := p.Source.(*schema.Check)
+			if !ok {
+				return nil, fmt.Errorf("missing check id")
+			}
+			checkId := check.Id
+
+			var (
+				metricName string
+				startTime  *opsee_types.Timestamp
+				endTime    *opsee_types.Timestamp
+			)
+			startTime = &opsee_types.Timestamp{}
+			endTime = &opsee_types.Timestamp{}
+
+			metricName, _ = p.Args["metric_name"].(string)
+			ts0, _ := p.Args["start_time"].(int)
+			ts1, _ := p.Args["end_time"].(int)
+
+			_ = startTime.Scan(ts0)
+			_ = endTime.Scan(ts1)
+
+			var aggregator *opsee.Aggregation
+			if ag, ok := p.Args["aggregation"].(map[string]interface{}); ok {
+				u, _ := ag["unit"].(string)
+				p, _ := ag["period"].(int)
+				a, _ := ag["type"].(string)
+
+				aggregator = &opsee.Aggregation{
+					Unit:   u,
+					Period: int64(p),
+					Type:   a,
+				}
+			}
+
+			return c.resolver.GetCheckMetrics(p.Context, user, checkId, metricName, startTime, endTime, aggregator)
+		},
+	}
 }
 
 func (c *Composter) adminQuery() *graphql.Object {

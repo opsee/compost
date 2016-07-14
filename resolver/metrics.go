@@ -8,6 +8,7 @@ import (
 	"github.com/opsee/basic/schema"
 	opsee_aws_cloudwatch "github.com/opsee/basic/schema/aws/cloudwatch"
 	opsee "github.com/opsee/basic/service"
+	opsee_types "github.com/opsee/protobuf/opseeproto/types"
 	"golang.org/x/net/context"
 )
 
@@ -51,4 +52,41 @@ func (c *Client) GetMetricStatistics(ctx context.Context, user *schema.User, reg
 		Namespace: aws.StringValue(input.Namespace),
 		Metrics:   metrics,
 	}, nil
+}
+
+func (c *Client) GetCheckMetrics(ctx context.Context, user *schema.User, checkId, metricName string, ts0, ts1 *opsee_types.Timestamp, aggregation *opsee.Aggregation) ([]*schema.Metric, error) {
+	req := &opsee.GetMetricsRequest{
+		Requestor: user,
+		Metrics: []*schema.Metric{
+			&schema.Metric{
+				Name: metricName,
+				Tags: []*schema.Tag{
+					&schema.Tag{
+						Name:  "check",
+						Value: checkId,
+					},
+				},
+			},
+		},
+		AbsoluteStartTime: ts0,
+		AbsoluteEndTime:   ts1,
+		Aggregation:       aggregation,
+	}
+
+	if aggregation != nil {
+		req.Metrics[0].Statistic = aggregation.Type
+	}
+
+	r, err := c.Marktricks.GetMetrics(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var m []*schema.Metric
+	for _, qr := range r.Results {
+		for _, nm := range qr.Metrics {
+			m = append(m, nm)
+		}
+	}
+	return m, nil
 }
