@@ -24,6 +24,34 @@ message Container {
   optional string TaskArn = 8;
 }
 
+message ContainerDefinition {
+  repeated string Command = 2;
+  optional sint64 Cpu = 3;
+  optional bool DisableNetworking = 4;
+  repeated string DnsSearchDomains = 5;
+  repeated string DnsServers = 6;
+  map<string, string> DockerLabels = 7;
+  repeated string DockerSecurityOptions = 8;
+  repeated string EntryPoint = 9;
+  repeated KeyValuePair Environment = 10;
+  optional bool Essential = 11;
+  repeated HostEntry ExtraHosts = 12;
+  optional string Hostname = 13;
+  optional string Image = 14;
+  repeated string Links = 15;
+  optional LogConfiguration LogConfiguration = 16;
+  optional sint64 Memory = 17;
+  repeated MountPoint MountPoints = 18;
+  optional string Name = 19;
+  repeated PortMapping PortMappings = 20;
+  optional bool Privileged = 21;
+  optional bool ReadonlyRootFilesystem = 22;
+  repeated Ulimit Ulimits = 23;
+  optional string User = 24;
+  repeated VolumeFrom VolumesFrom = 25;
+  optional string WorkingDirectory = 26;
+}
+
 message ContainerInstance {
   optional bool AgentConnected = 2;
   optional string AgentUpdateStatus = 3;
@@ -80,6 +108,14 @@ message DescribeServicesOutput {
   repeated Service Services = 3;
 }
 
+message DescribeTaskDefinitionInput {
+  optional string TaskDefinition = 2;
+}
+
+message DescribeTaskDefinitionOutput {
+  optional TaskDefinition TaskDefinition = 2;
+}
+
 message DescribeTasksInput {
   optional string Cluster = 2;
   repeated string Tasks = 3;
@@ -93,6 +129,15 @@ message DescribeTasksOutput {
 message Failure {
   optional string Arn = 2;
   optional string Reason = 3;
+}
+
+message HostEntry {
+  optional string Hostname = 2;
+  optional string IpAddress = 3;
+}
+
+message HostVolumeProperties {
+  optional string SourcePath = 2;
 }
 
 message KeyValuePair {
@@ -154,11 +199,28 @@ message LoadBalancer {
   optional string LoadBalancerName = 4;
 }
 
+message LogConfiguration {
+  optional string LogDriver = 2;
+  map<string, string> Options = 3;
+}
+
+message MountPoint {
+  optional string ContainerPath = 2;
+  optional bool ReadOnly = 3;
+  optional string SourceVolume = 4;
+}
+
 message NetworkBinding {
   optional string BindIP = 2;
   optional sint64 ContainerPort = 3;
   optional sint64 HostPort = 4;
   optional string Protocol = 5;
+}
+
+message PortMapping {
+  optional sint64 ContainerPort = 2;
+  optional sint64 HostPort = 3;
+  optional string Protocol = 4;
 }
 
 message Resource {
@@ -209,13 +271,39 @@ message Task {
   optional string TaskDefinitionArn = 14;
 }
 
+message TaskDefinition {
+  repeated ContainerDefinition ContainerDefinitions = 2;
+  optional string Family = 3;
+  repeated Attribute RequiresAttributes = 4;
+  optional sint64 Revision = 5;
+  optional string Status = 6;
+  optional string TaskDefinitionArn = 7;
+  repeated Volume Volumes = 8;
+}
+
 message TaskOverride {
   repeated ContainerOverride ContainerOverrides = 2;
+}
+
+message Ulimit {
+  optional sint64 HardLimit = 2;
+  optional string Name = 3;
+  optional sint64 SoftLimit = 4;
 }
 
 message VersionInfo {
   optional string AgentHash = 2;
   optional string AgentVersion = 3;
   optional string DockerVersion = 4;
+}
+
+message Volume {
+  optional HostVolumeProperties Host = 2;
+  optional string Name = 3;
+}
+
+message VolumeFrom {
+  optional bool ReadOnly = 2;
+  optional string SourceContainer = 3;
 }
 

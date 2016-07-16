@@ -31,7 +31,6 @@ message User {
 	opsee.types.Timestamp created_at = 10 [(gogoproto.moretags) = "db:\"created_at\""];
 	opsee.types.Timestamp updated_at = 11 [(gogoproto.moretags) = "db:\"updated_at\""];
 	string status = 12 [(gogoproto.moretags) = "token:\"status\" db:\"status\""];
-	opsee.types.Permission old_perms = 13;
 	bool has_password = 14 [(gogoproto.jsontag) = "has_password", (gogoproto.moretags) = "db:\"has_password\""];
 	UserFlags perms = 15 [(gogoproto.moretags) = "db:\"perms\" token:\"perms\""];
 }
@@ -75,7 +74,11 @@ message Invite {
 	int32 id = 1;
 	string email = 2;
 	string name = 3;
-	string customer_id = 4;
-	opsee.types.Permission old_perms = 5;
+	string customer_id = 4 [(gogoproto.moretags) = "db:\"customer_id\""];
 	UserFlags perms = 6;
+	opsee.types.Timestamp created_at = 7 [(gogoproto.moretags) = "db:\"created_at\""];
+	opsee.types.Timestamp updated_at = 8 [(gogoproto.moretags) = "db:\"updated_at\""];
+	string referrer = 9;
+	bool claimed = 10;
+	bool activated = 11;
 }
