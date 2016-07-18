@@ -15,6 +15,37 @@ import (
 	"golang.org/x/net/context"
 )
 
+// Fetches a single task definition for ECS services
+func (c *Client) GetTaskDefinition(ctx context.Context, user *schema.User, region, id string) (*opsee_aws_ecs.TaskDefinition, error) {
+	log.WithFields(log.Fields{
+		"customer_id": user.CustomerId,
+	}).Info("get task definition request")
+
+	resp, err := c.Bezos.Get(
+		ctx,
+		&opsee.BezosRequest{
+			User:   user,
+			Region: region,
+			VpcId:  "none",
+			Input: &opsee.BezosRequest_Ecs_DescribeTaskDefinitionInput{
+				&opsee_aws_ecs.DescribeTaskDefinitionInput{
+					TaskDefinition: aws.String(id),
+				},
+			},
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	output := resp.GetEcs_DescribeTaskDefinitionOutput()
+	if output == nil {
+		return nil, fmt.Errorf("error decoding aws response")
+	}
+
+	return output.TaskDefinition, nil
+}
+
 func (c *Client) GetGroups(ctx context.Context, user *schema.User, region, vpc, groupType, groupId string) (interface{}, error) {
 	log.WithFields(log.Fields{
 		"customer_id": user.CustomerId,
@@ -113,15 +144,11 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 			return nil, fmt.Errorf("error decoding aws response")
 		}
 
-		svc := make([]*opsee_aws_ecs.Service, 0, 1)
 		if len(output.Services) == 0 {
 			logger.Info("no services found")
 		}
 
-		if len(output.Services) > 0 {
-			svc = append(svc, output.Services[0])
-		}
-		return svc, nil
+		return output.Services, nil
 	}
 
 	lcInput := &opsee_aws_ecs.ListClustersInput{}

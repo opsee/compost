@@ -46,6 +46,7 @@ message BezosRequest {
 	aws.ecs.ListServicesInput ecs_ListServicesInput = 605;
 	aws.ecs.DescribeServicesInput ecs_DescribeServicesInput = 606;
 	aws.ecs.ListContainerInstancesInput ecs_ListContainerInstancesInput = 607;
+	aws.ecs.DescribeTaskDefinitionInput ecs_DescribeTaskDefinitionInput = 608;
   }
 }
 
@@ -77,6 +78,7 @@ message BezosResponse {
 	aws.ecs.ListServicesOutput ecs_ListServicesOutput = 605;
 	aws.ecs.DescribeServicesOutput ecs_DescribeServicesOutput = 606;
 	aws.ecs.ListContainerInstancesOutput ecs_ListContainerInstancesOutput = 607;
+	aws.ecs.DescribeTaskDefinitionOutput ecs_DescribeTaskDefinitionOutput = 608;
   }
 }
 

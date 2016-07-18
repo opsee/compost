@@ -29,6 +29,7 @@ var (
 	errDecodeQueryContext          = errors.New("error decoding query context")
 	errMissingRegion               = errors.New("missing region id")
 	errMissingVpc                  = errors.New("missing vpc id")
+	errMissingService              = errors.New("missing service name")
 	errMissingInstanceType         = errors.New("missing instance type - must be one of (ec2, rds)")
 	errMissingGroupType            = errors.New("missing group type - must be one of (security, elb, autoscaling)")
 	errDecodeInstances             = errors.New("error decoding instances")
@@ -770,7 +771,8 @@ func (c *Composter) queryRegion() *graphql.Field {
 			Name:        "Region",
 			Description: "The AWS Region",
 			Fields: graphql.Fields{
-				"vpc": c.queryVpc(),
+				"vpc":             c.queryVpc(),
+				"task_definition": c.queryTaskDefinition(),
 			},
 		}),
 		Args: graphql.FieldConfigArgument{
@@ -798,6 +800,36 @@ func (c *Composter) queryRegion() *graphql.Field {
 			queryContext.Region = region
 
 			return struct{}{}, nil
+		},
+	}
+}
+
+func (c *Composter) queryTaskDefinition() *graphql.Field {
+	return &graphql.Field{
+		Type: opsee_aws_ecs.GraphQLTaskDefinitionType,
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Description: "The Task Definition id",
+				Type:        graphql.NewNonNull(graphql.String),
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			queryContext, ok := p.Context.Value(queryContextKey).(*QueryContext)
+			if !ok {
+				return nil, errDecodeQueryContext
+			}
+
+			id, _ := p.Args["id"].(string)
+			if id == "" {
+				return nil, errMissingService
+			}
+
+			return c.resolver.GetTaskDefinition(p.Context, user, queryContext.Region, id)
 		},
 	}
 }
