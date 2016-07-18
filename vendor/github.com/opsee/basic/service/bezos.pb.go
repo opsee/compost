@@ -18,6 +18,8 @@
 		BezosResponse
 		GetCheckCountRequest
 		GetCheckCountResponse
+		GetCheckResultsRequest
+		GetCheckResultsResponse
 		ListCustomersResponse
 		GetUserRequest
 		GetUserResponse

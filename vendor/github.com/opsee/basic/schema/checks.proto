@@ -6,7 +6,6 @@ import "github.com/opsee/protobuf/opseeproto/types/errors.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/opsee/protobuf/opseeproto/opsee.proto";
 
-
 package opsee;
 
 option java_package = "co.opsee.proto";
