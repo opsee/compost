@@ -1,8 +1,6 @@
 package resolver
 
 import (
-	"encoding/json"
-
 	"github.com/opsee/basic/schema"
 	opsee "github.com/opsee/basic/service"
 	log "github.com/opsee/logrus"
@@ -46,29 +44,29 @@ func (c *Client) PutTeam(ctx context.Context, user *schema.User, teamInput map[s
 		"email":       user.Email,
 	}).Info("put team request")
 
-	var team schema.Team
-	tb, err := json.Marshal(teamInput)
-	if err != nil {
-		log.WithError(err).Error("marshal team input")
-	}
+	var (
+		plan        string
+		stripeToken string
+		name        string
+	)
 
-	err = json.Unmarshal(tb, &team)
-	if err != nil {
-		log.WithError(err).Error("marshal team input")
-	}
+	name, _ = teamInput["name"].(string)
+	plan, _ = teamInput["plan"].(string)
+	stripeToken, _ = teamInput["stripeToken"].(string)
 
 	req := &opsee.UpdateTeamRequest{
 		Requestor: user,
 		Team: &schema.Team{
-			Id:           user.CustomerId,
-			Name:         team.Name,
-			Subscription: team.Subscription,
+			Id:               user.CustomerId,
+			Name:             name,
+			SubscriptionPlan: plan,
 		},
+		StripeToken: stripeToken,
 	}
 
 	resp, err := c.Cats.UpdateTeam(ctx, req)
 	if err != nil {
-		log.WithError(err).Error("error getting team from cats")
+		log.WithError(err).Error("error updating team")
 		return nil, err
 	}
 
