@@ -54,6 +54,8 @@ message Team {
 	string stripe_customer_id = 7 [(gogoproto.moretags) = "db:\"stripe_customer_id\""];
 	string stripe_subscription_id = 8 [(gogoproto.moretags) = "db:\"stripe_subscription_id\""];
 	int32 subscription_quantity = 9 [(gogoproto.moretags) = "db:\"subscription_quantity\""];
+	string subscription_status = 10 [(gogoproto.moretags) = "db:\"subscription_status\""];
+	string subscription_plan = 11 [(gogoproto.moretags) = "db:\"subscription_plan\""];
 }
 
 message Invoice {

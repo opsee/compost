@@ -20,6 +20,8 @@
 		GetCheckCountResponse
 		GetCheckResultsRequest
 		GetCheckResultsResponse
+		GetCheckStateTransitionsRequest
+		GetCheckStateTransitionsResponse
 		ListCustomersResponse
 		GetUserRequest
 		GetUserResponse
@@ -33,6 +35,8 @@
 		UserTokenResponse
 		GetTeamRequest
 		GetTeamResponse
+		CreateTeamRequest
+		CreateTeamResponse
 		UpdateTeamRequest
 		UpdateTeamResponse
 		DeleteTeamRequest
