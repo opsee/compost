@@ -507,7 +507,7 @@ func (c *Composter) query() *graphql.Object {
 
 func (c *Composter) queryCheckStateTransitions() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(schema.GraphQLMetricType),
+		Type: graphql.NewList(schema.GraphQLCheckStateTransitionType),
 		Args: graphql.FieldConfigArgument{
 			"start_time": &graphql.ArgumentConfig{
 				Description: "unix timestamp start time",
