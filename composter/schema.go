@@ -238,6 +238,7 @@ func (c *Composter) initTypes() {
 		})
 	}
 
+	checkStateTransitions := c.queryCheckStateTransitions()
 	checkMetrics := c.queryCheckMetrics()
 	if CheckType == nil {
 		CheckType = graphql.NewObject(graphql.ObjectConfig{
@@ -246,7 +247,8 @@ func (c *Composter) initTypes() {
 				"notifications": &graphql.Field{
 					Type: graphql.NewList(schema.GraphQLNotificationType),
 				},
-				"metrics": checkMetrics,
+				"metrics":           checkMetrics,
+				"state_transitions": checkStateTransitions,
 			},
 		})
 		addFields(CheckType, schema.GraphQLCheckType.Fields())
@@ -501,6 +503,50 @@ func (c *Composter) query() *graphql.Object {
 	})
 
 	return query
+}
+
+func (c *Composter) queryCheckStateTransitions() *graphql.Field {
+	return &graphql.Field{
+		Type: graphql.NewList(schema.GraphQLCheckStateTransitionType),
+		Args: graphql.FieldConfigArgument{
+			"start_time": &graphql.ArgumentConfig{
+				Description: "unix timestamp start time",
+				Type:        opsee_scalars.Timestamp,
+			},
+			"end_time": &graphql.ArgumentConfig{
+				Description: "unix timestmap end time",
+				Type:        opsee_scalars.Timestamp,
+			},
+		},
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			user, ok := p.Context.Value(userKey).(*schema.User)
+			if !ok {
+				return nil, errDecodeUser
+			}
+
+			check, ok := p.Source.(*schema.Check)
+			if !ok {
+				return nil, fmt.Errorf("missing check id")
+			}
+			checkId := check.Id
+
+			var (
+				startTime *opsee_types.Timestamp
+				endTime   *opsee_types.Timestamp
+			)
+
+			startTime = &opsee_types.Timestamp{}
+			endTime = &opsee_types.Timestamp{}
+
+			ts0, _ := p.Args["start_time"].(int)
+			ts1, _ := p.Args["end_time"].(int)
+
+			_ = startTime.Scan(ts0)
+			_ = endTime.Scan(ts1)
+
+			return c.resolver.GetCheckStateTransitions(p.Context, user, checkId, startTime, endTime)
+		},
+	}
 }
 
 func (c *Composter) queryCheckMetrics() *graphql.Field {

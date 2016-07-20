@@ -14,7 +14,7 @@ func (t *Team) Validate() error {
 		return errNoTeamName
 	}
 
-	if t.Subscription == "" {
+	if t.SubscriptionPlan == "" {
 		return errNoTeamSubscription
 	}
 

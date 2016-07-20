@@ -613,3 +613,20 @@ func (c *Client) CheckResults(ctx context.Context, user *schema.User, checkId st
 
 	return results, nil
 }
+
+// Get check state transitions from cats
+func (c *Client) GetCheckStateTransitions(ctx context.Context, user *schema.User, checkId string, startTime, endTime *opsee_types.Timestamp) ([]*schema.CheckStateTransition, error) {
+	req := &opsee.GetCheckStateTransitionsRequest{
+		CheckId:           checkId,
+		CustomerId:        user.CustomerId,
+		AbsoluteStartTime: startTime,
+		AbsoluteEndTime:   endTime,
+	}
+
+	resp, err := c.Cats.GetCheckStateTransitions(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Transitions, nil
+}
