@@ -253,33 +253,41 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 
 			output := resp.GetEc2_DescribeInstancesOutput()
 			if output != nil {
-				// we have a container instance in the vpc we're in... now we can get
-				// services for this cluster.
-				lsInput := &opsee_aws_ecs.ListServicesInput{
-					Cluster: aws.String(cArn),
-				}
+				var nextToken *string
+				for {
+					// we have a container instance in the vpc we're in... now we can get
+					// services for this cluster.
+					lsInput := &opsee_aws_ecs.ListServicesInput{
+						Cluster:   aws.String(cArn),
+						NextToken: nextToken,
+					}
 
-				resp, err := c.Bezos.Get(
-					ctx,
-					&opsee.BezosRequest{
-						User:   user,
-						Region: region,
-						VpcId:  vpc,
-						Input:  &opsee.BezosRequest_Ecs_ListServicesInput{lsInput},
-					},
-				)
-				if err != nil {
-					return nil, err
-				}
+					resp, err := c.Bezos.Get(
+						ctx,
+						&opsee.BezosRequest{
+							User:   user,
+							Region: region,
+							VpcId:  vpc,
+							Input:  &opsee.BezosRequest_Ecs_ListServicesInput{lsInput},
+						},
+					)
+					if err != nil {
+						return nil, err
+					}
 
-				lsOutput := resp.GetEcs_ListServicesOutput()
-				if lsOutput != nil {
+					lsOutput := resp.GetEcs_ListServicesOutput()
+					if lsOutput == nil {
+						break
+					}
+
+					nextToken = lsOutput.NextToken
+
 					dsInput := &opsee_aws_ecs.DescribeServicesInput{
 						Cluster:  aws.String(cArn),
 						Services: lsOutput.ServiceArns,
 					}
 
-					resp, err := c.Bezos.Get(
+					resp, err = c.Bezos.Get(
 						ctx,
 						&opsee.BezosRequest{
 							User:   user,
@@ -303,6 +311,9 @@ func (c *Client) getGroupsEcsService(ctx context.Context, user *schema.User, reg
 						}
 					}
 
+					if nextToken == nil {
+						break
+					}
 				}
 			}
 		}
