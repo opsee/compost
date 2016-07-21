@@ -156,6 +156,9 @@ func (c *Composter) initTypes() {
 				"free": &graphql.EnumValueConfig{
 					Value: "free",
 				},
+				"beta": &graphql.EnumValueConfig{
+					Value: "beta",
+				},
 				"developer_monthly": &graphql.EnumValueConfig{
 					Value: "developer_monthly",
 				},
