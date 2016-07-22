@@ -13,12 +13,10 @@ option (opseeproto.graphql) = true;
 
 message GetCheckCountRequest {
   User user = 1;
-	bool prorated = 2;
 }
 
 message GetCheckCountResponse {
-	float count = 1;
-	bool prorated = 2;
+	int32 count = 1;
 }
 
 message GetCheckResultsRequest {
@@ -150,6 +148,15 @@ message DeleteTeamResponse {
 	Team team = 2;
 }
 
+message GetChecksRequest {
+	User requestor = 1;
+	string check_id = 2;
+}
+
+message GetChecksResponse {
+	repeated Check checks = 1;
+}
+
 service Cats {
 	rpc GetCheckCount(GetCheckCountRequest) returns (GetCheckCountResponse) {}
 	rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
@@ -163,4 +170,5 @@ service Cats {
 	rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {}
 	rpc GetCheckResults(GetCheckResultsRequest) returns (GetCheckResultsResponse) {}
 	rpc GetCheckStateTransitions(GetCheckStateTransitionsRequest) returns (GetCheckStateTransitionsResponse) {}
+	rpc GetChecks(GetChecksRequest) returns (GetChecksResponse) {}
 }

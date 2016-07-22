@@ -56,6 +56,10 @@ message Team {
 	int32 subscription_quantity = 9 [(gogoproto.moretags) = "db:\"subscription_quantity\""];
 	string subscription_status = 10 [(gogoproto.moretags) = "db:\"subscription_status\""];
 	string subscription_plan = 11 [(gogoproto.moretags) = "db:\"subscription_plan\""];
+	Invoice next_invoice = 12;
+	opsee.types.Timestamp subscription_trial_start = 13;
+	opsee.types.Timestamp subscription_trial_end = 14;
+	int32 subscription_plan_amount = 15;
 }
 
 message Invoice {
