@@ -2800,66 +2800,6 @@ type BezosResponseGetter interface {
 var GraphQLBezosResponseType *github_com_graphql_go_graphql.Object
 var GraphQLBezosResponseOutputUnion *github_com_graphql_go_graphql.Union
 
-func (g *BezosResponse_Cloudwatch_ListMetricsOutput) GetListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
-	return g.Cloudwatch_ListMetricsOutput
-}
-func (g *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) GetGetMetricStatisticsOutput() *opsee_aws_cloudwatch.GetMetricStatisticsOutput {
-	return g.Cloudwatch_GetMetricStatisticsOutput
-}
-func (g *BezosResponse_Cloudwatch_DescribeAlarmsOutput) GetDescribeAlarmsOutput() *opsee_aws_cloudwatch.DescribeAlarmsOutput {
-	return g.Cloudwatch_DescribeAlarmsOutput
-}
-func (g *BezosResponse_Cloudwatch_DescribeAlarmsForMetricOutput) GetDescribeAlarmsForMetricOutput() *opsee_aws_cloudwatch.DescribeAlarmsForMetricOutput {
-	return g.Cloudwatch_DescribeAlarmsForMetricOutput
-}
-func (g *BezosResponse_Ec2_DescribeInstancesOutput) GetDescribeInstancesOutput() *opsee_aws_ec2.DescribeInstancesOutput {
-	return g.Ec2_DescribeInstancesOutput
-}
-func (g *BezosResponse_Ec2_DescribeSecurityGroupsOutput) GetDescribeSecurityGroupsOutput() *opsee_aws_ec2.DescribeSecurityGroupsOutput {
-	return g.Ec2_DescribeSecurityGroupsOutput
-}
-func (g *BezosResponse_Ec2_DescribeSubnetsOutput) GetDescribeSubnetsOutput() *opsee_aws_ec2.DescribeSubnetsOutput {
-	return g.Ec2_DescribeSubnetsOutput
-}
-func (g *BezosResponse_Ec2_DescribeVpcsOutput) GetDescribeVpcsOutput() *opsee_aws_ec2.DescribeVpcsOutput {
-	return g.Ec2_DescribeVpcsOutput
-}
-func (g *BezosResponse_Ec2_DescribeRouteTablesOutput) GetDescribeRouteTablesOutput() *opsee_aws_ec2.DescribeRouteTablesOutput {
-	return g.Ec2_DescribeRouteTablesOutput
-}
-func (g *BezosResponse_Elb_DescribeLoadBalancersOutput) GetDescribeLoadBalancersOutput() *opsee_aws_elb.DescribeLoadBalancersOutput {
-	return g.Elb_DescribeLoadBalancersOutput
-}
-func (g *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) GetDescribeAutoScalingGroupsOutput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput {
-	return g.Autoscaling_DescribeAutoScalingGroupsOutput
-}
-func (g *BezosResponse_Rds_DescribeDBInstancesOutput) GetDescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
-	return g.Rds_DescribeDBInstancesOutput
-}
-func (g *BezosResponse_Ecs_ListTasksOutput) GetListTasksOutput() *opsee_aws_ecs.ListTasksOutput {
-	return g.Ecs_ListTasksOutput
-}
-func (g *BezosResponse_Ecs_DescribeTasksOutput) GetDescribeTasksOutput() *opsee_aws_ecs.DescribeTasksOutput {
-	return g.Ecs_DescribeTasksOutput
-}
-func (g *BezosResponse_Ecs_DescribeContainerInstancesOutput) GetDescribeContainerInstancesOutput() *opsee_aws_ecs.DescribeContainerInstancesOutput {
-	return g.Ecs_DescribeContainerInstancesOutput
-}
-func (g *BezosResponse_Ecs_ListClustersOutput) GetListClustersOutput() *opsee_aws_ecs.ListClustersOutput {
-	return g.Ecs_ListClustersOutput
-}
-func (g *BezosResponse_Ecs_ListServicesOutput) GetListServicesOutput() *opsee_aws_ecs.ListServicesOutput {
-	return g.Ecs_ListServicesOutput
-}
-func (g *BezosResponse_Ecs_DescribeServicesOutput) GetDescribeServicesOutput() *opsee_aws_ecs.DescribeServicesOutput {
-	return g.Ecs_DescribeServicesOutput
-}
-func (g *BezosResponse_Ecs_ListContainerInstancesOutput) GetListContainerInstancesOutput() *opsee_aws_ecs.ListContainerInstancesOutput {
-	return g.Ecs_ListContainerInstancesOutput
-}
-func (g *BezosResponse_Ecs_DescribeTaskDefinitionOutput) GetDescribeTaskDefinitionOutput() *opsee_aws_ecs.DescribeTaskDefinitionOutput {
-	return g.Ecs_DescribeTaskDefinitionOutput
-}
 func (g *BezosRequest_Cloudwatch_ListMetricsInput) GetListMetricsInput() *opsee_aws_cloudwatch.ListMetricsInput {
 	return g.Cloudwatch_ListMetricsInput
 }
@@ -2919,6 +2859,66 @@ func (g *BezosRequest_Ecs_ListContainerInstancesInput) GetListContainerInstances
 }
 func (g *BezosRequest_Ecs_DescribeTaskDefinitionInput) GetDescribeTaskDefinitionInput() *opsee_aws_ecs.DescribeTaskDefinitionInput {
 	return g.Ecs_DescribeTaskDefinitionInput
+}
+func (g *BezosResponse_Cloudwatch_ListMetricsOutput) GetListMetricsOutput() *opsee_aws_cloudwatch.ListMetricsOutput {
+	return g.Cloudwatch_ListMetricsOutput
+}
+func (g *BezosResponse_Cloudwatch_GetMetricStatisticsOutput) GetGetMetricStatisticsOutput() *opsee_aws_cloudwatch.GetMetricStatisticsOutput {
+	return g.Cloudwatch_GetMetricStatisticsOutput
+}
+func (g *BezosResponse_Cloudwatch_DescribeAlarmsOutput) GetDescribeAlarmsOutput() *opsee_aws_cloudwatch.DescribeAlarmsOutput {
+	return g.Cloudwatch_DescribeAlarmsOutput
+}
+func (g *BezosResponse_Cloudwatch_DescribeAlarmsForMetricOutput) GetDescribeAlarmsForMetricOutput() *opsee_aws_cloudwatch.DescribeAlarmsForMetricOutput {
+	return g.Cloudwatch_DescribeAlarmsForMetricOutput
+}
+func (g *BezosResponse_Ec2_DescribeInstancesOutput) GetDescribeInstancesOutput() *opsee_aws_ec2.DescribeInstancesOutput {
+	return g.Ec2_DescribeInstancesOutput
+}
+func (g *BezosResponse_Ec2_DescribeSecurityGroupsOutput) GetDescribeSecurityGroupsOutput() *opsee_aws_ec2.DescribeSecurityGroupsOutput {
+	return g.Ec2_DescribeSecurityGroupsOutput
+}
+func (g *BezosResponse_Ec2_DescribeSubnetsOutput) GetDescribeSubnetsOutput() *opsee_aws_ec2.DescribeSubnetsOutput {
+	return g.Ec2_DescribeSubnetsOutput
+}
+func (g *BezosResponse_Ec2_DescribeVpcsOutput) GetDescribeVpcsOutput() *opsee_aws_ec2.DescribeVpcsOutput {
+	return g.Ec2_DescribeVpcsOutput
+}
+func (g *BezosResponse_Ec2_DescribeRouteTablesOutput) GetDescribeRouteTablesOutput() *opsee_aws_ec2.DescribeRouteTablesOutput {
+	return g.Ec2_DescribeRouteTablesOutput
+}
+func (g *BezosResponse_Elb_DescribeLoadBalancersOutput) GetDescribeLoadBalancersOutput() *opsee_aws_elb.DescribeLoadBalancersOutput {
+	return g.Elb_DescribeLoadBalancersOutput
+}
+func (g *BezosResponse_Autoscaling_DescribeAutoScalingGroupsOutput) GetDescribeAutoScalingGroupsOutput() *opsee_aws_autoscaling.DescribeAutoScalingGroupsOutput {
+	return g.Autoscaling_DescribeAutoScalingGroupsOutput
+}
+func (g *BezosResponse_Rds_DescribeDBInstancesOutput) GetDescribeDBInstancesOutput() *opsee_aws_rds.DescribeDBInstancesOutput {
+	return g.Rds_DescribeDBInstancesOutput
+}
+func (g *BezosResponse_Ecs_ListTasksOutput) GetListTasksOutput() *opsee_aws_ecs.ListTasksOutput {
+	return g.Ecs_ListTasksOutput
+}
+func (g *BezosResponse_Ecs_DescribeTasksOutput) GetDescribeTasksOutput() *opsee_aws_ecs.DescribeTasksOutput {
+	return g.Ecs_DescribeTasksOutput
+}
+func (g *BezosResponse_Ecs_DescribeContainerInstancesOutput) GetDescribeContainerInstancesOutput() *opsee_aws_ecs.DescribeContainerInstancesOutput {
+	return g.Ecs_DescribeContainerInstancesOutput
+}
+func (g *BezosResponse_Ecs_ListClustersOutput) GetListClustersOutput() *opsee_aws_ecs.ListClustersOutput {
+	return g.Ecs_ListClustersOutput
+}
+func (g *BezosResponse_Ecs_ListServicesOutput) GetListServicesOutput() *opsee_aws_ecs.ListServicesOutput {
+	return g.Ecs_ListServicesOutput
+}
+func (g *BezosResponse_Ecs_DescribeServicesOutput) GetDescribeServicesOutput() *opsee_aws_ecs.DescribeServicesOutput {
+	return g.Ecs_DescribeServicesOutput
+}
+func (g *BezosResponse_Ecs_ListContainerInstancesOutput) GetListContainerInstancesOutput() *opsee_aws_ecs.ListContainerInstancesOutput {
+	return g.Ecs_ListContainerInstancesOutput
+}
+func (g *BezosResponse_Ecs_DescribeTaskDefinitionOutput) GetDescribeTaskDefinitionOutput() *opsee_aws_ecs.DescribeTaskDefinitionOutput {
+	return g.Ecs_DescribeTaskDefinitionOutput
 }
 
 func init() {

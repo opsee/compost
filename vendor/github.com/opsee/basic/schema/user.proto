@@ -48,7 +48,7 @@ message Team {
 	string id = 1;
 	string name = 2 [(gogoproto.moretags) = "db:\"name\""];
 	string subscription = 3 [(gogoproto.moretags) = "db:\"subscription\""];
-	CreditCardInfo creditCardInfo = 4;
+	CreditCardInfo credit_card_info = 4;
 	repeated Invoice invoices = 5;
 	repeated User users = 6;
 	string stripe_customer_id = 7 [(gogoproto.moretags) = "db:\"stripe_customer_id\""];
