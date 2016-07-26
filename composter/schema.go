@@ -1365,7 +1365,7 @@ func (c *Composter) mutateTeam() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			requestor, err := UserPermittedFromContext(p.Context, "admin")
+			requestor, err := UserPermittedFromContext(p.Context, "admin", PermissionOp{"or", "billing"})
 			if err != nil {
 				return nil, err
 			}
