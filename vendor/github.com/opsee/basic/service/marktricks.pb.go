@@ -10,8 +10,10 @@ import math "math"
 import _ "github.com/opsee/protobuf/opseeproto"
 import opsee_types "github.com/opsee/protobuf/opseeproto/types"
 import _ "github.com/opsee/basic/schema/aws/credentials"
-import opsee1 "github.com/opsee/basic/schema"
-import opsee2 "github.com/opsee/basic/schema"
+import _ "github.com/opsee/basic/schema"
+import _ "github.com/opsee/basic/schema"
+import _ "github.com/golang/protobuf/ptypes/struct"
+import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/opsee/basic/schema"
 
 import github_com_graphql_go_graphql "github.com/graphql-go/graphql"
@@ -22,6 +24,8 @@ import (
 	grpc "google.golang.org/grpc"
 )
 
+import errors "errors"
+
 import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -29,124 +33,225 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-type Group struct {
-	Name string `protobuf:"bytes,1,opt,name=Name,json=name,proto3" json:"Name,omitempty"`
+type GroupBy struct {
+	Name  string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Tags  []string          `protobuf:"bytes,2,rep,name=tags" json:"tags,omitempty"`
+	Group map[string]string `protobuf:"bytes,3,rep,name=group" json:"group,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *Group) Reset()                    { *m = Group{} }
-func (m *Group) String() string            { return proto.CompactTextString(m) }
-func (*Group) ProtoMessage()               {}
-func (*Group) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{0} }
+func (m *GroupBy) Reset()                    { *m = GroupBy{} }
+func (m *GroupBy) String() string            { return proto.CompactTextString(m) }
+func (*GroupBy) ProtoMessage()               {}
+func (*GroupBy) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{0} }
 
-type Aggregation struct {
-	Unit   string `protobuf:"bytes,1,opt,name=unit,proto3" json:"unit,omitempty"`
-	Period int64  `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	Type   string `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
-}
-
-func (m *Aggregation) Reset()                    { *m = Aggregation{} }
-func (m *Aggregation) String() string            { return proto.CompactTextString(m) }
-func (*Aggregation) ProtoMessage()               {}
-func (*Aggregation) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{1} }
-
-type QueryResult struct {
-	Metrics []*opsee2.Metric `protobuf:"bytes,1,rep,name=metrics" json:"metrics,omitempty"`
-	Groups  []*Group         `protobuf:"bytes,2,rep,name=groups" json:"groups,omitempty"`
-}
-
-func (m *QueryResult) Reset()                    { *m = QueryResult{} }
-func (m *QueryResult) String() string            { return proto.CompactTextString(m) }
-func (*QueryResult) ProtoMessage()               {}
-func (*QueryResult) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{2} }
-
-func (m *QueryResult) GetMetrics() []*opsee2.Metric {
+func (m *GroupBy) GetGroup() map[string]string {
 	if m != nil {
-		return m.Metrics
+		return m.Group
 	}
 	return nil
 }
 
-func (m *QueryResult) GetGroups() []*Group {
+type Sampling struct {
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Unit  string `protobuf:"bytes,2,opt,name=unit,proto3" json:"unit,omitempty"`
+}
+
+func (m *Sampling) Reset()                    { *m = Sampling{} }
+func (m *Sampling) String() string            { return proto.CompactTextString(m) }
+func (*Sampling) ProtoMessage()               {}
+func (*Sampling) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{1} }
+
+type Aggregator struct {
+	Name          string    `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	AlignSampling bool      `protobuf:"varint,2,opt,name=align_sampling,json=alignSampling,proto3" json:"align_sampling,omitempty"`
+	Sampling      *Sampling `protobuf:"bytes,3,opt,name=sampling" json:"sampling,omitempty"`
+}
+
+func (m *Aggregator) Reset()                    { *m = Aggregator{} }
+func (m *Aggregator) String() string            { return proto.CompactTextString(m) }
+func (*Aggregator) ProtoMessage()               {}
+func (*Aggregator) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{2} }
+
+func (m *Aggregator) GetSampling() *Sampling {
 	if m != nil {
-		return m.Groups
+		return m.Sampling
 	}
 	return nil
 }
 
-// Array of metrics with complete metric name and optional tags
-type GetMetricsRequest struct {
-	Requestor         *opsee1.User           `protobuf:"bytes,1,opt,name=requestor" json:"requestor,omitempty"`
-	Metrics           []*opsee2.Metric       `protobuf:"bytes,2,rep,name=metrics" json:"metrics,omitempty"`
-	AbsoluteStartTime *opsee_types.Timestamp `protobuf:"bytes,3,opt,name=absolute_start_time,json=absoluteStartTime" json:"absolute_start_time,omitempty"`
-	AbsoluteEndTime   *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=absolute_end_time,json=absoluteEndTime" json:"absolute_end_time,omitempty"`
-	Aggregation       *Aggregation           `protobuf:"bytes,5,opt,name=aggregation" json:"aggregation,omitempty"`
+type StringList struct {
+	Values []string `protobuf:"bytes,1,rep,name=values" json:""`
 }
 
-func (m *GetMetricsRequest) Reset()                    { *m = GetMetricsRequest{} }
-func (m *GetMetricsRequest) String() string            { return proto.CompactTextString(m) }
-func (*GetMetricsRequest) ProtoMessage()               {}
-func (*GetMetricsRequest) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{3} }
+func (m *StringList) Reset()                    { *m = StringList{} }
+func (m *StringList) String() string            { return proto.CompactTextString(m) }
+func (*StringList) ProtoMessage()               {}
+func (*StringList) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{3} }
 
-func (m *GetMetricsRequest) GetRequestor() *opsee1.User {
+type QueryMetric struct {
+	Name        string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Tags        map[string]*StringList `protobuf:"bytes,2,rep,name=tags" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+	GroupBy     []*GroupBy             `protobuf:"bytes,3,rep,name=group_by,json=groupBy" json:"group_by"`
+	Aggregators []*Aggregator          `protobuf:"bytes,4,rep,name=aggregators" json:"aggregators,omitempty"`
+	Limit       int64                  `protobuf:"varint,5,opt,name=limit,proto3" json:"limit,omitempty"`
+}
+
+func (m *QueryMetric) Reset()                    { *m = QueryMetric{} }
+func (m *QueryMetric) String() string            { return proto.CompactTextString(m) }
+func (*QueryMetric) ProtoMessage()               {}
+func (*QueryMetric) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{4} }
+
+func (m *QueryMetric) GetTags() map[string]*StringList {
 	if m != nil {
-		return m.Requestor
+		return m.Tags
 	}
 	return nil
 }
 
-func (m *GetMetricsRequest) GetMetrics() []*opsee2.Metric {
+func (m *QueryMetric) GetGroupBy() []*GroupBy {
 	if m != nil {
-		return m.Metrics
+		return m.GroupBy
 	}
 	return nil
 }
 
-func (m *GetMetricsRequest) GetAbsoluteStartTime() *opsee_types.Timestamp {
+func (m *QueryMetric) GetAggregators() []*Aggregator {
 	if m != nil {
-		return m.AbsoluteStartTime
+		return m.Aggregators
 	}
 	return nil
 }
 
-func (m *GetMetricsRequest) GetAbsoluteEndTime() *opsee_types.Timestamp {
+// use alternate datapoint type
+type Datapoint struct {
+	Timestamp *opsee_types.Timestamp `protobuf:"bytes,1,opt,name=timestamp" json:"timestamp,omitempty"`
+	Value     float64                `protobuf:"fixed64,2,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *Datapoint) Reset()                    { *m = Datapoint{} }
+func (m *Datapoint) String() string            { return proto.CompactTextString(m) }
+func (*Datapoint) ProtoMessage()               {}
+func (*Datapoint) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{5} }
+
+func (m *Datapoint) GetTimestamp() *opsee_types.Timestamp {
 	if m != nil {
-		return m.AbsoluteEndTime
+		return m.Timestamp
 	}
 	return nil
 }
 
-func (m *GetMetricsRequest) GetAggregation() *Aggregation {
+type Result struct {
+	Name    string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	GroupBy []*GroupBy             `protobuf:"bytes,2,rep,name=group_by,json=groupBy" json:"group_by,omitempty"`
+	Tags    map[string]*StringList `protobuf:"bytes,3,rep,name=tags" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+	Values  []*Datapoint           `protobuf:"bytes,4,rep,name=values" json:"values,omitempty"`
+}
+
+func (m *Result) Reset()                    { *m = Result{} }
+func (m *Result) String() string            { return proto.CompactTextString(m) }
+func (*Result) ProtoMessage()               {}
+func (*Result) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{6} }
+
+func (m *Result) GetGroupBy() []*GroupBy {
 	if m != nil {
-		return m.Aggregation
+		return m.GroupBy
 	}
 	return nil
 }
 
-// Array of metrics from Opsee metrics store
-type GetMetricsResponse struct {
-	Results []*QueryResult `protobuf:"bytes,1,rep,name=results" json:"results,omitempty"`
+func (m *Result) GetTags() map[string]*StringList {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
 }
 
-func (m *GetMetricsResponse) Reset()                    { *m = GetMetricsResponse{} }
-func (m *GetMetricsResponse) String() string            { return proto.CompactTextString(m) }
-func (*GetMetricsResponse) ProtoMessage()               {}
-func (*GetMetricsResponse) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{4} }
+func (m *Result) GetValues() []*Datapoint {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
 
-func (m *GetMetricsResponse) GetResults() []*QueryResult {
+type Query struct {
+	Results []*Result `protobuf:"bytes,1,rep,name=results" json:"results,omitempty"`
+}
+
+func (m *Query) Reset()                    { *m = Query{} }
+func (m *Query) String() string            { return proto.CompactTextString(m) }
+func (*Query) ProtoMessage()               {}
+func (*Query) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{7} }
+
+func (m *Query) GetResults() []*Result {
 	if m != nil {
 		return m.Results
 	}
 	return nil
 }
 
+type GetMetricsRequest struct {
+	Metrics       []*QueryMetric         `protobuf:"bytes,1,rep,name=metrics" json:"metrics,omitempty"`
+	CacheTime     int64                  `protobuf:"varint,2,opt,name=cache_time,json=cacheTime,proto3" json:"cache_time,omitempty"`
+	StartAbsolute *opsee_types.Timestamp `protobuf:"bytes,3,opt,name=start_absolute,json=startAbsolute" json:"start_absolute,omitempty"`
+	EndAbsolute   *opsee_types.Timestamp `protobuf:"bytes,4,opt,name=end_absolute,json=endAbsolute" json:"end_absolute,omitempty"`
+}
+
+func (m *GetMetricsRequest) Reset()                    { *m = GetMetricsRequest{} }
+func (m *GetMetricsRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetMetricsRequest) ProtoMessage()               {}
+func (*GetMetricsRequest) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{8} }
+
+func (m *GetMetricsRequest) GetMetrics() []*QueryMetric {
+	if m != nil {
+		return m.Metrics
+	}
+	return nil
+}
+
+func (m *GetMetricsRequest) GetStartAbsolute() *opsee_types.Timestamp {
+	if m != nil {
+		return m.StartAbsolute
+	}
+	return nil
+}
+
+func (m *GetMetricsRequest) GetEndAbsolute() *opsee_types.Timestamp {
+	if m != nil {
+		return m.EndAbsolute
+	}
+	return nil
+}
+
+type GetMetricsResponse struct {
+	Queries []*Query `protobuf:"bytes,1,rep,name=queries" json:"queries,omitempty"`
+	Errors  []string `protobuf:"bytes,5,rep,name=errors" json:"errors,omitempty"`
+}
+
+func (m *GetMetricsResponse) Reset()                    { *m = GetMetricsResponse{} }
+func (m *GetMetricsResponse) String() string            { return proto.CompactTextString(m) }
+func (*GetMetricsResponse) ProtoMessage()               {}
+func (*GetMetricsResponse) Descriptor() ([]byte, []int) { return fileDescriptorMarktricks, []int{9} }
+
+func (m *GetMetricsResponse) GetQueries() []*Query {
+	if m != nil {
+		return m.Queries
+	}
+	return nil
+}
+
 func init() {
-	proto.RegisterType((*Group)(nil), "opsee.Group")
-	proto.RegisterType((*Aggregation)(nil), "opsee.Aggregation")
-	proto.RegisterType((*QueryResult)(nil), "opsee.QueryResult")
+	proto.RegisterType((*GroupBy)(nil), "opsee.GroupBy")
+	proto.RegisterType((*Sampling)(nil), "opsee.Sampling")
+	proto.RegisterType((*Aggregator)(nil), "opsee.Aggregator")
+	proto.RegisterType((*StringList)(nil), "opsee.StringList")
+	proto.RegisterType((*QueryMetric)(nil), "opsee.QueryMetric")
+	proto.RegisterType((*Datapoint)(nil), "opsee.Datapoint")
+	proto.RegisterType((*Result)(nil), "opsee.Result")
+	proto.RegisterType((*Query)(nil), "opsee.Query")
 	proto.RegisterType((*GetMetricsRequest)(nil), "opsee.GetMetricsRequest")
 	proto.RegisterType((*GetMetricsResponse)(nil), "opsee.GetMetricsResponse")
 }
-func (this *Group) Equal(that interface{}) bool {
+func (this *GroupBy) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
 			return true
@@ -154,9 +259,9 @@ func (this *Group) Equal(that interface{}) bool {
 		return false
 	}
 
-	that1, ok := that.(*Group)
+	that1, ok := that.(*GroupBy)
 	if !ok {
-		that2, ok := that.(Group)
+		that2, ok := that.(GroupBy)
 		if ok {
 			that1 = &that2
 		} else {
@@ -174,9 +279,25 @@ func (this *Group) Equal(that interface{}) bool {
 	if this.Name != that1.Name {
 		return false
 	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if this.Tags[i] != that1.Tags[i] {
+			return false
+		}
+	}
+	if len(this.Group) != len(that1.Group) {
+		return false
+	}
+	for i := range this.Group {
+		if this.Group[i] != that1.Group[i] {
+			return false
+		}
+	}
 	return true
 }
-func (this *Aggregation) Equal(that interface{}) bool {
+func (this *Sampling) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
 			return true
@@ -184,9 +305,9 @@ func (this *Aggregation) Equal(that interface{}) bool {
 		return false
 	}
 
-	that1, ok := that.(*Aggregation)
+	that1, ok := that.(*Sampling)
 	if !ok {
-		that2, ok := that.(Aggregation)
+		that2, ok := that.(Sampling)
 		if ok {
 			that1 = &that2
 		} else {
@@ -199,20 +320,17 @@ func (this *Aggregation) Equal(that interface{}) bool {
 		}
 		return false
 	} else if this == nil {
+		return false
+	}
+	if this.Value != that1.Value {
 		return false
 	}
 	if this.Unit != that1.Unit {
 		return false
 	}
-	if this.Period != that1.Period {
-		return false
-	}
-	if this.Type != that1.Type {
-		return false
-	}
 	return true
 }
-func (this *QueryResult) Equal(that interface{}) bool {
+func (this *Aggregator) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
 			return true
@@ -220,9 +338,9 @@ func (this *QueryResult) Equal(that interface{}) bool {
 		return false
 	}
 
-	that1, ok := that.(*QueryResult)
+	that1, ok := that.(*Aggregator)
 	if !ok {
-		that2, ok := that.(QueryResult)
+		that2, ok := that.(Aggregator)
 		if ok {
 			that1 = &that2
 		} else {
@@ -237,19 +355,226 @@ func (this *QueryResult) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Metrics) != len(that1.Metrics) {
+	if this.Name != that1.Name {
 		return false
 	}
-	for i := range this.Metrics {
-		if !this.Metrics[i].Equal(that1.Metrics[i]) {
+	if this.AlignSampling != that1.AlignSampling {
+		return false
+	}
+	if !this.Sampling.Equal(that1.Sampling) {
+		return false
+	}
+	return true
+}
+func (this *StringList) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*StringList)
+	if !ok {
+		that2, ok := that.(StringList)
+		if ok {
+			that1 = &that2
+		} else {
 			return false
 		}
 	}
-	if len(this.Groups) != len(that1.Groups) {
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
 		return false
 	}
-	for i := range this.Groups {
-		if !this.Groups[i].Equal(that1.Groups[i]) {
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if this.Values[i] != that1.Values[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *QueryMetric) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*QueryMetric)
+	if !ok {
+		that2, ok := that.(QueryMetric)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if !this.Tags[i].Equal(that1.Tags[i]) {
+			return false
+		}
+	}
+	if len(this.GroupBy) != len(that1.GroupBy) {
+		return false
+	}
+	for i := range this.GroupBy {
+		if !this.GroupBy[i].Equal(that1.GroupBy[i]) {
+			return false
+		}
+	}
+	if len(this.Aggregators) != len(that1.Aggregators) {
+		return false
+	}
+	for i := range this.Aggregators {
+		if !this.Aggregators[i].Equal(that1.Aggregators[i]) {
+			return false
+		}
+	}
+	if this.Limit != that1.Limit {
+		return false
+	}
+	return true
+}
+func (this *Datapoint) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Datapoint)
+	if !ok {
+		that2, ok := that.(Datapoint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Timestamp.Equal(that1.Timestamp) {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
+func (this *Result) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Result)
+	if !ok {
+		that2, ok := that.(Result)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.GroupBy) != len(that1.GroupBy) {
+		return false
+	}
+	for i := range this.GroupBy {
+		if !this.GroupBy[i].Equal(that1.GroupBy[i]) {
+			return false
+		}
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if !this.Tags[i].Equal(that1.Tags[i]) {
+			return false
+		}
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *Query) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Query)
+	if !ok {
+		that2, ok := that.(Query)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if len(this.Results) != len(that1.Results) {
+		return false
+	}
+	for i := range this.Results {
+		if !this.Results[i].Equal(that1.Results[i]) {
 			return false
 		}
 	}
@@ -280,9 +605,6 @@ func (this *GetMetricsRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Requestor.Equal(that1.Requestor) {
-		return false
-	}
 	if len(this.Metrics) != len(that1.Metrics) {
 		return false
 	}
@@ -291,13 +613,13 @@ func (this *GetMetricsRequest) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if !this.AbsoluteStartTime.Equal(that1.AbsoluteStartTime) {
+	if this.CacheTime != that1.CacheTime {
 		return false
 	}
-	if !this.AbsoluteEndTime.Equal(that1.AbsoluteEndTime) {
+	if !this.StartAbsolute.Equal(that1.StartAbsolute) {
 		return false
 	}
-	if !this.Aggregation.Equal(that1.Aggregation) {
+	if !this.EndAbsolute.Equal(that1.EndAbsolute) {
 		return false
 	}
 	return true
@@ -327,34 +649,75 @@ func (this *GetMetricsResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Results) != len(that1.Results) {
+	if len(this.Queries) != len(that1.Queries) {
 		return false
 	}
-	for i := range this.Results {
-		if !this.Results[i].Equal(that1.Results[i]) {
+	for i := range this.Queries {
+		if !this.Queries[i].Equal(that1.Queries[i]) {
+			return false
+		}
+	}
+	if len(this.Errors) != len(that1.Errors) {
+		return false
+	}
+	for i := range this.Errors {
+		if this.Errors[i] != that1.Errors[i] {
 			return false
 		}
 	}
 	return true
 }
 
-type GroupGetter interface {
-	GetGroup() *Group
+type GroupByGetter interface {
+	GetGroupBy() *GroupBy
 }
 
-var GraphQLGroupType *github_com_graphql_go_graphql.Object
+var GraphQLGroupByType *github_com_graphql_go_graphql.Object
+var GraphQLGroupBy_GroupEntryType = github_com_opsee_protobuf_plugin_graphql_scalars.Map
 
-type AggregationGetter interface {
-	GetAggregation() *Aggregation
+type SamplingGetter interface {
+	GetSampling() *Sampling
 }
 
-var GraphQLAggregationType *github_com_graphql_go_graphql.Object
+var GraphQLSamplingType *github_com_graphql_go_graphql.Object
 
-type QueryResultGetter interface {
-	GetQueryResult() *QueryResult
+type AggregatorGetter interface {
+	GetAggregator() *Aggregator
 }
 
-var GraphQLQueryResultType *github_com_graphql_go_graphql.Object
+var GraphQLAggregatorType *github_com_graphql_go_graphql.Object
+
+type StringListGetter interface {
+	GetStringList() *StringList
+}
+
+var GraphQLStringListType *github_com_graphql_go_graphql.Object
+
+type QueryMetricGetter interface {
+	GetQueryMetric() *QueryMetric
+}
+
+var GraphQLQueryMetricType *github_com_graphql_go_graphql.Object
+var GraphQLQueryMetric_TagsEntryType = github_com_opsee_protobuf_plugin_graphql_scalars.Map
+
+type DatapointGetter interface {
+	GetDatapoint() *Datapoint
+}
+
+var GraphQLDatapointType *github_com_graphql_go_graphql.Object
+
+type ResultGetter interface {
+	GetResult() *Result
+}
+
+var GraphQLResultType *github_com_graphql_go_graphql.Object
+var GraphQLResult_TagsEntryType = github_com_opsee_protobuf_plugin_graphql_scalars.Map
+
+type QueryGetter interface {
+	GetQuery() *Query
+}
+
+var GraphQLQueryType *github_com_graphql_go_graphql.Object
 
 type GetMetricsRequestGetter interface {
 	GetGetMetricsRequest() *GetMetricsRequest
@@ -369,49 +732,106 @@ type GetMetricsResponseGetter interface {
 var GraphQLGetMetricsResponseType *github_com_graphql_go_graphql.Object
 
 func init() {
-	GraphQLGroupType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
-		Name:        "serviceGroup",
+	GraphQLGroupByType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceGroupBy",
 		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
-				"Name": &github_com_graphql_go_graphql.Field{
+				"name": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*Group)
+						obj, ok := p.Source.(*GroupBy)
 						if ok {
 							return obj.Name, nil
 						}
-						inter, ok := p.Source.(GroupGetter)
+						inter, ok := p.Source.(GroupByGetter)
 						if ok {
-							face := inter.GetGroup()
+							face := inter.GetGroupBy()
 							if face == nil {
 								return nil, nil
 							}
 							return face.Name, nil
 						}
-						return nil, fmt.Errorf("field Name not resolved")
+						return nil, fmt.Errorf("field name not resolved")
+					},
+				},
+				"tags": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GroupBy)
+						if ok {
+							return obj.Tags, nil
+						}
+						inter, ok := p.Source.(GroupByGetter)
+						if ok {
+							face := inter.GetGroupBy()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Tags, nil
+						}
+						return nil, fmt.Errorf("field tags not resolved")
+					},
+				},
+				"group": &github_com_graphql_go_graphql.Field{
+					Type:        GraphQLGroupBy_GroupEntryType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GroupBy)
+						if ok {
+							return obj.Group, nil
+						}
+						inter, ok := p.Source.(GroupByGetter)
+						if ok {
+							face := inter.GetGroupBy()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Group, nil
+						}
+						return nil, fmt.Errorf("field group not resolved")
 					},
 				},
 			}
 		}),
 	})
-	GraphQLAggregationType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
-		Name:        "serviceAggregation",
+	GraphQLSamplingType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceSampling",
 		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
+				"value": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Sampling)
+						if ok {
+							return obj.Value, nil
+						}
+						inter, ok := p.Source.(SamplingGetter)
+						if ok {
+							face := inter.GetSampling()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Value, nil
+						}
+						return nil, fmt.Errorf("field value not resolved")
+					},
+				},
 				"unit": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*Aggregation)
+						obj, ok := p.Source.(*Sampling)
 						if ok {
 							return obj.Unit, nil
 						}
-						inter, ok := p.Source.(AggregationGetter)
+						inter, ok := p.Source.(SamplingGetter)
 						if ok {
-							face := inter.GetAggregation()
+							face := inter.GetSampling()
 							if face == nil {
 								return nil, nil
 							}
@@ -420,88 +840,368 @@ func init() {
 						return nil, fmt.Errorf("field unit not resolved")
 					},
 				},
-				"period": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.Int,
-					Description: "",
-					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*Aggregation)
-						if ok {
-							return obj.Period, nil
-						}
-						inter, ok := p.Source.(AggregationGetter)
-						if ok {
-							face := inter.GetAggregation()
-							if face == nil {
-								return nil, nil
-							}
-							return face.Period, nil
-						}
-						return nil, fmt.Errorf("field period not resolved")
-					},
-				},
-				"type": &github_com_graphql_go_graphql.Field{
+			}
+		}),
+	})
+	GraphQLAggregatorType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceAggregator",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"name": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*Aggregation)
+						obj, ok := p.Source.(*Aggregator)
 						if ok {
-							return obj.Type, nil
+							return obj.Name, nil
 						}
-						inter, ok := p.Source.(AggregationGetter)
+						inter, ok := p.Source.(AggregatorGetter)
 						if ok {
-							face := inter.GetAggregation()
+							face := inter.GetAggregator()
 							if face == nil {
 								return nil, nil
 							}
-							return face.Type, nil
+							return face.Name, nil
 						}
-						return nil, fmt.Errorf("field type not resolved")
+						return nil, fmt.Errorf("field name not resolved")
+					},
+				},
+				"align_sampling": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Boolean,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Aggregator)
+						if ok {
+							return obj.AlignSampling, nil
+						}
+						inter, ok := p.Source.(AggregatorGetter)
+						if ok {
+							face := inter.GetAggregator()
+							if face == nil {
+								return nil, nil
+							}
+							return face.AlignSampling, nil
+						}
+						return nil, fmt.Errorf("field align_sampling not resolved")
+					},
+				},
+				"sampling": &github_com_graphql_go_graphql.Field{
+					Type:        GraphQLSamplingType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Aggregator)
+						if ok {
+							if obj.Sampling == nil {
+								return nil, nil
+							}
+							return obj.GetSampling(), nil
+						}
+						inter, ok := p.Source.(AggregatorGetter)
+						if ok {
+							face := inter.GetAggregator()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Sampling == nil {
+								return nil, nil
+							}
+							return face.GetSampling(), nil
+						}
+						return nil, fmt.Errorf("field sampling not resolved")
 					},
 				},
 			}
 		}),
 	})
-	GraphQLQueryResultType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
-		Name:        "serviceQueryResult",
+	GraphQLStringListType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceStringList",
 		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
-				"metrics": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.NewList(opsee2.GraphQLMetricType),
+				"values": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*QueryResult)
+						obj, ok := p.Source.(*StringList)
 						if ok {
-							return obj.Metrics, nil
+							return obj.Values, nil
 						}
-						inter, ok := p.Source.(QueryResultGetter)
+						inter, ok := p.Source.(StringListGetter)
 						if ok {
-							face := inter.GetQueryResult()
+							face := inter.GetStringList()
 							if face == nil {
 								return nil, nil
 							}
-							return face.Metrics, nil
+							return face.Values, nil
 						}
-						return nil, fmt.Errorf("field metrics not resolved")
+						return nil, fmt.Errorf("field values not resolved")
 					},
 				},
-				"groups": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.NewList(GraphQLGroupType),
+			}
+		}),
+	})
+	GraphQLQueryMetricType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceQueryMetric",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"name": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*QueryResult)
+						obj, ok := p.Source.(*QueryMetric)
 						if ok {
-							return obj.Groups, nil
+							return obj.Name, nil
 						}
-						inter, ok := p.Source.(QueryResultGetter)
+						inter, ok := p.Source.(QueryMetricGetter)
 						if ok {
-							face := inter.GetQueryResult()
+							face := inter.GetQueryMetric()
 							if face == nil {
 								return nil, nil
 							}
-							return face.Groups, nil
+							return face.Name, nil
 						}
-						return nil, fmt.Errorf("field groups not resolved")
+						return nil, fmt.Errorf("field name not resolved")
+					},
+				},
+				"tags": &github_com_graphql_go_graphql.Field{
+					Type:        GraphQLQueryMetric_TagsEntryType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*QueryMetric)
+						if ok {
+							return obj.Tags, nil
+						}
+						inter, ok := p.Source.(QueryMetricGetter)
+						if ok {
+							face := inter.GetQueryMetric()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Tags, nil
+						}
+						return nil, fmt.Errorf("field tags not resolved")
+					},
+				},
+				"group_by": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLGroupByType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*QueryMetric)
+						if ok {
+							return obj.GroupBy, nil
+						}
+						inter, ok := p.Source.(QueryMetricGetter)
+						if ok {
+							face := inter.GetQueryMetric()
+							if face == nil {
+								return nil, nil
+							}
+							return face.GroupBy, nil
+						}
+						return nil, fmt.Errorf("field group_by not resolved")
+					},
+				},
+				"aggregators": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLAggregatorType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*QueryMetric)
+						if ok {
+							return obj.Aggregators, nil
+						}
+						inter, ok := p.Source.(QueryMetricGetter)
+						if ok {
+							face := inter.GetQueryMetric()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Aggregators, nil
+						}
+						return nil, fmt.Errorf("field aggregators not resolved")
+					},
+				},
+				"limit": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*QueryMetric)
+						if ok {
+							return obj.Limit, nil
+						}
+						inter, ok := p.Source.(QueryMetricGetter)
+						if ok {
+							face := inter.GetQueryMetric()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Limit, nil
+						}
+						return nil, fmt.Errorf("field limit not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLDatapointType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceDatapoint",
+		Description: "use alternate datapoint type",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"timestamp": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Datapoint)
+						if ok {
+							if obj.Timestamp == nil {
+								return nil, nil
+							}
+							return obj.GetTimestamp(), nil
+						}
+						inter, ok := p.Source.(DatapointGetter)
+						if ok {
+							face := inter.GetDatapoint()
+							if face == nil {
+								return nil, nil
+							}
+							if face.Timestamp == nil {
+								return nil, nil
+							}
+							return face.GetTimestamp(), nil
+						}
+						return nil, fmt.Errorf("field timestamp not resolved")
+					},
+				},
+				"value": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Float,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Datapoint)
+						if ok {
+							return obj.Value, nil
+						}
+						inter, ok := p.Source.(DatapointGetter)
+						if ok {
+							face := inter.GetDatapoint()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Value, nil
+						}
+						return nil, fmt.Errorf("field value not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLResultType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceResult",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"name": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.String,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Result)
+						if ok {
+							return obj.Name, nil
+						}
+						inter, ok := p.Source.(ResultGetter)
+						if ok {
+							face := inter.GetResult()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Name, nil
+						}
+						return nil, fmt.Errorf("field name not resolved")
+					},
+				},
+				"group_by": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLGroupByType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Result)
+						if ok {
+							return obj.GroupBy, nil
+						}
+						inter, ok := p.Source.(ResultGetter)
+						if ok {
+							face := inter.GetResult()
+							if face == nil {
+								return nil, nil
+							}
+							return face.GroupBy, nil
+						}
+						return nil, fmt.Errorf("field group_by not resolved")
+					},
+				},
+				"tags": &github_com_graphql_go_graphql.Field{
+					Type:        GraphQLResult_TagsEntryType,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Result)
+						if ok {
+							return obj.Tags, nil
+						}
+						inter, ok := p.Source.(ResultGetter)
+						if ok {
+							face := inter.GetResult()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Tags, nil
+						}
+						return nil, fmt.Errorf("field tags not resolved")
+					},
+				},
+				"values": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLDatapointType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Result)
+						if ok {
+							return obj.Values, nil
+						}
+						inter, ok := p.Source.(ResultGetter)
+						if ok {
+							face := inter.GetResult()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Values, nil
+						}
+						return nil, fmt.Errorf("field values not resolved")
+					},
+				},
+			}
+		}),
+	})
+	GraphQLQueryType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
+		Name:        "serviceQuery",
+		Description: "",
+		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
+			return github_com_graphql_go_graphql.Fields{
+				"results": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLResultType),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*Query)
+						if ok {
+							return obj.Results, nil
+						}
+						inter, ok := p.Source.(QueryGetter)
+						if ok {
+							face := inter.GetQuery()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Results, nil
+						}
+						return nil, fmt.Errorf("field results not resolved")
 					},
 				},
 			}
@@ -509,36 +1209,11 @@ func init() {
 	})
 	GraphQLGetMetricsRequestType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "serviceGetMetricsRequest",
-		Description: "Array of metrics with complete metric name and optional tags",
+		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
-				"requestor": &github_com_graphql_go_graphql.Field{
-					Type:        opsee1.GraphQLUserType,
-					Description: "",
-					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*GetMetricsRequest)
-						if ok {
-							if obj.Requestor == nil {
-								return nil, nil
-							}
-							return obj.GetRequestor(), nil
-						}
-						inter, ok := p.Source.(GetMetricsRequestGetter)
-						if ok {
-							face := inter.GetGetMetricsRequest()
-							if face == nil {
-								return nil, nil
-							}
-							if face.Requestor == nil {
-								return nil, nil
-							}
-							return face.GetRequestor(), nil
-						}
-						return nil, fmt.Errorf("field requestor not resolved")
-					},
-				},
 				"metrics": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.NewList(opsee2.GraphQLMetricType),
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLQueryMetricType),
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*GetMetricsRequest)
@@ -556,16 +1231,35 @@ func init() {
 						return nil, fmt.Errorf("field metrics not resolved")
 					},
 				},
-				"absolute_start_time": &github_com_graphql_go_graphql.Field{
+				"cache_time": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.Int,
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GetMetricsRequest)
+						if ok {
+							return obj.CacheTime, nil
+						}
+						inter, ok := p.Source.(GetMetricsRequestGetter)
+						if ok {
+							face := inter.GetGetMetricsRequest()
+							if face == nil {
+								return nil, nil
+							}
+							return face.CacheTime, nil
+						}
+						return nil, fmt.Errorf("field cache_time not resolved")
+					},
+				},
+				"start_absolute": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*GetMetricsRequest)
 						if ok {
-							if obj.AbsoluteStartTime == nil {
+							if obj.StartAbsolute == nil {
 								return nil, nil
 							}
-							return obj.GetAbsoluteStartTime(), nil
+							return obj.GetStartAbsolute(), nil
 						}
 						inter, ok := p.Source.(GetMetricsRequestGetter)
 						if ok {
@@ -573,24 +1267,24 @@ func init() {
 							if face == nil {
 								return nil, nil
 							}
-							if face.AbsoluteStartTime == nil {
+							if face.StartAbsolute == nil {
 								return nil, nil
 							}
-							return face.GetAbsoluteStartTime(), nil
+							return face.GetStartAbsolute(), nil
 						}
-						return nil, fmt.Errorf("field absolute_start_time not resolved")
+						return nil, fmt.Errorf("field start_absolute not resolved")
 					},
 				},
-				"absolute_end_time": &github_com_graphql_go_graphql.Field{
+				"end_absolute": &github_com_graphql_go_graphql.Field{
 					Type:        github_com_opsee_protobuf_plugin_graphql_scalars.Timestamp,
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*GetMetricsRequest)
 						if ok {
-							if obj.AbsoluteEndTime == nil {
+							if obj.EndAbsolute == nil {
 								return nil, nil
 							}
-							return obj.GetAbsoluteEndTime(), nil
+							return obj.GetEndAbsolute(), nil
 						}
 						inter, ok := p.Source.(GetMetricsRequestGetter)
 						if ok {
@@ -598,37 +1292,12 @@ func init() {
 							if face == nil {
 								return nil, nil
 							}
-							if face.AbsoluteEndTime == nil {
+							if face.EndAbsolute == nil {
 								return nil, nil
 							}
-							return face.GetAbsoluteEndTime(), nil
+							return face.GetEndAbsolute(), nil
 						}
-						return nil, fmt.Errorf("field absolute_end_time not resolved")
-					},
-				},
-				"aggregation": &github_com_graphql_go_graphql.Field{
-					Type:        GraphQLAggregationType,
-					Description: "",
-					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
-						obj, ok := p.Source.(*GetMetricsRequest)
-						if ok {
-							if obj.Aggregation == nil {
-								return nil, nil
-							}
-							return obj.GetAggregation(), nil
-						}
-						inter, ok := p.Source.(GetMetricsRequestGetter)
-						if ok {
-							face := inter.GetGetMetricsRequest()
-							if face == nil {
-								return nil, nil
-							}
-							if face.Aggregation == nil {
-								return nil, nil
-							}
-							return face.GetAggregation(), nil
-						}
-						return nil, fmt.Errorf("field aggregation not resolved")
+						return nil, fmt.Errorf("field end_absolute not resolved")
 					},
 				},
 			}
@@ -636,16 +1305,16 @@ func init() {
 	})
 	GraphQLGetMetricsResponseType = github_com_graphql_go_graphql.NewObject(github_com_graphql_go_graphql.ObjectConfig{
 		Name:        "serviceGetMetricsResponse",
-		Description: "Array of metrics from Opsee metrics store",
+		Description: "",
 		Fields: (github_com_graphql_go_graphql.FieldsThunk)(func() github_com_graphql_go_graphql.Fields {
 			return github_com_graphql_go_graphql.Fields{
-				"results": &github_com_graphql_go_graphql.Field{
-					Type:        github_com_graphql_go_graphql.NewList(GraphQLQueryResultType),
+				"queries": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(GraphQLQueryType),
 					Description: "",
 					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
 						obj, ok := p.Source.(*GetMetricsResponse)
 						if ok {
-							return obj.Results, nil
+							return obj.Queries, nil
 						}
 						inter, ok := p.Source.(GetMetricsResponseGetter)
 						if ok {
@@ -653,9 +1322,28 @@ func init() {
 							if face == nil {
 								return nil, nil
 							}
-							return face.Results, nil
+							return face.Queries, nil
 						}
-						return nil, fmt.Errorf("field results not resolved")
+						return nil, fmt.Errorf("field queries not resolved")
+					},
+				},
+				"errors": &github_com_graphql_go_graphql.Field{
+					Type:        github_com_graphql_go_graphql.NewList(github_com_graphql_go_graphql.String),
+					Description: "",
+					Resolve: func(p github_com_graphql_go_graphql.ResolveParams) (interface{}, error) {
+						obj, ok := p.Source.(*GetMetricsResponse)
+						if ok {
+							return obj.Errors, nil
+						}
+						inter, ok := p.Source.(GetMetricsResponseGetter)
+						if ok {
+							face := inter.GetGetMetricsResponse()
+							if face == nil {
+								return nil, nil
+							}
+							return face.Errors, nil
+						}
+						return nil, fmt.Errorf("field errors not resolved")
 					},
 				},
 			}
@@ -735,7 +1423,7 @@ var _Marktricks_serviceDesc = grpc.ServiceDesc{
 	Metadata: fileDescriptorMarktricks,
 }
 
-func (m *Group) Marshal() (data []byte, err error) {
+func (m *GroupBy) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
 	n, err := m.MarshalTo(data)
@@ -745,7 +1433,7 @@ func (m *Group) Marshal() (data []byte, err error) {
 	return data[:n], nil
 }
 
-func (m *Group) MarshalTo(data []byte) (int, error) {
+func (m *GroupBy) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -756,10 +1444,42 @@ func (m *Group) MarshalTo(data []byte) (int, error) {
 		i = encodeVarintMarktricks(data, i, uint64(len(m.Name)))
 		i += copy(data[i:], m.Name)
 	}
+	if len(m.Tags) > 0 {
+		for _, s := range m.Tags {
+			data[i] = 0x12
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	if len(m.Group) > 0 {
+		for k, _ := range m.Group {
+			data[i] = 0x1a
+			i++
+			v := m.Group[k]
+			mapSize := 1 + len(k) + sovMarktricks(uint64(len(k))) + 1 + len(v) + sovMarktricks(uint64(len(v)))
+			i = encodeVarintMarktricks(data, i, uint64(mapSize))
+			data[i] = 0xa
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(len(k)))
+			i += copy(data[i:], k)
+			data[i] = 0x12
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(len(v)))
+			i += copy(data[i:], v)
+		}
+	}
 	return i, nil
 }
 
-func (m *Aggregation) Marshal() (data []byte, err error) {
+func (m *Sampling) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
 	n, err := m.MarshalTo(data)
@@ -769,32 +1489,27 @@ func (m *Aggregation) Marshal() (data []byte, err error) {
 	return data[:n], nil
 }
 
-func (m *Aggregation) MarshalTo(data []byte) (int, error) {
+func (m *Sampling) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.Unit) > 0 {
+	if len(m.Value) > 0 {
 		data[i] = 0xa
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(len(m.Value)))
+		i += copy(data[i:], m.Value)
+	}
+	if len(m.Unit) > 0 {
+		data[i] = 0x12
 		i++
 		i = encodeVarintMarktricks(data, i, uint64(len(m.Unit)))
 		i += copy(data[i:], m.Unit)
 	}
-	if m.Period != 0 {
-		data[i] = 0x10
-		i++
-		i = encodeVarintMarktricks(data, i, uint64(m.Period))
-	}
-	if len(m.Type) > 0 {
-		data[i] = 0x1a
-		i++
-		i = encodeVarintMarktricks(data, i, uint64(len(m.Type)))
-		i += copy(data[i:], m.Type)
-	}
 	return i, nil
 }
 
-func (m *QueryResult) Marshal() (data []byte, err error) {
+func (m *Aggregator) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
 	n, err := m.MarshalTo(data)
@@ -804,14 +1519,122 @@ func (m *QueryResult) Marshal() (data []byte, err error) {
 	return data[:n], nil
 }
 
-func (m *QueryResult) MarshalTo(data []byte) (int, error) {
+func (m *Aggregator) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.Metrics) > 0 {
-		for _, msg := range m.Metrics {
+	if len(m.Name) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(len(m.Name)))
+		i += copy(data[i:], m.Name)
+	}
+	if m.AlignSampling {
+		data[i] = 0x10
+		i++
+		if m.AlignSampling {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if m.Sampling != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(m.Sampling.Size()))
+		n1, err := m.Sampling.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	return i, nil
+}
+
+func (m *StringList) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *StringList) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
 			data[i] = 0xa
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
+		}
+	}
+	return i, nil
+}
+
+func (m *QueryMetric) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *QueryMetric) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(len(m.Name)))
+		i += copy(data[i:], m.Name)
+	}
+	if len(m.Tags) > 0 {
+		for k, _ := range m.Tags {
+			data[i] = 0x12
+			i++
+			v := m.Tags[k]
+			if v == nil {
+				return 0, errors.New("proto: map has nil element")
+			}
+			msgSize := v.Size()
+			mapSize := 1 + len(k) + sovMarktricks(uint64(len(k))) + 1 + msgSize + sovMarktricks(uint64(msgSize))
+			i = encodeVarintMarktricks(data, i, uint64(mapSize))
+			data[i] = 0xa
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(len(k)))
+			i += copy(data[i:], k)
+			data[i] = 0x12
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(v.Size()))
+			n2, err := v.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n2
+		}
+	}
+	if len(m.GroupBy) > 0 {
+		for _, msg := range m.GroupBy {
+			data[i] = 0x1a
 			i++
 			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(data[i:])
@@ -821,9 +1644,150 @@ func (m *QueryResult) MarshalTo(data []byte) (int, error) {
 			i += n
 		}
 	}
-	if len(m.Groups) > 0 {
-		for _, msg := range m.Groups {
+	if len(m.Aggregators) > 0 {
+		for _, msg := range m.Aggregators {
+			data[i] = 0x22
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Limit != 0 {
+		data[i] = 0x28
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(m.Limit))
+	}
+	return i, nil
+}
+
+func (m *Datapoint) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Datapoint) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Timestamp != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(m.Timestamp.Size()))
+		n3, err := m.Timestamp.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if m.Value != 0 {
+		data[i] = 0x11
+		i++
+		i = encodeFixed64Marktricks(data, i, uint64(math.Float64bits(float64(m.Value))))
+	}
+	return i, nil
+}
+
+func (m *Result) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Result) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		data[i] = 0xa
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(len(m.Name)))
+		i += copy(data[i:], m.Name)
+	}
+	if len(m.GroupBy) > 0 {
+		for _, msg := range m.GroupBy {
 			data[i] = 0x12
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Tags) > 0 {
+		for k, _ := range m.Tags {
+			data[i] = 0x1a
+			i++
+			v := m.Tags[k]
+			if v == nil {
+				return 0, errors.New("proto: map has nil element")
+			}
+			msgSize := v.Size()
+			mapSize := 1 + len(k) + sovMarktricks(uint64(len(k))) + 1 + msgSize + sovMarktricks(uint64(msgSize))
+			i = encodeVarintMarktricks(data, i, uint64(mapSize))
+			data[i] = 0xa
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(len(k)))
+			i += copy(data[i:], k)
+			data[i] = 0x12
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(v.Size()))
+			n4, err := v.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n4
+		}
+	}
+	if len(m.Values) > 0 {
+		for _, msg := range m.Values {
+			data[i] = 0x22
+			i++
+			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *Query) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Query) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Results) > 0 {
+		for _, msg := range m.Results {
+			data[i] = 0xa
 			i++
 			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(data[i:])
@@ -851,19 +1815,9 @@ func (m *GetMetricsRequest) MarshalTo(data []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Requestor != nil {
-		data[i] = 0xa
-		i++
-		i = encodeVarintMarktricks(data, i, uint64(m.Requestor.Size()))
-		n1, err := m.Requestor.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
-	}
 	if len(m.Metrics) > 0 {
 		for _, msg := range m.Metrics {
-			data[i] = 0x12
+			data[i] = 0xa
 			i++
 			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(data[i:])
@@ -873,35 +1827,30 @@ func (m *GetMetricsRequest) MarshalTo(data []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.AbsoluteStartTime != nil {
+	if m.CacheTime != 0 {
+		data[i] = 0x10
+		i++
+		i = encodeVarintMarktricks(data, i, uint64(m.CacheTime))
+	}
+	if m.StartAbsolute != nil {
 		data[i] = 0x1a
 		i++
-		i = encodeVarintMarktricks(data, i, uint64(m.AbsoluteStartTime.Size()))
-		n2, err := m.AbsoluteStartTime.MarshalTo(data[i:])
+		i = encodeVarintMarktricks(data, i, uint64(m.StartAbsolute.Size()))
+		n5, err := m.StartAbsolute.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n5
 	}
-	if m.AbsoluteEndTime != nil {
+	if m.EndAbsolute != nil {
 		data[i] = 0x22
 		i++
-		i = encodeVarintMarktricks(data, i, uint64(m.AbsoluteEndTime.Size()))
-		n3, err := m.AbsoluteEndTime.MarshalTo(data[i:])
+		i = encodeVarintMarktricks(data, i, uint64(m.EndAbsolute.Size()))
+		n6, err := m.EndAbsolute.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
-	}
-	if m.Aggregation != nil {
-		data[i] = 0x2a
-		i++
-		i = encodeVarintMarktricks(data, i, uint64(m.Aggregation.Size()))
-		n4, err := m.Aggregation.MarshalTo(data[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
+		i += n6
 	}
 	return i, nil
 }
@@ -921,8 +1870,8 @@ func (m *GetMetricsResponse) MarshalTo(data []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Results) > 0 {
-		for _, msg := range m.Results {
+	if len(m.Queries) > 0 {
+		for _, msg := range m.Queries {
 			data[i] = 0xa
 			i++
 			i = encodeVarintMarktricks(data, i, uint64(msg.Size()))
@@ -931,6 +1880,21 @@ func (m *GetMetricsResponse) MarshalTo(data []byte) (int, error) {
 				return 0, err
 			}
 			i += n
+		}
+	}
+	if len(m.Errors) > 0 {
+		for _, s := range m.Errors {
+			data[i] = 0x2a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			data[i] = uint8(l)
+			i++
+			i += copy(data[i:], s)
 		}
 	}
 	return i, nil
@@ -963,41 +1927,142 @@ func encodeVarintMarktricks(data []byte, offset int, v uint64) int {
 	data[offset] = uint8(v)
 	return offset + 1
 }
-func NewPopulatedGroup(r randyMarktricks, easy bool) *Group {
-	this := &Group{}
+func NewPopulatedGroupBy(r randyMarktricks, easy bool) *GroupBy {
+	this := &GroupBy{}
 	this.Name = randStringMarktricks(r)
-	if !easy && r.Intn(10) != 0 {
+	v1 := r.Intn(10)
+	this.Tags = make([]string, v1)
+	for i := 0; i < v1; i++ {
+		this.Tags[i] = randStringMarktricks(r)
 	}
-	return this
-}
-
-func NewPopulatedAggregation(r randyMarktricks, easy bool) *Aggregation {
-	this := &Aggregation{}
-	this.Unit = randStringMarktricks(r)
-	this.Period = int64(r.Int63())
-	if r.Intn(2) == 0 {
-		this.Period *= -1
-	}
-	this.Type = randStringMarktricks(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedQueryResult(r randyMarktricks, easy bool) *QueryResult {
-	this := &QueryResult{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.Metrics = make([]*opsee2.Metric, v1)
-		for i := 0; i < v1; i++ {
-			this.Metrics[i] = opsee2.NewPopulatedMetric(r, easy)
+		v2 := r.Intn(10)
+		this.Group = make(map[string]string)
+		for i := 0; i < v2; i++ {
+			this.Group[randStringMarktricks(r)] = randStringMarktricks(r)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedSampling(r randyMarktricks, easy bool) *Sampling {
+	this := &Sampling{}
+	this.Value = randStringMarktricks(r)
+	this.Unit = randStringMarktricks(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedAggregator(r randyMarktricks, easy bool) *Aggregator {
+	this := &Aggregator{}
+	this.Name = randStringMarktricks(r)
+	this.AlignSampling = bool(bool(r.Intn(2) == 0))
+	if r.Intn(10) != 0 {
+		this.Sampling = NewPopulatedSampling(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedStringList(r randyMarktricks, easy bool) *StringList {
+	this := &StringList{}
+	v3 := r.Intn(10)
+	this.Values = make([]string, v3)
+	for i := 0; i < v3; i++ {
+		this.Values[i] = randStringMarktricks(r)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedQueryMetric(r randyMarktricks, easy bool) *QueryMetric {
+	this := &QueryMetric{}
+	this.Name = randStringMarktricks(r)
+	if r.Intn(10) != 0 {
+		v4 := r.Intn(10)
+		this.Tags = make(map[string]*StringList)
+		for i := 0; i < v4; i++ {
+			this.Tags[randStringMarktricks(r)] = NewPopulatedStringList(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.Groups = make([]*Group, v2)
-		for i := 0; i < v2; i++ {
-			this.Groups[i] = NewPopulatedGroup(r, easy)
+		v5 := r.Intn(5)
+		this.GroupBy = make([]*GroupBy, v5)
+		for i := 0; i < v5; i++ {
+			this.GroupBy[i] = NewPopulatedGroupBy(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v6 := r.Intn(5)
+		this.Aggregators = make([]*Aggregator, v6)
+		for i := 0; i < v6; i++ {
+			this.Aggregators[i] = NewPopulatedAggregator(r, easy)
+		}
+	}
+	this.Limit = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Limit *= -1
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedDatapoint(r randyMarktricks, easy bool) *Datapoint {
+	this := &Datapoint{}
+	if r.Intn(10) != 0 {
+		this.Timestamp = opsee_types.NewPopulatedTimestamp(r, easy)
+	}
+	this.Value = float64(r.Float64())
+	if r.Intn(2) == 0 {
+		this.Value *= -1
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedResult(r randyMarktricks, easy bool) *Result {
+	this := &Result{}
+	this.Name = randStringMarktricks(r)
+	if r.Intn(10) != 0 {
+		v7 := r.Intn(5)
+		this.GroupBy = make([]*GroupBy, v7)
+		for i := 0; i < v7; i++ {
+			this.GroupBy[i] = NewPopulatedGroupBy(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v8 := r.Intn(10)
+		this.Tags = make(map[string]*StringList)
+		for i := 0; i < v8; i++ {
+			this.Tags[randStringMarktricks(r)] = NewPopulatedStringList(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v9 := r.Intn(5)
+		this.Values = make([]*Datapoint, v9)
+		for i := 0; i < v9; i++ {
+			this.Values[i] = NewPopulatedDatapoint(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedQuery(r randyMarktricks, easy bool) *Query {
+	this := &Query{}
+	if r.Intn(10) != 0 {
+		v10 := r.Intn(5)
+		this.Results = make([]*Result, v10)
+		for i := 0; i < v10; i++ {
+			this.Results[i] = NewPopulatedResult(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -1008,23 +2073,21 @@ func NewPopulatedQueryResult(r randyMarktricks, easy bool) *QueryResult {
 func NewPopulatedGetMetricsRequest(r randyMarktricks, easy bool) *GetMetricsRequest {
 	this := &GetMetricsRequest{}
 	if r.Intn(10) != 0 {
-		this.Requestor = opsee1.NewPopulatedUser(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v3 := r.Intn(5)
-		this.Metrics = make([]*opsee2.Metric, v3)
-		for i := 0; i < v3; i++ {
-			this.Metrics[i] = opsee2.NewPopulatedMetric(r, easy)
+		v11 := r.Intn(5)
+		this.Metrics = make([]*QueryMetric, v11)
+		for i := 0; i < v11; i++ {
+			this.Metrics[i] = NewPopulatedQueryMetric(r, easy)
 		}
 	}
-	if r.Intn(10) != 0 {
-		this.AbsoluteStartTime = opsee_types.NewPopulatedTimestamp(r, easy)
+	this.CacheTime = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.CacheTime *= -1
 	}
 	if r.Intn(10) != 0 {
-		this.AbsoluteEndTime = opsee_types.NewPopulatedTimestamp(r, easy)
+		this.StartAbsolute = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Aggregation = NewPopulatedAggregation(r, easy)
+		this.EndAbsolute = opsee_types.NewPopulatedTimestamp(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1034,11 +2097,16 @@ func NewPopulatedGetMetricsRequest(r randyMarktricks, easy bool) *GetMetricsRequ
 func NewPopulatedGetMetricsResponse(r randyMarktricks, easy bool) *GetMetricsResponse {
 	this := &GetMetricsResponse{}
 	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.Results = make([]*QueryResult, v4)
-		for i := 0; i < v4; i++ {
-			this.Results[i] = NewPopulatedQueryResult(r, easy)
+		v12 := r.Intn(5)
+		this.Queries = make([]*Query, v12)
+		for i := 0; i < v12; i++ {
+			this.Queries[i] = NewPopulatedQuery(r, easy)
 		}
+	}
+	v13 := r.Intn(10)
+	this.Errors = make([]string, v13)
+	for i := 0; i < v13; i++ {
+		this.Errors[i] = randStringMarktricks(r)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1064,9 +2132,9 @@ func randUTF8RuneMarktricks(r randyMarktricks) rune {
 	return rune(ru + 61)
 }
 func randStringMarktricks(r randyMarktricks) string {
-	v5 := r.Intn(100)
-	tmps := make([]rune, v5)
-	for i := 0; i < v5; i++ {
+	v14 := r.Intn(100)
+	tmps := make([]rune, v14)
+	for i := 0; i < v14; i++ {
 		tmps[i] = randUTF8RuneMarktricks(r)
 	}
 	return string(tmps)
@@ -1088,11 +2156,11 @@ func randFieldMarktricks(data []byte, r randyMarktricks, fieldNumber int, wire i
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateMarktricks(data, uint64(key))
-		v6 := r.Int63()
+		v15 := r.Int63()
 		if r.Intn(2) == 0 {
-			v6 *= -1
+			v15 *= -1
 		}
-		data = encodeVarintPopulateMarktricks(data, uint64(v6))
+		data = encodeVarintPopulateMarktricks(data, uint64(v15))
 	case 1:
 		data = encodeVarintPopulateMarktricks(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -1117,44 +2185,162 @@ func encodeVarintPopulateMarktricks(data []byte, v uint64) []byte {
 	data = append(data, uint8(v))
 	return data
 }
-func (m *Group) Size() (n int) {
+func (m *GroupBy) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovMarktricks(uint64(l))
 	}
+	if len(m.Tags) > 0 {
+		for _, s := range m.Tags {
+			l = len(s)
+			n += 1 + l + sovMarktricks(uint64(l))
+		}
+	}
+	if len(m.Group) > 0 {
+		for k, v := range m.Group {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovMarktricks(uint64(len(k))) + 1 + len(v) + sovMarktricks(uint64(len(v)))
+			n += mapEntrySize + 1 + sovMarktricks(uint64(mapEntrySize))
+		}
+	}
 	return n
 }
 
-func (m *Aggregation) Size() (n int) {
+func (m *Sampling) Size() (n int) {
 	var l int
 	_ = l
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovMarktricks(uint64(l))
+	}
 	l = len(m.Unit)
 	if l > 0 {
 		n += 1 + l + sovMarktricks(uint64(l))
 	}
-	if m.Period != 0 {
-		n += 1 + sovMarktricks(uint64(m.Period))
-	}
-	l = len(m.Type)
+	return n
+}
+
+func (m *Aggregator) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Name)
 	if l > 0 {
+		n += 1 + l + sovMarktricks(uint64(l))
+	}
+	if m.AlignSampling {
+		n += 2
+	}
+	if m.Sampling != nil {
+		l = m.Sampling.Size()
 		n += 1 + l + sovMarktricks(uint64(l))
 	}
 	return n
 }
 
-func (m *QueryResult) Size() (n int) {
+func (m *StringList) Size() (n int) {
 	var l int
 	_ = l
-	if len(m.Metrics) > 0 {
-		for _, e := range m.Metrics {
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			l = len(s)
+			n += 1 + l + sovMarktricks(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryMetric) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovMarktricks(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for k, v := range m.Tags {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+			}
+			mapEntrySize := 1 + len(k) + sovMarktricks(uint64(len(k))) + 1 + l + sovMarktricks(uint64(l))
+			n += mapEntrySize + 1 + sovMarktricks(uint64(mapEntrySize))
+		}
+	}
+	if len(m.GroupBy) > 0 {
+		for _, e := range m.GroupBy {
 			l = e.Size()
 			n += 1 + l + sovMarktricks(uint64(l))
 		}
 	}
-	if len(m.Groups) > 0 {
-		for _, e := range m.Groups {
+	if len(m.Aggregators) > 0 {
+		for _, e := range m.Aggregators {
+			l = e.Size()
+			n += 1 + l + sovMarktricks(uint64(l))
+		}
+	}
+	if m.Limit != 0 {
+		n += 1 + sovMarktricks(uint64(m.Limit))
+	}
+	return n
+}
+
+func (m *Datapoint) Size() (n int) {
+	var l int
+	_ = l
+	if m.Timestamp != nil {
+		l = m.Timestamp.Size()
+		n += 1 + l + sovMarktricks(uint64(l))
+	}
+	if m.Value != 0 {
+		n += 9
+	}
+	return n
+}
+
+func (m *Result) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovMarktricks(uint64(l))
+	}
+	if len(m.GroupBy) > 0 {
+		for _, e := range m.GroupBy {
+			l = e.Size()
+			n += 1 + l + sovMarktricks(uint64(l))
+		}
+	}
+	if len(m.Tags) > 0 {
+		for k, v := range m.Tags {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+			}
+			mapEntrySize := 1 + len(k) + sovMarktricks(uint64(len(k))) + 1 + l + sovMarktricks(uint64(l))
+			n += mapEntrySize + 1 + sovMarktricks(uint64(mapEntrySize))
+		}
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovMarktricks(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *Query) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Results) > 0 {
+		for _, e := range m.Results {
 			l = e.Size()
 			n += 1 + l + sovMarktricks(uint64(l))
 		}
@@ -1165,26 +2351,21 @@ func (m *QueryResult) Size() (n int) {
 func (m *GetMetricsRequest) Size() (n int) {
 	var l int
 	_ = l
-	if m.Requestor != nil {
-		l = m.Requestor.Size()
-		n += 1 + l + sovMarktricks(uint64(l))
-	}
 	if len(m.Metrics) > 0 {
 		for _, e := range m.Metrics {
 			l = e.Size()
 			n += 1 + l + sovMarktricks(uint64(l))
 		}
 	}
-	if m.AbsoluteStartTime != nil {
-		l = m.AbsoluteStartTime.Size()
+	if m.CacheTime != 0 {
+		n += 1 + sovMarktricks(uint64(m.CacheTime))
+	}
+	if m.StartAbsolute != nil {
+		l = m.StartAbsolute.Size()
 		n += 1 + l + sovMarktricks(uint64(l))
 	}
-	if m.AbsoluteEndTime != nil {
-		l = m.AbsoluteEndTime.Size()
-		n += 1 + l + sovMarktricks(uint64(l))
-	}
-	if m.Aggregation != nil {
-		l = m.Aggregation.Size()
+	if m.EndAbsolute != nil {
+		l = m.EndAbsolute.Size()
 		n += 1 + l + sovMarktricks(uint64(l))
 	}
 	return n
@@ -1193,9 +2374,15 @@ func (m *GetMetricsRequest) Size() (n int) {
 func (m *GetMetricsResponse) Size() (n int) {
 	var l int
 	_ = l
-	if len(m.Results) > 0 {
-		for _, e := range m.Results {
+	if len(m.Queries) > 0 {
+		for _, e := range m.Queries {
 			l = e.Size()
+			n += 1 + l + sovMarktricks(uint64(l))
+		}
+	}
+	if len(m.Errors) > 0 {
+		for _, s := range m.Errors {
+			l = len(s)
 			n += 1 + l + sovMarktricks(uint64(l))
 		}
 	}
@@ -1215,7 +2402,7 @@ func sovMarktricks(x uint64) (n int) {
 func sozMarktricks(x uint64) (n int) {
 	return sovMarktricks(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *Group) Unmarshal(data []byte) error {
+func (m *GroupBy) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1238,10 +2425,10 @@ func (m *Group) Unmarshal(data []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Group: wiretype end group for non-group")
+			return fmt.Errorf("proto: GroupBy: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Group: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: GroupBy: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1273,6 +2460,146 @@ func (m *Group) Unmarshal(data []byte) error {
 			}
 			m.Name = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Group", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			var keykey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				keykey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			var stringLenmapkey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLenmapkey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLenmapkey := int(stringLenmapkey)
+			if intStringLenmapkey < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postStringIndexmapkey := iNdEx + intStringLenmapkey
+			if postStringIndexmapkey > l {
+				return io.ErrUnexpectedEOF
+			}
+			mapkey := string(data[iNdEx:postStringIndexmapkey])
+			iNdEx = postStringIndexmapkey
+			var valuekey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				valuekey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			var stringLenmapvalue uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLenmapvalue := int(stringLenmapvalue)
+			if intStringLenmapvalue < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+			if postStringIndexmapvalue > l {
+				return io.ErrUnexpectedEOF
+			}
+			mapvalue := string(data[iNdEx:postStringIndexmapvalue])
+			iNdEx = postStringIndexmapvalue
+			if m.Group == nil {
+				m.Group = make(map[string]string)
+			}
+			m.Group[mapkey] = mapvalue
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipMarktricks(data[iNdEx:])
@@ -1294,7 +2621,7 @@ func (m *Group) Unmarshal(data []byte) error {
 	}
 	return nil
 }
-func (m *Aggregation) Unmarshal(data []byte) error {
+func (m *Sampling) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1317,13 +2644,42 @@ func (m *Aggregation) Unmarshal(data []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Aggregation: wiretype end group for non-group")
+			return fmt.Errorf("proto: Sampling: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Aggregation: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Sampling: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Unit", wireType)
 			}
@@ -1352,28 +2708,59 @@ func (m *Aggregation) Unmarshal(data []byte) error {
 			}
 			m.Unit = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMarktricks(data[iNdEx:])
+			if err != nil {
+				return err
 			}
-			m.Period = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMarktricks
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[iNdEx]
-				iNdEx++
-				m.Period |= (int64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
+			if skippy < 0 {
+				return ErrInvalidLengthMarktricks
 			}
-		case 3:
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Aggregator) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMarktricks
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Aggregator: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Aggregator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1398,7 +2785,60 @@ func (m *Aggregation) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Type = string(data[iNdEx:postIndex])
+			m.Name = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlignSampling", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AlignSampling = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sampling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Sampling == nil {
+				m.Sampling = &Sampling{}
+			}
+			if err := m.Sampling.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1421,7 +2861,7 @@ func (m *Aggregation) Unmarshal(data []byte) error {
 	}
 	return nil
 }
-func (m *QueryResult) Unmarshal(data []byte) error {
+func (m *StringList) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1444,15 +2884,123 @@ func (m *QueryResult) Unmarshal(data []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryResult: wiretype end group for non-group")
+			return fmt.Errorf("proto: StringList: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryResult: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: StringList: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metrics", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, string(data[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMarktricks(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryMetric) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMarktricks
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryMetric: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryMetric: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1476,14 +3024,360 @@ func (m *QueryResult) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Metrics = append(m.Metrics, &opsee2.Metric{})
-			if err := m.Metrics[len(m.Metrics)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+			var keykey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				keykey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			var stringLenmapkey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLenmapkey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLenmapkey := int(stringLenmapkey)
+			if intStringLenmapkey < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postStringIndexmapkey := iNdEx + intStringLenmapkey
+			if postStringIndexmapkey > l {
+				return io.ErrUnexpectedEOF
+			}
+			mapkey := string(data[iNdEx:postStringIndexmapkey])
+			iNdEx = postStringIndexmapkey
+			var valuekey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				valuekey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			var mapmsglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				mapmsglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if mapmsglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postmsgIndex := iNdEx + mapmsglen
+			if mapmsglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			if postmsgIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			mapvalue := &StringList{}
+			if err := mapvalue.Unmarshal(data[iNdEx:postmsgIndex]); err != nil {
+				return err
+			}
+			iNdEx = postmsgIndex
+			if m.Tags == nil {
+				m.Tags = make(map[string]*StringList)
+			}
+			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupBy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GroupBy = append(m.GroupBy, &GroupBy{})
+			if err := m.GroupBy[len(m.GroupBy)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aggregators", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Aggregators = append(m.Aggregators, &Aggregator{})
+			if err := m.Aggregators[len(m.Aggregators)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
+			}
+			m.Limit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Limit |= (int64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMarktricks(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Datapoint) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMarktricks
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Datapoint: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Datapoint: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Timestamp == nil {
+				m.Timestamp = &opsee_types.Timestamp{}
+			}
+			if err := m.Timestamp.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 2:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var v uint64
+			if (iNdEx + 8) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += 8
+			v = uint64(data[iNdEx-8])
+			v |= uint64(data[iNdEx-7]) << 8
+			v |= uint64(data[iNdEx-6]) << 16
+			v |= uint64(data[iNdEx-5]) << 24
+			v |= uint64(data[iNdEx-4]) << 32
+			v |= uint64(data[iNdEx-3]) << 40
+			v |= uint64(data[iNdEx-2]) << 48
+			v |= uint64(data[iNdEx-1]) << 56
+			m.Value = float64(math.Float64frombits(v))
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMarktricks(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Result) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMarktricks
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Result: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Result: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Groups", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupBy", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1507,8 +3401,236 @@ func (m *QueryResult) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Groups = append(m.Groups, &Group{})
-			if err := m.Groups[len(m.Groups)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+			m.GroupBy = append(m.GroupBy, &GroupBy{})
+			if err := m.GroupBy[len(m.GroupBy)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			var keykey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				keykey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			var stringLenmapkey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLenmapkey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLenmapkey := int(stringLenmapkey)
+			if intStringLenmapkey < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postStringIndexmapkey := iNdEx + intStringLenmapkey
+			if postStringIndexmapkey > l {
+				return io.ErrUnexpectedEOF
+			}
+			mapkey := string(data[iNdEx:postStringIndexmapkey])
+			iNdEx = postStringIndexmapkey
+			var valuekey uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				valuekey |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			var mapmsglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				mapmsglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if mapmsglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postmsgIndex := iNdEx + mapmsglen
+			if mapmsglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			if postmsgIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			mapvalue := &StringList{}
+			if err := mapvalue.Unmarshal(data[iNdEx:postmsgIndex]); err != nil {
+				return err
+			}
+			iNdEx = postmsgIndex
+			if m.Tags == nil {
+				m.Tags = make(map[string]*StringList)
+			}
+			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &Datapoint{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMarktricks(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Query) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMarktricks
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Query: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Query: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Results", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Results = append(m.Results, &Result{})
+			if err := m.Results[len(m.Results)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1564,39 +3686,6 @@ func (m *GetMetricsRequest) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Requestor", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMarktricks
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMarktricks
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Requestor == nil {
-				m.Requestor = &opsee1.User{}
-			}
-			if err := m.Requestor.Unmarshal(data[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Metrics", wireType)
 			}
 			var msglen int
@@ -1621,14 +3710,33 @@ func (m *GetMetricsRequest) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Metrics = append(m.Metrics, &opsee2.Metric{})
+			m.Metrics = append(m.Metrics, &QueryMetric{})
 			if err := m.Metrics[len(m.Metrics)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CacheTime", wireType)
+			}
+			m.CacheTime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.CacheTime |= (int64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AbsoluteStartTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field StartAbsolute", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1652,16 +3760,16 @@ func (m *GetMetricsRequest) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.AbsoluteStartTime == nil {
-				m.AbsoluteStartTime = &opsee_types.Timestamp{}
+			if m.StartAbsolute == nil {
+				m.StartAbsolute = &opsee_types.Timestamp{}
 			}
-			if err := m.AbsoluteStartTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
+			if err := m.StartAbsolute.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AbsoluteEndTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field EndAbsolute", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1685,43 +3793,10 @@ func (m *GetMetricsRequest) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.AbsoluteEndTime == nil {
-				m.AbsoluteEndTime = &opsee_types.Timestamp{}
+			if m.EndAbsolute == nil {
+				m.EndAbsolute = &opsee_types.Timestamp{}
 			}
-			if err := m.AbsoluteEndTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Aggregation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMarktricks
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMarktricks
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Aggregation == nil {
-				m.Aggregation = &Aggregation{}
-			}
-			if err := m.Aggregation.Unmarshal(data[iNdEx:postIndex]); err != nil {
+			if err := m.EndAbsolute.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1777,7 +3852,7 @@ func (m *GetMetricsResponse) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Results", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Queries", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1801,10 +3876,39 @@ func (m *GetMetricsResponse) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Results = append(m.Results, &QueryResult{})
-			if err := m.Results[len(m.Results)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+			m.Queries = append(m.Queries, &Query{})
+			if err := m.Queries[len(m.Queries)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Errors", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMarktricks
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMarktricks
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Errors = append(m.Errors, string(data[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1933,36 +4037,56 @@ var (
 )
 
 var fileDescriptorMarktricks = []byte{
-	// 494 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x8c, 0x53, 0xcd, 0xaa, 0xd3, 0x40,
-	0x14, 0x26, 0xfd, 0xe5, 0x9e, 0x28, 0x7a, 0x47, 0xb8, 0xc4, 0x0a, 0x57, 0x09, 0x8a, 0x55, 0xa4,
-	0x91, 0xea, 0x46, 0x77, 0xb7, 0xa0, 0x77, 0x55, 0xc5, 0x51, 0x37, 0x22, 0x94, 0x49, 0x7a, 0xcc,
-	0x0d, 0x6d, 0x32, 0x71, 0x66, 0xa2, 0xf4, 0x75, 0x5c, 0xe9, 0x1b, 0xb8, 0x74, 0xe9, 0xd2, 0x47,
-	0x50, 0x9f, 0xc2, 0xa5, 0xf3, 0x93, 0xb4, 0x41, 0xa5, 0xb8, 0x38, 0xe1, 0xfc, 0x7c, 0xdf, 0x99,
-	0x33, 0xe7, 0x9b, 0xc0, 0xc5, 0x9c, 0x89, 0x95, 0x12, 0x59, 0xb2, 0x92, 0x93, 0x52, 0x70, 0xc5,
-	0x49, 0x9f, 0x97, 0x12, 0x71, 0x74, 0x37, 0xcd, 0xd4, 0x59, 0x15, 0x4f, 0x12, 0x9e, 0x47, 0x36,
-	0x13, 0xd9, 0x72, 0x5c, 0xbd, 0x71, 0xa1, 0x8d, 0x9c, 0xeb, 0x88, 0xa3, 0x87, 0xff, 0xc5, 0x50,
-	0x9b, 0x12, 0x65, 0xa4, 0xb2, 0x1c, 0xa5, 0x62, 0x79, 0x59, 0x73, 0x1f, 0xfc, 0xc5, 0x8d, 0x99,
-	0xcc, 0x92, 0x48, 0x26, 0x67, 0x98, 0xb3, 0x88, 0xbd, 0x97, 0x51, 0x22, 0x70, 0x89, 0x85, 0xca,
-	0xd8, 0x5a, 0xba, 0x26, 0x35, 0x75, 0xbc, 0x9f, 0x5a, 0x49, 0x14, 0x35, 0xf2, 0xf6, 0x7e, 0xa4,
-	0xfe, 0x6e, 0xb7, 0x30, 0xf2, 0xf5, 0x74, 0xc9, 0xca, 0x05, 0xe1, 0x15, 0xe8, 0x9f, 0x0a, 0x5e,
-	0x95, 0x84, 0x40, 0xef, 0x09, 0xcb, 0x31, 0xf0, 0xae, 0x79, 0xe3, 0x03, 0xda, 0x2b, 0xb4, 0x1f,
-	0xce, 0xc1, 0x3f, 0x49, 0x53, 0x81, 0x29, 0x53, 0x19, 0x2f, 0x0c, 0xa4, 0x2a, 0x32, 0xd5, 0x40,
-	0x8c, 0x4f, 0x8e, 0x60, 0x50, 0xa2, 0xc8, 0xf8, 0x32, 0xe8, 0xe8, 0x6c, 0x97, 0xd6, 0x91, 0xc1,
-	0x9a, 0x9b, 0x04, 0x5d, 0x87, 0x35, 0x7e, 0xf8, 0x1a, 0xfc, 0x67, 0x15, 0x8a, 0x0d, 0x45, 0x59,
-	0xad, 0x15, 0xb9, 0x09, 0xc3, 0x1c, 0x8d, 0x3e, 0x52, 0x77, 0xec, 0x8e, 0xfd, 0xe9, 0xf9, 0x89,
-	0xdb, 0xf9, 0xdc, 0x66, 0x69, 0x53, 0x25, 0xd7, 0x61, 0x90, 0x9a, 0x19, 0xa5, 0x3e, 0xc3, 0xe0,
-	0xce, 0xd5, 0x38, 0x3b, 0x38, 0xad, 0x6b, 0xe1, 0xa7, 0x0e, 0x1c, 0x9e, 0xa2, 0x72, 0x64, 0x49,
-	0xf1, 0x6d, 0xa5, 0x65, 0x20, 0xb7, 0xe0, 0x40, 0x38, 0x97, 0x0b, 0x3b, 0xb8, 0x3f, 0xf5, 0x6b,
-	0xfa, 0x4b, 0xbd, 0x3e, 0xba, 0xab, 0xb6, 0xe7, 0xe9, 0xec, 0x9d, 0xe7, 0x31, 0x5c, 0x62, 0xb1,
-	0xe4, 0xeb, 0x4a, 0xe1, 0x42, 0xef, 0x52, 0xa8, 0x85, 0xd1, 0xdc, 0x5e, 0xd5, 0x9f, 0x1e, 0xd5,
-	0x24, 0xa7, 0xe3, 0x8b, 0xe6, 0x31, 0xd0, 0xc3, 0x86, 0xf2, 0xdc, 0x30, 0x4c, 0x9e, 0xcc, 0x60,
-	0x9b, 0x5c, 0x60, 0xb1, 0x74, 0x5d, 0x7a, 0x7b, 0xbb, 0x5c, 0x68, 0x08, 0x8f, 0x8a, 0xa5, 0xed,
-	0x71, 0x1f, 0x7c, 0xb6, 0x93, 0x28, 0xe8, 0x5b, 0x36, 0xa9, 0xd9, 0x2d, 0xf1, 0x68, 0x1b, 0x16,
-	0xce, 0x80, 0xb4, 0x57, 0x25, 0x4b, 0x5e, 0x48, 0x24, 0x77, 0x60, 0x28, 0xac, 0x34, 0x8d, 0x20,
-	0x4d, 0x9f, 0x96, 0x6a, 0xb4, 0x81, 0x4c, 0x9f, 0x02, 0xcc, 0xb7, 0x3f, 0x18, 0x39, 0x01, 0xd8,
-	0x75, 0x24, 0x41, 0xa3, 0xd0, 0x9f, 0x7a, 0x8c, 0x2e, 0xff, 0xa3, 0xe2, 0x8e, 0x9f, 0xdd, 0xf8,
-	0xf5, 0xe3, 0xd8, 0xfb, 0xf8, 0xf3, 0xd8, 0xfb, 0xac, 0xed, 0xab, 0xb6, 0x6f, 0xda, 0xbe, 0x6b,
-	0xfb, 0xf2, 0xe1, 0xaa, 0xf7, 0x6a, 0xa8, 0xd5, 0x7a, 0x97, 0x25, 0x18, 0x0f, 0xec, 0xc3, 0xbd,
-	0xf7, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x4a, 0x81, 0xca, 0xfd, 0xdf, 0x03, 0x00, 0x00,
+	// 804 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x55, 0x4d, 0x4f, 0x1b, 0x47,
+	0x18, 0xee, 0xfa, 0xdb, 0xef, 0x02, 0x85, 0x51, 0x45, 0x8d, 0x45, 0x01, 0xad, 0x44, 0x4b, 0xa1,
+	0xb5, 0x91, 0xa1, 0x2a, 0x20, 0xf5, 0x80, 0xd5, 0x0a, 0xa9, 0x2a, 0xaa, 0xba, 0x20, 0x55, 0xea,
+	0xc5, 0x1a, 0x2f, 0xd3, 0x65, 0xe5, 0xfd, 0xca, 0xcc, 0x2c, 0x91, 0xff, 0x4b, 0x4e, 0xc9, 0x25,
+	0x3f, 0x21, 0xc7, 0x1c, 0x73, 0xcc, 0x39, 0x87, 0x28, 0xc9, 0x91, 0x5f, 0x90, 0x63, 0x66, 0x67,
+	0x66, 0x3f, 0x1c, 0x1c, 0x94, 0x43, 0x0e, 0x6b, 0xcf, 0xbc, 0xf3, 0x3c, 0x33, 0xef, 0xfb, 0x3c,
+	0xef, 0xec, 0xc2, 0x72, 0x80, 0xe9, 0x84, 0x53, 0xcf, 0x99, 0xb0, 0x5e, 0x4c, 0x23, 0x1e, 0xa1,
+	0x7a, 0x14, 0x33, 0x42, 0xba, 0xfb, 0xae, 0xc7, 0xaf, 0x93, 0x71, 0xcf, 0x89, 0x82, 0xbe, 0x8c,
+	0xf4, 0xe5, 0xf2, 0x38, 0xf9, 0x5f, 0x4d, 0xe5, 0x4c, 0x0d, 0x15, 0xb1, 0x7b, 0xf2, 0x59, 0x0c,
+	0x3e, 0x8d, 0x09, 0xeb, 0x73, 0x2f, 0x20, 0x8c, 0xe3, 0x20, 0xd6, 0xdc, 0xe3, 0x3b, 0xdc, 0x31,
+	0x66, 0x9e, 0xd3, 0x67, 0xce, 0x35, 0x09, 0x70, 0x1f, 0x3f, 0x64, 0x7d, 0x87, 0x92, 0x2b, 0x12,
+	0x72, 0x0f, 0xfb, 0x4c, 0x6d, 0xa2, 0xa9, 0x3b, 0xf7, 0x53, 0x13, 0x46, 0xa8, 0x46, 0xee, 0xde,
+	0x8f, 0x14, 0xbf, 0xb9, 0x0a, 0xdd, 0x5f, 0x4a, 0x58, 0x37, 0xf2, 0x71, 0xe8, 0x16, 0xd5, 0xc4,
+	0xaa, 0x06, 0xc6, 0x69, 0xe2, 0x70, 0xfd, 0xa7, 0x69, 0x3f, 0xcf, 0xd0, 0xdc, 0xa8, 0x20, 0xa5,
+	0x33, 0xa5, 0x40, 0x3a, 0xd2, 0x70, 0x53, 0x68, 0xe0, 0x4c, 0xd4, 0xc4, 0x7a, 0x64, 0x40, 0xf3,
+	0x8c, 0x46, 0x49, 0x3c, 0x9c, 0x22, 0x04, 0xb5, 0x10, 0x07, 0xa4, 0x63, 0x6c, 0x19, 0x3b, 0x6d,
+	0x5b, 0x8e, 0xd3, 0x18, 0xc7, 0x2e, 0xeb, 0x54, 0xb6, 0xaa, 0x69, 0x2c, 0x1d, 0xa3, 0x3e, 0xd4,
+	0xdd, 0x94, 0xd2, 0xa9, 0x8a, 0xa0, 0x39, 0x58, 0xeb, 0x29, 0x43, 0xf4, 0x36, 0xea, 0xff, 0x8f,
+	0x90, 0xd3, 0xa9, 0xad, 0x70, 0xdd, 0x23, 0x80, 0x22, 0x88, 0x96, 0xa1, 0x3a, 0x21, 0x53, 0x7d,
+	0x4a, 0x3a, 0x44, 0xdf, 0x40, 0xfd, 0x06, 0xfb, 0x09, 0x11, 0xa7, 0xa4, 0x31, 0x35, 0x39, 0xa9,
+	0x1c, 0x19, 0xd6, 0x21, 0xb4, 0x2e, 0x84, 0x61, 0xbe, 0x17, 0xba, 0x05, 0xca, 0x28, 0xa1, 0xd2,
+	0x04, 0x93, 0xd0, 0xe3, 0x9a, 0x2a, 0xc7, 0x16, 0x07, 0x38, 0x75, 0x5d, 0x4a, 0x5c, 0xcc, 0x23,
+	0x3a, 0xb7, 0xac, 0x6d, 0x58, 0xc2, 0xbe, 0xe7, 0x86, 0x23, 0xa6, 0x77, 0x97, 0xfc, 0x96, 0xbd,
+	0x28, 0xa3, 0xf9, 0x91, 0x7b, 0xd0, 0xca, 0x01, 0x55, 0x01, 0x30, 0x07, 0x5f, 0xeb, 0x62, 0x33,
+	0x88, 0x9d, 0x03, 0xac, 0x5d, 0x80, 0x0b, 0xd1, 0xd4, 0xa1, 0xfb, 0x97, 0xc7, 0x38, 0x5a, 0x87,
+	0x86, 0x4c, 0x90, 0x89, 0x73, 0x85, 0x74, 0xc3, 0xda, 0xed, 0xeb, 0xcd, 0xaf, 0x6c, 0x1d, 0xb3,
+	0x9e, 0x54, 0xc0, 0xfc, 0x27, 0x21, 0x74, 0x7a, 0x4e, 0xd2, 0x7b, 0x30, 0x37, 0xc7, 0xfd, 0x92,
+	0xf4, 0xe6, 0x60, 0x5d, 0x1f, 0x5c, 0x62, 0xf5, 0x2e, 0xc5, 0xb2, 0x12, 0x5a, 0x19, 0xf3, 0x2b,
+	0xb4, 0xa4, 0xe0, 0xa3, 0xf1, 0x54, 0x7b, 0xb3, 0x34, 0xeb, 0xcd, 0x70, 0x41, 0x64, 0x91, 0x63,
+	0xec, 0xa6, 0xab, 0x9d, 0x3f, 0x00, 0x13, 0xe7, 0x82, 0xb1, 0x4e, 0x4d, 0x72, 0x57, 0x34, 0xb7,
+	0x90, 0xd2, 0x2e, 0xa3, 0x52, 0x3f, 0x7c, 0x2f, 0x10, 0xd2, 0xd7, 0x45, 0xd2, 0x55, 0x5b, 0x4d,
+	0xba, 0x7f, 0x42, 0x3b, 0x4f, 0x6b, 0x8e, 0xd5, 0x3f, 0x94, 0xad, 0x2e, 0xce, 0x28, 0x84, 0x2b,
+	0xbb, 0xff, 0x2f, 0xb4, 0x7f, 0xc7, 0x1c, 0xc7, 0x91, 0x17, 0x72, 0x74, 0x08, 0xed, 0xfc, 0x02,
+	0xcb, 0x1d, 0xcd, 0xc1, 0xaa, 0x66, 0xab, 0x9b, 0x79, 0x99, 0xad, 0xda, 0x05, 0x70, 0xb6, 0xb5,
+	0x0c, 0xbd, 0xb9, 0x75, 0x6b, 0x40, 0xc3, 0x26, 0x2c, 0xf1, 0xf9, 0x5c, 0xe5, 0x7f, 0x2c, 0xe9,
+	0x58, 0x99, 0xa7, 0x63, 0xa1, 0xdc, 0x9e, 0x36, 0x49, 0xc9, 0xfd, 0xad, 0x86, 0xa9, 0xbd, 0xef,
+	0xf8, 0xb3, 0x93, 0xf7, 0x84, 0x52, 0x78, 0x59, 0xc3, 0xf3, 0x22, 0xb3, 0xfe, 0xf8, 0xa2, 0x2a,
+	0xee, 0x43, 0x5d, 0x36, 0x8d, 0x60, 0x35, 0xa9, 0x4c, 0x4c, 0xf5, 0xa4, 0x39, 0x58, 0x9c, 0x49,
+	0xd7, 0xce, 0x56, 0xad, 0x57, 0x06, 0xac, 0x9c, 0x11, 0xae, 0xba, 0x8c, 0xd9, 0xe4, 0x81, 0x48,
+	0x89, 0xa3, 0x9f, 0xa0, 0x19, 0xa8, 0x88, 0xa6, 0xa3, 0xbb, 0x2d, 0x69, 0x67, 0x10, 0xf4, 0x1d,
+	0x80, 0x83, 0xc5, 0xdb, 0x6d, 0x94, 0x7a, 0x21, 0xf3, 0xac, 0xda, 0x6d, 0x19, 0x49, 0x7d, 0x42,
+	0xbf, 0xc1, 0x92, 0x30, 0x88, 0xf2, 0x11, 0x1e, 0xb3, 0xc8, 0x4f, 0x38, 0xd1, 0xf7, 0xeb, 0x53,
+	0x96, 0x2e, 0x4a, 0xf4, 0xa9, 0x06, 0xa3, 0x63, 0x58, 0x20, 0xe1, 0x55, 0x41, 0xae, 0xdd, 0x4b,
+	0x36, 0x05, 0x36, 0xa3, 0x5a, 0x97, 0x80, 0xca, 0xb5, 0xb1, 0x38, 0x0a, 0x19, 0x41, 0xdf, 0x43,
+	0x53, 0x54, 0x49, 0x3d, 0x92, 0x15, 0xb7, 0x50, 0x2e, 0xce, 0xce, 0x16, 0xd1, 0x2a, 0x34, 0x08,
+	0xa5, 0xe9, 0x25, 0xa9, 0xcb, 0x37, 0xa2, 0x9e, 0x0d, 0xfe, 0x06, 0x38, 0xcf, 0x3f, 0x6a, 0xe8,
+	0x54, 0xbc, 0xf0, 0xf2, 0x33, 0x50, 0x27, 0x6b, 0x9e, 0x8f, 0x25, 0xed, 0xae, 0xcd, 0x59, 0x51,
+	0x09, 0x0d, 0xb7, 0xdf, 0xbf, 0xdd, 0x30, 0x9e, 0xbe, 0xdb, 0x30, 0x9e, 0x89, 0xe7, 0x85, 0x78,
+	0x5e, 0x8a, 0xe7, 0x8d, 0x78, 0x9e, 0x3f, 0xde, 0x34, 0xfe, 0x6b, 0x8a, 0x0f, 0xcc, 0x8d, 0xe7,
+	0x90, 0x71, 0x43, 0xbe, 0xc6, 0x0f, 0x3e, 0x04, 0x00, 0x00, 0xff, 0xff, 0xc9, 0x2f, 0xf4, 0xdb,
+	0x53, 0x07, 0x00, 0x00,
 }
