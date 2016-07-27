@@ -600,7 +600,15 @@ func (c *Composter) queryCheckMetrics() *graphql.Field {
 			_ = startTime.Scan(ts0)
 			_ = endTime.Scan(ts1)
 
-			var aggregator *opsee.Aggregator
+			aggregator := &opsee.Aggregator{
+				Name:          "avg",
+				AlignSampling: true,
+				Sampling: &opsee.Sampling{
+					Value: "30",
+					Unit:  "seconds",
+				},
+			}
+
 			if ag, ok := p.Args["aggregation"].(map[string]interface{}); ok {
 				u, _ := ag["unit"].(string)
 				p, _ := ag["period"].(int)
@@ -616,7 +624,7 @@ func (c *Composter) queryCheckMetrics() *graphql.Field {
 				}
 			}
 
-			return c.resolver.GetCheckMetrics(p.Context, user, checkId, metricName, startTime, endTime, aggregator)
+			return c.resolver.QueryCheckMetrics(p.Context, user, checkId, metricName, startTime, endTime, aggregator)
 		},
 	}
 }

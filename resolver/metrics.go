@@ -54,8 +54,8 @@ func (c *Client) GetMetricStatistics(ctx context.Context, user *schema.User, reg
 	}, nil
 }
 
-func (c *Client) GetCheckMetrics(ctx context.Context, user *schema.User, checkId, metricName string, ts0, ts1 *opsee_types.Timestamp, aggregator *opsee.Aggregator) ([]*schema.Metric, error) {
-	req := &opsee.GetMetricsRequest{
+func (c *Client) QueryCheckMetrics(ctx context.Context, user *schema.User, checkId, metricName string, ts0, ts1 *opsee_types.Timestamp, aggregator *opsee.Aggregator) ([]*schema.Metric, error) {
+	req := &opsee.QueryMetricsRequest{
 		Metrics: []*opsee.QueryMetric{
 			&opsee.QueryMetric{
 				Name: metricName,
@@ -78,7 +78,7 @@ func (c *Client) GetCheckMetrics(ctx context.Context, user *schema.User, checkId
 		EndAbsolute:   ts1,
 	}
 
-	r, err := c.Marktricks.GetMetrics(ctx, req)
+	r, err := c.Marktricks.QueryMetrics(ctx, req)
 	if err != nil {
 		return nil, err
 	}

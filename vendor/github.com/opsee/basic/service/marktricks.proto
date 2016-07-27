@@ -15,6 +15,37 @@ package opsee;
 option go_package = "service";
 option (opseeproto.graphql) = true;
 
+
+// Old Stuff, remove after testing
+message Group {
+    string Name = 1;
+}
+
+message Aggregation {
+    string unit = 1; // graphql doesn't support enums yet (milliseconds, seconds, minutes, hours, days, weeks, months, years)
+    int64 period = 2; 
+    string type = 3; // sum, avg, min, max
+}
+
+message QueryResult {
+    repeated Metric metrics = 1;
+    repeated Group groups = 2;
+}
+
+// Array of metrics with complete metric name and optional tags
+message GetMetricsRequest {
+    User requestor = 1;
+    repeated Metric metrics = 2;
+    opsee.types.Timestamp absolute_start_time = 3; 
+    opsee.types.Timestamp absolute_end_time = 4;
+    Aggregation aggregation = 5;
+}
+
+message GetMetricsResponse {
+    repeated QueryResult results = 1;  
+}
+
+// New Stuff
 message GroupBy {
     string name = 1;
     repeated string tags = 2;
@@ -60,18 +91,19 @@ message Query {
     repeated Result results = 1;
 }
 
-message GetMetricsRequest {
+message QueryMetricsRequest {
     repeated QueryMetric metrics = 1;
     int64 cache_time = 2;
     opsee.types.Timestamp start_absolute = 3; 
     opsee.types.Timestamp end_absolute = 4;
 }
 
-message GetMetricsResponse {
+message QueryMetricsResponse {
     repeated Query queries = 1;  
     repeated string errors = 5;
 }
 
 service Marktricks {
     rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
+    rpc QueryMetrics(QueryMetricsRequest) returns (QueryMetricsResponse);
 }
