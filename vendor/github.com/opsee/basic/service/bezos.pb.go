@@ -63,6 +63,16 @@
 		QueryResult
 		GetMetricsRequest
 		GetMetricsResponse
+		GroupBy
+		Sampling
+		Aggregator
+		StringList
+		QueryMetric
+		Datapoint
+		Result
+		Query
+		QueryMetricsRequest
+		QueryMetricsResponse
 		EnhancedCombatModeRequest
 		EnhancedCombatModeResponse
 		GetRoleStackRequest

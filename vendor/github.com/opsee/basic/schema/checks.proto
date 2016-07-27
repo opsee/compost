@@ -16,19 +16,19 @@ option go_package = "schema";
 option (opseeproto.graphql) = true;
 
 message Target {
-	string name = 1;
-	string type = 2 [(opseeproto.required) = true];
-	string id = 3 [(opseeproto.required) = true];
+	string name = 1 [(gogoproto.moretags) = "db:\"target_name\""];
+	string type = 2 [(opseeproto.required) = true, (gogoproto.moretags) = "db:\"target_type\""];
+	string id = 3 [(opseeproto.required) = true, (gogoproto.moretags) = "db:\"target_id\""];
 	string address = 4 [(gogoproto.moretags) = "dynamodbav:\",omitempty\""];
 }
 
 message Check {
-	string id = 1;
-	int32 interval = 2 [(opseeproto.required) = true];
+	string id = 1 [(gogoproto.moretags) = "db:\"id\""];
+	int32 interval = 2 [(opseeproto.required) = true, (gogoproto.moretags) = "db:\"interval\""];
 	Target target = 3 [(opseeproto.required) = true];
 	opsee.types.Timestamp last_run = 4;
-	opsee.types.Any check_spec = 5 [(opseeproto.required) = true];
-	string name = 6 [(opseeproto.required) = true];
+	opsee.types.Any check_spec = 5 [(opseeproto.required) = true, (gogoproto.moretags) = "db:\"check_spec\""];
+	string name = 6 [(opseeproto.required) = true, (gogoproto.moretags) = "db:\"name\""];
 	repeated Assertion assertions = 7;
 	repeated CheckResult results = 8;
 	oneof spec {
@@ -40,9 +40,9 @@ message Check {
 	string execution_group_id = 11 [(gogoproto.moretags) = "db:\"execution_group_id\""];
 	int32 min_failing_count = 12 [(gogoproto.moretags) = "db:\"min_failing_count\""];
 	int64 min_failing_time = 13 [(gogoproto.moretags) = "db:\"min_failing_time\""];
-	int32 failing_count = 14;
-	int32 response_count = 15;
-	string state = 16;
+	int32 failing_count = 14 [(gogoproto.moretags) = "db:\"failing_count\""];
+	int32 response_count = 15 [(gogoproto.moretags) = "db:\"response_count\""];
+	string state = 16 [(gogoproto.moretags) = "db:\"state_name\""];
 }
 
 message CheckTargets {
@@ -144,10 +144,11 @@ message CheckResult {
 }
 
 message CheckStateTransition {
-    string check_id = 1;
-    string from = 3;
-    string to = 4;
-    opsee.types.Timestamp occurred_at = 5;
+    string check_id = 1 [(gogoproto.moretags) = "db:\"check_id\""];
+    string from = 3 [(gogoproto.moretags) = "db:\"from_state\""];
+    string to = 4 [(gogoproto.moretags) = "db:\"to_state\""];
+    opsee.types.Timestamp occurred_at = 5 [(gogoproto.moretags) = "db:\"created_at\""];
+	string customer_id = 6 [(gogoproto.moretags) = "db:\"customer_id\""];
 }
 
 

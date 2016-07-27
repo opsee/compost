@@ -54,38 +54,55 @@ func (c *Client) GetMetricStatistics(ctx context.Context, user *schema.User, reg
 	}, nil
 }
 
-func (c *Client) GetCheckMetrics(ctx context.Context, user *schema.User, checkId, metricName string, ts0, ts1 *opsee_types.Timestamp, aggregation *opsee.Aggregation) ([]*schema.Metric, error) {
-	req := &opsee.GetMetricsRequest{
-		Requestor: user,
-		Metrics: []*schema.Metric{
-			&schema.Metric{
+func (c *Client) QueryCheckMetrics(ctx context.Context, user *schema.User, checkId, metricName string, ts0, ts1 *opsee_types.Timestamp, aggregator *opsee.Aggregator) ([]*schema.Metric, error) {
+	req := &opsee.QueryMetricsRequest{
+		Metrics: []*opsee.QueryMetric{
+			&opsee.QueryMetric{
 				Name: metricName,
-				Tags: []*schema.Tag{
-					&schema.Tag{
-						Name:  "check",
-						Value: checkId,
+				GroupBy: []*opsee.GroupBy{
+					&opsee.GroupBy{
+						Name: "tag",
+						Tags: []string{"region"},
 					},
+				},
+				Tags: map[string]*opsee.StringList{
+					"check": &opsee.StringList{Values: []string{checkId}},
+				},
+				Aggregators: []*opsee.Aggregator{
+					aggregator,
 				},
 			},
 		},
-		AbsoluteStartTime: ts0,
-		AbsoluteEndTime:   ts1,
-		Aggregation:       aggregation,
+		CacheTime:     0,
+		StartAbsolute: ts0,
+		EndAbsolute:   ts1,
 	}
 
-	if aggregation != nil {
-		req.Metrics[0].Statistic = aggregation.Type
-	}
-
-	r, err := c.Marktricks.GetMetrics(ctx, req)
+	r, err := c.Marktricks.QueryMetrics(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
+	// convert kairosdb types to schema.Metric
 	var m []*schema.Metric
-	for _, qr := range r.Results {
-		for _, nm := range qr.Metrics {
-			m = append(m, nm)
+	for _, query := range r.Queries {
+		for _, result := range query.Results {
+			var tags []*schema.Tag
+			for k, v := range result.Tags {
+				if len(v.Values) > 0 {
+					tags = append(tags, &schema.Tag{k, v.Values[0]})
+				}
+			}
+			for _, dp := range result.Values {
+				nm := &schema.Metric{
+					Name:      result.Name,
+					Value:     float64(dp.Value),
+					Timestamp: dp.Timestamp,
+					Unit:      "milliseconds",
+					Tags:      tags,
+				}
+				m = append(m, nm)
+			}
 		}
 	}
 	return m, nil

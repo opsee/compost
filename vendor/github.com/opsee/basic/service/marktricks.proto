@@ -5,6 +5,9 @@ import "github.com/opsee/protobuf/opseeproto/types/timestamp.proto";
 import "github.com/opsee/basic/schema/aws/credentials/types.proto";
 import "github.com/opsee/basic/schema/user.proto";
 import "github.com/opsee/basic/schema/checks.proto";
+import "github.com/golang/protobuf/ptypes/struct/struct.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
 import "stack.proto";
 
 package opsee;
@@ -13,6 +16,7 @@ option go_package = "service";
 option (opseeproto.graphql) = true;
 
 
+// Old Stuff, remove after testing
 message Group {
     string Name = 1;
 }
@@ -37,11 +41,69 @@ message GetMetricsRequest {
     Aggregation aggregation = 5;
 }
 
-// Array of metrics from Opsee metrics store
 message GetMetricsResponse {
     repeated QueryResult results = 1;  
 }
 
+// New Stuff
+message GroupBy {
+    string name = 1;
+    repeated string tags = 2;
+    map<string, string> group = 3;
+}
+
+message Sampling {
+    string value = 1;
+    string unit = 2;    
+}
+
+message Aggregator {
+    string name = 1;
+    bool align_sampling = 2;
+    Sampling sampling = 3;
+}
+
+message StringList {
+    repeated string values = 1 [(gogoproto.jsontag) = ""];
+}
+
+message QueryMetric {
+    string name = 1;
+    map<string, StringList> tags = 2;
+    repeated GroupBy group_by = 3 [(gogoproto.jsontag) = "group_by"];
+    repeated Aggregator aggregators = 4;
+    int64 limit = 5;
+}
+
+message Datapoint {
+    opsee.types.Timestamp timestamp = 1;
+    double value = 2;
+}
+
+message Result {
+    string name = 1;
+    repeated GroupBy group_by = 2;
+    map<string, StringList> tags = 3;
+    repeated Datapoint values = 4;
+}
+
+message Query {
+    repeated Result results = 1;
+}
+
+message QueryMetricsRequest {
+    repeated QueryMetric metrics = 1;
+    int64 cache_time = 2;
+    opsee.types.Timestamp start_absolute = 3; 
+    opsee.types.Timestamp end_absolute = 4;
+}
+
+message QueryMetricsResponse {
+    repeated Query queries = 1;  
+    repeated string errors = 5;
+}
+
 service Marktricks {
     rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
+    rpc QueryMetrics(QueryMetricsRequest) returns (QueryMetricsResponse);
 }
