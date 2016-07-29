@@ -38,21 +38,6 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 		wg           sync.WaitGroup
 	)
 
-	if checkId != "" && transitionId > 0 {
-		req := &opsee.GetCheckSnapshotRequest{
-			Requestor:    user,
-			CheckId:      checkId,
-			TransitionId: int64(transitionId),
-		}
-		resp, err := c.Cats.GetCheckSnapshot(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		check := resp.Check
-		return []*schema.Check{check}, nil
-	}
-
 	wg.Add(1)
 	go func() {
 		var (
@@ -80,19 +65,34 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 		err    error
 	)
 
-	if checkId != "" {
-		check, err := c.Bartnet.GetCheck(user, checkId)
+	if checkId != "" && transitionId > 0 {
+		req := &opsee.GetCheckSnapshotRequest{
+			Requestor:    user,
+			CheckId:      checkId,
+			TransitionId: int64(transitionId),
+		}
+		resp, err := c.Cats.GetCheckSnapshot(ctx, req)
 		if err != nil {
-			log.WithError(err).Error("couldn't list checks from bartnet")
 			return nil, err
 		}
 
+		check := resp.Check
 		checks = append(checks, check)
 	} else {
-		checks, err = c.Bartnet.ListChecks(user)
-		if err != nil {
-			log.WithError(err).Error("couldn't list checks from bartnet")
-			return nil, err
+		if checkId != "" {
+			check, err := c.Bartnet.GetCheck(user, checkId)
+			if err != nil {
+				log.WithError(err).Error("couldn't list checks from bartnet")
+				return nil, err
+			}
+
+			checks = append(checks, check)
+		} else {
+			checks, err = c.Bartnet.ListChecks(user)
+			if err != nil {
+				log.WithError(err).Error("couldn't list checks from bartnet")
+				return nil, err
+			}
 		}
 	}
 
@@ -101,36 +101,6 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 
 	for resp := range responseChan {
 		switch t := resp.response.(type) {
-		// case []*schema.CheckResult:
-		// 	for _, result := range t {
-		// 		for _, res := range result.Responses {
-		// 			if res.Reply == nil {
-		// 				if res.Response == nil {
-		// 					continue
-		// 				}
-		//
-		// 				any, err := opsee_types.UnmarshalAny(res.Response)
-		// 				if err != nil {
-		// 					log.WithError(err).Error("couldn't list results from beavis")
-		// 					return nil, err
-		// 				}
-		//
-		// 				switch reply := any.(type) {
-		// 				case *schema.HttpResponse:
-		// 					res.Reply = &schema.CheckResponse_HttpResponse{reply}
-		// 				case *schema.CloudWatchResponse:
-		// 					res.Reply = &schema.CheckResponse_CloudwatchResponse{reply}
-		// 				}
-		// 			}
-		// 		}
-		//
-		// 		if _, ok := checkMap[result.CheckId]; !ok {
-		// 			checkMap[result.CheckId] = []*schema.CheckResult{result}
-		// 		} else {
-		// 			checkMap[result.CheckId] = append(checkMap[result.CheckId], result)
-		// 		}
-		// 	}
-		//
 		case []*hugs.Notification:
 			for _, notif := range t {
 				notifMap[notif.CheckId] = append(notifMap[notif.CheckId], &schema.Notification{Type: notif.Type, Value: notif.Value})
@@ -142,32 +112,34 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 	}
 
 	for _, check := range checks {
-		results, err := c.CheckResults(ctx, user, check.Id)
-		if err != nil {
-			return nil, err
-		}
-
-		check.Results = results
-		check.Notifications = notifMap[check.Id]
-
-		if check.Spec == nil {
-			if check.CheckSpec == nil {
-				continue
-			}
-
-			any, err := opsee_types.UnmarshalAny(check.CheckSpec)
+		if transitionId == 0 {
+			results, err := c.CheckResults(ctx, user, check.Id)
 			if err != nil {
-				log.WithError(err).Error("couldn't list checks from bartnet")
 				return nil, err
 			}
 
-			switch spec := any.(type) {
-			case *schema.HttpCheck:
-				check.Spec = &schema.Check_HttpCheck{spec}
-			case *schema.CloudWatchCheck:
-				check.Spec = &schema.Check_CloudwatchCheck{spec}
+			check.Results = results
+
+			if check.Spec == nil {
+				if check.CheckSpec == nil {
+					continue
+				}
+
+				any, err := opsee_types.UnmarshalAny(check.CheckSpec)
+				if err != nil {
+					log.WithError(err).Error("couldn't list checks from bartnet")
+					return nil, err
+				}
+
+				switch spec := any.(type) {
+				case *schema.HttpCheck:
+					check.Spec = &schema.Check_HttpCheck{spec}
+				case *schema.CloudWatchCheck:
+					check.Spec = &schema.Check_CloudwatchCheck{spec}
+				}
 			}
 		}
+		check.Notifications = notifMap[check.Id]
 	}
 
 	return checks, nil
