@@ -39,7 +39,11 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 	)
 
 	if checkId != "" && transitionId > 0 {
-		req := &opsee.GetCheckSnapshotRequest{}
+		req := &opsee.GetCheckSnapshotRequest{
+			Requestor:    user,
+			CheckId:      checkId,
+			TransitionId: int64(transitionId),
+		}
 		resp, err := c.Cats.GetCheckSnapshot(ctx, req)
 		if err != nil {
 			return nil, err
