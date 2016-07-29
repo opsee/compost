@@ -520,7 +520,7 @@ func (c *Composter) queryCheckStateTransitions() *graphql.Field {
 				Description: "unix timestmap end time",
 				Type:        opsee_scalars.Timestamp,
 			},
-			"transition_id": &graphql.ArgumentConfig{
+			"id": &graphql.ArgumentConfig{
 				Description: "state transition id",
 				Type:        graphql.Int,
 			},
@@ -537,7 +537,7 @@ func (c *Composter) queryCheckStateTransitions() *graphql.Field {
 			}
 			checkId := check.Id
 
-			tid, _ := p.Args["transition_id"].(int)
+			tid, _ := p.Args["id"].(int)
 			if tid > 0 {
 				resp, err := c.resolver.GetCheckStateTransition(p.Context, user, checkId, tid)
 				if err != nil {
