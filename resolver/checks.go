@@ -31,35 +31,23 @@ const (
 // ListChecks fetches Checks from Bartnet and CheckResults from Beavis
 // concurrently, then zips them together. If the request to Beavis fails,
 // then checks are returned without results.
-func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId string) ([]*schema.Check, error) {
+func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId string, transitionId int) ([]*schema.Check, error) {
 	var (
 		responseChan = make(chan *checkCompostResponse, 2)
-		// checkMap     = make(map[string][]*schema.CheckResult)
-		notifMap = make(map[string][]*schema.Notification)
-		wg       sync.WaitGroup
+		notifMap     = make(map[string][]*schema.Notification)
+		wg           sync.WaitGroup
 	)
 
-	// wg.Add(1)
-	// go func() {
-	// 	var (
-	// 		results []*schema.CheckResult
-	// 		err     error
-	// 	)
-	//
-	// 	if checkId != "" {
-	// 		results, err = c.CheckResults(ctx, user, checkId)
-	// 	} else {
-	// 		results, err = c.AllCheckResults(ctx, user)
-	// 	}
-	//
-	// 	if err != nil {
-	// 		responseChan <- &checkCompostResponse{err}
-	// 	} else {
-	// 		responseChan <- &checkCompostResponse{results}
-	// 	}
-	//
-	// 	wg.Done()
-	// }()
+	if checkId != "" && transitionId > 0 {
+		req := &opsee.GetCheckSnapshotRequest{}
+		resp, err := c.Cats.GetCheckSnapshot(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		check := resp.Check
+		return []*schema.Check{check}, nil
+	}
 
 	wg.Add(1)
 	go func() {
@@ -418,4 +406,24 @@ func (c *Client) GetCheckStateTransitions(ctx context.Context, user *schema.User
 	}
 
 	return resp.Transitions, nil
+}
+
+// Get a single check state transition from cats
+func (c *Client) GetCheckStateTransition(ctx context.Context, user *schema.User, checkId string, transitionId int) (*schema.CheckStateTransition, error) {
+	req := &opsee.GetCheckStateTransitionsRequest{
+		CheckId:           checkId,
+		CustomerId:        user.CustomerId,
+		StateTransitionId: int64(transitionId),
+	}
+
+	resp, err := c.Cats.GetCheckStateTransitions(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(resp.Transitions) == 1 {
+		return resp.Transitions[0], nil
+	}
+
+	return nil, fmt.Errorf("Received incorrect number of state transitions from cats: %v", resp.Transitions)
 }

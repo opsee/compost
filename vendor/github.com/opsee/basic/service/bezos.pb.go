@@ -43,6 +43,8 @@
 		DeleteTeamResponse
 		GetChecksRequest
 		GetChecksResponse
+		GetCheckSnapshotRequest
+		GetCheckSnapshotResponse
 		CheckResourceResponse
 		ResourceResponse
 		CheckResourceRequest
