@@ -520,6 +520,10 @@ func (c *Composter) queryCheckStateTransitions() *graphql.Field {
 				Description: "unix timestmap end time",
 				Type:        opsee_scalars.Timestamp,
 			},
+			"transition_id": &graphql.ArgumentConfig{
+				Description: "state transition id",
+				Type:        graphql.Int,
+			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			user, ok := p.Context.Value(userKey).(*schema.User)
@@ -532,6 +536,11 @@ func (c *Composter) queryCheckStateTransitions() *graphql.Field {
 				return nil, fmt.Errorf("missing check id")
 			}
 			checkId := check.Id
+
+			tid, _ := p.Args["transition_id"].(int)
+			if tid > 0 {
+				return c.resolver.GetCheckStateTransition(p.Context, user, checkId, tid)
+			}
 
 			var (
 				startTime *opsee_types.Timestamp
@@ -811,6 +820,10 @@ func (c *Composter) queryChecks() *graphql.Field {
 				Description: "A single check Id",
 				Type:        graphql.String,
 			},
+			"state_transition_id": &graphql.ArgumentConfig{
+				Description: "A check station transition ID",
+				Type:        graphql.Int,
+			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			user, ok := p.Context.Value(userKey).(*schema.User)
@@ -819,8 +832,9 @@ func (c *Composter) queryChecks() *graphql.Field {
 			}
 
 			id, _ := p.Args["id"].(string)
+			transitionId, _ := p.Args["state_transition_id"].(int)
 
-			return c.resolver.ListChecks(p.Context, user, id)
+			return c.resolver.ListChecks(p.Context, user, id, transitionId)
 		},
 	}
 }

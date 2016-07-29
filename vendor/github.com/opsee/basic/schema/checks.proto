@@ -149,6 +149,7 @@ message CheckStateTransition {
     string to = 4 [(gogoproto.moretags) = "db:\"to_state\""];
     opsee.types.Timestamp occurred_at = 5 [(gogoproto.moretags) = "db:\"created_at\""];
 	string customer_id = 6 [(gogoproto.moretags) = "db:\"customer_id\""];
+	int64 id = 7 [(gogoproto.moretags) = "db:\"id\""];
 }
 
 

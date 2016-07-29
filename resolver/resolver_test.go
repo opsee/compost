@@ -2,9 +2,10 @@ package resolver
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/opsee/basic/schema"
 	"golang.org/x/net/context"
-	"testing"
 )
 
 func TestResolveChecks(t *testing.T) {
@@ -33,7 +34,7 @@ func TestResolveChecks(t *testing.T) {
 		Verified:   true,
 	}
 
-	checks, err := resolver.ListChecks(context.Background(), user, "")
+	checks, err := resolver.ListChecks(context.Background(), user, "", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
