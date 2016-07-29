@@ -539,7 +539,12 @@ func (c *Composter) queryCheckStateTransitions() *graphql.Field {
 
 			tid, _ := p.Args["transition_id"].(int)
 			if tid > 0 {
-				return c.resolver.GetCheckStateTransition(p.Context, user, checkId, tid)
+				resp, err := c.resolver.GetCheckStateTransition(p.Context, user, checkId, tid)
+				if if err != nil {
+					return nil, err
+				}
+
+				return []*schema.CheckStateTransition{resp}, nil
 			}
 
 			var (
