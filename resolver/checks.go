@@ -73,6 +73,7 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 		}
 		resp, err := c.Cats.GetCheckSnapshot(ctx, req)
 		if err != nil {
+			log.WithError(err).Error("Error getting check snapshot from cats.")
 			return nil, err
 		}
 
@@ -115,6 +116,7 @@ func (c *Client) ListChecks(ctx context.Context, user *schema.User, checkId stri
 		if transitionId == 0 {
 			results, err := c.CheckResults(ctx, user, check.Id)
 			if err != nil {
+				log.WithError(err).Error("Error getting check results.")
 				return nil, err
 			}
 
@@ -152,7 +154,9 @@ func (c *Client) UpsertChecks(ctx context.Context, user *schema.User, checksInpu
 	for i, checkInput := range checksInput {
 		check, ok := checkInput.(map[string]interface{})
 		if !ok {
-			return nil, fmt.Errorf("error decoding check input")
+			err := fmt.Errorf("error decoding check input")
+			log.WithError(err).Error("Error in UpsertChecks request")
+			return nil, err
 		}
 
 		notifList, _ := check["notifications"].([]interface{})
@@ -160,12 +164,14 @@ func (c *Client) UpsertChecks(ctx context.Context, user *schema.User, checksInpu
 
 		checkJson, err := json.Marshal(check)
 		if err != nil {
+			log.WithError(err).Error("Error marshalling check from request.")
 			return nil, err
 		}
 
 		checkProto := &schema.Check{}
 		err = jsonpb.Unmarshal(bytes.NewBuffer(checkJson), checkProto)
 		if err != nil {
+			log.WithError(err).Error("Error unmarshalling check protobuf.")
 			return nil, err
 		}
 
@@ -174,11 +180,13 @@ func (c *Client) UpsertChecks(ctx context.Context, user *schema.User, checksInpu
 		if checkProto.Id == "" {
 			checkResponse, err = c.Bartnet.CreateCheck(user, checkProto)
 			if err != nil {
+				log.WithError(err).Error("Error creating check.")
 				return nil, err
 			}
 		} else {
 			checkResponse, err = c.Bartnet.UpdateCheck(user, checkProto)
 			if err != nil {
+				log.WithError(err).Error("Error updating check.")
 				return nil, err
 			}
 		}
@@ -213,6 +221,7 @@ func (c *Client) UpsertChecks(ctx context.Context, user *schema.User, checksInpu
 
 		err = c.Hugs.CreateNotificationsMulti(user, notifs)
 		if err != nil {
+			log.WithError(err).Error("Error creating notification")
 			return nil, err
 		}
 
@@ -227,11 +236,14 @@ func (c *Client) DeleteChecks(ctx context.Context, user *schema.User, checksInpu
 	for _, ci := range checksInput {
 		id, ok := ci.(string)
 		if !ok {
-			return nil, fmt.Errorf("unable to decode check id")
+			err := fmt.Errorf("unable to decode check id")
+			log.WithError(err).Error("Error in delete check request.")
+			return nil, err
 		}
 
 		err := c.Bartnet.DeleteCheck(user, id)
 		if err != nil {
+			log.WithError(err).Error("Error deleting check: %d", id)
 			continue
 		}
 
@@ -249,12 +261,14 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 
 	checkJson, err := json.Marshal(checkInput)
 	if err != nil {
+		log.WithError(err).Error("Error marshalling check from request.")
 		return nil, err
 	}
 
 	checkProto := &schema.Check{}
 	err = jsonpb.Unmarshal(bytes.NewBuffer(checkJson), checkProto)
 	if err != nil {
+		log.WithError(err).Error("Error unmarshalling check protobuf.")
 		return nil, err
 	}
 
@@ -269,11 +283,14 @@ func (c *Client) TestCheck(ctx context.Context, user *schema.User, checkInput ma
 	}
 
 	if err != nil {
+		log.WithError(err).Error("Error marshalling check spec.")
 		return nil, err
 	}
 
 	if checkProto.Target == nil {
-		return nil, fmt.Errorf("test check is missing target")
+		err := fmt.Errorf("test check is missing target")
+		log.WithError(err).Error("Error in test check request.")
+		return nil, err
 	}
 
 	if checkProto.Target.Type == "external_host" {
